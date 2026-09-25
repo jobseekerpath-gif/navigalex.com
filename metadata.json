@@ -1,0 +1,7 @@
+{
+  "name": "Navigalex",
+  "description": "Navigalex Advisory: We protect Indian business owners from hidden financial, legal, and bank-loan risks. Real senior advisors powered by smart AI tools.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
