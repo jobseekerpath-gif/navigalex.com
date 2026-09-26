@@ -1034,7 +1034,7 @@ Your Personality & Voice:
   app.use(express.static('dist'));
 app.get('*', (req,res) => res.sendFile(path.resolve('dist/index.html')));
 
-app.listen(PORT, "0.0.0.0", '0.0.0.0', () => {
+app.listen(PORT, "0.0.0.0", () => {
     console.log(`Server running on http://localhost:${PORT}`);
   });
 }
