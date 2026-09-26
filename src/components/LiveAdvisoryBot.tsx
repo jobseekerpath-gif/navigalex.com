@@ -84,7 +84,7 @@ export default function LiveAdvisoryBot({ onOpenAssessment, onNavigateTab }: Liv
       } else if (lower.includes('bank') || lower.includes('loan') || lower.includes('dscr') || lower.includes('cibil')) {
         action = { label: 'Calculate Bank DSCR Now', actionType: 'cibil' };
       } else if (lower.includes('cfo') || lower.includes('sprint') || lower.includes('hire') || lower.includes('assessment')) {
-        action = { label: 'Request Confidential Assessment', actionType: 'assessment', param: 'ControlCFO™ 30-Day Sprint' };
+        action = { label: 'Request Confidential Assessment', actionType: 'assessment', param: 'ControlCFOÃ¢â€žÂ¢ 30-Day Sprint' };
       }
 
       const botMessage: Message = {
@@ -128,7 +128,7 @@ export default function LiveAdvisoryBot({ onOpenAssessment, onNavigateTab }: Liv
   };
 
   const quickPrompts = [
-    "How does ControlCFO™ Sprint work?",
+    "How does ControlCFOÃ¢â€žÂ¢ Sprint work?",
     "Why do banks reject CC limit renewals?",
     "How to screen customer contract traps?",
     "Prevent export LC payment disputes"
@@ -143,8 +143,8 @@ export default function LiveAdvisoryBot({ onOpenAssessment, onNavigateTab }: Liv
           const trimmed = line.trim();
           if (!trimmed) return <div key={idx} className="h-0.5" />;
           
-          const isBullet = trimmed.startsWith('* ') || trimmed.startsWith('- ') || trimmed.startsWith('• ');
-          const cleanLine = isBullet ? trimmed.replace(/^[\*\-•]\s*/, '') : trimmed;
+          const isBullet = trimmed.startsWith('* ') || trimmed.startsWith('- ') || trimmed.startsWith('Ã¢â‚¬Â¢ ');
+          const cleanLine = isBullet ? trimmed.replace(/^[\*\-Ã¢â‚¬Â¢]\s*/, '') : trimmed;
 
           // Parse bold segments **word**
           const parts = cleanLine.split(/(\*\*.*?\*\*)/g);
@@ -186,7 +186,7 @@ export default function LiveAdvisoryBot({ onOpenAssessment, onNavigateTab }: Liv
           <div className="text-left hidden sm:block">
             <span className="text-xs font-bold block leading-none">Live Advisory Bot</span>
             <span className="text-[10px] text-blue-100 block leading-tight mt-0.5 flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Online • Confidential
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Online Ã¢â‚¬Â¢ Confidential
             </span>
           </div>
         </button>
@@ -203,10 +203,10 @@ export default function LiveAdvisoryBot({ onOpenAssessment, onNavigateTab }: Liv
               </div>
               <div>
                 <div className="flex items-center gap-1.5">
-                  <span className="text-xs font-bold tracking-wide">NAVIGALEX LIVE BOT</span>
+                  <span className="text-xs font-bold tracking-wide">NAVIGALEX LIVE BOT — Live API â€” Live API Ã¯Â¿Â½ Live API</span>
                   <span className="inline-block w-2 h-2 rounded-full bg-emerald-400"></span>
                 </div>
-                <span className="text-[10px] text-slate-300 block">Executive Advisory • AI & Senior Review</span>
+                <span className="text-[10px] text-slate-300 block">Executive Advisory Ã¢â‚¬Â¢ AI & Senior Review</span>
               </div>
             </div>
             <div className="flex items-center gap-1">
@@ -336,3 +336,6 @@ export default function LiveAdvisoryBot({ onOpenAssessment, onNavigateTab }: Liv
     </div>
   );
 }
+
+
+

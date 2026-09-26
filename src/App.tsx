@@ -12,10 +12,10 @@ import {
 export const ADVISORY_DESKS = [
   {
     id: "controlcfo-sprint",
-    title: "1. ControlCFO™ 30-Day Readiness Sprint",
+    title: "1. ControlCFOâ„¢ 30-Day Readiness Sprint",
     tagline: "Flagship Outsourced Finance, Risk & Governance Command Centre",
     badge: "Initial Launch Priority",
-    summary: "Like having an experienced, senior CFO and risk director running your financial governance on a part-time sprint—without paying ₹35 Lakh/year full-time salary.",
+    summary: "Like having an experienced, senior CFO and risk director running your financial governance on a part-time sprintâ€”without paying â‚¹35 Lakh/year full-time salary.",
     problem: "Sales are growing, but cash is constantly tight, debtors are delayed past 75 days, and bank limit renewal is stalled.",
     deliverables: [
       "13-Week Dynamic Cash-Flow Runway Model",
@@ -33,7 +33,7 @@ export const ADVISORY_DESKS = [
     clientInputsNeeded: "Last 12 months Bank Statements, Tally / ERP backup, Top 5 Customer Agreements, GST 3B vs 2B returns.",
     timeframe: "30 Days Fixed Sprint",
     humanSignoff: "Senior CA & Corporate Advocate Dual Review",
-    price: "₹1.5–4 Lakh fixed"
+    price: "â‚¹1.5â€“4 Lakh fixed"
   },
   {
     id: "board-box",
@@ -57,7 +57,7 @@ export const ADVISORY_DESKS = [
     clientInputsNeeded: "Certificate of Incorporation, MOA/AOA, past 12 months Board Minutes, Statutory Registers.",
     timeframe: "4-Week Setup + Monthly Retainer",
     humanSignoff: "Company Secretary (CS) & Corporate Counsel",
-    price: "₹2–6 Lakh setup + ₹50,000–₹1.5 Lakh/month"
+    price: "â‚¹2â€“6 Lakh setup + â‚¹50,000â€“â‚¹1.5 Lakh/month"
   },
   {
     id: "contract-to-cash",
@@ -81,7 +81,7 @@ export const ADVISORY_DESKS = [
     clientInputsNeeded: "Top 5-10 Customer Master Services Agreements (MSAs), unpaid invoice list >60 days.",
     timeframe: "14-Day Setup + Monthly Retainer",
     humanSignoff: "Corporate Contracts Advocate",
-    price: "₹75,000–₹3 Lakh setup + ₹25,000–₹1 Lakh/month"
+    price: "â‚¹75,000â€“â‚¹3 Lakh setup + â‚¹25,000â€“â‚¹1 Lakh/month"
   },
   {
     id: "tradeshield",
@@ -102,16 +102,16 @@ export const ADVISORY_DESKS = [
       "Continuous: Monthly retainer for active exporters and EPC contractors"
     ],
     clientInputsNeeded: "Draft LC / Sanction letter, Proforma Invoice, Bill of Lading draft, Bank Guarantee text.",
-    timeframe: "24–48 Hours per Transaction / Monthly Retainer",
+    timeframe: "24â€“48 Hours per Transaction / Monthly Retainer",
     humanSignoff: "Trade Finance & International Banking Specialist",
-    price: "₹50,000–₹2 Lakh per transaction/retainer"
+    price: "â‚¹50,000â€“â‚¹2 Lakh per transaction/retainer"
   },
   {
     id: "fraudsignal",
     title: "5. FraudSignal Investigation Cell",
     tagline: "Forensic Accounting & Internal Leakage Detection",
     badge: "Forensic & Whistleblower",
-    summary: "Discreet forensic audits to detect vendor kickbacks, ghost billing, employee theft, and fund diversion—backed by court-ready evidence.",
+    summary: "Discreet forensic audits to detect vendor kickbacks, ghost billing, employee theft, and fund diversionâ€”backed by court-ready evidence.",
     problem: "Unexplained drops in gross profit margins, inventory mismatches, anonymous whistleblower tips, or suspected partner embezzlement.",
     deliverables: [
       "Forensic Transaction Analytics & Vendor Duplicate Billing Scan",
@@ -126,9 +126,9 @@ export const ADVISORY_DESKS = [
       "Week 3-4: Evidence Corroboration & Comprehensive Counsel-Ready Report"
     ],
     clientInputsNeeded: "Vendor ledgers, ERP audit logs, bank statements, whistleblower details (strictly confidential).",
-    timeframe: "2–4 Weeks per Investigation",
+    timeframe: "2â€“4 Weeks per Investigation",
     humanSignoff: "Certified Fraud Examiner (CFE) & Senior Forensic Auditor",
-    price: "₹3–15 Lakh per investigation"
+    price: "â‚¹3â€“15 Lakh per investigation"
   },
   {
     id: "lenderready",
@@ -150,9 +150,9 @@ export const ADVISORY_DESKS = [
       "Week 3: Final Borrower Data Room Assembly & Bank Meeting Briefing"
     ],
     clientInputsNeeded: "Last 2 years Audited Balance Sheets, provisional P&L, 12 months Bank Statements, GST returns.",
-    timeframe: "14–21 Days",
+    timeframe: "14â€“21 Days",
     humanSignoff: "Former Senior Credit Officer & Chartered Accountant",
-    price: "₹75,000–₹3 Lakh + lawful success fee"
+    price: "â‚¹75,000â€“â‚¹3 Lakh + lawful success fee"
   },
   {
     id: "regtech",
@@ -174,16 +174,16 @@ export const ADVISORY_DESKS = [
       "Month 3: Simulated Regulatory Stress Test & Team Training"
     ],
     clientInputsNeeded: "Current onboarding workflows, data architecture diagram, vendor master agreements.",
-    timeframe: "6–12 Weeks Project",
+    timeframe: "6â€“12 Weeks Project",
     humanSignoff: "Fintech Regulatory Lawyer & Senior Systems Auditor",
-    price: "₹5–25 Lakh per project"
+    price: "â‚¹5â€“25 Lakh per project"
   },
   {
     id: "family-wealth",
     title: "8. Family Wealth Governance Office",
     tagline: "Multi-Entity Asset Consolidation & Succession Peace",
     badge: "Promoter & Family Office",
-    summary: "Structures family businesses across siblings, holding entities, and trusts—preventing family disputes and preserving wealth across generations.",
+    summary: "Structures family businesses across siblings, holding entities, and trustsâ€”preventing family disputes and preserving wealth across generations.",
     problem: "Messy cross-holdings between family members, informal loans, lack of a clear succession plan, and vulnerability to future family litigation.",
     deliverables: [
       "Consolidated Family Balance Sheet & Cross-Entity Asset Map",
@@ -199,9 +199,9 @@ export const ADVISORY_DESKS = [
       "Ongoing: Quarterly Family Governance Review"
     ],
     clientInputsNeeded: "Entity ownership cap tables, property title documents, family tree and key promoter objectives.",
-    timeframe: "8–12 Weeks Setup + Quarterly Retainer",
+    timeframe: "8â€“12 Weeks Setup + Quarterly Retainer",
     humanSignoff: "Senior Estate Planning Advocate & Wealth Governance Advisor",
-    price: "₹2–10 Lakh setup + ₹75,000–₹3 Lakh/month"
+    price: "â‚¹2â€“10 Lakh setup + â‚¹75,000â€“â‚¹3 Lakh/month"
   },
   {
     id: "internal-audit",
@@ -225,7 +225,7 @@ export const ADVISORY_DESKS = [
     clientInputsNeeded: "ERP raw dump, chart of accounts, delegation of authority matrix, sample vouchers.",
     timeframe: "Quarterly Audit Cycles",
     humanSignoff: "Internal Audit Partner (CA / CIA)",
-    price: "₹2–10 Lakh per cycle"
+    price: "â‚¹2â€“10 Lakh per cycle"
   }
 ];
 
@@ -322,7 +322,7 @@ export default function App() {
 
   // Live Business Health Diagnostic State
   const [diagnosticIndustry, setDiagnosticIndustry] = useState('Manufacturing & Engineering');
-  const [diagnosticRevenue, setDiagnosticRevenue] = useState('₹5 Cr - ₹25 Cr');
+  const [diagnosticRevenue, setDiagnosticRevenue] = useState('â‚¹5 Cr - â‚¹25 Cr');
   const [diagnosticFile, setDiagnosticFile] = useState<File | null>(null);
   const [isRunningDiagnostic, setIsRunningDiagnostic] = useState(false);
   const [diagnosticResult, setDiagnosticResult] = useState<any>(null);
@@ -344,7 +344,7 @@ export default function App() {
     email: '',
     phone: '',
     businessType: 'MSME / Manufacturing',
-    turnover: '₹5 Cr - ₹25 Cr',
+    turnover: 'â‚¹5 Cr - â‚¹25 Cr',
     primaryConcern: 'Contract & Receivable Cash Flow Risk',
     contactMethod: 'Phone',
     consent: false
@@ -575,16 +575,16 @@ Payment shall be released within 90 days after delivery and final acceptance. In
         {/* Mobile Navigation Drawer */}
         {mobileMenuOpen && (
           <div className="lg:hidden bg-white border-b border-slate-200 px-6 py-6 space-y-4 shadow-xl">
-            <button onClick={() => { setActiveTab('home'); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="block w-full text-left text-sm font-medium py-2 text-slate-700">Home</button>
-            <button onClick={() => { setActiveTab('live-tools'); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="block w-full text-left text-sm font-medium py-2 text-blue-600 font-bold">Live AI Scanners</button>
-            <button onClick={() => { setActiveTab('services'); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="block w-full text-left text-sm font-medium py-2 text-slate-700">Our 9 Services</button>
-            <button onClick={() => { setActiveTab('why-pick-us'); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="block w-full text-left text-sm font-medium py-2 text-slate-700">Why Pick These Products</button>
-            <button onClick={() => { setActiveTab('industries'); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="block w-full text-left text-sm font-medium py-2 text-slate-700">Industries</button>
-            <button onClick={() => { setActiveTab('how-it-works'); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="block w-full text-left text-sm font-medium py-2 text-slate-700">How It Works</button>
-            <button onClick={() => { setActiveTab('about'); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="block w-full text-left text-sm font-medium py-2 text-slate-700">About</button>
-            <button onClick={() => { setActiveTab('contact'); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="block w-full text-left text-sm font-medium py-2 text-slate-700">Contact</button>
+            <button onClick={() => { setActiveTab('home'); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="block w-full text-left text-sm font-medium py-2 text-slate-700"><span aria-label="Close" className="text-xl leading-none">×</span>Home</button>
+            <button onClick={() => { setActiveTab('live-tools'); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="block w-full text-left text-sm font-medium py-2 text-blue-600 font-bold"><span aria-label="Close" className="text-xl leading-none">×</span>Live AI Scanners</button>
+            <button onClick={() => { setActiveTab('services'); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="block w-full text-left text-sm font-medium py-2 text-slate-700"><span aria-label="Close" className="text-xl leading-none">×</span>Our 9 Services</button>
+            <button onClick={() => { setActiveTab('why-pick-us'); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="block w-full text-left text-sm font-medium py-2 text-slate-700"><span aria-label="Close" className="text-xl leading-none">×</span>Why Pick These Products</button>
+            <button onClick={() => { setActiveTab('industries'); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="block w-full text-left text-sm font-medium py-2 text-slate-700"><span aria-label="Close" className="text-xl leading-none">×</span>Industries</button>
+            <button onClick={() => { setActiveTab('how-it-works'); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="block w-full text-left text-sm font-medium py-2 text-slate-700"><span aria-label="Close" className="text-xl leading-none">×</span>How It Works</button>
+            <button onClick={() => { setActiveTab('about'); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="block w-full text-left text-sm font-medium py-2 text-slate-700"><span aria-label="Close" className="text-xl leading-none">×</span>About</button>
+            <button onClick={() => { setActiveTab('contact'); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="block w-full text-left text-sm font-medium py-2 text-slate-700"><span aria-label="Close" className="text-xl leading-none">×</span>Contact</button>
             <div className="pt-4 border-t border-slate-200">
-              <button onClick={() => { openAssessmentForm(); setMobileMenuOpen(false); }} className="w-full py-3 bg-blue-600 text-white font-semibold text-xs rounded-lg shadow-md">
+              <button onClick={() => { openAssessmentForm(); setMobileMenuOpen(false); }} className="w-full py-3 bg-blue-600 text-white font-semibold text-xs rounded-lg shadow-md"><span aria-label="Close" className="text-xl leading-none">×</span>
                 Request a Confidential Assessment
               </button>
             </div>
@@ -609,7 +609,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                 </h1>
 
                 <p className="text-base sm:text-xl text-slate-700 max-w-3xl leading-relaxed font-normal">
-                  We help Indian business owners, MSMEs, and directors spot the hidden cash leakages, bad contract terms, and loan rejection traps that accountants, lawyers, and software miss—before they cost you money.
+                  We help Indian business owners, MSMEs, and directors spot the hidden cash leakages, bad contract terms, and loan rejection traps that accountants, lawyers, and software missâ€”before they cost you money.
                 </p>
 
                 <div className="pt-4 flex flex-col sm:flex-row items-start sm:items-center gap-4">
@@ -665,8 +665,8 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                     <span className="text-xs font-bold text-indigo-700 uppercase tracking-wider">Flagship Product</span>
                     <Briefcase className="w-4 h-4 text-indigo-600" />
                   </div>
-                  <h3 className="font-bold text-slate-900 text-base">ControlCFO™ 30-Day Sprint</h3>
-                  <p className="text-xs text-slate-600 mt-1 mb-3">Your part-time senior CFO and risk command centre without paying ₹35 Lakh/year full-time salary.</p>
+                  <h3 className="font-bold text-slate-900 text-base">ControlCFOâ„¢ 30-Day Sprint</h3>
+                  <p className="text-xs text-slate-600 mt-1 mb-3">Your part-time senior CFO and risk command centre without paying â‚¹35 Lakh/year full-time salary.</p>
                   <button onClick={() => { setSelectedDeskModal(ADVISORY_DESKS[0]); }} className="text-xs font-bold text-indigo-600 hover:text-indigo-700 flex items-center gap-1 cursor-pointer">
                     See sprint details <ChevronRight className="w-3 h-3" />
                   </button>
@@ -706,7 +706,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                 <span className="text-xs font-bold uppercase tracking-widest text-blue-300">HOW NAVIGALEX SOLVES THIS</span>
                 <h3 className="text-2xl sm:text-3xl font-bold text-white">One Unified Command System For Your Money & Safety</h3>
                 <p className="text-sm text-slate-200 max-w-2xl mx-auto leading-relaxed">
-                  We connect every risk to proof, an action item, a responsible owner, and a firm deadline. No assumptions, no academic theories—just clear steps to protect your profits.
+                  We connect every risk to proof, an action item, a responsible owner, and a firm deadline. No assumptions, no academic theoriesâ€”just clear steps to protect your profits.
                 </p>
                 <div className="pt-2">
                   <button onClick={() => { setActiveTab('live-tools'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="px-6 py-3 bg-blue-500 hover:bg-blue-400 text-white text-xs font-bold rounded-xl transition-all shadow-md cursor-pointer">
@@ -755,7 +755,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                       {Object.values(diagnosticScores).reduce((a, b) => a + b, 0)} / 25
                     </strong>
                     <span className="block text-[11px] text-slate-500 mt-0.5">
-                      {Object.values(diagnosticScores).reduce((a, b) => a + b, 0) > 16 ? "⚠️ High Risk: Immediate cleanup recommended." : "Healthy profile with minor optimization needed."}
+                      {Object.values(diagnosticScores).reduce((a, b) => a + b, 0) > 16 ? "âš ï¸ High Risk: Immediate cleanup recommended." : "Healthy profile with minor optimization needed."}
                     </span>
                   </div>
                   <button onClick={() => openAssessmentForm('Complete 5-Part Risk Assessment')} className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white rounded-xl transition-all shadow-md cursor-pointer">
@@ -806,11 +806,11 @@ Payment shall be released within 90 days after delivery and final acceptance. In
 
               {/* WHY PICK THIS PRODUCT GUIDE */}
               <div className="p-4 bg-blue-50/70 border border-blue-200 rounded-xl space-y-2">
-                <span className="text-xs font-bold text-blue-900 uppercase">💡 Why pick this product?</span>
+                <span className="text-xs font-bold text-blue-900 uppercase">ðŸ’¡ Why pick this product?</span>
                 <p className="text-xs text-slate-700 leading-relaxed">
-                  <strong>Who should use this:</strong> Any founder, director, or contractor signing agreements worth over ₹5 Lakhs.<br />
+                  <strong>Who should use this:</strong> Any founder, director, or contractor signing agreements worth over â‚¹5 Lakhs.<br />
                   <strong>Disaster it prevents:</strong> Prevents signing "unlimited liability" clauses where a client can sue you for 10x your billing, or freeze payments for months.<br />
-                  <strong>Expected ROI:</strong> Saves ₹5 Lakhs - ₹50 Lakhs in future litigation and avoids getting locked in unfavorable foreign arbitration.
+                  <strong>Expected ROI:</strong> Saves â‚¹5 Lakhs - â‚¹50 Lakhs in future litigation and avoids getting locked in unfavorable foreign arbitration.
                 </p>
               </div>
 
@@ -874,7 +874,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                       <p className="text-xs text-slate-500">File / Clause: {docResult.fileName}</p>
                     </div>
                     <span className="px-3.5 py-1 rounded-full bg-rose-100 border border-rose-300 text-rose-800 text-xs font-bold">
-                      Risk Score: {docResult.riskScore} — {docResult.riskLevel}
+                      Risk Score: {docResult.riskScore} â€” {docResult.riskLevel}
                     </span>
                   </div>
 
@@ -887,7 +887,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                     <div className="space-y-2">
                       {docResult.clauses?.map((c: string, idx: number) => (
                         <div key={idx} className="p-3 bg-white border border-rose-200 rounded-lg text-xs text-slate-800 shadow-sm flex items-start gap-2">
-                          <span className="text-rose-600 font-bold shrink-0">⚠️</span>
+                          <span className="text-rose-600 font-bold shrink-0">âš ï¸</span>
                           <span>{c}</span>
                         </div>
                       ))}
@@ -901,7 +901,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                     <div className="space-y-2">
                       {docResult.recommendations?.map((r: string, idx: number) => (
                         <div key={idx} className="p-3 bg-white border border-emerald-200 rounded-lg text-xs text-slate-800 shadow-sm flex items-start gap-2">
-                          <span className="text-emerald-600 font-bold shrink-0">✓</span>
+                          <span className="text-emerald-600 font-bold shrink-0">âœ“</span>
                           <span>{r}</span>
                         </div>
                       ))}
@@ -923,17 +923,17 @@ Payment shall be released within 90 days after delivery and final acceptance. In
 
               {/* WHY PICK THIS PRODUCT GUIDE */}
               <div className="p-4 bg-emerald-50/70 border border-emerald-200 rounded-xl space-y-2">
-                <span className="text-xs font-bold text-emerald-900 uppercase">💡 Why pick this product?</span>
+                <span className="text-xs font-bold text-emerald-900 uppercase">ðŸ’¡ Why pick this product?</span>
                 <p className="text-xs text-slate-700 leading-relaxed">
                   <strong>Who should use this:</strong> Any business owner applying for fresh bank loans, renewing CC/OD limits, or facing delayed bank credit sanction.<br />
                   <strong>Disaster it prevents:</strong> Prevents banks from rejecting your loan after 3 months of waiting or slapping 2% penalty interest due to DSCR dip.<br />
-                  <strong>Expected ROI:</strong> Helps negotiate 50–75 bps lower interest rates and speeds up loan disbursal from months to weeks.
+                  <strong>Expected ROI:</strong> Helps negotiate 50â€“75 bps lower interest rates and speeds up loan disbursal from months to weeks.
                 </p>
               </div>
 
               <form onSubmit={handleScanCibil} className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Annual Business Turnover (₹ in Crores)</label>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Annual Business Turnover (â‚¹ in Crores)</label>
                   <input 
                     type="number" 
                     step="0.5"
@@ -941,11 +941,11 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                     onChange={e => setCibilForm({...cibilForm, turnover: e.target.value})}
                     className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 font-bold focus:outline-none focus:border-emerald-600"
                   />
-                  <span className="text-[11px] text-slate-500 mt-1 block">e.g. 15 for ₹15 Crores annual sales</span>
+                  <span className="text-[11px] text-slate-500 mt-1 block">e.g. 15 for â‚¹15 Crores annual sales</span>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Total Monthly Loan EMIs (₹ in Lakhs)</label>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Total Monthly Loan EMIs (â‚¹ in Lakhs)</label>
                   <input 
                     type="number" 
                     step="0.5"
@@ -953,11 +953,11 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                     onChange={e => setCibilForm({...cibilForm, monthlyEmi: e.target.value})}
                     className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 font-bold focus:outline-none focus:border-emerald-600"
                   />
-                  <span className="text-[11px] text-slate-500 mt-1 block">e.g. 4.5 for ₹4.5 Lakhs monthly EMI outflow</span>
+                  <span className="text-[11px] text-slate-500 mt-1 block">e.g. 4.5 for â‚¹4.5 Lakhs monthly EMI outflow</span>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Existing Bank Cash Credit / OD Limit (₹ in Crores)</label>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Existing Bank Cash Credit / OD Limit (â‚¹ in Crores)</label>
                   <input 
                     type="number" 
                     step="0.1"
@@ -965,11 +965,11 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                     onChange={e => setCibilForm({...cibilForm, ccLimit: e.target.value})}
                     className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 font-bold focus:outline-none focus:border-emerald-600"
                   />
-                  <span className="text-[11px] text-slate-500 mt-1 block">e.g. 2.5 for ₹2.5 Crores sanctioned limit</span>
+                  <span className="text-[11px] text-slate-500 mt-1 block">e.g. 2.5 for â‚¹2.5 Crores sanctioned limit</span>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Overdue Receivables Stuck &gt; 90 Days (₹ in Lakhs)</label>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Overdue Receivables Stuck &gt; 90 Days (â‚¹ in Lakhs)</label>
                   <input 
                     type="number" 
                     step="5"
@@ -977,7 +977,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                     onChange={e => setCibilForm({...cibilForm, overdueDebtors: e.target.value})}
                     className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 font-bold focus:outline-none focus:border-emerald-600"
                   />
-                  <span className="text-[11px] text-slate-500 mt-1 block">e.g. 45 for ₹45 Lakhs payments delayed over 90 days</span>
+                  <span className="text-[11px] text-slate-500 mt-1 block">e.g. 45 for â‚¹45 Lakhs payments delayed over 90 days</span>
                 </div>
 
                 <div className="sm:col-span-2">
@@ -1040,11 +1040,11 @@ Payment shall be released within 90 days after delivery and final acceptance. In
 
               {/* WHY PICK THIS PRODUCT GUIDE */}
               <div className="p-4 bg-indigo-50/70 border border-indigo-200 rounded-xl space-y-2">
-                <span className="text-xs font-bold text-indigo-900 uppercase">💡 Why pick this product?</span>
+                <span className="text-xs font-bold text-indigo-900 uppercase">ðŸ’¡ Why pick this product?</span>
                 <p className="text-xs text-slate-700 leading-relaxed">
                   <strong>Who should use this:</strong> Promoters wanting a comprehensive 360-degree scan of their business health across contracts, banking, cash, and internal controls.<br />
                   <strong>Disaster it prevents:</strong> Discovers money leakages, uncollected debts, and compliance gaps before external auditors or tax authorities flag them.<br />
-                  <strong>Expected ROI:</strong> Generates a prioritized 90-day action plan that helps improve net operating cash flow by 15–25%.
+                  <strong>Expected ROI:</strong> Generates a prioritized 90-day action plan that helps improve net operating cash flow by 15â€“25%.
                 </p>
               </div>
 
@@ -1075,11 +1075,11 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                       onChange={e => setDiagnosticRevenue(e.target.value)}
                       className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 font-medium focus:outline-none focus:border-indigo-600"
                     >
-                      <option>&lt; ₹1 Cr (Early Stage)</option>
-                      <option>₹1 Cr - ₹5 Cr</option>
-                      <option>₹5 Cr - ₹25 Cr (MSME Growth)</option>
-                      <option>₹25 Cr - ₹100 Cr (Mid-Corporate)</option>
-                      <option>₹100 Cr+ (Enterprise)</option>
+                      <option>&lt; â‚¹1 Cr (Early Stage)</option>
+                      <option>â‚¹1 Cr - â‚¹5 Cr</option>
+                      <option>â‚¹5 Cr - â‚¹25 Cr (MSME Growth)</option>
+                      <option>â‚¹25 Cr - â‚¹100 Cr (Mid-Corporate)</option>
+                      <option>â‚¹100 Cr+ (Enterprise)</option>
                     </select>
                   </div>
                 </div>
@@ -1123,7 +1123,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                     <h5 className="text-xs font-bold text-rose-700 uppercase">Top 3 Business Risk Blindspots:</h5>
                     {diagnosticResult.report.keyFindings?.map((f: string, i: number) => (
                       <div key={i} className="p-2.5 bg-white border border-slate-200 rounded-lg text-xs text-slate-800 flex items-start gap-2">
-                        <span className="text-rose-600 font-bold shrink-0">•</span>
+                        <span className="text-rose-600 font-bold shrink-0">â€¢</span>
                         <span>{f}</span>
                       </div>
                     ))}
@@ -1133,7 +1133,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                     <h5 className="text-xs font-bold text-emerald-700 uppercase">Immediate Action Steps:</h5>
                     {diagnosticResult.report.actionSteps?.map((a: string, i: number) => (
                       <div key={i} className="p-2.5 bg-white border border-slate-200 rounded-lg text-xs text-slate-800 flex items-start gap-2">
-                        <span className="text-emerald-600 font-bold shrink-0">✓</span>
+                        <span className="text-emerald-600 font-bold shrink-0">âœ“</span>
                         <span>{a}</span>
                       </div>
                     ))}
@@ -1156,11 +1156,11 @@ Payment shall be released within 90 days after delivery and final acceptance. In
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
                 {
-                  title: "1. ControlCFO™ 30-Day Sprint",
-                  idealFor: "Owner-managed MSMEs (₹5 Cr - ₹50 Cr turnover) without a full-time senior CFO.",
+                  title: "1. ControlCFOâ„¢ 30-Day Sprint",
+                  idealFor: "Owner-managed MSMEs (â‚¹5 Cr - â‚¹50 Cr turnover) without a full-time senior CFO.",
                   problemSolved: "Your accountant only tells you what taxes to pay. No one is managing your future cash runway, debtor recovery, or bank limits.",
-                  concreteRoi: "Saves ₹25+ Lakhs annually compared to hiring a full-time C-suite executive while giving you institutional board-grade control.",
-                  price: "₹1.5–4 Lakh fixed",
+                  concreteRoi: "Saves â‚¹25+ Lakhs annually compared to hiring a full-time C-suite executive while giving you institutional board-grade control.",
+                  price: "â‚¹1.5â€“4 Lakh fixed",
                   deskIndex: 0
                 },
                 {
@@ -1168,7 +1168,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                   idealFor: "Contractors, manufacturers, and agencies signing large client agreements.",
                   problemSolved: "Big clients insert unilateral termination, uncapped indemnity, and 90-day payment delays that choke your business.",
                   concreteRoi: "Closes payment loopholes before signing. Recovers stuck receivables up to 40% faster with formal MSME Samadhaan protections.",
-                  price: "₹75,000–₹3 Lakh setup",
+                  price: "â‚¹75,000â€“â‚¹3 Lakh setup",
                   deskIndex: 2
                 },
                 {
@@ -1176,7 +1176,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                   idealFor: "Companies applying for bank loans, CC limit enhancements, or facing high loan interest.",
                   problemSolved: "Banks take 3-6 months and often reject loans because balance sheet ratios (DSCR, drawing power) look weak or inconsistent.",
                   concreteRoi: "Prepares bank-compliant data rooms. Helps negotiate 50-75 bps lower interest rates, saving lakhs in interest every year.",
-                  price: "₹75,000–₹3 Lakh + success fee",
+                  price: "â‚¹75,000â€“â‚¹3 Lakh + success fee",
                   deskIndex: 5
                 },
                 {
@@ -1184,7 +1184,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                   idealFor: "Exporters, importers, and government tender contractors.",
                   problemSolved: "Over 60% of export Letters of Credit suffer discrepancy rejections, trapping container shipments at foreign ports.",
                   concreteRoi: "Zero-defect document review prevents bank rejection, saves demurrage charges, and guarantees prompt payment realization.",
-                  price: "₹50,000–₹2 Lakh per transaction",
+                  price: "â‚¹50,000â€“â‚¹2 Lakh per transaction",
                   deskIndex: 3
                 },
                 {
@@ -1192,7 +1192,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                   idealFor: "Business owners suspecting internal theft, kickbacks, or fake vendor billing.",
                   problemSolved: "Internal employees or partners siphoning company funds through inflated procurement or unauthorized dispatches.",
                   concreteRoi: "Discreet forensic audits produce evidence-grade documentation ready for legal action or asset recovery.",
-                  price: "₹3–15 Lakh per investigation",
+                  price: "â‚¹3â€“15 Lakh per investigation",
                   deskIndex: 4
                 },
                 {
@@ -1200,7 +1200,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                   idealFor: "Family-owned businesses and promoters planning succession or multi-entity management.",
                   problemSolved: "Disputes between siblings or partners, messy asset ownership, and lack of clear authority matrices.",
                   concreteRoi: "Protects family wealth across generations with a legally sound family constitution and consolidated reporting.",
-                  price: "₹2–10 Lakh setup",
+                  price: "â‚¹2â€“10 Lakh setup",
                   deskIndex: 7
                 }
               ].map((p, idx) => (
@@ -1283,7 +1283,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                       <span className="px-2.5 py-0.5 rounded bg-blue-50 border border-blue-200 text-[10px] font-bold text-blue-700 uppercase">
                         {srv.badge}
                       </span>
-                      <span className="text-[11px] font-bold text-slate-500">⏱️ {srv.timeframe}</span>
+                      <span className="text-[11px] font-bold text-slate-500">â±ï¸ {srv.timeframe}</span>
                     </div>
 
                     <div>
@@ -1294,7 +1294,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                     <p className="text-xs text-slate-600 leading-relaxed font-normal">{srv.summary}</p>
 
                     <div className="p-3 bg-rose-50/80 border border-rose-200 rounded-xl space-y-1">
-                      <span className="text-[10px] font-bold text-rose-800 uppercase tracking-wider block">⚠️ The Problem Solved</span>
+                      <span className="text-[10px] font-bold text-rose-800 uppercase tracking-wider block">âš ï¸ The Problem Solved</span>
                       <p className="text-xs text-slate-800 leading-relaxed">{srv.problem}</p>
                     </div>
 
@@ -1351,7 +1351,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
               <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900">Tailored Solutions for Your Sector</h2>
               {/* REPHRASED LINE WITH AUTHENTIC LOCALIZED FEEL */}
               <p className="text-slate-700 font-medium text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
-                Rooted on-ground across Delhi NCR — serving factory promoters, exporters, and enterprises in Noida Phase 2 & Sector 63, Greater Noida Ecotech & Surajpur industrial hubs, Gurugram Udyog Vihar & Manesar, and manufacturing corridors across North India.
+                Rooted on-ground across â€” serving factory promoters, exporters, and enterprises in Noida Phase 2 & Sector 63, Greater Noida Ecotech & Surajpur industrial hubs,  Udyog Vihar & Manesar, and manufacturing corridors across North India.
               </p>
             </div>
 
@@ -1395,7 +1395,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                 { step: "06", title: "Executive Action Plan", desc: "You receive a 1-page board-grade brief with exact steps, priorities, and cost impact." },
                 { step: "07", title: "Implementation Support", desc: "We help you re-negotiate contracts, fix bank files, or implement internal checks." },
                 { step: "08", title: "Closure Proof", desc: "We verify and document that the risk has been permanently resolved." },
-                { step: "09", title: "Monthly Command Monitoring", desc: "Continuous oversight through ControlCFO™ monthly check-ins." }
+                { step: "09", title: "Monthly Command Monitoring", desc: "Continuous oversight through ControlCFOâ„¢ monthly check-ins." }
               ].map((w, idx) => (
                 <div key={idx} className="navigalex-card p-6 rounded-2xl flex items-center gap-6 shadow-sm">
                   <div className="w-12 h-12 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center font-bold text-blue-600 shrink-0">
@@ -1444,7 +1444,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                 </div>
                 <div>
                   <h4 className="text-xs font-bold uppercase tracking-wider text-blue-600 mb-1">Primary Operational Hub</h4>
-                  <p className="text-xs text-slate-600">Serving Noida (Sec 62/63/Phase 2), Greater Noida (Ecotech/Surajpur), Gurugram, and North India.</p>
+                  <p className="text-xs text-slate-600">Serving , and North India.</p>
                 </div>
                 <div>
                   <h4 className="text-xs font-bold uppercase tracking-wider text-blue-600 mb-1">Data Privacy Mandate</h4>
@@ -1474,7 +1474,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                   <p className="text-sm text-slate-600 max-w-md mx-auto">
                     Thank you, {leadForm.name || 'Leader'}. A senior practice director will contact you via {leadForm.contactMethod} within 4 business hours to discuss your situation confidentially.
                   </p>
-                  <button onClick={() => setLeadSubmitted(false)} className="px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-xs font-semibold text-white rounded-xl cursor-pointer">
+                  <button onClick={() => setLeadSubmitted(false)} className="px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-xs font-semibold text-white rounded-xl cursor-pointer"><span aria-label="Close" className="text-xl leading-none">×</span>
                     Submit Another Inquiry
                   </button>
                 </div>
@@ -1549,10 +1549,10 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                         onChange={e => setLeadForm({...leadForm, turnover: e.target.value})}
                         className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none focus:border-blue-600"
                       >
-                        <option>&lt; ₹5 Cr</option>
-                        <option>₹5 Cr - ₹25 Cr</option>
-                        <option>₹25 Cr - ₹100 Cr</option>
-                        <option>₹100 Cr+</option>
+                        <option>&lt; â‚¹5 Cr</option>
+                        <option>â‚¹5 Cr - â‚¹25 Cr</option>
+                        <option>â‚¹25 Cr - â‚¹100 Cr</option>
+                        <option>â‚¹100 Cr+</option>
                       </select>
                     </div>
                   </div>
@@ -1564,7 +1564,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                       onChange={e => setLeadForm({...leadForm, primaryConcern: e.target.value})}
                       className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none focus:border-blue-600"
                     >
-                      <option>1. ControlCFO™ 30-Day Readiness Sprint</option>
+                      <option>1. ControlCFOâ„¢ 30-Day Readiness Sprint</option>
                       <option>2. Board-in-a-Box Governance OS</option>
                       <option>3. Contract-to-Cash Risk Desk</option>
                       <option>4. TradeShield LC/BG Desk</option>
@@ -1659,7 +1659,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                   onClick={() => { setSelectedDeskModal(ADVISORY_DESKS[0]); window.scrollTo({ top: 0, behavior: 'smooth' }); }} 
                   className="hover:text-white transition-colors cursor-pointer text-left"
                 >
-                  ControlCFO™ Sprint
+                  ControlCFOâ„¢ Sprint
                 </button>
               </li>
               <li>
@@ -1759,10 +1759,10 @@ Payment shall be released within 90 days after delivery and final acceptance. In
         </div>
 
         <div className="max-w-7xl mx-auto pt-8 border-t border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4 text-slate-500">
-          <p>© {new Date().getFullYear()} Navigalex Advisory & Governance Intelligence. All rights reserved.</p>
+          <p>Â© {new Date().getFullYear()} Navigalex Advisory & Governance Intelligence. All rights reserved.</p>
           <p className="text-[11px] flex items-center gap-1.5">
             <MapPin className="w-3.5 h-3.5 text-blue-500" />
-            <span>Delhi NCR • Noida (Sec 62/63/Phase 2) • Greater Noida (Ecotech/Surajpur) • Gurugram</span>
+            <span>â€¢ â€¢ â€¢ </span>
           </p>
         </div>
       </footer>
@@ -1869,7 +1869,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
               <button 
                 onClick={() => setShowPrivacyModal(false)}
                 className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors cursor-pointer"
-              >
+              ><span aria-label="Close" className="text-xl leading-none">×</span>
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -1877,7 +1877,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
             <div className="space-y-4 text-xs text-slate-700 leading-relaxed">
               <div className="p-3.5 bg-blue-50/70 border border-blue-200 rounded-xl">
                 <strong className="text-blue-900 block font-bold mb-1">Our Core Confidentiality Guarantee:</strong>
-                <span>We never upload or train public consumer AI tools on your company’s financial records, Tally dumps, or customer contracts. All data ingestion operates in isolated enterprise-grade sandboxes with AES-256 encryption.</span>
+                <span>We never upload or train public consumer AI tools on your companyâ€™s financial records, Tally dumps, or customer contracts. All data ingestion operates in isolated enterprise-grade sandboxes with AES-256 encryption.</span>
               </div>
 
               <div>
@@ -1900,7 +1900,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
               <button 
                 onClick={() => setShowPrivacyModal(false)}
                 className="px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl cursor-pointer"
-              >
+              ><span aria-label="Close" className="text-xl leading-none">×</span>
                 Close Privacy Policy
               </button>
             </div>
@@ -1925,7 +1925,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
               <button 
                 onClick={() => setShowGuardrailsModal(false)}
                 className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors cursor-pointer"
-              >
+              ><span aria-label="Close" className="text-xl leading-none">×</span>
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -1957,7 +1957,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
               <button 
                 onClick={() => setShowGuardrailsModal(false)}
                 className="px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl cursor-pointer"
-              >
+              ><span aria-label="Close" className="text-xl leading-none">×</span>
                 Acknowledge & Close
               </button>
             </div>
@@ -1986,3 +1986,5 @@ Payment shall be released within 90 days after delivery and final acceptance. In
     </div>
   );
 }
+
+

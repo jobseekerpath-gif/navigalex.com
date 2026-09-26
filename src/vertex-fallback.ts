@@ -14,3 +14,4 @@ export async function vertexFallback(prompt: string) {
 
   return response.text || "";
 }
+

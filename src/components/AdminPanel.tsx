@@ -119,8 +119,8 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
   const [caseStudyForm, setCaseStudyForm] = useState({
     title: '',
     clientSector: 'Manufacturing & Engineering',
-    region: 'Noida Sector 63, Delhi NCR',
-    dealSize: '₹25 Cr Annual Turnover',
+    region: 'Noida Sector 63, ',
+    dealSize: 'â‚¹25 Cr Annual Turnover',
     riskIdentified: '',
     advisoryProvided: '',
     concreteRoi: '',
@@ -343,8 +343,8 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
       setCaseStudyForm({
         title: '',
         clientSector: 'Manufacturing & Engineering',
-        region: 'Noida Sector 63, Delhi NCR',
-        dealSize: '₹25 Cr Annual Turnover',
+        region: 'Noida Sector 63, ',
+        dealSize: 'â‚¹25 Cr Annual Turnover',
         riskIdentified: '',
         advisoryProvided: '',
         concreteRoi: '',
@@ -500,7 +500,7 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
               onClick={onBackToSite}
               className="text-xs text-slate-500 hover:text-blue-600 font-medium transition-colors cursor-pointer"
             >
-              ← Return to Public Website
+              â† Return to Public Website
             </button>
           </div>
         </div>
@@ -991,8 +991,8 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
                   setCaseStudyForm({
                     title: '',
                     clientSector: 'Manufacturing & Engineering',
-                    region: 'Noida Sector 63, Delhi NCR',
-                    dealSize: '₹25 Cr Annual Turnover',
+                    region: 'Noida Sector 63, ',
+                    dealSize: 'â‚¹25 Cr Annual Turnover',
                     riskIdentified: '',
                     advisoryProvided: '',
                     concreteRoi: '',
@@ -1167,7 +1167,7 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
                   </span>
                 </div>
                 <h3 className="text-xl font-bold text-slate-900 mt-1">{selectedInquiry.name}</h3>
-                <span className="text-xs text-slate-600">{selectedInquiry.designation} • {selectedInquiry.company}</span>
+                <span className="text-xs text-slate-600">{selectedInquiry.designation} â€¢ {selectedInquiry.company}</span>
               </div>
               <button
                 onClick={() => setSelectedInquiry(null)}
@@ -1254,7 +1254,7 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
               <button
                 onClick={() => setShowCaseStudyModal(false)}
                 className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 cursor-pointer"
-              >
+              ><span aria-label="Close" className="text-xl leading-none">×</span>
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -1267,7 +1267,7 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
                   required
                   value={caseStudyForm.title}
                   onChange={e => setCaseStudyForm({...caseStudyForm, title: e.target.value})}
-                  placeholder="e.g. Noida Automotive Component Manufacturer: ₹1.8 Cr Receivables Recovery"
+                  placeholder="e.g. Noida Automotive Component Manufacturer: â‚¹1.8 Cr Receivables Recovery"
                   className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-blue-600 focus:bg-white"
                 />
               </div>
@@ -1296,7 +1296,7 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
                     required
                     value={caseStudyForm.region}
                     onChange={e => setCaseStudyForm({...caseStudyForm, region: e.target.value})}
-                    placeholder="e.g. Noida Phase-2, Delhi NCR"
+                    placeholder="e.g. Noida Phase-2, "
                     className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs text-slate-900 focus:outline-none focus:border-blue-600"
                   />
                 </div>
@@ -1308,7 +1308,7 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
                   type="text"
                   value={caseStudyForm.dealSize}
                   onChange={e => setCaseStudyForm({...caseStudyForm, dealSize: e.target.value})}
-                  placeholder="e.g. ₹42 Cr Annual Turnover"
+                  placeholder="e.g. â‚¹42 Cr Annual Turnover"
                   className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs text-slate-900 focus:outline-none focus:border-blue-600"
                 />
               </div>
@@ -1344,7 +1344,7 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
                   required
                   value={caseStudyForm.concreteRoi}
                   onChange={e => setCaseStudyForm({...caseStudyForm, concreteRoi: e.target.value})}
-                  placeholder="e.g. Recovered 100% of trapped ₹1.8 Cr within 38 days, saving ₹12L legal fees"
+                  placeholder="e.g. Recovered 100% of trapped â‚¹1.8 Cr within 38 days, saving â‚¹12L legal fees"
                   className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs text-slate-900 focus:outline-none focus:border-blue-600"
                 />
               </div>
@@ -1377,3 +1377,5 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
     </div>
   );
 }
+
+

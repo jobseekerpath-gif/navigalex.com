@@ -1,5 +1,4 @@
 import express from 'express';
-import { createServer as createViteServer } from 'vite';
 import { GoogleGenAI } from '@google/genai';
 
 async function startServer() {
@@ -681,6 +680,113 @@ async function startServer() {
   const apiKey = process.env.GEMINI_API_KEY;
   const ai = apiKey ? new GoogleGenAI({ apiKey }) : null;
 
+  // --- Document Analysis: Multi-Provider AI Helpers ---
+
+  interface DocumentAnalysisResult {
+    riskScore: number;
+    riskLevel: string;
+    summary: string;
+    clauses: string[];
+    recommendations: string[];
+  }
+
+  interface ProviderResponse {
+    text: string;
+    model: string;
+  }
+
+  function buildAnalysisPrompt(documentText: string, fileName: string): string {
+    return `You are a senior Indian corporate contracts advisor. Analyze the following document for financial and legal risk exposure to the business signing it (e.g. indemnity, termination, jurisdiction, penalties, payment terms, IP transfer).
+
+Document name: ${fileName}
+Document text:
+"""
+${documentText.slice(0, 12000)}
+"""
+
+Respond with ONLY a JSON object (no markdown fences, no extra commentary) in exactly this shape:
+{
+  "riskScore": <integer 0-100>,
+  "riskLevel": "<short risk level label, e.g. 'High Risk (Immediate Review Needed)'>",
+  "summary": "<2-3 sentence executive summary>",
+  "clauses": ["<red flag clause 1>", "<red flag clause 2>", "..."],
+  "recommendations": ["<recommendation 1>", "<recommendation 2>", "..."]
+}`;
+  }
+
+  function parseAnalysisJson(raw: string): DocumentAnalysisResult | null {
+    try {
+      const cleaned = raw.trim().replace(/^```(?:json)?/i, '').replace(/```$/i, '').trim();
+      const parsed = JSON.parse(cleaned);
+      if (
+        typeof parsed.riskScore !== 'number' ||
+        !Array.isArray(parsed.clauses) ||
+        !Array.isArray(parsed.recommendations)
+      ) {
+        return null;
+      }
+      return {
+        riskScore: parsed.riskScore,
+        riskLevel: typeof parsed.riskLevel === 'string' ? parsed.riskLevel : 'Moderate Risk (Needs Negotiation)',
+        summary: typeof parsed.summary === 'string' ? parsed.summary : '',
+        clauses: parsed.clauses.filter((c: unknown) => typeof c === 'string'),
+        recommendations: parsed.recommendations.filter((r: unknown) => typeof r === 'string')
+      };
+    } catch {
+      return null;
+    }
+  }
+
+  async function analyzeWithClaude(prompt: string): Promise<ProviderResponse | null> {
+    const key = process.env.ANTHROPIC_API_KEY;
+    if (!key) return null;
+    const model = process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-5-20250929';
+
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'x-api-key': key,
+        'anthropic-version': '2023-06-01',
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        model,
+        max_tokens: 1536,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    if (!resp.ok) {
+      throw new Error(`Claude API error ${resp.status}: ${(await resp.text()).slice(0, 300)}`);
+    }
+    const data: any = await resp.json();
+    const text = data?.content?.[0]?.text;
+    if (!text) throw new Error('Claude returned an empty response');
+    return { text, model };
+  }
+
+  async function analyzeWithGemini(prompt: string): Promise<ProviderResponse | null> {
+    if (!ai) return null;
+    const model = process.env.GEMINI_MODEL || 'gemini-flash-latest';
+    const response = await ai.models.generateContent({ model, contents: prompt });
+    if (!response.text) throw new Error('Gemini returned an empty response');
+    return { text: response.text, model };
+  }
+
+  async function analyzeWithVertex(prompt: string): Promise<ProviderResponse | null> {
+    const project = process.env.GOOGLE_CLOUD_PROJECT;
+    if (!project) return null;
+    const model = process.env.VERTEX_MODEL || 'gemini-2.5-flash';
+    const client = new GoogleGenAI({
+      vertexai: true,
+      project,
+      location: process.env.GOOGLE_CLOUD_LOCATION || 'us-central1'
+    });
+    const response = await client.models.generateContent({ model, contents: prompt });
+    if (!response.text) throw new Error('Vertex AI returned an empty response');
+    return { text: response.text, model };
+  }
+
   // Bot Chat Endpoint
   app.post('/api/bot/chat', async (req, res) => {
     const { message, history, visitorId } = req.body;
@@ -814,69 +920,68 @@ Your Personality & Voice:
     });
   });
 
-  app.post('/api/documents/analyze', (req, res) => {
+  app.post('/api/documents/analyze', async (req, res) => {
     const { documentText, fileName, visitorId } = req.body;
-    const text = (documentText || "").toLowerCase();
+    const text = (documentText || "").trim();
+    const effectiveFileName = fileName || 'Pasted Agreement Text';
 
     // Log real activity
     recordVisitorActivity(
-      req, 
-      visitorId || '', 
-      'SCAN_CONTRACT', 
-      '/live-tools', 
-      `Analyzed contract clauses in "${fileName || 'Pasted Agreement Text'}" (${text.length} chars)`
+      req,
+      visitorId || '',
+      'SCAN_CONTRACT',
+      '/live-tools',
+      `Analyzed contract clauses in "${effectiveFileName}" (${text.length} chars)`
     );
 
-    const redFlags: string[] = [];
-    const suggestions: string[] = [];
-    let riskScore = 68;
-
-    if (text.includes("indemn") || text.includes("hold harmless") || !text) {
-      redFlags.push("Uncapped Indemnification Clause: You may be held financially liable for third-party damages without any monetary ceiling.");
-      suggestions.push("Cap total indemnity to the total fees received under this agreement in the previous 12 months.");
-      riskScore += 12;
+    if (!text) {
+      return res.status(400).json({ error: 'documentText is required.' });
     }
 
-    if (text.includes("terminat") || text.includes("immediate") || text.includes("convenience")) {
-      redFlags.push("One-Sided Termination: Client can terminate the contract without cause, but you cannot exit even if payments are delayed.");
-      suggestions.push("Add a reciprocal 30-day notice period and guarantee full payment for work done up to the termination date.");
-      riskScore += 8;
-    }
+    const prompt = buildAnalysisPrompt(text, effectiveFileName);
 
-    if (text.includes("jurisdiction") || text.includes("court") || text.includes("arbitration")) {
-      redFlags.push("Inconvenient Dispute Jurisdiction: Any legal claim must be filed in a distant or foreign jurisdiction, drastically increasing legal costs.");
-      suggestions.push("Insist on jurisdiction in your local commercial courts or institutional fast-track arbitration.");
-      riskScore += 6;
-    }
+    const providers: Array<{ name: string; run: () => Promise<ProviderResponse | null> }> = [
+      { name: 'claude', run: () => analyzeWithClaude(prompt) },
+      { name: 'gemini', run: () => analyzeWithGemini(prompt) },
+      { name: 'vertex', run: () => analyzeWithVertex(prompt) }
+    ];
 
-    if (text.includes("delay") || text.includes("penalty") || text.includes("liquidated")) {
-      redFlags.push("Punitive Delay Penalties: Penalty clauses for minor project delays without allowing grace periods for client-side delays.");
-      suggestions.push("Include excusable delays (Force Majeure, client dependency delays) and cap penalties at maximum 5% of order value.");
-      riskScore += 9;
-    }
+    let lastError: string | null = null;
 
-    if (redFlags.length === 0) {
-      redFlags.push("Ambiguous Payment Terms: Net payment terms lack clear late-payment interest clauses.");
-      redFlags.push("Broad Intellectual Property Transfer: Clauses transfer all background tools and templates to client.");
-      suggestions.push("Add MSME Samadhaan compliant 45-day statutory payment clause with 3x RBI bank rate interest.");
-      suggestions.push("Retain background IP rights and license only project deliverables.");
-      riskScore = 55;
-    }
+    for (const provider of providers) {
+      try {
+        const result = await provider.run();
+        if (!result) continue; // provider not configured, try next
 
-    riskScore = Math.min(riskScore, 95);
-    const riskLevel = riskScore > 75 ? "High Risk (Immediate Review Needed)" : "Moderate Risk (Needs Negotiation)";
+        const parsed = parseAnalysisJson(result.text);
+        if (!parsed) {
+          lastError = `${provider.name}/${result.model} returned unparsable output`;
+          console.warn(`[documents/analyze] ${lastError}`);
+          continue;
+        }
 
-    res.json({
-      success: true,
-      analysis: {
-        fileName: fileName || "Contract_Excerpt.txt",
-        riskScore: `${riskScore}/100`,
-        riskLevel,
-        summary: `Analysis identified ${redFlags.length} major commercial and legal risk clauses in this document. If signed in its current state, your business bears unhedged financial risk without adequate protections.`,
-        clauses: redFlags,
-        recommendations: suggestions
+        console.log(`[documents/analyze] provider=${provider.name} model=${result.model} used for "${effectiveFileName}"`);
+
+        const riskScore = Math.max(0, Math.min(100, Math.round(parsed.riskScore)));
+        return res.json({
+          success: true,
+          analysis: {
+            fileName: effectiveFileName,
+            riskScore: `${riskScore}/100`,
+            riskLevel: parsed.riskLevel,
+            summary: parsed.summary,
+            clauses: parsed.clauses,
+            recommendations: parsed.recommendations
+          }
+        });
+      } catch (err: any) {
+        lastError = err?.message || String(err);
+        console.warn(`[documents/analyze] provider=${provider.name} failed: ${lastError}`);
       }
-    });
+    }
+
+    console.error(`[documents/analyze] all providers failed for "${effectiveFileName}". last error: ${lastError}`);
+    return res.status(502).json({ error: 'All AI providers failed to analyze the document. Please try again later.' });
   });
 
   // Financial & CIBIL Health Scanner API: Real Activity Hook
@@ -926,15 +1031,10 @@ Your Personality & Voice:
     });
   });
 
-  // Create Vite server in middleware mode
-  const vite = await createViteServer({
-    server: { middlewareMode: true },
-    appType: 'spa',
-  });
+  app.use(express.static('dist'));
+app.get('*', (req,res) => res.sendFile(path.resolve('dist/index.html')));
 
-  app.use(vite.middlewares);
-
-  app.listen(PORT, '0.0.0.0', () => {
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server running on http://localhost:${PORT}`);
   });
 }
@@ -943,3 +1043,5 @@ startServer().catch(err => {
   console.error('Failed to start server:', err);
   process.exit(1);
 });
+
+

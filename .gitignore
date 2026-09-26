@@ -6,3 +6,7 @@ coverage/
 *.log
 .env*
 !.env.example
+
+vertex-key.json
+navigalex-ai-credentials.json
+*.json
