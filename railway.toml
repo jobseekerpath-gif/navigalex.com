@@ -1,3 +1,0 @@
-[deploy]
-startCommand = "node --import tsx server.ts"
-restartPolicyType = "ON_FAILURE"
