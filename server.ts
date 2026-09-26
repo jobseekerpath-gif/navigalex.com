@@ -3,7 +3,7 @@ import { GoogleGenAI } from '@google/genai';
 
 async function startServer() {
   const app = express();
-  const PORT = 3000;
+  const PORT = Number(process.env.PORT) || 3000;
 
   // Enable trust proxy for accurate real visitor IP tracking behind Google Cloud Run / Load Balancers
   app.set('trust proxy', true);
@@ -1034,7 +1034,7 @@ Your Personality & Voice:
   app.use(express.static('dist'));
 app.get('*', (req,res) => res.sendFile(path.resolve('dist/index.html')));
 
-app.listen(PORT, '0.0.0.0', () => {
+app.listen(PORT, "0.0.0.0", '0.0.0.0', () => {
     console.log(`Server running on http://localhost:${PORT}`);
   });
 }
@@ -1043,5 +1043,6 @@ startServer().catch(err => {
   console.error('Failed to start server:', err);
   process.exit(1);
 });
+
 
 
