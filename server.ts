@@ -1,4 +1,4 @@
-﻿import express from 'express';
+import express from 'express';
 import path from 'node:path';
 import { GoogleGenAI } from '@google/genai';
 
@@ -197,7 +197,7 @@ async function startServer() {
       timestamp: new Date(Date.now() - 3600000 * 2).toISOString(),
       eventType: 'INQUIRY_SUBMIT',
       path: '/contact',
-      details: 'Submitted confidential assessment for Apex Precision Engineering (â‚¹25 Cr - â‚¹100 Cr turnover)',
+      details: 'Submitted confidential assessment for Apex Precision Engineering (₹25 Cr - ₹100 Cr turnover)',
       browser: 'Chrome',
       os: 'Windows',
       device: 'Desktop'
@@ -221,7 +221,7 @@ async function startServer() {
       timestamp: new Date(Date.now() - 3600000 * 9).toISOString(),
       eventType: 'SCAN_DSCR',
       path: '/live-tools',
-      details: 'Ran Bank DSCR Calculator for â‚¹15 Cr turnover and â‚¹4.5 Lakh monthly EMI',
+      details: 'Ran Bank DSCR Calculator for ₹15 Cr turnover and ₹4.5 Lakh monthly EMI',
       browser: 'Chrome',
       os: 'Android',
       device: 'Mobile'
@@ -266,7 +266,7 @@ async function startServer() {
       email: 'rajesh.sharma@apexeng.in',
       phone: '+91 98112 43210',
       businessType: 'Manufacturing & Engineering',
-      turnover: 'â‚¹25 Cr - â‚¹100 Cr',
+      turnover: '₹25 Cr - ₹100 Cr',
       primaryConcern: 'Contract & Receivable Cash Flow Risk',
       contactMethod: 'Phone',
       status: 'New',
@@ -282,7 +282,7 @@ async function startServer() {
       email: 'sunita@sunglobal.com',
       phone: '+91 98100 87654',
       businessType: 'Exporters & International Trade',
-      turnover: 'â‚¹5 Cr - â‚¹25 Cr',
+      turnover: '₹5 Cr - ₹25 Cr',
       primaryConcern: 'TradeShield Export Letter of Credit / Bank Guarantee',
       contactMethod: 'WhatsApp',
       status: 'Under Review',
@@ -298,13 +298,13 @@ async function startServer() {
       email: 'vikram@goelinfra.co.in',
       phone: '+91 99105 12345',
       businessType: 'Real Estate, Construction & Property',
-      turnover: 'â‚¹25 Cr - â‚¹100 Cr',
+      turnover: '₹25 Cr - ₹100 Cr',
       primaryConcern: 'Bank Loan CC/OD Renewal & Data Room',
       contactMethod: 'Confidential Video Call',
       status: 'NDA Executed',
       submittedAt: new Date(Date.now() - 3600000 * 24).toISOString(),
       ip: '122.161.45.67',
-      notes: 'PSU bank delayed â‚¹15 Cr working capital renewal due to DSCR dip. CMA data reconstruction required.'
+      notes: 'PSU bank delayed ₹15 Cr working capital renewal due to DSCR dip. CMA data reconstruction required.'
     },
     {
       id: 'INQ-1046',
@@ -314,8 +314,8 @@ async function startServer() {
       email: 'harish@mehtadistributors.com',
       phone: '+91 98200 99887',
       businessType: 'Distributors & Wholesale Trading',
-      turnover: 'â‚¹5 Cr - â‚¹25 Cr',
-      primaryConcern: 'ControlCFOâ„¢ 30-Day Financial Sprint',
+      turnover: '₹5 Cr - ₹25 Cr',
+      primaryConcern: 'ControlCFO™ 30-Day Financial Sprint',
       contactMethod: 'Phone',
       status: 'Diagnostic Delivered',
       submittedAt: new Date(Date.now() - 3600000 * 48).toISOString(),
@@ -328,13 +328,13 @@ async function startServer() {
   let caseStudies: CaseStudy[] = [
     {
       id: 'CS-201',
-      title: 'Automotive Component Manufacturer (Noida Phase-2): â‚¹1.8 Cr Trapped Receivables Recovery',
+      title: 'Automotive Component Manufacturer (Noida Phase-2): ₹1.8 Cr Trapped Receivables Recovery',
       clientSector: 'Manufacturing & Engineering',
       region: 'Noida Phase-2, Delhi NCR',
-      dealSize: 'â‚¹42 Cr Annual Turnover',
-      riskIdentified: 'Tier-1 customer withheld â‚¹1.8 Cr invoking an uncapped indemnity clause for assembly line delay caused by raw material supply shortages.',
+      dealSize: '₹42 Cr Annual Turnover',
+      riskIdentified: 'Tier-1 customer withheld ₹1.8 Cr invoking an uncapped indemnity clause for assembly line delay caused by raw material supply shortages.',
       advisoryProvided: 'Navigalex Contract-to-Cash Desk redlined the master agreement, established force-majeure event timeline, and filed formal MSME Samadhaan dispute notice.',
-      concreteRoi: 'Recovered 100% of the â‚¹1.8 Cr trapped principal within 38 days without formal court litigation, saving an estimated â‚¹12 Lakhs in legal expenses.',
+      concreteRoi: 'Recovered 100% of the ₹1.8 Cr trapped principal within 38 days without formal court litigation, saving an estimated ₹12 Lakhs in legal expenses.',
       status: 'Published',
       submittedAt: '2026-03-15T10:30:00Z',
       author: 'Senior Partner (Legal & Debt Recovery)'
@@ -354,13 +354,13 @@ async function startServer() {
     },
     {
       id: 'CS-203',
-      title: 'Specialty Chemicals & Polymers (Gurugram Manesar): â‚¹25 Cr Bank Credit Renewal & DSCR Optimization',
+      title: 'Specialty Chemicals & Polymers (Gurugram Manesar): ₹25 Cr Bank Credit Renewal & DSCR Optimization',
       clientSector: 'Chemicals & Manufacturing',
       region: 'Manesar Industrial Area, Gurugram',
-      dealSize: 'â‚¹68 Cr Annual Turnover',
+      dealSize: '₹68 Cr Annual Turnover',
       riskIdentified: 'Lead private sector bank flagged DSCR of 1.15x and proposed hiking CC limit interest by 125 bps and slashing drawing power by 20%.',
       advisoryProvided: 'LenderReady Credit Office reconstructed CMA data, segregated long-term capex debt from operational cash credit, and restructured debt tenure.',
-      concreteRoi: 'Bank renewed â‚¹25 Cr limit without drawing power haircut and lowered interest spread by 65 bps, saving â‚¹16.2 Lakhs annual interest expense.',
+      concreteRoi: 'Bank renewed ₹25 Cr limit without drawing power haircut and lowered interest spread by 65 bps, saving ₹16.2 Lakhs annual interest expense.',
       status: 'Published',
       submittedAt: '2026-02-18T09:00:00Z',
       author: 'Former Senior Credit Officer & CA Lead'
@@ -479,7 +479,7 @@ async function startServer() {
       email,
       phone,
       businessType: businessType || 'General Enterprise',
-      turnover: turnover || 'â‚¹5 Cr - â‚¹25 Cr',
+      turnover: turnover || '₹5 Cr - ₹25 Cr',
       primaryConcern: primaryConcern || 'Contract & Receivable Cash Flow Risk',
       contactMethod: contactMethod || 'Phone',
       status: 'New',
@@ -824,7 +824,7 @@ Respond with ONLY a JSON object (no markdown fences, no extra commentary) in exa
     const systemInstruction = `You are Navigalex Live, a seasoned Senior Corporate Advisor and Virtual CFO helping Indian business owners, MSME promoters, and directors protect their business from financial, contract, and banking traps.
 
 Your Personality & Voice:
-- Conversational, human, sharp, and direct â€” like an experienced senior partner sitting across the table with a founder over coffee.
+- Conversational, human, sharp, and direct — like an experienced senior partner sitting across the table with a founder over coffee.
 - Speak in natural, plain business terms that Indian entrepreneurs relate to (e.g. Tally reconciliations, delayed client payments, bank CC limit drawing power, MSME Samadhaan, LC discrepancies).
 - Never sound like an automated robotic script or repeat canned generic disclaimers.
 - Answer the user's exact query immediately and specifically. If they ask "what can you do for me", give a crisp, compelling 3-point breakdown of the exact high-stakes problems you solve (e.g., catching uncapped contract liability before signing, fixing bank DSCR so loan renewals aren't blocked, and running 30-day ControlCFO sprints for cash flow).
@@ -860,19 +860,19 @@ Your Personality & Voice:
     let reply = "";
 
     if (lower.includes("what can you do") || lower.includes("who are you") || lower.includes("help me") || lower.includes("how can you help")) {
-      reply = "Think of me as your on-demand CFO and legal risk partner. Here is specifically what I do for business owners:\n\nâ€¢ **Protect Your Contracts:** I review your client and vendor MSAs to eliminate unlimited liability clauses and 90-day payment delay traps.\nâ€¢ **Fix Bank Loan Rejections:** I calculate your Debt Service Coverage (DSCR) and reconcile bank statements so your CC limit renewals get sanctioned without friction.\nâ€¢ **Stop Cash Leakages:** Through our **ControlCFOâ„¢ 30-Day Sprint**, we give you a 13-week cash runway model and a prioritized action plan to unlock trapped receivables.\n\nAre you currently dealing with a delayed customer payment, a contract negotiation, or a bank loan issue?";
+      reply = "Think of me as your on-demand CFO and legal risk partner. Here is specifically what I do for business owners:\n\n• **Protect Your Contracts:** I review your client and vendor MSAs to eliminate unlimited liability clauses and 90-day payment delay traps.\n• **Fix Bank Loan Rejections:** I calculate your Debt Service Coverage (DSCR) and reconcile bank statements so your CC limit renewals get sanctioned without friction.\n• **Stop Cash Leakages:** Through our **ControlCFO™ 30-Day Sprint**, we give you a 13-week cash runway model and a prioritized action plan to unlock trapped receivables.\n\nAre you currently dealing with a delayed customer payment, a contract negotiation, or a bank loan issue?";
     } else if (lower.includes("cfo") || lower.includes("controlcfo") || lower.includes("cash") || lower.includes("sprint")) {
-      reply = "Our **ControlCFOâ„¢ 30-Day Sprint** is built for businesses doing â‚¹5 Crâ€“â‚¹50 Cr who need senior financial leadership without paying â‚¹35 Lakh/year for a full-time CFO. In 30 days, we deliver a 13-week dynamic cash flow model, review your top 5 contracts, audit your debtor ledger, and provide a 90-day action matrix signed off by a Chartered Accountant for a fixed â‚¹1.5â€“4 Lakh fee.\n\nWould you like to see the week-by-week delivery schedule?";
+      reply = "Our **ControlCFO™ 30-Day Sprint** is built for businesses doing ₹5 Cr–₹50 Cr who need senior financial leadership without paying ₹35 Lakh/year for a full-time CFO. In 30 days, we deliver a 13-week dynamic cash flow model, review your top 5 contracts, audit your debtor ledger, and provide a 90-day action matrix signed off by a Chartered Accountant for a fixed ₹1.5–4 Lakh fee.\n\nWould you like to see the week-by-week delivery schedule?";
     } else if (lower.includes("contract") || lower.includes("agreement") || lower.includes("clause") || lower.includes("indemnity") || lower.includes("review")) {
       reply = "Most Indian MSMEs sign customer agreements where the client has inserted unlimited indemnities or unilateral termination rights. If a dispute happens, your payments freeze.\n\nWe screen contracts clause-by-clause, insert protective MSME Samadhaan terms, and cap your total liability. You can test a contract right now on our **Live Contract Scanner** tab, or I can connect you with our legal desk. What agreement are you reviewing?";
     } else if (lower.includes("bank") || lower.includes("loan") || lower.includes("dscr") || lower.includes("cc limit") || lower.includes("cibil") || lower.includes("limit")) {
-      reply = "Banks reject loan enhancements when your DSCR drops below 1.30x or when GST returns don't reconcile with your bank statements. Our **LenderReady Credit Office** audits your financial data room, fixes DSCR ratios, and helps negotiate 50â€“75 bps lower interest rates.\n\nYou can calculate your current loan eligibility in 30 seconds using our **Live Bank DSCR Scanner** tab. What is your current CC limit?";
+      reply = "Banks reject loan enhancements when your DSCR drops below 1.30x or when GST returns don't reconcile with your bank statements. Our **LenderReady Credit Office** audits your financial data room, fixes DSCR ratios, and helps negotiate 50–75 bps lower interest rates.\n\nYou can calculate your current loan eligibility in 30 seconds using our **Live Bank DSCR Scanner** tab. What is your current CC limit?";
     } else if (lower.includes("lc") || lower.includes("letter of credit") || lower.includes("export") || lower.includes("trade") || lower.includes("bg") || lower.includes("demurrage")) {
-      reply = "Over 60% of export LCs face discrepancy rejections under UCP 600 rules, stranding containers at ports. Our **TradeShield Desk** provides rapid 24â€“48 hour pre-shipment clause audits to guarantee zero-defect documents before dispatch.\n\nAre you currently exporting under an active Letter of Credit?";
+      reply = "Over 60% of export LCs face discrepancy rejections under UCP 600 rules, stranding containers at ports. Our **TradeShield Desk** provides rapid 24–48 hour pre-shipment clause audits to guarantee zero-defect documents before dispatch.\n\nAre you currently exporting under an active Letter of Credit?";
     } else if (lower.includes("cost") || lower.includes("price") || lower.includes("fee") || lower.includes("charges")) {
-      reply = "Every service operates on transparent, fixed milestone fees:\n\nâ€¢ **ControlCFOâ„¢ 30-Day Sprint:** â‚¹1.5â€“4 Lakh fixed\nâ€¢ **Contract-to-Cash Desk:** â‚¹75,000â€“â‚¹3 Lakh setup\nâ€¢ **LenderReady Credit Desk:** â‚¹75,000â€“â‚¹3 Lakh + success fee\nâ€¢ **TradeShield Export LC Review:** â‚¹50,000â€“â‚¹2 Lakh per transaction\n\nAll tools on the site are 100% free to test. Which desk are you evaluating?";
+      reply = "Every service operates on transparent, fixed milestone fees:\n\n• **ControlCFO™ 30-Day Sprint:** ₹1.5–4 Lakh fixed\n• **Contract-to-Cash Desk:** ₹75,000–₹3 Lakh setup\n• **LenderReady Credit Desk:** ₹75,000–₹3 Lakh + success fee\n• **TradeShield Export LC Review:** ₹50,000–₹2 Lakh per transaction\n\nAll tools on the site are 100% free to test. Which desk are you evaluating?";
     } else {
-      reply = `I hear you. As a business owner, you're constantly balancing cash flow, client demands, and banking compliance. \n\nWhether you need to review a risky customer contract, fix a stalled bank credit renewal, or run a 30-day financial health cleanup, we give you actionable answers backed by real CAs and Advocates.\n\nTell me a bit about your businessâ€”what industry are you in, or what is the main hurdle you're facing right now?`;
+      reply = `I hear you. As a business owner, you're constantly balancing cash flow, client demands, and banking compliance. \n\nWhether you need to review a risky customer contract, fix a stalled bank credit renewal, or run a 30-day financial health cleanup, we give you actionable answers backed by real CAs and Advocates.\n\nTell me a bit about your business—what industry are you in, or what is the main hurdle you're facing right now?`;
     }
 
     res.json({
@@ -898,7 +898,7 @@ Your Personality & Voice:
       success: true,
       assessment: {
         industry: industry || "General Business",
-        revenue: revenue || "â‚¹1 Cr - â‚¹5 Cr",
+        revenue: revenue || "₹1 Cr - ₹5 Cr",
         serviceType: serviceType || "Business Health Check",
         fileName: fileName || null,
         createdAt: new Date().toISOString(),
@@ -999,7 +999,7 @@ Your Personality & Voice:
       visitorId || '', 
       'SCAN_DSCR', 
       '/live-tools', 
-      `Calculated Bank DSCR (Turnover: â‚¹${t} Cr, EMI: â‚¹${emi}L/mo, CC: â‚¹${cc} Cr, Debtors: â‚¹${debtors}L)`
+      `Calculated Bank DSCR (Turnover: ₹${t} Cr, EMI: ₹${emi}L/mo, CC: ₹${cc} Cr, Debtors: ₹${debtors}L)`
     );
 
     const annualEmi = (emi * 12) / 100;
@@ -1023,7 +1023,7 @@ Your Personality & Voice:
       report: {
         healthScore: dscrNum >= 1.5 ? "82/100 (Strong)" : dscrNum >= 1.2 ? "65/100 (Caution)" : "48/100 (High Risk)",
         calculatedDscr: `${dscr}x (Bank benchmark: 1.30x - 1.50x)`,
-        maxEligibleLimit: `â‚¹${(t * 0.20).toFixed(1)} Cr (Estimated)`,
+        maxEligibleLimit: `₹${(t * 0.20).toFixed(1)} Cr (Estimated)`,
         riskPoints: issues.length > 0 ? issues : ["Credit profile is within standard commercial bank tolerance."],
         advice: dscrNum < 1.3 
           ? "Restructure short-term debt into long-term facilities before applying to PSU/private banks."
@@ -1034,7 +1034,7 @@ Your Personality & Voice:
 
   app.use(express.static('dist'));
 app.use((req, res, next) => {
-    if (req.method !== 'GET' -and req.method !== 'HEAD') { return next(); }
+    if (req.method !== 'GET' && req.method !== 'HEAD') { return next(); }
     res.sendFile(path.resolve('dist/index.html'));
   });
 
@@ -1047,6 +1047,7 @@ startServer().catch(err => {
   console.error('Failed to start server:', err);
   process.exit(1);
 });
+
 
 
 
