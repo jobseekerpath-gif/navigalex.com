@@ -5,7 +5,8 @@
     "dockerfilePath": "Dockerfile"
   },
   "deploy": {
-    "startCommand": "node --import tsx server.ts",
+    "startCommand": "node server.js",
     "healthcheckPath": "/"
   }
 }
+
