@@ -1038,8 +1038,7 @@ app.use((req, res, next) => {
     res.sendFile(path.resolve('dist/index.html'));
   });
 
-app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+app.listen(Number(process.env.PORT) || 8080, "0.0.0.0", () => console.log(`Server running on 0.0.0.0:${process.env.PORT || 8080}`));
   });
 }
 
@@ -1047,6 +1046,7 @@ startServer().catch(err => {
   console.error('Failed to start server:', err);
   process.exit(1);
 });
+
 
 
 
