@@ -4,7 +4,7 @@ import { GoogleGenAI } from '@google/genai';
 
 async function startServer() {
   const app = express();
-  const PORT = Number(process.env.PORT) || 3000;
+  const PORT = Number(process.env.PORT) || 8080;
 
   // Enable trust proxy for accurate real visitor IP tracking behind Google Cloud Run / Load Balancers
   app.set('trust proxy', true);
@@ -1039,13 +1039,13 @@ app.use((req, res, next) => {
   });
 
 app.listen(Number(process.env.PORT) || 8080, "0.0.0.0", () => console.log(`Server running on 0.0.0.0:${process.env.PORT || 8080}`));
-  });
 }
 
 startServer().catch(err => {
   console.error('Failed to start server:', err);
   process.exit(1);
 });
+
 
 
 
