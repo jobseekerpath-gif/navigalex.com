@@ -1877,7 +1877,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
             <div className="space-y-4 text-xs text-slate-700 leading-relaxed">
               <div className="p-3.5 bg-blue-50/70 border border-blue-200 rounded-xl">
                 <strong className="text-blue-900 block font-bold mb-1">Our Core Confidentiality Guarantee:</strong>
-                <span>We never upload or train public consumer AI tools on your companyâ€™s financial records, Tally dumps, or customer contracts. All data ingestion operates in isolated enterprise-grade sandboxes with AES-256 encryption.</span>
+                <span>We never upload or train public consumer AI tools on your company’s financial records, Tally dumps, or customer contracts. All data ingestion operates in isolated enterprise-grade sandboxes with AES-256 encryption.</span>
               </div>
 
               <div>
