@@ -4,13 +4,13 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "tsx server.ts",
-    "build": "vite build",
+    "dev": "node scripts/patch-bot.cjs && tsx server.ts",
+    "build": "node scripts/patch-bot.cjs && vite build",
     "postbuild": "node scripts/fix-encoding.cjs",
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit",
-    "start": "tsx server.ts"
+    "start": "node scripts/patch-bot.cjs && tsx server.ts"
   },
   "dependencies": {
     "@google/genai": "^2.24.0",
@@ -32,7 +32,6 @@
     "autoprefixer": "^10.4.21",
     "esbuild": "^0.28.2",
     "tailwindcss": "^4.3.3",
-    "tsx": "^4.23.15",
     "typescript": "^7.0.2"
   },
   "engines": {
