@@ -20,7 +20,7 @@ source = source.replace(
 );
 
 source = source.replace(
-  new RegExp(NL + '\\\\s*visitorSessions\\\\.set\\\\(\\\\'V-103214\\\\'[\\\\s\\\\S]*?(?=' + NL + '\\\\s*// Seed Data: Inquiries)'),
+  new RegExp(NL + "\\\\s*visitorSessions\\\\.set\\\\('V-103214'[\\\\s\\\\S]*?(?=" + NL + "\\\\s*// Seed Data: Inquiries)"),
   NL
 );
 
