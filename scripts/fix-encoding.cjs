@@ -11,10 +11,9 @@ const cp1252Special = {
   '\u0153': 0x9C, '\u017E': 0x9E, '\u0178': 0x9F
 };
 
-function toCp1252Byte(ch) {
+function toByte(ch) {
   const cp = ch.codePointAt(0);
-  if (cp <= 0xFF) return cp;
-  return cp1252Special[ch] ?? null;
+  return cp <= 0xFF ? cp : (cp1252Special[ch] ?? null);
 }
 
 function repair(text) {
@@ -22,10 +21,8 @@ function repair(text) {
   let out = '';
 
   for (let i = 0; i < text.length;) {
-    const first = text[i];
-    if (!suspicious.has(first)) {
-      out += first;
-      i += 1;
+    if (!suspicious.has(text[i])) {
+      out += text[i++];
       continue;
     }
 
@@ -35,42 +32,22 @@ function repair(text) {
       const bytes = [];
       let valid = true;
       for (const ch of chunk) {
-        const b = toCp1252Byte(ch);
+        const b = toByte(ch);
         if (b === null) { valid = false; break; }
         bytes.push(b);
       }
       if (!valid) break;
-      try {
-        const decoded = Buffer.from(bytes).toString('utf8');
-        if (!decoded.includes('\uFFFD') && decoded !== chunk && /[^\x00-\x7F]/.test(decoded)) {
-          best = decoded;
-        }
-      } catch {}
+      const decoded = Buffer.from(bytes).toString('utf8');
+      if (!decoded.includes('\uFFFD') && decoded !== chunk && /[^\x00-\x7F]/.test(decoded)) {
+        best = { decoded, len };
+      }
     }
 
     if (best) {
-      out += best;
-      i += Math.max(2, best.length === 1 ? 2 : 2);
-      // Re-evaluate the original run from the next character when needed.
-      // The common mojibake sequences are 2-4 source characters long.
-      let consumed = 2;
-      for (let len = 2; len <= 8 && i - 2 + len <= text.length; len++) {
-        const chunk = text.slice(i - 2, i - 2 + len);
-        const bytes = [];
-        let valid = true;
-        for (const ch of chunk) {
-          const b = toCp1252Byte(ch);
-          if (b === null) { valid = false; break; }
-          bytes.push(b);
-        }
-        if (!valid) break;
-        const decoded = Buffer.from(bytes).toString('utf8');
-        if (!decoded.includes('\uFFFD') && decoded !== chunk && /[^\x00-\x7F]/.test(decoded)) consumed = len;
-      }
-      i = i - 2 + consumed;
+      out += best.decoded;
+      i += best.len;
     } else {
-      out += first;
-      i += 1;
+      out += text[i++];
     }
   }
   return out;
