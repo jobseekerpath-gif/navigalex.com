@@ -12,6 +12,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/jspdf@4.2.1/dist/jspdf.umd.min.js"></script>
   </head>
   <body class="bg-white text-slate-900 antialiased selection:bg-blue-600 selection:text-white font-light font-['Inter']">
     <div id="root"></div>
@@ -41,13 +42,80 @@
         };
         const root = document.getElementById('root');
         if (!root) return;
+
+        const addReportDownload = () => {
+          if (document.getElementById('navigalex-pdf-download')) return;
+          const heading = [...root.querySelectorAll('*')].find(el =>
+            el.children.length === 0 && el.textContent.trim() === 'Contract Scan Diagnostic'
+          );
+          if (!heading) return;
+
+          let card = heading;
+          for (let i = 0; i < 7 && card; i++, card = card.parentElement) {
+            const text = card.textContent || '';
+            if (text.includes('Risk Score:') && text.includes('RECOMMENDED SAFE')) break;
+          }
+          if (!card || !(card.textContent || '').includes('Risk Score:')) return;
+
+          const button = document.createElement('button');
+          button.id = 'navigalex-pdf-download';
+          button.type = 'button';
+          button.textContent = 'Download PDF Report';
+          button.style.cssText = 'display:inline-flex;align-items:center;gap:8px;margin:14px 0;padding:10px 18px;border:0;border-radius:8px;background:#1764ff;color:#fff;font:600 14px Inter,Arial,sans-serif;cursor:pointer;box-shadow:0 2px 8px rgba(23,100,255,.25);';
+
+          button.onclick = () => {
+            const jspdf = window.jspdf;
+            if (!jspdf || !jspdf.jsPDF) {
+              alert('PDF engine is still loading. Please try again.');
+              return;
+            }
+            const doc = new jspdf.jsPDF({ unit: 'mm', format: 'a4' });
+            const pageWidth = doc.internal.pageSize.getWidth();
+            const pageHeight = doc.internal.pageSize.getHeight();
+            const margin = 15;
+            let y = 18;
+            const safe = (s) => repair(String(s || '')).replace(/[₹™→]/g, ch => ({'₹':'INR ','™':'TM','→':'->'}[ch] || ch));
+            const lines = safe(card.innerText).split(/\n+/).map(s => s.trim()).filter(Boolean);
+
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(18);
+            doc.text('Navigalex Contract Risk Report', margin, y);
+            y += 9;
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(9);
+            doc.text(`Generated: ${new Date().toLocaleString('en-IN')}`, margin, y);
+            y += 8;
+            doc.setDrawColor(23, 100, 255);
+            doc.line(margin, y, pageWidth - margin, y);
+            y += 8;
+
+            doc.setFontSize(10);
+            for (const item of lines) {
+              const wrapped = doc.splitTextToSize(item, pageWidth - margin * 2);
+              if (y + wrapped.length * 5.2 > pageHeight - margin) {
+                doc.addPage();
+                y = margin;
+              }
+              doc.setFont('helvetica', item === 'DANGER CLAUSES DETECTED (WHAT CAN HURT YOU)' ? 'bold' : 'normal');
+              doc.text(wrapped, margin, y);
+              y += wrapped.length * 5.2 + 2;
+            }
+            doc.save('Navigalex-Contract-Risk-Report.pdf');
+          };
+
+          heading.parentElement.insertBefore(button, heading.nextSibling);
+        };
+
         new MutationObserver((mutations) => {
           for (const mutation of mutations) {
             if (mutation.type === 'characterData') repairNode(mutation.target);
             for (const node of mutation.addedNodes) repairNode(node);
           }
+          addReportDownload();
         }).observe(root, { childList: true, subtree: true, characterData: true });
+
         repairNode(root);
+        addReportDownload();
       })();
     </script>
     <script type="module" src="/src/main.tsx"></script>
