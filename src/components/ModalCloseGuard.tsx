@@ -20,18 +20,21 @@ function isPopup(el: HTMLElement) {
   const roleDialog = el.getAttribute('role') === 'dialog' || el.getAttribute('aria-modal') === 'true';
   const fixedLarge = s.position === 'fixed' && el.getBoundingClientRect().width > 320 && el.getBoundingClientRect().height > 250;
   const knownPopup = MARKERS.some((m) => text.includes(m));
-  return roleDialog || (fixedLarge && knownPopup);
+  return roleDialog || fixedLarge || (knownPopup && el.getBoundingClientRect().width > 320);
 }
 
 export default function ModalCloseGuard() {
   useEffect(() => {
     const install = () => {
-      const popups = Array.from(document.querySelectorAll<HTMLElement>('div, section, aside'))
+      const popups = Array.from(document.querySelectorAll<HTMLElement>('div, section, aside, dialog'))
         .filter(isPopup);
 
       popups.forEach((popup) => {
         let button = popup.querySelector<HTMLButtonElement>(':scope > [data-modal-close-guard]');
         if (button) return;
+
+        const popupStyle = getComputedStyle(popup);
+        if (popupStyle.position === 'static') popup.style.position = 'relative';
 
         button = document.createElement('button');
         button.type = 'button';
@@ -42,29 +45,37 @@ export default function ModalCloseGuard() {
 
         Object.assign(button.style, {
           position: 'absolute',
-          top: '14px',
           right: '14px',
-          width: '44px',
-          height: '44px',
-          border: '2px solid rgba(255,255,255,.9)',
+          bottom: '14px',
+          width: '48px',
+          height: '48px',
+          minWidth: '48px',
+          minHeight: '48px',
+          border: '2px solid rgba(255,255,255,.95)',
           borderRadius: '50%',
           background: '#111827',
           color: '#fff',
-          fontSize: '30px',
-          fontWeight: '600',
-          lineHeight: '38px',
+          fontFamily: 'Arial, sans-serif',
+          fontSize: '32px',
+          fontWeight: '700',
+          lineHeight: '42px',
           textAlign: 'center',
           cursor: 'pointer',
           zIndex: '2147483647',
-          boxShadow: '0 4px 16px rgba(0,0,0,.35)',
+          boxShadow: '0 4px 16px rgba(0,0,0,.4)',
           padding: '0',
-          margin: '0'
+          margin: '0',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          pointerEvents: 'auto'
         });
 
         button.onclick = (e) => {
           e.preventDefault();
           e.stopPropagation();
           popup.style.display = 'none';
+          popup.setAttribute('aria-hidden', 'true');
         };
 
         popup.appendChild(button);
