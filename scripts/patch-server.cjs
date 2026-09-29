@@ -140,8 +140,8 @@ const replacement = `  // Bot Chat Endpoint — real AI provider routing
     objects.push('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>');
     pages.forEach((pageItems, i) => {
       const content: string[] = ['q', '0.96 0.98 1 rg', '0 0 612 792 re', 'f', 'Q', 'BT'];
-      content.push('/F1 18 Tf', '0.08 0.18 0.35 rg', '50 760 Td', '(' + esc('NAVIGALEX') + ') Tj');
-      content.push('/F1 7 Tf', '0.35 0.40 0.48 rg', '420 4 Td', '(' + esc('CONFIDENTIAL') + ') Tj');
+      content.push('/F1 18 Tf', '0.08 0.18 0.35 rg', '1 0 0 1 50 760 Tm', '(' + esc('NAVIGALEX') + ') Tj');
+      content.push('/F1 7 Tf', '0.35 0.40 0.48 rg', '1 0 0 1 500 760 Tm', '(' + esc('CONFIDENTIAL') + ') Tj');
       let y = 730;
       for (const item of pageItems) {
         if (item.kind === 'rule') { content.push('ET', '0.82 0.86 0.92 RG', '50 ' + y + ' m', '562 ' + y + ' l', 'S', 'BT'); y -= 10; continue; }
@@ -151,7 +151,7 @@ const replacement = `  // Bot Chat Endpoint — real AI provider routing
         else if (item.kind === 'subtitle') { size = 9; color = '0.25 0.35 0.50'; }
         else if (item.kind === 'section') { size = 10; color = '0.08 0.36 0.85'; y -= 5; }
         else if (item.kind === 'small') { size = 7; color = '0.40 0.44 0.50'; }
-        content.push('/F1 ' + size + ' Tf', color + ' rg', '50 ' + y + ' Td', '(' + esc(item.text.slice(0, 105)) + ') Tj');
+        content.push('/F1 ' + size + ' Tf', color + ' rg', '1 0 0 1 50 ' + y + ' Tm', '(' + esc(item.text.slice(0, 105)) + ') Tj');
         y -= heightFor(item.kind);
       }
       content.push('ET');
