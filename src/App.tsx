@@ -1457,6 +1457,8 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                   {option.label}
                 </button>
               ))}
+            </div>
+
             <div className="flex justify-end">
               <button
                 type="button"
@@ -1465,8 +1467,6 @@ Payment shall be released within 90 days after delivery and final acceptance. In
               >
                 Family Wealth Governance → Dedicated Family Office
               </button>
-            </div>
-
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
