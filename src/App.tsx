@@ -822,17 +822,17 @@ export default function App() {
               <Shield className="w-5 h-5 text-white" />
             </span>
             <span className="min-w-0 leading-none text-left">
-              <span className="block text-lg sm:text-xl font-extrabold tracking-tight text-slate-950">NAVIGALEX</span>
-              <span className="block mt-1 text-[8px] sm:text-[9px] text-blue-600 font-extrabold tracking-[0.18em] uppercase">Executive Advisory</span>
+              <span className="block text-[22px] sm:text-[25px] font-extrabold tracking-tight text-black">NAVIGALEX</span>
+              <span className="block mt-1 text-[10px] sm:text-[11px] text-black font-extrabold tracking-[0.18em] uppercase">Executive Advisory</span>
             </span>
           </button>
 
           <nav className="hidden lg:flex items-center gap-1 xl:gap-2 font-semibold" aria-label="Primary navigation">
             {[
               ['home', 'Home'],
-              ['live-tools', 'AI Assessments'],
-              ['services', 'Services'],
-              ['why-pick-us', 'Why Navigalex'],
+              ['live-tools', 'Live AI Scanners'],
+              ['services', 'Our 9 Services'],
+              ['why-pick-us', 'Why Pick These Products'],
               ['industries', 'Industries'],
               ['how-it-works', 'How It Works'],
               ['about', 'About'],
@@ -852,7 +852,7 @@ export default function App() {
           <div className="flex items-center gap-2 shrink-0">
             <button
               onClick={() => openAssessmentForm()}
-              className="hidden sm:inline-flex items-center justify-center px-4 py-2.5 text-xs font-bold text-white bg-blue-600 hover:bg-blue-500 rounded-xl shadow-sm shadow-blue-600/20 transition-all cursor-pointer"
+              className="hidden sm:inline-flex items-center justify-center px-4 py-2.5 text-[14px] font-bold text-black bg-blue-600 hover:bg-blue-500 rounded-xl shadow-sm shadow-blue-600/20 transition-all cursor-pointer"
             >
               Request Assessment
             </button>
@@ -885,7 +885,7 @@ export default function App() {
                   key={tab}
                   type="button"
                   onClick={() => { setActiveTab(tab); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                  className={`text-left px-3 py-2.5 rounded-xl text-[16px] font-semibold transition-colors ${activeTab === tab ? 'text-[#8B0000] bg-red-50' : 'text-[#8B0000] hover:bg-red-50'}`}
+                  className={`text-left px-3 py-2.5 rounded-xl text-[14px] font-semibold text-black transition-colors ${activeTab === tab ? 'text-black bg-slate-100' : 'text-black hover:bg-slate-100'}`}
                 >
                   {label}
                 </button>
@@ -894,7 +894,7 @@ export default function App() {
             <div className="mt-3 pt-3 border-t border-slate-200">
               <button
                 onClick={() => { openAssessmentForm(); setMobileMenuOpen(false); }}
-                className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm shadow-sm"
+                className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-black font-bold text-[14px] shadow-sm"
               >
                 Request a Confidential Assessment
               </button>
