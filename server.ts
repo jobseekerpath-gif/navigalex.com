@@ -421,19 +421,19 @@ async function startServer() {
     const { title, clientSector, region, dealSize, riskIdentified, advisoryProvided, concreteRoi, status } = req.body;
     const clientIp = getClientIp(req);
     
-    if (!title || !clientSector || !riskIdentified) {
-      return res.status(400).json({ error: 'Title, client sector, and risk description are required.' });
+    if (!title || !clientSector || !riskIdentified || !advisoryProvided || !concreteRoi) {
+      return res.status(400).json({ error: 'Title, client sector, risk description, advisory provided, and verified outcome are required.' });
     }
 
     const newCaseStudy: CaseStudy = {
-      id: `CS-${Math.floor(200 + Math.random() * 800)}`,
+      id: `CS-${crypto.randomUUID()}`,
       title,
       clientSector,
       region: region || 'Not disclosed',
       dealSize: dealSize || 'Not disclosed',
       riskIdentified,
-      advisoryProvided: advisoryProvided || '',
-      concreteRoi: concreteRoi || '',
+      advisoryProvided,
+      concreteRoi,
       status: status || 'Draft',
       submittedAt: new Date().toISOString(),
       author: 'Practice Director'
