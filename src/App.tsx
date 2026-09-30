@@ -1094,6 +1094,7 @@ export default function App() {
                       onChange={e => setDocFile(e.target.files?.[0] || null)}
                       className="hidden" 
                       id="contract-file-upload-live"
+                      accept=".txt,.csv,.json"
                     />
                     <label htmlFor="contract-file-upload-live" className="cursor-pointer flex flex-col items-center gap-2">
                       <Upload className="w-8 h-8 text-blue-600" />
