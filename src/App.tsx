@@ -456,11 +456,11 @@ export default function App() {
 
   // Interactive 5-point slider state
   const [diagnosticScores, setDiagnosticScores] = useState({
-    cash: 3,
-    contract: 2,
-    funding: 3,
-    fraud: 2,
-    governance: 3
+    cash: 0,
+    contract: 0,
+    funding: 0,
+    fraud: 0,
+    governance: 0
   });
 
   // Lead Generation form state
@@ -1014,7 +1014,9 @@ export default function App() {
                   <div key={dim.key} className="space-y-2">
                     <div className="flex justify-between items-center text-sm">
                       <span className="font-bold text-slate-900">{dim.label}</span>
-                      <span className="text-xs font-bold text-blue-600">Risk: {diagnosticScores[dim.key as keyof typeof diagnosticScores]} / 5</span>
+                      <span className="text-xs font-bold text-blue-600">
+                        {diagnosticScores[dim.key as keyof typeof diagnosticScores] === 0 ? 'Not answered' : `Risk: ${diagnosticScores[dim.key as keyof typeof diagnosticScores]} / 5`}
+                      </span>
                     </div>
                     <p className="text-xs text-slate-500">{dim.desc}</p>
                     <input 
@@ -1037,7 +1039,9 @@ export default function App() {
                       {Object.values(diagnosticScores).reduce((a, b) => a + b, 0) > 16 ? "âš ï¸ High Risk: Immediate cleanup recommended." : "Healthy profile with minor optimization needed."}
                     </span>
                   </div>
-                  <button onClick={() => openAssessmentForm('Complete 5-Part Risk Assessment')} className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white rounded-xl transition-all shadow-md cursor-pointer">
+                  <button
+                    disabled={Object.values(diagnosticScores).some((score) => score === 0)}
+                    onClick={() => openAssessmentForm('Complete 5-Part Risk Assessment')} className="px-6 py-3 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed text-xs font-semibold text-white rounded-xl transition-all shadow-md cursor-pointer">
                     Request Full Confidential Audit
                   </button>
                 </div>
