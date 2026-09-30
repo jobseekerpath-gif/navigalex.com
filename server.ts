@@ -189,99 +189,15 @@ async function startServer() {
     return activity;
   }
 
-  // Production telemetry starts empty and records only live visitor activity.\n
-  // Seed Data: Inquiries
-  let inquiries: Inquiry[] = [
-    {
-      id: 'INQ-1049',
-      name: 'Rajesh Sharma',
-      company: 'Apex Precision Engineering Pvt Ltd',
-      designation: 'Managing Director & Promoter',
-      email: 'rajesh.sharma@apexeng.in',
-      phone: '+91 98112 43210',
-      businessType: 'Manufacturing & Engineering',
-      turnover: '₹25 Cr - ₹100 Cr',
-      primaryConcern: 'Contract & Receivable Cash Flow Risk',
-      contactMethod: 'Phone',
-      status: 'New',
-      submittedAt: new Date(Date.now() - 3600000 * 2).toISOString(),
-      ip: '103.21.144.12',
-      notes: 'Client facing 90+ days payment holdback from Tier-1 automotive customer citing unilateral penalty clause.'
-    },
-    {
-      id: 'INQ-1048',
-      name: 'Sunita Aggarwal',
-      company: 'Sun Continental Exports LLP',
-      designation: 'Director of Finance',
-      email: 'sunita@sunglobal.com',
-      phone: '+91 98100 87654',
-      businessType: 'Exporters & International Trade',
-      turnover: '₹5 Cr - ₹25 Cr',
-      primaryConcern: 'TradeShield Export Letter of Credit / Bank Guarantee',
-      contactMethod: 'WhatsApp',
-      status: 'Under Review',
-      submittedAt: new Date(Date.now() - 3600000 * 8).toISOString(),
-      ip: '49.36.128.91',
-      notes: 'European buyer bank raised 2 discrepancy notes on Bill of Lading consignee field under UCP 600.'
-    },
-    {
-      id: 'INQ-1047',
-      name: 'Vikramaditya Goel',
-      company: 'Goel Infra Projects & Real Estate',
-      designation: 'Managing Director',
-      email: 'vikram@goelinfra.co.in',
-      phone: '+91 99105 12345',
-      businessType: 'Real Estate, Construction & Property',
-      turnover: '₹25 Cr - ₹100 Cr',
-      primaryConcern: 'Bank Loan CC/OD Renewal & Data Room',
-      contactMethod: 'Confidential Video Call',
-      status: 'NDA Executed',
-      submittedAt: new Date(Date.now() - 3600000 * 24).toISOString(),
-      ip: '122.161.45.67',
-      notes: 'PSU bank delayed ₹15  let inquiries: Inquiry[] = [];\n\n  // Seed Data: Case Studies
-  let caseStudies: CaseStudy[] = [
-    {
-      id: 'CS-201',
-      title: 'Automotive Component Manufacturer (Noida Phase-2): ₹1.8 Cr Trapped Receivables Recovery',
-      clientSector: 'Manufacturing & Engineering',
-      region: 'Noida Phase-2, Delhi NCR',
-      dealSize: '₹42 Cr Annual Turnover',
-      riskIdentified: 'Tier-1 customer withheld ₹1.8 Cr invoking an uncapped indemnity clause for assembly line delay caused by raw material supply shortages.',
-      advisoryProvided: 'Navigalex Contract-to-Cash Desk redlined the master agreement, established force-majeure event timeline, and filed formal MSME Samadhaan dispute notice.',
-      concreteRoi: 'Recovered 100% of the ₹1.8 Cr trapped principal within 38 days without formal court litigation, saving an estimated ₹12 Lakhs in legal expenses.',
-      status: 'Published',
-      submittedAt: '2026-03-15T10:30:00Z',
-      author: 'Senior Partner (Legal & Debt Recovery)'
-    },
-    {
-      id: 'CS-202',
-      title: 'Apparel Exporter (Greater Noida Surajpur): $3.2M LC Discrepancy Defense',
-      clientSector: 'Exporters & International Trade',
-      region: 'Greater Noida Ecotech Hub',
-      dealSize: '$12M Export Orderbook',
-      riskIdentified: 'Issuing bank in Hamburg rejected 3 Letters of Credit citing discrepancy between Port of Loading in airway bill versus commercial invoice.',
-      advisoryProvided: 'TradeShield Desk executed an immediate UCP 600 Article 14 review, demonstrated compliance under ISBP 745, and engaged negotiating bank trade desk.',
-      concreteRoi: 'Bank withdrew notice of refusal within 72 hours. All funds credited on due date, averting container demurrage charges of ~$45,000.',
-      status: 'Published',
-      submittedAt: '2026-03-01T14:15:00Z',
-      author: 'Trade Finance Practice Lead'
-    },
-    {
-      id: 'CS-203',
-      title: 'Specialty Chemicals & Polymers (Gurugram Manesar): ₹25 Cr Bank Credit Renewal & DSCR Optimization',
-      clientSector: 'Chemicals & Manufacturing',
-      region: 'Manesar Industrial Area, Gurugram',
-      dealSize: '₹68 Cr Annual Turnover',
-      riskIdentified: 'Lead private sector bank flagged DSCR of 1.15x and proposed hiking CC limit interest by 125 bps and slashing drawing power by 20%.',
-      advisoryProvided: 'LenderReady Credit Office reconstructed CMA data, segregated long-term capex debt from operational cash credit, and restructured debt tenure.',
-      concreteRoi: 'Bank renewed ₹25 Cr limit without drawing power haircut and lowered interest spread by 65 bps, saving ₹16.2 Lakhs annual interest expense.',
-      status: 'Published',
-      submittedAt: '2026-02-18T09:00:00Z',
-      author: 'Former Senior Credit Officer & CA Lead'
-    }
-  ];
+  // Production telemetry starts empty and records only live visitor activity.
 
-  let caseStudies: CaseStudy[] = [];\n\n  // Audit logs are created only from live authenticated/admin events.\n  // Helper to record an audit log
+  let inquiries: Inquiry[] = [];
+
+  let caseStudies: CaseStudy[] = [];
+
+  let auditLogs: AuditLog[] = [];
+
+  // Helper to record an audit log
   const recordAuditLog = (actor: string, eventType: AuditLog['eventType'], description: string, ip: string, severity: AuditLog['severity'] = 'INFO') => {
     const newLog: AuditLog = {
       id: `LOG-${Date.now().toString().slice(-4)}`,
@@ -777,43 +693,43 @@ Your Personality & Voice:
   });
 
   // Diagnostics API Routes: Real Activity Hook
-  app.post('/api/assessments/run', (req, res) => {
-    const { industry, revenue, serviceType, fileName, visitorId } = req.body;
-    
-    // Log real activity
-    recordVisitorActivity(
-      req, 
-      visitorId || '', 
-      'SCAN_HEALTH', 
-      '/live-tools', 
-      `Ran Business Health Diagnostic for ${industry || 'General Business'} (${revenue || 'Revenue not specified'})`
-    );
-
-    res.json({
-      success: true,
-      assessment: {
-        industry: industry || "General Business",
-        revenue: revenue || "₹1 Cr - ₹5 Cr",
-        serviceType: serviceType || "Business Health Check",
-        fileName: fileName || null,
-        createdAt: new Date().toISOString(),
-        score: 72,
-        rating: "Moderate Risk - Action Required",
-        report: {
-          executiveSummary: `Diagnostic review for ${industry || "your enterprise"} (${revenue || "current revenue"}). Your overall business resilience score is 72/100. While cash generation is active, there are 3 critical blindspots in contract liability, debtor collection cycles, and bank credit documentation that require immediate attention.`,
-          keyFindings: [
-            "Contract Liability Exposure: Customer agreements lack clear liability caps, meaning a single project dispute could freeze working capital.",
-            "Debtor Collection Delay: Receivables are taking 78 days on average to realize versus a healthy industry benchmark of 45 days.",
-            "Bank Facility Preparedness: Your current debt-service coverage ratio (DSCR) is close to the lender threshold (1.25x), risking higher loan interest or renewal delays."
-          ],
-          actionSteps: [
-            "Standardize your Master Services Agreement (MSA) with a strict liability cap limited to 1x contract value.",
-            "Implement a weekly debtor escalation protocol with automated milestone sign-offs.",
-            "Reconcile GST filings with bank turnover figures before the upcoming bank credit limit renewal."
-          ]
+  app.post('/api/assessments/run', async (req, res) => {
+    const { industry, revenue, serviceType, financialSummary, visitorId } = req.body;
+    const summary = typeof financialSummary === 'string' ? financialSummary.trim() : '';
+    if (!industry || !revenue || summary.length < 40) {
+      return res.status(400).json({ error: 'Enter the actual financial and operating facts you want assessed (at least 40 characters). No report is generated from preset assumptions.' });
+    }
+    recordVisitorActivity(req, visitorId || '', 'SCAN_HEALTH', '/live-tools', 'Ran Business Health Diagnostic from user-supplied business facts.');
+    const prompt = 'You are a senior business advisory analyst. Review ONLY the user-supplied facts below. Do not invent figures, ratios, benchmarks, legal claims, deadlines or outcomes. Do not assume facts from the selected industry or revenue range. Return a concise personalized summary, evidence-based findings, concrete next actions, and missing-data items.\n\n' +
+      'Industry: ' + industry + '\nRevenue range: ' + revenue + '\nService: ' + (serviceType || 'Business Health Assessment') + '\nUser-supplied facts:\n' + summary + '\n\n' +
+      'Return ONLY JSON: {"summary":"2-3 sentence personalized summary","keyFindings":["finding 1"],"actionSteps":["action 1"],"dataGaps":["missing input"]}';
+    const providers: Array<{ name: string; run: () => Promise<ProviderResponse | null> }> = [
+      { name: 'claude', run: () => analyzeWithClaude(prompt) },
+      { name: 'gemini', run: () => analyzeWithGemini(prompt) },
+      { name: 'vertex', run: () => analyzeWithVertex(prompt) }
+    ];
+    let lastError = 'No configured AI provider.';
+    for (const provider of providers) {
+      try {
+        const result = await provider.run();
+        if (!result || !result.text) { lastError = provider.name + ' is not configured.'; continue; }
+        const cleaned = result.text.trim().replace(/^```(?:json)?/i, '').replace(/```$/i, '').trim();
+        const parsed = JSON.parse(cleaned);
+        if (typeof parsed.summary !== 'string' || !Array.isArray(parsed.keyFindings) || !Array.isArray(parsed.actionSteps) || !Array.isArray(parsed.dataGaps)) {
+          throw new Error('AI returned an invalid diagnostic structure.');
         }
-      }
-    });
+        return res.json({ success: true, assessment: {
+          industry, revenue, serviceType: serviceType || 'Business Health Assessment', createdAt: new Date().toISOString(),
+          report: {
+            executiveSummary: parsed.summary.trim(),
+            keyFindings: parsed.keyFindings.filter((v: unknown) => typeof v === 'string').slice(0, 6),
+            actionSteps: parsed.actionSteps.filter((v: unknown) => typeof v === 'string').slice(0, 6),
+            dataGaps: parsed.dataGaps.filter((v: unknown) => typeof v === 'string').slice(0, 6)
+          }
+        } });
+      } catch (err: any) { lastError = provider.name + ': ' + (err?.message || String(err)); }
+    }
+    return res.status(502).json({ error: 'The business assessment could not be generated from the supplied information.', detail: lastError });
   });
 
   app.post('/api/documents/analyze', async (req, res) => {
@@ -882,49 +798,34 @@ Your Personality & Voice:
 
   // Financial & CIBIL Health Scanner API: Real Activity Hook
   app.post('/api/cibil-scan', (req, res) => {
-    const { turnover, monthlyEmi, ccLimit, overdueDebtors, visitorId } = req.body;
-    const t = parseFloat(turnover) || 10;
-    const emi = parseFloat(monthlyEmi) || 5;
-    const cc = parseFloat(ccLimit) || 1.5;
-    const debtors = parseFloat(overdueDebtors) || 50;
-
-    // Log real activity
-    recordVisitorActivity(
-      req, 
-      visitorId || '', 
-      'SCAN_DSCR', 
-      '/live-tools', 
-      `Calculated Bank DSCR (Turnover: ₹${t} Cr, EMI: ₹${emi}L/mo, CC: ₹${cc} Cr, Debtors: ₹${debtors}L)`
-    );
-
-    const annualEmi = (emi * 12) / 100;
-    const estOperatingProfit = t * 0.12;
-    const dscr = annualEmi > 0 ? (estOperatingProfit / annualEmi).toFixed(2) : "3.5";
-    const dscrNum = parseFloat(dscr);
-
-    const issues: string[] = [];
-    if (dscrNum < 1.3) {
-      issues.push("Low Debt Coverage (DSCR < 1.3x): Banks may consider your company overleveraged and refuse additional term loans.");
+    const { turnover, monthlyEmi, ccLimit, overdueDebtors, annualOperatingProfit, visitorId } = req.body;
+    const t = Number(turnover);
+    const emi = Number(monthlyEmi);
+    const cc = Number(ccLimit);
+    const debtors = Number(overdueDebtors);
+    const operatingProfit = Number(annualOperatingProfit);
+    if (![t, emi, cc, debtors, operatingProfit].every(Number.isFinite) || t <= 0 || emi < 0 || cc < 0 || debtors < 0 || operatingProfit < 0) {
+      return res.status(400).json({ error: 'Enter actual numeric figures for turnover, EMI, CC/OD limit, overdue receivables and annual operating profit.' });
     }
-    if (debtors > (t * 0.15 * 100)) {
-      issues.push("Excessive Overdue Receivables (>90 Days): Bank auditors will haircut your drawing power on Cash Credit limits.");
-    }
-    if (cc > (t * 0.25)) {
-      issues.push("High Working Capital Utilization: Your CC facility exceeds 25% of annual turnover, triggering high interest scrutiny.");
-    }
-
-    res.json({
-      success: true,
-      report: {
-        healthScore: dscrNum >= 1.5 ? "82/100 (Strong)" : dscrNum >= 1.2 ? "65/100 (Caution)" : "48/100 (High Risk)",
-        calculatedDscr: `${dscr}x (Bank benchmark: 1.30x - 1.50x)`,
-        maxEligibleLimit: `₹${(t * 0.20).toFixed(1)} Cr (Estimated)`,
-        riskPoints: issues.length > 0 ? issues : ["Credit profile is within standard commercial bank tolerance."],
-        advice: dscrNum < 1.3 
-          ? "Restructure short-term debt into long-term facilities before applying to PSU/private banks."
-          : "Prepare a certified Lender Data Room to negotiate a 50-75 bps lower interest rate."
-      }
-    });
+    recordVisitorActivity(req, visitorId || '', 'SCAN_DSCR', '/live-tools', 'Calculated banking metrics from user-supplied financial figures.');
+    const annualEmiCr = (emi * 12) / 100;
+    const dscr = annualEmiCr > 0 ? operatingProfit / annualEmiCr : null;
+    const ccShare = t > 0 ? (cc / t) * 100 : 0;
+    const overdueShare = t > 0 ? debtors / t : 0;
+    const observations: string[] = [];
+    if (annualEmiCr === 0) observations.push('No EMI burden was entered, so DSCR is not meaningful for this input set.');
+    else observations.push('DSCR is calculated from the annual operating-profit and annualized EMI figures you entered.');
+    if (operatingProfit < annualEmiCr) observations.push('The operating-profit figure entered is below the annual EMI burden; this warrants closer lender review.');
+    if (overdueShare > 0) observations.push('Overdue receivables entered are ' + overdueShare.toFixed(2) + '% of annual turnover.');
+    if (ccShare > 0) observations.push('The current CC/OD limit entered is ' + ccShare.toFixed(2) + '% of annual turnover.');
+    res.json({ success: true, report: {
+      calculatedDscr: dscr === null ? 'Not meaningful with zero EMI' : dscr.toFixed(2) + 'x',
+      annualOperatingProfit: operatingProfit.toFixed(2) + ' Cr',
+      annualEmi: annualEmiCr.toFixed(2) + ' Cr',
+      ccLimitShareOfTurnover: ccShare.toFixed(2) + '%',
+      overdueReceivablesShareOfTurnover: overdueShare.toFixed(2) + '%',
+      observations
+    } });
   });
 
   app.use(express.static('dist'));
