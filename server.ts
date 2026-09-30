@@ -9,7 +9,7 @@ async function startServer() {
 
   // Enable trust proxy for accurate real visitor IP tracking behind Google Cloud Run / Load Balancers
   app.set('trust proxy', true);
-  app.use(express.json());
+  app.use(express.json({ limit: '8mb' }));
 
   // In-Memory Secure Admin Store
   const adminTokens = new Set<string>();
@@ -314,7 +314,7 @@ async function startServer() {
     const identifier = (username || email || '').trim().toLowerCase();
     const clientIp = getClientIp(req);
 
-    const isValidUser = identifier === 'admin' || identifier === 'admin@navigalex.com' || identifier === 'navigalex4@gmail.com';
+    const isValidUser = identifier === ADMIN_CREDENTIALS.username.toLowerCase() || identifier === ADMIN_CREDENTIALS.email.toLowerCase();
     const isValidPass = password === ADMIN_CREDENTIALS.password;
 
     if (isValidUser && isValidPass) {
@@ -327,7 +327,7 @@ async function startServer() {
         success: true,
         token,
         admin: {
-          username: 'admin',
+          username: ADMIN_CREDENTIALS.username,
           email: ADMIN_CREDENTIALS.email,
           role: 'Super Administrator',
           name: 'Practice Lead & Governance Officer',
@@ -349,7 +349,7 @@ async function startServer() {
       return res.json({
         authenticated: true,
         admin: {
-          username: 'admin',
+          username: ADMIN_CREDENTIALS.username,
           email: ADMIN_CREDENTIALS.email,
           role: 'Super Administrator',
           name: 'Practice Lead & Governance Officer'
