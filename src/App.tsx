@@ -111,7 +111,7 @@ export const ADVISORY_DESKS = [
     {
     id: "board-box",
     title: "5. Board-in-a-Box Governance OS",
-    tagline: "Statutory Director Protection & Board Cadence",
+    tagline: "Board Governance & Director Risk Controls",
     badge: "Turnkey System",
     summary: "Structured corporate governance system to maintain board cadence, authority records and evidence for financing, diligence and ongoing governance.",
     problem: "Missing board minutes, undocumented shareholder agreements, ambiguous director authorities, and compliance lapses exposing founders to personal fines.",
@@ -183,7 +183,7 @@ export const ADVISORY_DESKS = [
     {
     id: "tradeshield",
     title: "8. TradeShield LC/BG Desk",
-    tagline: "Pre-Shipment LC Screening & Bank Guarantee Protection",
+    tagline: "Pre-Shipment LC and Bank Guarantee Document Review",
     badge: "Export & Tender Desk",
     summary: "Specialist documentary trade-finance review to identify discrepancies and wording issues before documents are presented to banks or counterparties.",
     problem: "Documentary discrepancies and wording mismatches can delay payment or create bank/counterparty disputes; the desk reviews the transaction documents you provide.",
@@ -206,7 +206,7 @@ export const ADVISORY_DESKS = [
     {
     id: "family-wealth",
     title: "9. Family Wealth Governance Office",
-    tagline: "Multi-Entity Asset Consolidation & Succession Peace",
+    tagline: "Family Governance & Succession Coordination",
     badge: "Promoter & Family Office",
     summary: "Governance and coordination for family businesses, holding entities and succession planning, with legal formalisation handled with the appropriate professionals.",
     problem: "Messy cross-holdings between family members, informal loans, lack of a clear succession plan, and vulnerability to future family litigation.",
@@ -932,7 +932,7 @@ export default function App() {
                     <span className="text-xs font-bold text-emerald-700 uppercase tracking-wider">LIVE 2</span>
                     <BarChart3 className="w-4 h-4 text-emerald-600" />
                   </div>
-                  <h3 className="font-bold text-slate-900 text-base">Bank Loan & CIBIL Check</h3>
+                  <h3 className="font-bold text-slate-900 text-base">Bank Loan Readiness Check</h3>
                   <p className="text-xs text-slate-600 mt-1 mb-3">Calculate your Debt Service Coverage (DSCR) and see exactly what triggers loan rejection from banks.</p>
                   <button onClick={() => { setActiveTab('live-tools'); window.scrollTo({ top: 600, behavior: 'smooth' }); }} className="text-xs font-bold text-emerald-700 hover:text-emerald-800 flex items-center gap-1 cursor-pointer">
                     Calculate DSCR <ChevronRight className="w-3 h-3" />
@@ -1007,7 +1007,7 @@ export default function App() {
                 {[
                   { key: 'cash', label: '1. Customer Payment Delay (Receivables)', desc: 'How long does it take clients to clear bills? (1 = under 30 days, 5 = stuck over 90 days).' },
                   { key: 'contract', label: '2. Customer & Vendor Contracts', desc: 'Do you sign customer contracts without lawyer review or with unlimited penalties? (1 = fully capped, 5 = unlimited liability).' },
-                  { key: 'funding', label: '3. Bank Loan & CC Limits', desc: 'Is your bank CC limit frequently 90%+ utilized with tight interest coverage? (1 = healthy cushion, 5 = near default).' },
+                  { key: 'funding', label: '3. Bank Loan & CC Limits', desc: 'Is your bank borrowing frequently close to its available limit with limited coverage? (1 = strong cushion, 5 = high pressure).' },
                   { key: 'fraud', label: '4. Internal Billing & Inventory Checks', desc: 'Can employees or partners release money or dispatch inventory without dual approvals? (1 = strict controls, 5 = blind trust).' },
                   { key: 'governance', label: '5. Board Minutes & Director Protection', desc: 'Are company resolutions and director meeting records properly drafted and signed? (1 = well documented, 5 = records are missing or unclear).' }
                 ].map((dim) => (
@@ -1213,13 +1213,13 @@ export default function App() {
               )}
             </section>
 
-            {/* LIVE 2: CIBIL & Bank Loan Readiness Calculator */}
+            {/* LIVE 2: Bank Loan Readiness Calculator */}
             <section className="navigalex-card rounded-2xl p-8 sm:p-10 shadow-xl border-t-4 border-emerald-600 space-y-8">
               <div className="border-b border-slate-200 pb-6">
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold mb-2">
                   <Landmark className="w-3.5 h-3.5" /> LIVE BANKING ENGINE
                 </div>
-                <h3 className="text-2xl font-bold text-slate-900">2. Bank Loan & CIBIL Readiness Scanner</h3>
+                <h3 className="text-2xl font-bold text-slate-900">2. Bank Loan Readiness Calculator</h3>
                 <p className="text-xs text-slate-600 mt-1">Calculate DSCR and review the relationship between operating profit, debt service, borrowing and overdue receivables.</p>
               </div>
 
@@ -1313,7 +1313,7 @@ export default function App() {
 
               </form>
 
-              {/* CIBIL Result Output */}
+              {/* Bank Readiness Result */}
               {cibilResult && (
                 <div className="p-6 bg-slate-50 border border-slate-300 rounded-xl space-y-4 animate-fadeIn">
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
