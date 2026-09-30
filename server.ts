@@ -11,11 +11,11 @@ async function startServer() {
   app.use(express.json());
 
   // In-Memory Secure Admin Store
-  const adminTokens = new Set<string>(['demo-admin-token-navigalex-2026']);
+  const adminTokens = new Set<string>();
   const ADMIN_CREDENTIALS = {
-    username: 'admin',
-    email: 'admin@navigalex.com',
-    password: 'Jackyu@62.'
+    username: process.env.ADMIN_USERNAME || '',
+    email: process.env.ADMIN_EMAIL || '',
+    password: process.env.ADMIN_PASSWORD || ''
   };
 
   interface Inquiry {
@@ -188,74 +188,7 @@ async function startServer() {
     return activity;
   }
 
-  // Pre-seed some initial activity logs
-  visitorActivities.push(
-    {
-      id: 'ACT-INIT-1',
-      visitorId: 'V-103214',
-      ip: '103.21.144.12',
-      timestamp: new Date(Date.now() - 3600000 * 2).toISOString(),
-      eventType: 'INQUIRY_SUBMIT',
-      path: '/contact',
-      details: 'Submitted confidential assessment for Apex Precision Engineering (₹25 Cr - ₹100 Cr turnover)',
-      browser: 'Chrome',
-      os: 'Windows',
-      device: 'Desktop'
-    },
-    {
-      id: 'ACT-INIT-2',
-      visitorId: 'V-493612',
-      ip: '49.36.128.91',
-      timestamp: new Date(Date.now() - 3600000 * 5).toISOString(),
-      eventType: 'SCAN_CONTRACT',
-      path: '/live-tools',
-      details: 'Scanned contract agreement (indemnity clause & penalty analysis)',
-      browser: 'Safari',
-      os: 'macOS',
-      device: 'Desktop'
-    },
-    {
-      id: 'ACT-INIT-3',
-      visitorId: 'V-122161',
-      ip: '122.161.45.67',
-      timestamp: new Date(Date.now() - 3600000 * 9).toISOString(),
-      eventType: 'SCAN_DSCR',
-      path: '/live-tools',
-      details: 'Ran Bank DSCR Calculator for ₹15 Cr turnover and ₹4.5 Lakh monthly EMI',
-      browser: 'Chrome',
-      os: 'Android',
-      device: 'Mobile'
-    }
-  );
-
-  visitorSessions.set('V-103214', {
-    visitorId: 'V-103214',
-    ip: '103.21.144.12',
-    browser: 'Chrome',
-    os: 'Windows',
-    device: 'Desktop',
-    firstSeen: new Date(Date.now() - 3600000 * 3).toISOString(),
-    lastSeen: new Date(Date.now() - 3600000 * 2).toISOString(),
-    pageViewsCount: 6,
-    activitiesCount: 3,
-    currentPath: '/contact',
-    lastAction: 'Submitted confidential assessment'
-  });
-
-  visitorSessions.set('V-493612', {
-    visitorId: 'V-493612',
-    ip: '49.36.128.91',
-    browser: 'Safari',
-    os: 'macOS',
-    device: 'Desktop',
-    firstSeen: new Date(Date.now() - 3600000 * 6).toISOString(),
-    lastSeen: new Date(Date.now() - 3600000 * 5).toISOString(),
-    pageViewsCount: 4,
-    activitiesCount: 2,
-    currentPath: '/live-tools',
-    lastAction: 'Scanned contract agreement'
-  });
-
+  // Production telemetry starts empty and records only live visitor activity.\n
   // Seed Data: Inquiries
   let inquiries: Inquiry[] = [
     {
@@ -304,27 +237,7 @@ async function startServer() {
       status: 'NDA Executed',
       submittedAt: new Date(Date.now() - 3600000 * 24).toISOString(),
       ip: '122.161.45.67',
-      notes: 'PSU bank delayed ₹15 Cr working capital renewal due to DSCR dip. CMA data reconstruction required.'
-    },
-    {
-      id: 'INQ-1046',
-      name: 'Harish Mehta',
-      company: 'Mehta Distributors & Logistics',
-      designation: 'Chief Executive Officer',
-      email: 'harish@mehtadistributors.com',
-      phone: '+91 98200 99887',
-      businessType: 'Distributors & Wholesale Trading',
-      turnover: '₹5 Cr - ₹25 Cr',
-      primaryConcern: 'ControlCFO™ 30-Day Financial Sprint',
-      contactMethod: 'Phone',
-      status: 'Diagnostic Delivered',
-      submittedAt: new Date(Date.now() - 3600000 * 48).toISOString(),
-      ip: '115.240.10.15',
-      notes: '13-Week cash flow runway model and top 5 dealer agreements reviewed and handed over.'
-    }
-  ];
-
-  // Seed Data: Case Studies
+      notes: 'PSU bank delayed ₹15  let inquiries: Inquiry[] = [];\n\n  // Seed Data: Case Studies
   let caseStudies: CaseStudy[] = [
     {
       id: 'CS-201',
@@ -367,38 +280,7 @@ async function startServer() {
     }
   ];
 
-  // Seed Data: Audit Logs
-  let auditLogs: AuditLog[] = [
-    {
-      id: 'LOG-5001',
-      timestamp: new Date().toISOString(),
-      actor: 'System Daemon',
-      eventType: 'SECURITY_SCAN',
-      description: 'Automated cryptographic integrity check passed: Zero unauthorized file access attempts detected.',
-      ip: '127.0.0.1',
-      severity: 'INFO'
-    },
-    {
-      id: 'LOG-5002',
-      timestamp: new Date(Date.now() - 3600000 * 2).toISOString(),
-      actor: 'Public Client',
-      eventType: 'INQUIRY_RECEIVED',
-      description: 'New confidential assessment submitted by Rajesh Sharma (Apex Precision Engineering Pvt Ltd). Assigned ref #INQ-1049.',
-      ip: '103.21.144.12',
-      severity: 'INFO'
-    },
-    {
-      id: 'LOG-5003',
-      timestamp: new Date(Date.now() - 3600000 * 5).toISOString(),
-      actor: 'admin',
-      eventType: 'AUTH_LOGIN',
-      description: 'Admin user authenticated successfully via secure session token.',
-      ip: '182.74.88.2',
-      severity: 'INFO'
-    }
-  ];
-
-  // Helper to record an audit log
+  let caseStudies: CaseStudy[] = [];\n\n  // Audit logs are created only from live authenticated/admin events.\n  // Helper to record an audit log
   const recordAuditLog = (actor: string, eventType: AuditLog['eventType'], description: string, ip: string, severity: AuditLog['severity'] = 'INFO') => {
     const newLog: AuditLog = {
       id: `LOG-${Date.now().toString().slice(-4)}`,
@@ -508,6 +390,9 @@ async function startServer() {
 
   // Admin Auth: Login
   app.post('/api/admin/login', (req, res) => {
+    if (!ADMIN_CREDENTIALS.username || !ADMIN_CREDENTIALS.password) {
+      return res.status(503).json({ error: 'Admin authentication is not configured.' });
+    }
     const { email, username, password, visitorId } = req.body;
     const identifier = (username || email || '').trim().toLowerCase();
     const clientIp = getClientIp(req);
@@ -516,7 +401,7 @@ async function startServer() {
     const isValidPass = password === ADMIN_CREDENTIALS.password;
 
     if (isValidUser && isValidPass) {
-      const token = `nvx-token-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+      const token = `nvx-token-${Date.now()}-${crypto.randomUUID()}`;
       adminTokens.add(token);
       recordAuditLog(identifier, 'AUTH_LOGIN', `Admin session established successfully. Token issued.`, clientIp, 'INFO');
       recordVisitorActivity(req, visitorId || '', 'ADMIN_ACCESS', '/admin', `Admin user logged in successfully (${identifier})`);
