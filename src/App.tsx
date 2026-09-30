@@ -461,6 +461,27 @@ export default function App() {
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
   const [showGuardrailsModal, setShowGuardrailsModal] = useState(false);
 
+  useEffect(() => {
+    const modalOpen = Boolean(selectedDeskModal || showPrivacyModal || showGuardrailsModal);
+    if (!modalOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') return;
+      if (selectedDeskModal) setSelectedDeskModal(null);
+      else if (showPrivacyModal) setShowPrivacyModal(false);
+      else if (showGuardrailsModal) setShowGuardrailsModal(false);
+    };
+
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener('keydown', onKeyDown);
+    };
+  }, [selectedDeskModal, showPrivacyModal, showGuardrailsModal]);
+
   // Seamless "Request Assessment" trigger that always scrolls & focuses
   const openAssessmentForm = (concern?: string) => {
     if (concern) {
@@ -2086,8 +2107,8 @@ Payment shall be released within 90 days after delivery and final acceptance. In
 
       {/* MODAL 1: DETAILED DESK SCOPE & DELIVERY MODAL */}
       {selectedDeskModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto animate-fadeIn">
-          <div className="relative bg-white rounded-2xl max-w-2xl w-full p-6 sm:p-8 space-y-6 shadow-2xl border border-slate-200 my-8">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto animate-fadeIn" role="presentation">
+          <div className="relative bg-white rounded-2xl max-w-2xl w-full p-6 sm:p-8 space-y-6 shadow-2xl border border-slate-200 my-8" role="dialog" aria-modal="true">
             <div className="flex items-start justify-between border-b border-slate-200 pb-4">
               <div>
                 <div className="inline-block px-2.5 py-0.5 rounded bg-blue-50 border border-blue-200 text-[10px] font-bold text-blue-700 uppercase mb-1">
