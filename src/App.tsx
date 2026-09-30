@@ -803,7 +803,7 @@ export default function App() {
       <div className="bg-slate-900 border-b border-slate-800 py-2.5 px-4 text-center text-xs text-slate-300 tracking-wide flex items-center justify-center gap-2 relative z-10">
         <Shield className="w-4 h-4 text-blue-400 shrink-0" />
         <span>
-          <strong>Navigalex Advisory:</strong> We protect Indian business owners from hidden financial, legal, and bank-loan risks. Real senior advisors powered by smart AI.
+          <strong>Navigalex Advisory:</strong> We help Indian business owners assess financial, legal, governance and banking risks using AI-assisted analysis and professional review.
         </span>
       </div>
 
@@ -985,7 +985,7 @@ export default function App() {
                 <span className="text-xs font-bold uppercase tracking-widest text-blue-300">HOW NAVIGALEX SOLVES THIS</span>
                 <h3 className="text-2xl sm:text-3xl font-bold text-white">One Unified Decision System For Your Money & Risk</h3>
                 <p className="text-sm text-slate-200 max-w-2xl mx-auto leading-relaxed">
-                  We connect each signal to evidence, an action owner, and a practical next step. Clear decisions, clear accountability, no unnecessary complexity.
+                  We connect each finding to the evidence supplied, an action owner, and a practical next step. Clear decisions and clear accountability.
                 </p>
                 <div className="pt-2">
                   <button onClick={() => { setActiveTab('live-tools'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="px-6 py-3 bg-blue-500 hover:bg-blue-400 text-white text-xs font-bold rounded-xl transition-all shadow-md cursor-pointer">
@@ -1640,13 +1640,13 @@ export default function App() {
                 <div className="p-4 bg-white/10 rounded-xl border border-white/10 space-y-2">
                   <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center font-bold text-xs text-white">01</div>
                   <h4 className="font-bold text-sm">30-Min Intake & Mutual NDA</h4>
-                  <p className="text-xs text-slate-300">We sign a strict 2-way non-disclosure agreement and identify your primary financial or legal pain point.</p>
+                  <p className="text-xs text-slate-300">We agree confidentiality terms, including an NDA where required, and identify the business issue you want assessed.</p>
                 </div>
 
                 <div className="p-4 bg-white/10 rounded-xl border border-white/10 space-y-2">
                   <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center font-bold text-xs text-white">02</div>
                   <h4 className="font-bold text-sm">Secure Data Room Ingestion</h4>
-                  <p className="text-xs text-slate-300">You drop Tally/ERP reports, bank statements, or client contracts into an encrypted, private client folder.</p>
+                  <p className="text-xs text-slate-300">You provide the financial records, bank data or contracts needed for the agreed assessment through the agreed secure channel.</p>
                 </div>
 
                 <div className="p-4 bg-white/10 rounded-xl border border-white/10 space-y-2">
@@ -2056,15 +2056,15 @@ export default function App() {
 
             <div className="space-y-4">
               {[
-                { step: "01", title: "Intake & Discovery", desc: "We review your core business goals, contracts, and financial statements under complete non-disclosure." },
-                { step: "02", title: "Risk Classification", desc: "We group risks across cash leakage, contract traps, and bank credit vulnerabilities." },
-                { step: "03", title: "Evidence Collection", desc: "We reconcile bank statements, GST returns, debtor ledgers, and agreements." },
-                { step: "04", title: "AI-Assisted Fast Scan", desc: "Our secure internal models scan hundreds of pages in minutes to flag dangerous clauses and discrepancies." },
-                { step: "05", title: "Senior Professional Review", desc: "Experienced CFOs, senior corporate lawyers, and forensic specialists personally examine all flagged points." },
-                { step: "06", title: "Executive Action Plan", desc: "You receive a 1-page board-grade brief with exact steps, priorities, and cost impact." },
-                { step: "07", title: "Implementation Support", desc: "We help you re-negotiate contracts, fix bank files, or implement internal checks." },
-                { step: "08", title: "Closure Proof", desc: "We verify and document that the risk has been permanently resolved." },
-                { step: "09", title: "Monthly Command Monitoring", desc: "Continuous oversight through ControlCFOâ„¢ monthly check-ins." }
+                { step: "01", title: "Intake & Discovery", desc: "We review the business goals and documents you choose to provide; confidentiality terms are agreed as applicable." },
+                { step: "02", title: "Risk Classification", desc: "We group issues across the business areas supported by the information you provide." },
+                { step: "03", title: "Evidence Collection", desc: "We reconcile bank statements, GST returns, debtor ledgers and agreements where those records are supplied and within scope." },
+                { step: "04", title: "AI-Assisted Fast Scan", desc: "AI-assisted analysis can flag patterns, inconsistencies and clauses in supplied documents; results depend on the quality and completeness of the inputs." },
+                { step: "05", title: "Senior Professional Review", desc: "Professional review is performed according to the engagement scope and the reviewer assigned to the matter." },
+                { step: "06", title: "Executive Action Plan", desc: "You receive a concise brief with evidence-linked findings, priorities and recommended next actions." },
+                { step: "07", title: "Implementation Support", desc: "Where implementation support is included, we help translate agreed actions into practical next steps." },
+                { step: "08", title: "Closure Proof", desc: "We document completed actions and outstanding items; closure is recorded only where the agreed evidence supports it." },
+                { step: "09", title: "Monthly Command Monitoring", desc: "Ongoing monitoring can be provided where included in the engagement." }
               ].map((w, idx) => (
                 <div key={idx} className="navigalex-card p-6 rounded-2xl flex items-center gap-6 shadow-sm">
                   <div className="w-12 h-12 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center font-bold text-blue-600 shrink-0">
@@ -2081,12 +2081,12 @@ export default function App() {
             {/* Quality Gates */}
             <div className="navigalex-card p-8 rounded-2xl border border-blue-200 space-y-4 bg-blue-50/40 shadow-sm">
               <h3 className="text-xl font-bold text-slate-900">Our Strict Human Quality Gates</h3>
-              <p className="text-xs text-slate-600">AI never makes final decisions alone. Every single recommendation is signed off by qualified human practitioners:</p>
+              <p className="text-xs text-slate-600">AI does not make final professional decisions. Professional review and sign-off are provided where included in the engagement:</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-slate-700">
                 <div className="p-3 bg-white rounded-lg border border-slate-200 shadow-sm"><strong>Finance:</strong> Dual review of cash models by qualified finance heads.</div>
                 <div className="p-3 bg-white rounded-lg border border-slate-200 shadow-sm"><strong>Legal:</strong> Review and sign-off by practicing advocates & counsel.</div>
-                <div className="p-3 bg-white rounded-lg border border-slate-200 shadow-sm"><strong>Forensics:</strong> Certified evidence preservation for any dispute.</div>
-                <div className="p-3 bg-white rounded-lg border border-slate-200 shadow-sm"><strong>Delivery:</strong> Clear client-approved action log with auditable trail.</div>
+                <div className="p-3 bg-white rounded-lg border border-slate-200 shadow-sm"><strong>Forensics:</strong> Evidence preservation and investigation support are scoped to the matter and appropriate professional requirements.</div>
+                <div className="p-3 bg-white rounded-lg border border-slate-200 shadow-sm"><strong>Delivery:</strong> A client-approved action log can be maintained as part of the agreed delivery scope.</div>
               </div>
             </div>
           </div>
@@ -2113,11 +2113,11 @@ export default function App() {
                 </div>
                 <div>
                   <h4 className="text-xs font-bold uppercase tracking-wider text-blue-600 mb-1">Primary Operational Hub</h4>
-                  <p className="text-xs text-slate-600">Serving , and North India.</p>
+                  <p className="text-xs text-slate-600">Serving India remotely and on-site where agreed.</p>
                 </div>
                 <div>
                   <h4 className="text-xs font-bold uppercase tracking-wider text-blue-600 mb-1">Data Privacy Mandate</h4>
-                  <p className="text-xs text-slate-600">We never feed confidential client documents into open consumer AI platforms. All client data is encrypted and isolated.</p>
+                  <p className="text-xs text-slate-600">Sensitive information is handled according to the published privacy terms and the controls of the engagement. Do not submit information you are not authorised to share.</p>
                 </div>
               </div>
             </div>
@@ -2141,7 +2141,7 @@ export default function App() {
                   </div>
                   <h3 className="text-2xl font-bold text-slate-900">Inquiry Received Successfully</h3>
                   <p className="text-sm text-slate-600 max-w-md mx-auto">
-                    Thank you, {leadForm.name || 'Leader'}. A senior practice director will contact you via {leadForm.contactMethod} within 4 business hours to discuss your situation confidentially.
+                    Thank you, {leadForm.name || 'there'}. Your request has been recorded. Our team will contact you using the method you selected.
                   </p>
                   <button onClick={() => setLeadSubmitted(false)} className="px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-xs font-semibold text-white rounded-xl cursor-pointer"><span aria-label="Close" className="text-xl leading-none">×</span>
                     Submit Another Inquiry
@@ -2300,7 +2300,7 @@ export default function App() {
             <h3 className="text-xl font-bold text-white">Professional & Regulatory Boundaries</h3>
           </div>
           <p className="text-xs text-slate-400 leading-relaxed max-w-4xl">
-            <strong>Clear legal clarity:</strong> Navigalex provides business, financial, governance, and risk advisory services. Navigalex does <em>not</em> provide unregistered securities tips, court appearance/litigation without enrolled advocates, statutory audit certificates, or formal court-appointed insolvency administration. Where statutory certifications are mandatory, we work in coordination with registered Investment Advisers (RIAs), practicing advocates, registered Insolvency Professionals, and statutory auditors. All data is handled under strict confidentiality and DPDP compliance.
+            <strong>Clear legal clarity:</strong> Navigalex provides business, financial, governance, and risk advisory services. Navigalex does <em>not</em> provide unregistered securities tips, court appearance/litigation without enrolled advocates, statutory audit certificates, or formal court-appointed insolvency administration. Where statutory certifications are mandatory, we work in coordination with registered Investment Advisers (RIAs), practicing advocates, registered Insolvency Professionals, and statutory auditors. Data is handled according to applicable privacy requirements and the published privacy terms.
           </p>
         </div>
       </section>
