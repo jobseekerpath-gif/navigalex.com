@@ -19,15 +19,15 @@ export const ADVISORY_DESKS = [
     summary: "Prepares lender-ready financial files, reconciliations and debt-service models so your credit proposal is easier to review and challenge before submission.",
     problem: "Credit proposals can become difficult to assess when financial statements, GST data, bank turnover and borrowing data do not reconcile.",
     deliverables: [
-      "Bank-Grade Borrower Information Memorandum & CMA Data Pack",
+      "Borrower Information Memorandum and CMA Data Pack prepared from supplied financial records",
       "Dynamic DSCR & Monthly Cash-Flow Coverage Model",
       "Loan covenant and obligation tracker based on the agreements and sanction terms supplied",
       "One-Time Settlement (OTS) & Debt Restructuring Proposal (if stressed)",
-      "Professional Representation During Bank Credit Committee Discussions"
+      "Support for management during lender meetings, based on the agreed engagement scope"
     ],
     deliverySchedule: [
       "Week 1: Reconciliation of Last 24 Months Bank Statements, GST & ITR",
-      "Week 2: Construction of Certified CMA Data & DSCR Model",
+      "Week 2: Construction of CMA Data and DSCR Model prepared from supplied financial records",
       "Week 3: Final Borrower Data Room Assembly & Bank Meeting Briefing"
     ],
     clientInputsNeeded: "Last 2 years Audited Balance Sheets, provisional P&L, 12 months Bank Statements, GST returns.",
@@ -40,7 +40,7 @@ export const ADVISORY_DESKS = [
     title: "2. ControlCFO 90-Day Readiness Sprint",
     tagline: "Flagship Outsourced Finance, Risk & Governance Command Centre",
     badge: "Initial Launch Priority",
-    summary: "Like having an experienced, senior CFO and risk director running your financial governance on a part-time sprintâ€”without paying â‚¹35 Lakh/year full-time salary.",
+    summary: "Structured senior finance and risk oversight delivered as a defined sprint, with clear working papers, decision points and an action register.",
     problem: "Cash conversion, customer collections, borrowing capacity or management controls may be creating avoidable pressure on the business.",
     deliverables: [
       "13-Week Dynamic Cash-Flow Runway Model",
@@ -90,7 +90,7 @@ export const ADVISORY_DESKS = [
     tagline: "Continuous Risk & Internal Financial Control Auditing",
     badge: "Continuous Controls",
     summary: "Continuous, risk-based internal control testing that catches billing errors, inventory leakages, and unauthorized expenditures every quarter.",
-    problem: "Statutory annual audits only check past year's accounts for tax compliance, failing to catch real-time operational leakages and employee fraud.",
+    problem: "A statutory audit and an internal control review serve different purposes; this engagement focuses on the control areas and transactions agreed in scope.",
     deliverables: [
       "Risk-Based Internal Audit Charter & Annual Test Plan",
       "Risk-based transaction testing across agreed procurement, payroll and sales populations",
@@ -113,14 +113,14 @@ export const ADVISORY_DESKS = [
     title: "5. Board-in-a-Box Governance OS",
     tagline: "Statutory Director Protection & Board Cadence",
     badge: "Turnkey System",
-    summary: "Complete corporate governance system that protects promoter-directors from personal statutory liability and prepares the company for institutional funding or M&A.",
+    summary: "Structured corporate governance system to maintain board cadence, authority records and evidence for financing, diligence and ongoing governance.",
     problem: "Missing board minutes, undocumented shareholder agreements, ambiguous director authorities, and compliance lapses exposing founders to personal fines.",
     deliverables: [
       "Annual Board & Committee Calendar with Statutory Timelines",
       "Institutional Board Agenda, Resolutions & Minutes Packs",
       "Delegation of Authority (DoA) Financial Approval Matrix",
       "Director Conflicts of Interest & Related-Party Register",
-      "Encrypted Evidence Vault for Audit & Due Diligence"
+      "Controlled evidence index and document pack for audit and due diligence"
     ],
     deliverySchedule: [
       "Week 1-2: Corporate Secretarial & Governance Gap Analysis",
@@ -137,8 +137,8 @@ export const ADVISORY_DESKS = [
     title: "6. RegTech Journey Lab",
     tagline: "Compliance Architecture for NBFCs, Fintechs & Tech Vendors",
     badge: "Institutional RegTech",
-    summary: "Turn statutory compliance into an automated, audit-proof workflow for co-lending, digital onboarding, DPDP privacy, and RBI outsourcing rules.",
-    problem: "Fintechs and NBFC vendors getting penalized or rejected by enterprise partners due to loose KYC controls, missing data logs, or RBI audit deficiencies.",
+    summary: "Turn applicable compliance requirements into a documented control workflow for onboarding, data protection, outsourcing and other agreed requirements.",
+    problem: "Compliance gaps in onboarding, data logging, outsourcing or privacy controls can create partner, audit or remediation issues.",
     deliverables: [
       "End-to-End Regulatory Controls Matrix & Gap Analysis",
       "KYC / AML Onboarding Architecture & Edge-Case Rules",
@@ -161,7 +161,7 @@ export const ADVISORY_DESKS = [
     title: "7. FraudSignal Investigation Cell",
     tagline: "Forensic Accounting & Internal Leakage Detection",
     badge: "Forensic & Whistleblower",
-    summary: "Discreet forensic audits to detect vendor kickbacks, ghost billing, employee theft, and fund diversionâ€”backed by court-ready evidence.",
+    summary: "Discreet forensic reviews that test transaction patterns, supporting records and control gaps, with evidence preservation structured for appropriate professional or legal follow-up.",
     problem: "Unexplained drops in gross profit margins, inventory mismatches, anonymous whistleblower tips, or suspected partner embezzlement.",
     deliverables: [
       "Forensic Transaction Analytics & Vendor Duplicate Billing Scan",
@@ -186,13 +186,13 @@ export const ADVISORY_DESKS = [
     tagline: "Pre-Shipment LC Screening & Bank Guarantee Protection",
     badge: "Export & Tender Desk",
     summary: "Specialist documentary trade-finance review to identify discrepancies and wording issues before documents are presented to banks or counterparties.",
-    problem: "Over 60% of export Letters of Credit get rejected due to minor paperwork mismatches under UCP 600 rules, delaying payment by months and incurring heavy demurrage.",
+    problem: "Documentary discrepancies and wording mismatches can delay payment or create bank/counterparty disputes; the desk reviews the transaction documents you provide.",
     deliverables: [
       "Pre-Issuance Letter of Credit (LC) Clause Audit",
-      "Zero-Defect Export Document Checklist (BL, Certificate of Origin, Invoice)",
+      "Transaction-specific export document checklist covering the supplied LC/BG and trade documents",
       "Bank Guarantee (BG) Wording Review to Prevent Unfair Encashment",
       "Trade-compliance issue log against the requirements applicable to the supplied transaction",
-      "Direct Liaison Support with Issuing & Advising Banks"
+      "Coordination support with issuing and advising banks, subject to the agreed mandate"
     ],
     deliverySchedule: [
       "24-48 Hours: Rapid turnaround per LC or Bank Guarantee transaction",
@@ -208,7 +208,7 @@ export const ADVISORY_DESKS = [
     title: "9. Family Wealth Governance Office",
     tagline: "Multi-Entity Asset Consolidation & Succession Peace",
     badge: "Promoter & Family Office",
-    summary: "Structures family businesses across siblings, holding entities, and trustsâ€”preventing family disputes and preserving wealth across generations.",
+    summary: "Governance and coordination for family businesses, holding entities and succession planning, with legal formalisation handled with the appropriate professionals.",
     problem: "Messy cross-holdings between family members, informal loans, lack of a clear succession plan, and vulnerability to future family litigation.",
     deliverables: [
       "Consolidated Family Balance Sheet & Cross-Entity Asset Map",
@@ -1494,61 +1494,61 @@ export default function App() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
                 {
-                  title: "1. ControlCFOâ„¢ 30-Day Sprint",
-                  idealFor: "Owner-managed MSMEs (â‚¹5 Cr - â‚¹50 Cr turnover) without a full-time senior CFO.",
-                  problemSolved: "Your accountant only tells you what taxes to pay. No one is managing your future cash runway, debtor recovery, or bank limits.",
-                  concreteRoi: "Saves â‚¹25+ Lakhs annually compared to hiring a full-time C-suite executive while giving you institutional board-grade control.",
-                  price: "â‚¹1.5â€“4 Lakh fixed",
-                  deskIndex: 0
+                  title: "1. ControlCFO™ 30-Day Sprint",
+                  idealFor: "Owner-managed businesses that want structured senior finance and risk oversight without adding a full-time executive role.",
+                  problemSolved: "Management has fragmented visibility across cash flow, customer collections, contracts, debt and controls.",
+                  commercialValue: "Creates a single working view of cash, risk, responsibilities and next actions from the records supplied.",
+                  price: "₹1.5–4 Lakh fixed",
+                  deskIndex: 1
                 },
                 {
                   title: "2. Contract-to-Cash Risk Desk",
-                  idealFor: "Contractors, manufacturers, and agencies signing large client agreements.",
-                  problemSolved: "Big clients insert unilateral termination, uncapped indemnity, and 90-day payment delays that choke your business.",
-                  concreteRoi: "Closes payment loopholes before signing. Recovers stuck receivables up to 40% faster with formal MSME Samadhaan protections.",
-                  price: "â‚¹75,000â€“â‚¹3 Lakh setup",
+                  idealFor: "Contractors, manufacturers and service businesses negotiating material customer agreements.",
+                  problemSolved: "Supplier-side exposure can sit in indemnity, termination, payment, IP and dispute provisions.",
+                  commercialValue: "Turns the supplied contract language and receivable facts into a focused negotiation and collection action list.",
+                  price: "₹75,000–₹3 Lakh setup",
                   deskIndex: 2
                 },
                 {
                   title: "3. LenderReady Credit Office",
-                  idealFor: "Companies applying for bank loans, CC limit enhancements, or facing high loan interest.",
-                  problemSolved: "Banks take 3-6 months and often reject loans because balance sheet ratios (DSCR, drawing power) look weak or inconsistent.",
-                  concreteRoi: "Prepares bank-compliant data rooms. Helps negotiate 50-75 bps lower interest rates, saving lakhs in interest every year.",
-                  price: "â‚¹75,000â€“â‚¹3 Lakh + success fee",
-                  deskIndex: 5
+                  idealFor: "Companies preparing a bank borrowing, renewal, enhancement or restructuring package.",
+                  problemSolved: "Financial records may be incomplete, inconsistent or difficult for a lender to evaluate.",
+                  commercialValue: "Creates a lender-ready information pack and highlights the figures or documents that need reconciliation.",
+                  price: "₹75,000–₹3 Lakh + success fee",
+                  deskIndex: 0
                 },
                 {
                   title: "4. TradeShield LC/BG Desk",
-                  idealFor: "Exporters, importers, and government tender contractors.",
-                  problemSolved: "Over 60% of export Letters of Credit suffer discrepancy rejections, trapping container shipments at foreign ports.",
-                  concreteRoi: "Zero-defect document review prevents bank rejection, saves demurrage charges, and guarantees prompt payment realization.",
-                  price: "â‚¹50,000â€“â‚¹2 Lakh per transaction",
-                  deskIndex: 3
+                  idealFor: "Exporters, importers and tender/EPC businesses handling documentary trade transactions.",
+                  problemSolved: "Document wording and documentary mismatches can create payment, presentation or guarantee risks.",
+                  commercialValue: "Produces a transaction-specific discrepancy and documentation checklist before presentation.",
+                  price: "₹50,000–₹2 Lakh per transaction",
+                  deskIndex: 7
                 },
                 {
                   title: "5. FraudSignal Investigation Cell",
-                  idealFor: "Business owners suspecting internal theft, kickbacks, or fake vendor billing.",
-                  problemSolved: "Internal employees or partners siphoning company funds through inflated procurement or unauthorized dispatches.",
-                  concreteRoi: "Discreet forensic audits produce evidence-grade documentation ready for legal action or asset recovery.",
-                  price: "â‚¹3â€“15 Lakh per investigation",
-                  deskIndex: 4
+                  idealFor: "Businesses investigating suspected leakage, unusual transactions or internal control breakdowns.",
+                  problemSolved: "Transaction data can contain patterns that require structured testing and corroboration.",
+                  commercialValue: "Produces a documented investigation trail, evidence index and issues for management or counsel review.",
+                  price: "₹3–15 Lakh per investigation",
+                  deskIndex: 6
                 },
                 {
                   title: "6. Family Wealth Governance",
-                  idealFor: "Family-owned businesses and promoters planning succession or multi-entity management.",
-                  problemSolved: "Disputes between siblings or partners, messy asset ownership, and lack of clear authority matrices.",
-                  concreteRoi: "Protects family wealth across generations with a legally sound family constitution and consolidated reporting.",
-                  price: "â‚¹2â€“10 Lakh setup",
-                  deskIndex: 7
+                  idealFor: "Family-owned groups managing multiple entities, ownership structures or succession planning.",
+                  problemSolved: "Ownership, authority and succession decisions can remain fragmented across family and operating entities.",
+                  commercialValue: "Creates a structured governance and decision framework for review and formalisation with the appropriate professionals.",
+                  price: "₹2–10 Lakh setup",
+                  deskIndex: 8
                 }
-              ].map((p, idx) => (
+              ]              ].map((p, idx) => (
                 <div key={idx} className="navigalex-card p-8 rounded-2xl flex flex-col justify-between space-y-6 shadow-md border-t-4 border-blue-600">
                   <div className="space-y-4">
                     <h3 className="text-xl font-bold text-slate-900">{p.title}</h3>
                     <div className="space-y-2 text-xs text-slate-700">
                       <div><strong className="text-slate-900">Who picks this:</strong> {p.idealFor}</div>
                       <div><strong className="text-rose-600">The Problem Solved:</strong> {p.problemSolved}</div>
-                      <div><strong className="text-emerald-700">Expected ROI:</strong> {p.concreteRoi}</div>
+                      <div><strong className="text-emerald-700">Commercial value:</strong> {p.commercialValue}</div>
                     </div>
                   </div>
                   <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
@@ -1571,9 +1571,9 @@ export default function App() {
           <div className="py-20 px-6 max-w-7xl mx-auto space-y-16">
             <div className="text-center max-w-3xl mx-auto space-y-3">
               <span className="text-xs font-bold text-blue-600 uppercase tracking-widest">PRODUCT ARCHITECTURE & DELIVERABLES</span>
-              <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900">All 9 Specialized Advisory Desks</h2>
+              <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900">8 Core Advisory Desks + Dedicated Family Office</h2>
               <p className="text-slate-600">
-                Real, commercial advisory services combining 70% AI data ingestion with 100% senior CA and Advocate review. Click any desk below to see exact deliverables and the delivery schedule.
+                Real advisory services using AI-assisted analysis plus the professional review and delivery scope agreed for each engagement. Click any desk below to see deliverables and the delivery schedule.
               </p>
             </div>
 
@@ -2506,23 +2506,23 @@ export default function App() {
 
             <div className="space-y-4 text-xs text-slate-700 leading-relaxed">
               <div className="p-3.5 bg-blue-50/70 border border-blue-200 rounded-xl">
-                <strong className="text-blue-900 block font-bold mb-1">Our Core Confidentiality Guarantee:</strong>
-                <span>We never upload or train public consumer AI systems on your company’s financial records, Tally dumps, or customer contracts. All data ingestion operates in isolated enterprise-grade sandboxes with AES-256 encryption.</span>
+                <strong className="text-blue-900 block font-bold mb-1">Data Handling</strong>
+                <span>Use the site only to submit information you are authorised to share. Document handling and retention are governed by the service arrangement and applicable privacy requirements.</span>
               </div>
 
               <div>
                 <h4 className="font-bold text-slate-900 uppercase tracking-wider mb-1">1. Information Collection & Usage</h4>
-                <p>We collect business financial data, banking sanction letters, contracts, and officer contact details exclusively to execute the requested advisory desk. No data is ever rented or shared with third parties.</p>
+                <p>Information submitted through the site is used to process the requested assessment or inquiry, operate the service, and maintain required records. Refer to the published privacy terms for applicable disclosures.</p>
               </div>
 
               <div>
                 <h4 className="font-bold text-slate-900 uppercase tracking-wider mb-1">2. Non-Disclosure & Legal Protection</h4>
-                <p>Prior to receiving sensitive general ledgers or customer agreements, Navigalex executes a formal mutual Non-Disclosure Agreement (NDA) with your authorized director or promoter.</p>
+                <p>Sensitive commercial information should be shared only after the parties have agreed the engagement terms and any required confidentiality arrangements.</p>
               </div>
 
               <div>
                 <h4 className="font-bold text-slate-900 uppercase tracking-wider mb-1">3. Data Retention & Secure Shredding</h4>
-                <p>Upon mandate completion and delivery of final action logs, client working files are retained only for the agreed statutory period or permanently purged upon formal written request.</p>
+                <p>Retention periods depend on the applicable engagement terms, legal requirements and operational records policy.</p>
               </div>
             </div>
 
