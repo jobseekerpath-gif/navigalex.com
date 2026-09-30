@@ -574,7 +574,7 @@ export default function App() {
     setDocInputError('');
     let sourceText = docText.trim();
     if (!sourceText && docFile) {
-      const isTextFile = /(^text\\/)|(csv)|(json)/i.test(docFile.type) || /\\.(txt|csv|json)$/i.test(docFile.name);
+      const isTextFile = /(^text\/)|(csv)|(json)/i.test(docFile.type) || /\.(txt|csv|json)$/i.test(docFile.name);
       if (!isTextFile) {
         setDocInputError('This version does not extract PDF, DOCX or image contents. Paste the actual contract text in Option B so the assessment is based on the document itself.');
         return;
@@ -685,7 +685,7 @@ export default function App() {
     }
     let sourceText = diagnosticNotes.trim();
     if (!sourceText && diagnosticFile) {
-      const isTextFile = /(^text\\/)|(csv)|(json)/i.test(diagnosticFile.type) || /\\.(txt|csv|json)$/i.test(diagnosticFile.name);
+      const isTextFile = /(^text\/)|(csv)|(json)/i.test(diagnosticFile.type) || /\.(txt|csv|json)$/i.test(diagnosticFile.name);
       if (!isTextFile) {
         setDiagnosticInputError('This version does not extract PDF or Excel files. Paste the actual financial and operating facts into the text box so the report is based on real inputs.');
         return;
