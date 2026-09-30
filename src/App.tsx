@@ -1619,7 +1619,7 @@ export default function App() {
                         href={getFreeToolHandoffUrl('contract-43b-h')}
                         className="inline-flex w-full items-center justify-center rounded-xl bg-blue-50 hover:bg-blue-100 border border-blue-200 px-3 py-2 text-xs font-bold text-blue-800 transition-colors"
                       >
-                        Check whether your buyer owes you under 43B(h)
+                        Check a buyer-payment position under Section 43B(h)
                       </a>
                     )}
                     {srv.id === 'family-wealth' && (
