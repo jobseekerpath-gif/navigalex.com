@@ -185,7 +185,7 @@ export const ADVISORY_DESKS = [
     tagline: "Pre-Shipment LC Screening & Bank Guarantee Protection",
     badge: "Export & Tender Desk",
     summary: "Specialist documentary trade finance review to prevent foreign bank discrepancy rejections, frozen containers, and invoked bank guarantees.",
-    problem: "Over 60% of export Letters of Credit get rejected due to minor paperwork mismatches under UCP 600 rules, delaying payment by months and incurring heavy demurrage.",
+    problem: "Documentary discrepancies, wording mismatches, and incomplete trade paperwork can delay payment or trigger disputes.",
     deliverables: [
       "Pre-Issuance Letter of Credit (LC) Clause Audit",
       "Zero-Defect Export Document Checklist (BL, Certificate of Origin, Invoice)",
