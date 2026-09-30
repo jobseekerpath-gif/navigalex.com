@@ -896,7 +896,7 @@ export default function App() {
           </div>
         )}
 
-        {/* LIVE AI TOOLS TAB */}
+        {/* LIVE AI ASSESSMENTS TAB */}
         {activeTab === 'live-tools' && (
           <div className="py-16 px-6 max-w-7xl mx-auto space-y-20">
             <div className="text-center max-w-3xl mx-auto space-y-3">
