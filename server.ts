@@ -227,15 +227,16 @@ async function startServer() {
 
   // Public Telemetry: Real User Activity Tracking Endpoint
   app.post('/api/track/activity', (req, res) => {
-    const { visitorId, eventType, path, details } = req.body;
+    const { visitorId, path } = req.body;
+    const cleanPath = typeof path === 'string' && path.startsWith('/') ? path.slice(0, 200) : '/';
     const act = recordVisitorActivity(
-      req, 
-      visitorId, 
-      eventType || 'PAGE_VIEW', 
-      path || '/', 
-      details || 'Viewed page'
+      req,
+      typeof visitorId === 'string' ? visitorId.slice(0, 120) : '',
+      'PAGE_VIEW',
+      cleanPath,
+      'Viewed page'
     );
-    res.json({ success: true, activityId: act.id, ip: act.ip });
+    res.json({ success: true, activityId: act.id });
   });
 
   // Admin: Get Real Visitors List
@@ -428,12 +429,12 @@ async function startServer() {
       id: `CS-${Math.floor(200 + Math.random() * 800)}`,
       title,
       clientSector,
-      region: region || 'Delhi NCR',
-      dealSize: dealSize || 'Confidential Turnover',
+      region: region || 'Not disclosed',
+      dealSize: dealSize || 'Not disclosed',
       riskIdentified,
-      advisoryProvided: advisoryProvided || 'Navigalex Bespoke Advisory Engagement',
-      concreteRoi: concreteRoi || 'Substantial financial and operational risk mitigation',
-      status: status || 'Published',
+      advisoryProvided: advisoryProvided || '',
+      concreteRoi: concreteRoi || '',
+      status: status || 'Draft',
       submittedAt: new Date().toISOString(),
       author: 'Practice Director'
     };
