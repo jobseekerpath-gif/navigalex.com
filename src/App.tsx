@@ -443,6 +443,7 @@ export default function App() {
   });
   const [isScanningCibil, setIsScanningCibil] = useState(false);
   const [cibilResult, setCibilResult] = useState<any>(null);
+  const [cibilInputError, setCibilInputError] = useState('');
 
   // Live Business Health Diagnostic State
   const [diagnosticIndustry, setDiagnosticIndustry] = useState('');
@@ -653,7 +654,8 @@ export default function App() {
   const handleScanCibil = async (e: React.FormEvent) => {
     e.preventDefault();
     const required = Object.values(cibilForm);
-    if (required.some((value) => value === '')) return;
+    if (required.some((value) => value === '')) { setCibilInputError('Enter all five figures before running the calculation.'); return; }
+    setCibilInputError('');
     setIsScanningCibil(true);
     try {
       const res = await fetch('/api/cibil-scan', {
@@ -663,13 +665,13 @@ export default function App() {
       });
       const data = await res.json();
       if (!res.ok || !data.success) {
-        setDocInputError(data.error || 'The banking assessment could not be calculated.');
+        setCibilInputError(data.error || 'The banking assessment could not be calculated.');
         return;
       }
       setCibilResult(data.report);
     } catch (err) {
       console.error(err);
-      setDocInputError('The banking assessment could not be completed.');
+      setCibilInputError('The banking assessment could not be completed.');
     } finally {
       setIsScanningCibil(false);
     }
@@ -1127,6 +1129,12 @@ export default function App() {
                     </>
                   )}
                 </button>
+                {docInputError && (
+                  <div className="rounded-xl bg-amber-50 border border-amber-200 px-4 py-3 text-xs text-amber-900" role="alert">
+                    {docInputError}
+                  </div>
+                )}
+
               </form>
 
               {/* Live Contract Scan Results */}
@@ -1207,7 +1215,7 @@ export default function App() {
                   <Landmark className="w-3.5 h-3.5" /> LIVE BANKING ENGINE
                 </div>
                 <h3 className="text-2xl font-bold text-slate-900">2. Bank Loan & CIBIL Readiness Scanner</h3>
-                <p className="text-xs text-slate-600 mt-1">Check your Debt Service Coverage Ratio (DSCR), maximum working capital eligibility, and the exact reasons banks reject loan files.</p>
+                <p className="text-xs text-slate-600 mt-1">Calculate DSCR and review the relationship between operating profit, debt service, borrowing and overdue receivables.</p>
               </div>
 
               {/* WHY PICK THIS PRODUCT GUIDE */}
@@ -1292,6 +1300,12 @@ export default function App() {
                     {isScanningCibil ? "Calculating Banking Coverage..." : "Run Free Bank Readiness Diagnostic"}
                   </button>
                 </div>
+                {cibilInputError && (
+                  <div className="sm:col-span-2 rounded-xl bg-amber-50 border border-amber-200 px-4 py-3 text-xs text-amber-900" role="alert">
+                    {cibilInputError}
+                  </div>
+                )}
+
               </form>
 
               {/* CIBIL Result Output */}
@@ -1344,10 +1358,10 @@ export default function App() {
             <section className="navigalex-card rounded-2xl p-8 sm:p-10 shadow-xl border-t-4 border-indigo-600 space-y-8">
               <div className="border-b border-slate-200 pb-6">
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-bold mb-2">
-                  <Activity className="w-3.5 h-3.5" /> LIVE DIAGNOSTIC ENGINE
+                  <Activity className="w-3.5 h-3.5" /> LIVE BUSINESS ASSESSMENT
                 </div>
-                <h3 className="text-2xl font-bold text-slate-900">3. Business Health & File Upload Scanner</h3>
-                <p className="text-xs text-slate-600 mt-1">Upload your P&L, balance sheet, or select your industry metrics to generate an instant executive health diagnostic.</p>
+                <h3 className="text-2xl font-bold text-slate-900">3. Business Health Assessment</h3>
+                <p className="text-xs text-slate-600 mt-1">Provide your actual operating and financial facts to generate a business-specific management assessment.</p>
               </div>
 
               {/* WHY PICK THIS PRODUCT GUIDE */}
@@ -1369,6 +1383,7 @@ export default function App() {
                       onChange={e => setDiagnosticIndustry(e.target.value)}
                       className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 font-medium focus:outline-none focus:border-indigo-600"
                     >
+                      <option value="" disabled>Select an industry</option>
                       <option>Manufacturing & Engineering</option>
                       <option>Exporters & International Trade</option>
                       <option>Distributors & Wholesale Trading</option>
@@ -1387,6 +1402,7 @@ export default function App() {
                       onChange={e => setDiagnosticRevenue(e.target.value)}
                       className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 font-medium focus:outline-none focus:border-indigo-600"
                     >
+                      <option value="" disabled>Select a revenue range</option>
                       <option>&lt; â‚¹1 Cr (Early Stage)</option>
                       <option>â‚¹1 Cr - â‚¹5 Cr</option>
                       <option>â‚¹5 Cr - â‚¹25 Cr (MSME Growth)</option>
@@ -1430,8 +1446,14 @@ export default function App() {
                   disabled={isRunningDiagnostic}
                   className="w-full py-4 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-500 rounded-xl shadow-lg transition-all cursor-pointer"
                 >
-                  {isRunningDiagnostic ? "Compiling Executive Health Scan..." : "Generate Business Health Diagnostic Report"}
+                  {isRunningDiagnostic ? "Compiling Executive Health Scan..." : "Generate Business Health Assessment"}
                 </button>
+                {diagnosticInputError && (
+                  <div className="rounded-xl bg-amber-50 border border-amber-200 px-4 py-3 text-xs text-amber-900" role="alert">
+                    {diagnosticInputError}
+                  </div>
+                )}
+
               </form>
 
               {diagnosticResult && (
@@ -1487,7 +1509,7 @@ export default function App() {
           <div className="py-20 px-6 max-w-7xl mx-auto space-y-16">
             <div className="text-center max-w-3xl mx-auto space-y-3">
               <span className="text-xs font-bold text-blue-600 uppercase tracking-widest">CLEAR VALUE & RETURN ON INVESTMENT</span>
-              <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900">Why Business Owners Choose Navigalex</h2>
+              <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900">How Navigalex Services Create Commercial Value</h2>
               <p className="text-slate-600">Here is the plain, straightforward reason why Indian promoters and directors engage our desks instead of traditional advisors.</p>
             </div>
 
