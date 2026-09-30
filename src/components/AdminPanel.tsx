@@ -80,11 +80,11 @@ interface AdminPanelProps {
 }
 
 export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
-  // Authentication State with specified credentials: username: admin, password: Jackyu@62.
+  // Authentication state; administrator credentials are supplied through secure server configuration.
   const [token, setToken] = useState<string | null>(() => sessionStorage.getItem('nvx_admin_token'));
   const [adminUser, setAdminUser] = useState<any>(null);
   const [loginUsername, setLoginUsername] = useState('admin');
-  const [loginPassword, setLoginPassword] = useState('Jackyu@62.');
+  const [loginPassword, setLoginPassword] = useState('');
   const [loginError, setLoginError] = useState('');
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
@@ -438,7 +438,7 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
               </div>
               <div>
                 <span className="text-slate-400 block text-[9px] uppercase font-bold">Password</span>
-                <strong className="text-slate-900 select-all font-bold">Jackyu@62.</strong>
+                <strong className="text-slate-900 font-bold">Configured in Railway environment variables</strong>
               </div>
             </div>
 
@@ -464,7 +464,7 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
                   required
                   value={loginUsername}
                   onChange={e => setLoginUsername(e.target.value)}
-                  placeholder="admin"
+                  placeholder="Admin username or email"
                   className="w-full bg-slate-50 border border-slate-300 rounded-xl pl-10 pr-4 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:bg-white transition-all font-mono"
                 />
               </div>
@@ -479,7 +479,7 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
                   required
                   value={loginPassword}
                   onChange={e => setLoginPassword(e.target.value)}
-                  placeholder="Jackyu@62."
+                  placeholder="Enter admin password"
                   className="w-full bg-slate-50 border border-slate-300 rounded-xl pl-10 pr-4 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:bg-white transition-all font-mono"
                 />
               </div>
@@ -983,7 +983,7 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
             <div className="flex items-center justify-between bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
               <div>
                 <h3 className="text-base font-bold text-slate-900">Client Case Study Submissions</h3>
-                <p className="text-xs text-slate-500">Manage real-world corporate turnarounds and verified ROI case studies.</p>
+                <p className="text-xs text-slate-500">Manage verified client case studies. Publish only outcomes supported by client records and approval.</p>
               </div>
               <button
                 onClick={() => {
@@ -1344,7 +1344,7 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
                   required
                   value={caseStudyForm.concreteRoi}
                   onChange={e => setCaseStudyForm({...caseStudyForm, concreteRoi: e.target.value})}
-                  placeholder="e.g. Recovered 100% of trapped â‚¹1.8 Cr within 38 days, saving â‚¹12L legal fees"
+                  placeholder="Enter only a verified, evidence-backed client outcome; do not use estimates presented as facts."
                   className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs text-slate-900 focus:outline-none focus:border-blue-600"
                 />
               </div>
