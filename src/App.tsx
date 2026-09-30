@@ -316,6 +316,7 @@ const getFreeToolHandoffUrl = (tool: string) => {
     utm_source: "free_tool",
     utm_campaign: handoff.campaign
   });
+  if (tool === 'contract-43b-h') return "/43b-h-check?" + params.toString();
   return "/services?" + params.toString();
 };
 
@@ -325,6 +326,9 @@ export default function App() {
   const getInitialTab = () => {
     if (typeof window !== 'undefined') {
       const p = window.location.pathname.toLowerCase();
+      if (p === '/43b-h-check' || p.startsWith('/43b-h-check')) {
+        return '43b-h-check';
+      }
       if (p === '/family-office' || p.startsWith('/family-office')) {
         return 'family-office';
       }
@@ -363,7 +367,9 @@ export default function App() {
       const p = window.location.pathname.toLowerCase();
       const urlPersona = new URLSearchParams(window.location.search).get('persona');
       setPersona(PERSONA_OPTIONS.some((option) => option.key === urlPersona) ? urlPersona || 'all' : 'all');
-      if (p === '/family-office' || p.startsWith('/family-office')) {
+      if (p === '/43b-h-check' || p.startsWith('/43b-h-check')) {
+        setActiveTab('43b-h-check');
+      } else if (p === '/family-office' || p.startsWith('/family-office')) {
         setActiveTab('family-office');
       } else if (p === '/services' || p.startsWith('/services') || urlPersona) {
         setActiveTab('services');
@@ -415,6 +421,16 @@ export default function App() {
   const [isAnalyzingDoc, setIsAnalyzingDoc] = useState(false);
   const [isDownloadingContractReport, setIsDownloadingContractReport] = useState(false);
   const [docResult, setDocResult] = useState<any>(null);
+
+  // Section 43B(h) payment-timing screening state
+  const [paymentCheck, setPaymentCheck] = useState({
+    msmeStatus: 'yes',
+    acceptanceDate: '',
+    agreedDays: '45',
+    paidDate: '',
+    amount: ''
+  });
+  const [paymentCheckResult, setPaymentCheckResult] = useState<any>(null);
 
   // Live CIBIL / Banking Health Calculator State
   const [cibilForm, setCibilForm] = useState({
@@ -500,6 +516,52 @@ export default function App() {
 
   const handleSelectDeskForBooking = (deskTitle: string) => {
     openAssessmentForm(deskTitle);
+  };
+
+  const runPaymentTimingCheck = (e: React.FormEvent) => {
+    e.preventDefault();
+    const { msmeStatus, acceptanceDate, agreedDays, paidDate, amount } = paymentCheck;
+    if (!acceptanceDate) {
+      setPaymentCheckResult({ type: 'input', message: 'Enter the acceptance or deemed-acceptance date.' });
+      return;
+    }
+
+    const accepted = new Date(acceptanceDate + 'T00:00:00');
+    if (Number.isNaN(accepted.getTime())) {
+      setPaymentCheckResult({ type: 'input', message: 'Enter a valid acceptance date.' });
+      return;
+    }
+
+    const agreed = Math.max(0, Number.parseInt(agreedDays || '45', 10) || 0);
+    const statutoryMax = new Date(accepted);
+    statutoryMax.setDate(statutoryMax.getDate() + 45);
+
+    const agreedDue = new Date(accepted);
+    agreedDue.setDate(agreedDue.getDate() + Math.min(agreed, 45));
+
+    const today = new Date();
+    const paid = paidDate ? new Date(paidDate + 'T00:00:00') : today;
+    if (Number.isNaN(paid.getTime())) {
+      setPaymentCheckResult({ type: 'input', message: 'Enter a valid payment date or leave it blank if unpaid.' });
+      return;
+    }
+
+    const daysToPayment = Math.max(0, Math.floor((paid.getTime() - accepted.getTime()) / 86400000));
+    const beyond45 = paid.getTime() > statutoryMax.getTime();
+    const beyondAgreed = paid.getTime() > agreedDue.getTime();
+    const potentialIssue = msmeStatus === 'yes' && (beyond45 || beyondAgreed);
+
+    setPaymentCheckResult({
+      type: potentialIssue ? 'flag' : 'clear',
+      daysToPayment,
+      statutoryMax: statutoryMax.toLocaleDateString('en-IN'),
+      agreedDue: agreedDue.toLocaleDateString('en-IN'),
+      amount: amount || '',
+      potentialIssue,
+      note: msmeStatus === 'yes'
+        ? 'Based on the dates you entered, the payment appears to be beyond the Section 15 timing screen used for this check.'
+        : 'The Section 15 timing screen is intended for a supplier that qualifies as a micro or small enterprise. Your answer indicates that status is not confirmed.'
+    });
   };
 
   const handleAnalyzeDocument = async (e: React.FormEvent) => {
@@ -1081,7 +1143,7 @@ export default function App() {
                       href={getFreeToolHandoffUrl('contract-43b-h')}
                       className="flex-1 inline-flex items-center justify-center rounded-xl bg-blue-50 hover:bg-blue-100 border border-blue-200 px-4 py-3 text-xs font-bold text-blue-800 transition-colors text-center"
                     >
-                      Check whether your buyer owes you under 43B(h)
+                      Check a buyer-payment position under Section 43B(h)
                     </a>
                   </div>
 
@@ -1557,7 +1619,7 @@ export default function App() {
                         href={getFreeToolHandoffUrl('contract-43b-h')}
                         className="inline-flex w-full items-center justify-center rounded-xl bg-blue-50 hover:bg-blue-100 border border-blue-200 px-3 py-2 text-xs font-bold text-blue-800 transition-colors"
                       >
-                        Check whether your buyer owes you under 43B(h)
+                        Check a buyer-payment position under Section 43B(h)
                       </a>
                     )}
                     {srv.id === 'family-wealth' && (
@@ -1647,6 +1709,129 @@ export default function App() {
                 </div>
               ))}
             </div>
+          </div>
+        )}
+
+        {activeTab === '43b-h-check' && (
+          <div className="py-16 px-6 max-w-4xl mx-auto space-y-8">
+            <button
+              type="button"
+              onClick={() => {
+                window.history.pushState(null, '', '/services?persona=growing&service=contract-to-cash');
+                setActiveTab('services');
+              }}
+              className="text-xs font-bold text-blue-700 hover:text-blue-600"
+            >
+              ← Back to Contract-to-Cash
+            </button>
+
+            <div className="space-y-3">
+              <span className="text-xs font-bold text-blue-600 uppercase tracking-widest">FREE PAYMENT TIMING CHECK</span>
+              <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900">Check a buyer-payment position under Section 43B(h)</h2>
+              <p className="text-slate-600 max-w-3xl">
+                Enter the commercial dates from your transaction. This screen checks payment timing against the Section 15 timing framework. It is a screening aid, not a legal or tax conclusion.
+              </p>
+            </div>
+
+            <form onSubmit={runPaymentTimingCheck} className="navigalex-card rounded-2xl p-6 sm:p-8 shadow-xl border-t-4 border-blue-600 space-y-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Supplier status</label>
+                  <select
+                    value={paymentCheck.msmeStatus}
+                    onChange={(e) => setPaymentCheck({ ...paymentCheck, msmeStatus: e.target.value })}
+                    className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900"
+                  >
+                    <option value="yes">Micro/small enterprise status confirmed</option>
+                    <option value="no">Not confirmed</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Acceptance / deemed acceptance date</label>
+                  <input
+                    required
+                    type="date"
+                    value={paymentCheck.acceptanceDate}
+                    onChange={(e) => setPaymentCheck({ ...paymentCheck, acceptanceDate: e.target.value })}
+                    className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Written payment term (days)</label>
+                  <input
+                    type="number"
+                    min="0"
+                    max="45"
+                    value={paymentCheck.agreedDays}
+                    onChange={(e) => setPaymentCheck({ ...paymentCheck, agreedDays: e.target.value })}
+                    className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900"
+                  />
+                  <span className="text-[11px] text-slate-500 mt-1 block">The checker caps this entry at 45 days.</span>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Payment date</label>
+                  <input
+                    type="date"
+                    value={paymentCheck.paidDate}
+                    onChange={(e) => setPaymentCheck({ ...paymentCheck, paidDate: e.target.value })}
+                    className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900"
+                  />
+                  <span className="text-[11px] text-slate-500 mt-1 block">Leave blank if still unpaid; the screen uses today's date.</span>
+                </div>
+
+                <div className="sm:col-span-2">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Outstanding amount (optional)</label>
+                  <input
+                    type="text"
+                    inputMode="decimal"
+                    value={paymentCheck.amount}
+                    onChange={(e) => setPaymentCheck({ ...paymentCheck, amount: e.target.value })}
+                    placeholder="e.g. 250000"
+                    className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900"
+                  />
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                className="w-full py-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-bold shadow-lg"
+              >
+                Check Payment Timing
+              </button>
+            </form>
+
+            {paymentCheckResult && (
+              <div className={`rounded-2xl border p-6 ${paymentCheckResult.type === 'flag' ? 'bg-amber-50 border-amber-200' : paymentCheckResult.type === 'clear' ? 'bg-emerald-50 border-emerald-200' : 'bg-slate-50 border-slate-200'}`}>
+                {paymentCheckResult.type === 'input' ? (
+                  <p className="text-sm font-semibold text-slate-800">{paymentCheckResult.message}</p>
+                ) : (
+                  <div className="space-y-3">
+                    <h3 className="text-lg font-bold text-slate-900">
+                      {paymentCheckResult.type === 'flag' ? 'Potential payment-timing issue' : 'No timing issue indicated by these entries'}
+                    </h3>
+                    <ul className="space-y-2 text-sm text-slate-700">
+                      <li>• Days from acceptance to payment check: {paymentCheckResult.daysToPayment}</li>
+                      <li>• 45-day statutory timing screen date: {paymentCheckResult.statutoryMax}</li>
+                      <li>• Written-term timing screen date: {paymentCheckResult.agreedDue}</li>
+                      {paymentCheckResult.amount && <li>• Amount entered: ₹{paymentCheckResult.amount}</li>}
+                    </ul>
+                    <p className="text-xs text-slate-600">{paymentCheckResult.note}</p>
+                    {paymentCheckResult.type === 'flag' && (
+                      <button
+                        type="button"
+                        onClick={() => openAssessmentForm('Contract-to-Cash - Section 43B(h) Payment Review')}
+                        className="inline-flex px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold"
+                      >
+                        Request Contract-to-Cash Review
+                      </button>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )}
 
