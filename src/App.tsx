@@ -16,12 +16,12 @@ export const ADVISORY_DESKS = [
     title: "1. LenderReady Credit & Recovery Office",
     tagline: "Bank Sanction Acceleration & Debt Restructuring",
     badge: "Initial Launch Priority",
-    summary: "Prepares bank-grade financial files and debt service models so banks approve loans and CC limit enhancements 3x faster with lower interest.",
-    problem: "Banks reject loan proposals or slash Cash Credit limits because DSCR is weak, GST returns don't match bank turnover, or drawing power calculations have errors.",
+    summary: "Prepares lender-ready financial files, reconciliations and debt-service models so your credit proposal is easier to review and challenge before submission.",
+    problem: "Credit proposals can become difficult to assess when financial statements, GST data, bank turnover and borrowing data do not reconcile.",
     deliverables: [
       "Bank-Grade Borrower Information Memorandum & CMA Data Pack",
       "Dynamic DSCR & Monthly Cash-Flow Coverage Model",
-      "Loan Covenant Tracker to Prevent Penal Interest Sanctions",
+      "Loan covenant and obligation tracker based on the agreements and sanction terms supplied",
       "One-Time Settlement (OTS) & Debt Restructuring Proposal (if stressed)",
       "Professional Representation During Bank Credit Committee Discussions"
     ],
@@ -41,7 +41,7 @@ export const ADVISORY_DESKS = [
     tagline: "Flagship Outsourced Finance, Risk & Governance Command Centre",
     badge: "Initial Launch Priority",
     summary: "Like having an experienced, senior CFO and risk director running your financial governance on a part-time sprintâ€”without paying â‚¹35 Lakh/year full-time salary.",
-    problem: "Sales are growing, but cash is constantly tight, debtors are delayed past 75 days, and bank limit renewal is stalled.",
+    problem: "Cash conversion, customer collections, borrowing capacity or management controls may be creating avoidable pressure on the business.",
     deliverables: [
       "13-Week Dynamic Cash-Flow Runway Model",
       "Top 5 Customer & Vendor Contract Risk Review (with Redlines)",
@@ -65,14 +65,14 @@ export const ADVISORY_DESKS = [
     title: "3. Contract-to-Cash Risk Desk",
     tagline: "Stop Unfair Contract Clauses & Accelerate Stuck Payments",
     badge: "Initial Launch Priority",
-    summary: "An active risk desk that screens every customer agreement before you sign, and installs aggressive recovery workflows for delayed receivables.",
-    problem: "Big clients insert unilateral termination, uncapped liability, and 90-day payment delays, leaving you with zero legal leverage when payments freeze.",
+    summary: "A structured contract and receivables desk that reviews customer terms before signing and builds a documented follow-up process for overdue amounts.",
+    problem: "Commercial contracts can shift liability, termination rights and payment risk toward the supplier; the review identifies the provisions actually present in your documents.",
     deliverables: [
       "AI-Assisted Clause-by-Clause Contract Risk Scorecard",
-      "Ready-to-Send Redline Amendments with MSME Samadhaan Protections",
+      "Document-specific redline suggestions and payment-escalation options where applicable",
       "Debtor Realization Tracking & Statutory Escalation Notices",
-      "Contract Renewal & Milestone Payment Alert Dashboard",
-      "Standardized Customer Master Services Agreement (MSA) Template"
+      "Contract renewal and milestone-payment tracking based on supplied dates",
+      "Standard customer MSA framework for review and legal customisation"
     ],
     deliverySchedule: [
       "Week 1: Ingestion of Top 10 Existing Client Contracts & Debtor Ledger",
@@ -93,7 +93,7 @@ export const ADVISORY_DESKS = [
     problem: "Statutory annual audits only check past year's accounts for tax compliance, failing to catch real-time operational leakages and employee fraud.",
     deliverables: [
       "Risk-Based Internal Audit Charter & Annual Test Plan",
-      "AI-Automated 100% Transaction Testing (Procurement, Payroll, Sales)",
+      "Risk-based transaction testing across agreed procurement, payroll and sales populations",
       "Internal Financial Controls (IFC) Deficiency & Red Flag Scorecard",
       "Management Action Tracker with Proof of Remediation",
       "Quarterly Board & Audit Committee Presentation Deck"
@@ -168,7 +168,7 @@ export const ADVISORY_DESKS = [
       "Whistleblower Complaint Intake & Independent Fact-Finding Brief",
       "Digital Audit Trail & Electronic Evidence Preservation Pack",
       "Asset Tracing Brief & Financial Discrepancy Reconciliation",
-      "Counsel-Ready Investigation Report for Board or Police Filing"
+      "Investigation report formatted for review by the board and, where appropriate, external counsel or authorities"
     ],
     deliverySchedule: [
       "Week 1: Covert Data Extraction (ERP logs, Bank statements, Vendor masters)",
@@ -185,13 +185,13 @@ export const ADVISORY_DESKS = [
     title: "8. TradeShield LC/BG Desk",
     tagline: "Pre-Shipment LC Screening & Bank Guarantee Protection",
     badge: "Export & Tender Desk",
-    summary: "Specialist documentary trade finance review to prevent foreign bank discrepancy rejections, frozen containers, and invoked bank guarantees.",
+    summary: "Specialist documentary trade-finance review to identify discrepancies and wording issues before documents are presented to banks or counterparties.",
     problem: "Over 60% of export Letters of Credit get rejected due to minor paperwork mismatches under UCP 600 rules, delaying payment by months and incurring heavy demurrage.",
     deliverables: [
       "Pre-Issuance Letter of Credit (LC) Clause Audit",
       "Zero-Defect Export Document Checklist (BL, Certificate of Origin, Invoice)",
       "Bank Guarantee (BG) Wording Review to Prevent Unfair Encashment",
-      "FEMA & RBI Trade Compliance Validation Report",
+      "Trade-compliance issue log against the requirements applicable to the supplied transaction",
       "Direct Liaison Support with Issuing & Advising Banks"
     ],
     deliverySchedule: [
@@ -212,7 +212,7 @@ export const ADVISORY_DESKS = [
     problem: "Messy cross-holdings between family members, informal loans, lack of a clear succession plan, and vulnerability to future family litigation.",
     deliverables: [
       "Consolidated Family Balance Sheet & Cross-Entity Asset Map",
-      "Legally Binding Family Constitution & Decision Charter",
+      "Family Constitution and Decision Charter for review and formalisation with legal counsel where required",
       "Succession & Inter-Generational Transfer Roadmap (Will & Trust Deeds)",
       "Family Investment Policy Statement & Risk Allocation Guide",
       "Quarterly Family Council Governance Pack & Review Facilitation"
@@ -421,6 +421,7 @@ export default function App() {
   const [isAnalyzingDoc, setIsAnalyzingDoc] = useState(false);
   const [isDownloadingContractReport, setIsDownloadingContractReport] = useState(false);
   const [docResult, setDocResult] = useState<any>(null);
+  const [docInputError, setDocInputError] = useState('');
 
   // Section 43B(h) payment-timing screening state
   const [paymentCheck, setPaymentCheck] = useState({
@@ -434,17 +435,20 @@ export default function App() {
 
   // Live CIBIL / Banking Health Calculator State
   const [cibilForm, setCibilForm] = useState({
-    turnover: '15', // in Cr
-    monthlyEmi: '4.5', // in Lakhs
-    ccLimit: '2.5', // in Cr
-    overdueDebtors: '45' // in Lakhs
+    turnover: '',
+    monthlyEmi: '',
+    ccLimit: '',
+    overdueDebtors: '',
+    annualOperatingProfit: ''
   });
   const [isScanningCibil, setIsScanningCibil] = useState(false);
   const [cibilResult, setCibilResult] = useState<any>(null);
 
   // Live Business Health Diagnostic State
-  const [diagnosticIndustry, setDiagnosticIndustry] = useState('Manufacturing & Engineering');
-  const [diagnosticRevenue, setDiagnosticRevenue] = useState('â‚¹5 Cr - â‚¹25 Cr');
+  const [diagnosticIndustry, setDiagnosticIndustry] = useState('');
+  const [diagnosticRevenue, setDiagnosticRevenue] = useState('');
+  const [diagnosticNotes, setDiagnosticNotes] = useState('');
+  const [diagnosticInputError, setDiagnosticInputError] = useState('');
   const [diagnosticFile, setDiagnosticFile] = useState<File | null>(null);
   const [isRunningDiagnostic, setIsRunningDiagnostic] = useState(false);
   const [diagnosticResult, setDiagnosticResult] = useState<any>(null);
@@ -566,29 +570,47 @@ export default function App() {
 
   const handleAnalyzeDocument = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!docText.trim() && !docFile) return;
+    setDocInputError('');
+    let sourceText = docText.trim();
+    if (!sourceText && docFile) {
+      const isTextFile = /(^text\\/)|(csv)|(json)/i.test(docFile.type) || /\\.(txt|csv|json)$/i.test(docFile.name);
+      if (!isTextFile) {
+        setDocInputError('This version does not extract PDF, DOCX or image contents. Paste the actual contract text in Option B so the assessment is based on the document itself.');
+        return;
+      }
+      try { sourceText = (await docFile.text()).trim(); } catch {
+        setDocInputError('The selected text file could not be read. Paste the contract text directly.');
+        return;
+      }
+    }
+    if (sourceText.length < 80) {
+      setDocInputError('Please provide enough of the actual contract text for a meaningful document-specific assessment.');
+      return;
+    }
     setIsAnalyzingDoc(true);
     try {
       const res = await fetch('/api/documents/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          documentText: docText || `Uploaded file analysis: ${docFile?.name}`,
-          fileName: docFile?.name || "Contract_Excerpt.txt",
+        body: JSON.stringify({
+          documentText: sourceText,
+          fileName: docFile?.name || 'Pasted Agreement Text',
           visitorId
         })
       });
       const data = await res.json();
-      if (data.success) {
-        setDocResult(data.analysis);
+      if (!res.ok || !data.success) {
+        setDocInputError(data.error || 'The contract could not be assessed from the supplied text.');
+        return;
       }
+      setDocResult(data.analysis);
     } catch (err) {
       console.error(err);
+      setDocInputError('The contract assessment could not be completed. Please try again.');
     } finally {
       setIsAnalyzingDoc(false);
     }
   };
-
   const handleDownloadContractReport = async () => {
     if (!docResult || isDownloadingContractReport) return;
     setIsDownloadingContractReport(true);
@@ -630,29 +652,51 @@ export default function App() {
 
   const handleScanCibil = async (e: React.FormEvent) => {
     e.preventDefault();
+    const required = Object.values(cibilForm);
+    if (required.some((value) => value === '')) return;
     setIsScanningCibil(true);
     try {
       const res = await fetch('/api/cibil-scan', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...cibilForm,
-          visitorId
-        })
+        body: JSON.stringify({ ...cibilForm, visitorId })
       });
       const data = await res.json();
-      if (data.success) {
-        setCibilResult(data.report);
+      if (!res.ok || !data.success) {
+        setDocInputError(data.error || 'The banking assessment could not be calculated.');
+        return;
       }
+      setCibilResult(data.report);
     } catch (err) {
       console.error(err);
+      setDocInputError('The banking assessment could not be completed.');
     } finally {
       setIsScanningCibil(false);
     }
   };
-
   const handleRunDiagnostic = async (e: React.FormEvent) => {
     e.preventDefault();
+    setDiagnosticInputError('');
+    if (!diagnosticIndustry || !diagnosticRevenue) {
+      setDiagnosticInputError('Select the industry and revenue range before running the assessment.');
+      return;
+    }
+    let sourceText = diagnosticNotes.trim();
+    if (!sourceText && diagnosticFile) {
+      const isTextFile = /(^text\\/)|(csv)|(json)/i.test(diagnosticFile.type) || /\\.(txt|csv|json)$/i.test(diagnosticFile.name);
+      if (!isTextFile) {
+        setDiagnosticInputError('This version does not extract PDF or Excel files. Paste the actual financial and operating facts into the text box so the report is based on real inputs.');
+        return;
+      }
+      try { sourceText = (await diagnosticFile.text()).trim(); } catch {
+        setDiagnosticInputError('The supporting text file could not be read. Paste the figures directly.');
+        return;
+      }
+    }
+    if (sourceText.length < 40) {
+      setDiagnosticInputError('Enter the actual financial and operating facts you want assessed. The system will not generate a report from preset assumptions.');
+      return;
+    }
     setIsRunningDiagnostic(true);
     try {
       const res = await fetch('/api/assessments/run', {
@@ -661,22 +705,24 @@ export default function App() {
         body: JSON.stringify({
           industry: diagnosticIndustry,
           revenue: diagnosticRevenue,
-          serviceType: 'Business Health Check',
-          fileName: diagnosticFile?.name,
+          serviceType: 'Business Health Assessment',
+          financialSummary: sourceText,
           visitorId
         })
       });
       const data = await res.json();
-      if (data.success) {
-        setDiagnosticResult(data.assessment);
+      if (!res.ok || !data.success) {
+        setDiagnosticInputError(data.error || 'The business assessment could not be generated.');
+        return;
       }
+      setDiagnosticResult(data.assessment);
     } catch (err) {
       console.error(err);
+      setDiagnosticInputError('The business assessment could not be completed. Please try again.');
     } finally {
       setIsRunningDiagnostic(false);
     }
   };
-
   const handleLeadSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!leadForm.consent) {
@@ -1026,16 +1072,16 @@ export default function App() {
               <div className="p-4 bg-blue-50/70 border border-blue-200 rounded-xl space-y-2">
                 <span className="text-xs font-bold text-blue-900 uppercase">ðŸ’¡ Why pick this product?</span>
                 <p className="text-xs text-slate-700 leading-relaxed">
-                  <strong>Who should use this:</strong> Any founder, director, or contractor signing agreements worth over â‚¹5 Lakhs.<br />
-                  <strong>Disaster it prevents:</strong> Prevents signing "unlimited liability" clauses where a client can sue you for 10x your billing, or freeze payments for months.<br />
-                  <strong>Expected ROI:</strong> Saves â‚¹5 Lakhs - â‚¹50 Lakhs in future litigation and avoids getting locked in unfavorable foreign arbitration.
+                  <strong>Best fit:</strong> Teams reviewing customer, vendor or service agreements where commercial exposure matters.<br />
+                  <strong>What it checks:</strong> Liability, indemnity, payment, termination, IP, jurisdiction and dispute terms actually present in the supplied text.<br />
+                  <strong>Commercial value:</strong> Gives you a document-specific risk summary and negotiation actions before you decide whether to sign.
                 </p>
               </div>
 
               <form onSubmit={handleAnalyzeDocument} className="space-y-6">
                 {/* File Upload Zone */}
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Option A: Upload Agreement Document (PDF, DOCX, TXT, Image)</label>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Option A: Upload agreement text (TXT or CSV)</label>
                   <div className="border-2 border-dashed border-slate-300 rounded-xl p-6 text-center hover:border-blue-500 transition-colors bg-slate-50">
                     <input 
                       type="file" 
@@ -1048,7 +1094,7 @@ export default function App() {
                       <span className="text-sm font-bold text-slate-800">
                         {docFile ? docFile.name : "Click to browse or drop agreement file here"}
                       </span>
-                      <span className="text-xs text-slate-500">Supports PDF, Word, TXT agreements up to 50MB</span>
+                      <span className="text-xs text-slate-500">For PDF/DOCX/image contracts, paste the extracted text below. Text files and CSV are read directly.</span>
                     </label>
                   </div>
                 </div>
@@ -1168,9 +1214,9 @@ export default function App() {
               <div className="p-4 bg-emerald-50/70 border border-emerald-200 rounded-xl space-y-2">
                 <span className="text-xs font-bold text-emerald-900 uppercase">ðŸ’¡ Why pick this product?</span>
                 <p className="text-xs text-slate-700 leading-relaxed">
-                  <strong>Who should use this:</strong> Any business owner applying for fresh bank loans, renewing CC/OD limits, or facing delayed bank credit sanction.<br />
-                  <strong>Disaster it prevents:</strong> Prevents banks from rejecting your loan after 3 months of waiting or slapping 2% penalty interest due to DSCR dip.<br />
-                  <strong>Expected ROI:</strong> Helps negotiate 50â€“75 bps lower interest rates and speeds up loan disbursal from months to weeks.
+                  <strong>Best fit:</strong> Businesses preparing or reviewing a bank borrowing package using their own financial figures.<br />
+                  <strong>What it checks:</strong> DSCR and the relationship between operating profit, debt service, borrowing and overdue receivables based on your inputs.<br />
+                  <strong>Commercial value:</strong> Helps you prepare a clearer lender discussion from the numbers you supply.
                 </p>
               </div>
 
@@ -1223,6 +1269,20 @@ export default function App() {
                   <span className="text-[11px] text-slate-500 mt-1 block">e.g. 45 for â‚¹45 Lakhs payments delayed over 90 days</span>
                 </div>
 
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Annual Operating Profit (INR in Crores)</label>
+                  <input
+                    type="number"
+                    step="0.1"
+                    min="0"
+                    value={cibilForm.annualOperatingProfit}
+                    onChange={e => setCibilForm({...cibilForm, annualOperatingProfit: e.target.value})}
+                    placeholder="e.g. 2.1"
+                    className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 font-bold focus:outline-none focus:border-emerald-600"
+                  />
+                  <span className="text-[11px] text-slate-500 mt-1 block">Required for a real DSCR calculation; no operating-profit assumption is applied.</span>
+                </div>
+
                 <div className="sm:col-span-2">
                   <button
                     type="submit"
@@ -1239,23 +1299,34 @@ export default function App() {
                 <div className="p-6 bg-slate-50 border border-slate-300 rounded-xl space-y-4 animate-fadeIn">
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div className="p-4 bg-white rounded-xl border border-slate-200">
-                      <span className="text-xs text-slate-500 block uppercase font-bold">Banking Health Rating</span>
-                      <span className="text-lg font-bold text-emerald-700 mt-1 block">{cibilResult.healthScore}</span>
-                    </div>
-                    <div className="p-4 bg-white rounded-xl border border-slate-200">
-                      <span className="text-xs text-slate-500 block uppercase font-bold">Your Calculated DSCR</span>
+                      <span className="text-xs text-slate-500 block uppercase font-bold">Calculated DSCR</span>
                       <span className="text-lg font-bold text-blue-700 mt-1 block">{cibilResult.calculatedDscr}</span>
                     </div>
                     <div className="p-4 bg-white rounded-xl border border-slate-200">
-                      <span className="text-xs text-slate-500 block uppercase font-bold">Estimated Eligible CC Limit</span>
-                      <span className="text-lg font-bold text-indigo-700 mt-1 block">{cibilResult.maxEligibleLimit}</span>
+                      <span className="text-xs text-slate-500 block uppercase font-bold">Operating Profit Used</span>
+                      <span className="text-lg font-bold text-slate-900 mt-1 block">{cibilResult.annualOperatingProfit}</span>
+                    </div>
+                    <div className="p-4 bg-white rounded-xl border border-slate-200">
+                      <span className="text-xs text-slate-500 block uppercase font-bold">Annualized EMI</span>
+                      <span className="text-lg font-bold text-slate-900 mt-1 block">{cibilResult.annualEmi}</span>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="p-4 bg-white rounded-xl border border-slate-200 text-xs text-slate-700">
+                      <strong className="block text-slate-900 mb-1">CC/OD share of turnover</strong>
+                      {cibilResult.ccLimitShareOfTurnover}
+                    </div>
+                    <div className="p-4 bg-white rounded-xl border border-slate-200 text-xs text-slate-700">
+                      <strong className="block text-slate-900 mb-1">Overdue receivables share of turnover</strong>
+                      {cibilResult.overdueReceivablesShareOfTurnover}
                     </div>
                   </div>
 
                   <div className="pt-2">
-                    <h5 className="text-xs font-bold text-slate-700 uppercase mb-2">Bank Red Flags to Fix Before Applying:</h5>
+                    <h5 className="text-xs font-bold text-slate-700 uppercase mb-2">Calculated observations:</h5>
                     <div className="space-y-1.5">
-                      {cibilResult.riskPoints?.map((p: string, i: number) => (
+                      {(cibilResult.observations || []).map((p: string, i: number) => (
                         <div key={i} className="text-xs text-slate-700 p-2.5 bg-white border border-slate-200 rounded-lg flex items-center gap-2">
                           <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />
                           <span>{p}</span>
@@ -1264,15 +1335,7 @@ export default function App() {
                     </div>
                   </div>
 
-                  <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg text-xs text-blue-900">
-                    <strong>Navigalex Advisory Note:</strong> {cibilResult.advice}
-                  </div>
-                  <a
-                    href={getFreeToolHandoffUrl('loan-eligibility')}
-                    className="block rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-4 py-3 text-sm font-bold text-emerald-800 transition-colors"
-                  >
-                    Next step: LenderReady Credit & Recovery Office
-                  </a>
+                  <p className="text-[11px] text-slate-500">This calculation uses only the figures you entered. It is not a lender approval or credit decision.</p>
                 </div>
               )}
             </section>
@@ -1291,9 +1354,9 @@ export default function App() {
               <div className="p-4 bg-indigo-50/70 border border-indigo-200 rounded-xl space-y-2">
                 <span className="text-xs font-bold text-indigo-900 uppercase">ðŸ’¡ Why pick this product?</span>
                 <p className="text-xs text-slate-700 leading-relaxed">
-                  <strong>Who should use this:</strong> Promoters wanting a comprehensive 360-degree scan of their business health across contracts, banking, cash, and internal controls.<br />
-                  <strong>Disaster it prevents:</strong> Discovers money leakages, uncollected debts, and compliance gaps before external auditors or tax authorities flag them.<br />
-                  <strong>Expected ROI:</strong> Generates a prioritized 90-day action plan that helps improve net operating cash flow by 15â€“25%.
+                  <strong>Best fit:</strong> Management teams willing to provide actual operating and financial facts for a business-specific review.<br />
+                  <strong>What it checks:</strong> Cash conversion, controls, collections, debt and operating issues supported by the facts you provide.<br />
+                  <strong>Commercial value:</strong> Produces a prioritized action list linked to the information available in your assessment.
                 </p>
               </div>
 
@@ -1334,21 +1397,32 @@ export default function App() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Upload P&L / Statement / Financial Summary (Optional)</label>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Optional supporting text (TXT/CSV)</label>
                   <div className="border-2 border-dashed border-slate-300 rounded-xl p-4 text-center hover:border-indigo-500 transition-colors bg-slate-50">
                     <input 
                       type="file" 
                       onChange={e => setDiagnosticFile(e.target.files?.[0] || null)}
                       className="hidden" 
-                      id="diagnostic-file-upload"
+                      id="diagnostic-file-upload" accept=".txt,.csv,.json"
                     />
                     <label htmlFor="diagnostic-file-upload" className="cursor-pointer flex items-center justify-center gap-2">
                       <Upload className="w-4 h-4 text-indigo-600" />
                       <span className="text-xs font-bold text-slate-700">
-                        {diagnosticFile ? diagnosticFile.name : "Click to attach PDF, Excel or CSV file"}
+                        {diagnosticFile ? diagnosticFile.name : "Attach TXT/CSV supporting data"}
                       </span>
                     </label>
                   </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Actual financial & operating facts</label>
+                  <textarea
+                    rows={6}
+                    value={diagnosticNotes}
+                    onChange={e => setDiagnosticNotes(e.target.value)}
+                    placeholder="Example: Revenue ₹18 Cr; EBITDA ₹2.1 Cr; receivables ₹3.4 Cr; bank debt ₹4.2 Cr; top customer concentration 28%; two approval points for purchases; any known collection, contract or control issue..."
+                    className="w-full bg-slate-50 border border-slate-300 rounded-xl p-4 text-sm text-slate-900 focus:outline-none focus:border-indigo-600"
+                  />
                 </div>
 
                 <button
@@ -1362,31 +1436,46 @@ export default function App() {
 
               {diagnosticResult && (
                 <div className="p-6 bg-slate-50 border border-slate-300 rounded-xl space-y-6 animate-fadeIn">
-                  <div className="flex justify-between items-center border-b border-slate-200 pb-3">
-                    <h4 className="font-bold text-slate-900">Diagnostic Report for {diagnosticResult.industry}</h4>
-                    <span className="px-3 py-1 bg-emerald-100 text-emerald-800 text-xs font-bold rounded-full">Score: {diagnosticResult.score}/100</span>
+                  <div className="border-b border-slate-200 pb-3">
+                    <h4 className="font-bold text-slate-900">Business Assessment Summary</h4>
+                    <p className="text-xs text-slate-500">{diagnosticResult.industry} | {diagnosticResult.revenue}</p>
                   </div>
-                  <p className="text-xs text-slate-700 leading-relaxed">{diagnosticResult.report.executiveSummary}</p>
+
+                  <div className="rounded-xl bg-white border border-slate-200 p-4">
+                    <h5 className="text-xs font-bold uppercase tracking-wider text-blue-700 mb-2">Executive Summary</h5>
+                    <p className="text-sm text-slate-700 leading-relaxed">{diagnosticResult.report.executiveSummary}</p>
+                  </div>
 
                   <div className="space-y-2">
-                    <h5 className="text-xs font-bold text-rose-700 uppercase">Top 3 Business Risk Blindspots:</h5>
-                    {diagnosticResult.report.keyFindings?.map((f: string, i: number) => (
+                    <h5 className="text-xs font-bold text-rose-700 uppercase">Key Findings:</h5>
+                    {(diagnosticResult.report.keyFindings || []).map((f: string, i: number) => (
                       <div key={i} className="p-2.5 bg-white border border-slate-200 rounded-lg text-xs text-slate-800 flex items-start gap-2">
-                        <span className="text-rose-600 font-bold shrink-0">â€¢</span>
+                        <span className="text-rose-600 font-bold shrink-0">{i + 1}.</span>
                         <span>{f}</span>
                       </div>
                     ))}
                   </div>
 
                   <div className="space-y-2">
-                    <h5 className="text-xs font-bold text-emerald-700 uppercase">Immediate Action Steps:</h5>
-                    {diagnosticResult.report.actionSteps?.map((a: string, i: number) => (
+                    <h5 className="text-xs font-bold text-emerald-700 uppercase">Recommended Actions:</h5>
+                    {(diagnosticResult.report.actionSteps || []).map((a: string, i: number) => (
                       <div key={i} className="p-2.5 bg-white border border-slate-200 rounded-lg text-xs text-slate-800 flex items-start gap-2">
-                        <span className="text-emerald-600 font-bold shrink-0">âœ“</span>
+                        <span className="text-emerald-600 font-bold shrink-0">{i + 1}.</span>
                         <span>{a}</span>
                       </div>
                     ))}
                   </div>
+
+                  {(diagnosticResult.report.dataGaps || []).length > 0 && (
+                    <div className="rounded-xl bg-amber-50 border border-amber-200 p-4">
+                      <h5 className="text-xs font-bold uppercase tracking-wider text-amber-800 mb-2">Data to tighten the assessment</h5>
+                      <div className="space-y-1">
+                        {diagnosticResult.report.dataGaps.map((g: string, i: number) => (
+                          <div key={i} className="text-xs text-amber-900">• {g}</div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
             </section>
@@ -2382,7 +2471,7 @@ export default function App() {
             {/* Quality Gate Guarantee */}
             <div className="flex items-center gap-3 p-3 bg-blue-50 border border-blue-200 rounded-xl text-xs text-blue-900">
               <Shield className="w-5 h-5 text-blue-600 shrink-0" />
-              <span><strong>Human Quality Gate:</strong> {selectedDeskModal.humanSignoff}. AI accelerates discovery; experienced practitioners review and sign off every document.</span>
+              <span><strong>Human Quality Gate:</strong> {selectedDeskModal.humanSignoff}. The engagement scope states who performs professional review; AI is used only to accelerate structured analysis.</span>
             </div>
 
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-slate-200">
