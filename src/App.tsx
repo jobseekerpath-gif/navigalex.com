@@ -253,7 +253,9 @@ const readPersonaParam = () => {
 };
 
 
-const isResolvedPlaceholder = (value?: string) => Boolean(value && !/^\\{\\{[^}]+\\}\\}$/.test(value));
+const isResolvedPlaceholder = (value?: string) => Boolean(
+  value && !(value.trim().startsWith('{{') && value.trim().endsWith('}}'))
+);
 
 const REGULATORY_TRIGGERS: Record<string, { label: string; value: string }> = {
   "regtech": { label: "DPDP compliance deadline", value: "{{DPDP_DEADLINE}}" },
