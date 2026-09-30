@@ -827,7 +827,7 @@ export default function App() {
             </span>
           </button>
 
-          <nav className="hidden lg:flex items-center gap-1 xl:gap-2 text-[11px] xl:text-xs font-semibold text-slate-600" aria-label="Primary navigation">
+          <nav className="hidden lg:flex items-center gap-1 xl:gap-2 font-semibold" aria-label="Primary navigation">
             {[
               ['home', 'Home'],
               ['live-tools', 'AI Assessments'],
@@ -842,7 +842,7 @@ export default function App() {
                 key={tab}
                 type="button"
                 onClick={() => { setActiveTab(tab); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                className={`px-2.5 xl:px-3 py-2 rounded-lg transition-colors hover:text-blue-600 hover:bg-blue-50/70 ${activeTab === tab ? 'text-blue-700 bg-blue-50' : ''}`}
+                className={`px-2.5 xl:px-3 py-2 rounded-lg text-[16px] xl:text-[17px] leading-tight transition-colors hover:bg-red-50 ${activeTab === tab ? 'text-[#8B0000] bg-red-50' : 'text-[#8B0000]'}`}
               >
                 {label}
               </button>
@@ -885,7 +885,7 @@ export default function App() {
                   key={tab}
                   type="button"
                   onClick={() => { setActiveTab(tab); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                  className={`text-left px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors ${activeTab === tab ? 'text-blue-700 bg-blue-50' : 'text-slate-700 hover:bg-slate-50'}`}
+                  className={`text-left px-3 py-2.5 rounded-xl text-[16px] font-semibold transition-colors ${activeTab === tab ? 'text-[#8B0000] bg-red-50' : 'text-[#8B0000] hover:bg-red-50'}`}
                 >
                   {label}
                 </button>

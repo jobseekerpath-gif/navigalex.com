@@ -108,10 +108,3 @@
 }
 
 
-/* Heading treatment requested: preserve existing wording, increase scale 1.5×, use blood red. */
-h1,
-h2,
-h3 {
-  color: #8b0000 !important;
-  font-size: 1.5em !important;
-}
