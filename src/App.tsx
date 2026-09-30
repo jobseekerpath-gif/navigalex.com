@@ -1143,7 +1143,7 @@ export default function App() {
                       href={getFreeToolHandoffUrl('contract-43b-h')}
                       className="flex-1 inline-flex items-center justify-center rounded-xl bg-blue-50 hover:bg-blue-100 border border-blue-200 px-4 py-3 text-xs font-bold text-blue-800 transition-colors text-center"
                     >
-                      Check a buyer-payment position under Section 43B(h)
+                      Check payment timing under Section 43B(h)
                     </a>
                   </div>
 
@@ -1619,7 +1619,7 @@ export default function App() {
                         href={getFreeToolHandoffUrl('contract-43b-h')}
                         className="inline-flex w-full items-center justify-center rounded-xl bg-blue-50 hover:bg-blue-100 border border-blue-200 px-3 py-2 text-xs font-bold text-blue-800 transition-colors"
                       >
-                        Check a buyer-payment position under Section 43B(h)
+                        Check payment timing under Section 43B(h)
                       </a>
                     )}
                     {srv.id === 'family-wealth' && (
@@ -1726,10 +1726,10 @@ export default function App() {
             </button>
 
             <div className="space-y-3">
-              <span className="text-xs font-bold text-blue-600 uppercase tracking-widest">FREE PAYMENT TIMING CHECK</span>
-              <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900">Check a buyer-payment position under Section 43B(h)</h2>
+              <span className="text-xs font-bold text-blue-600 uppercase tracking-widest">SECTION 43B(h) PAYMENT TIMING CHECK</span>
+              <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900">Check payment timing under Section 43B(h)</h2>
               <p className="text-slate-600 max-w-3xl">
-                Enter the commercial dates from your transaction. This screen checks payment timing against the Section 15 timing framework. It is a screening aid, not a legal or tax conclusion.
+                Enter the transaction dates and supplier status. This screen checks payment timing against the Section 15 framework used for this assessment. It is a screening aid, not a legal or tax conclusion.
               </p>
             </div>
 
@@ -1768,7 +1768,7 @@ export default function App() {
                     onChange={(e) => setPaymentCheck({ ...paymentCheck, agreedDays: e.target.value })}
                     className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900"
                   />
-                  <span className="text-[11px] text-slate-500 mt-1 block">The checker caps this entry at 45 days.</span>
+                  <span className="text-[11px] text-slate-500 mt-1 block">Enter the agreed payment term from your contract. The screen also applies the statutory 45-day outer limit used in this check.</span>
                 </div>
 
                 <div>
