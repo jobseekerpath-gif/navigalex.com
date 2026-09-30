@@ -413,6 +413,7 @@ export default function App() {
   const [docFile, setDocFile] = useState<File | null>(null);
   const [docText, setDocText] = useState('');
   const [isAnalyzingDoc, setIsAnalyzingDoc] = useState(false);
+  const [isDownloadingContractReport, setIsDownloadingContractReport] = useState(false);
   const [docResult, setDocResult] = useState<any>(null);
 
   // Live CIBIL / Banking Health Calculator State
@@ -523,6 +524,45 @@ export default function App() {
       console.error(err);
     } finally {
       setIsAnalyzingDoc(false);
+    }
+  };
+
+  const handleDownloadContractReport = async () => {
+    if (!docResult || isDownloadingContractReport) return;
+    setIsDownloadingContractReport(true);
+    try {
+      const response = await fetch('/api/report/pdf', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: 'Contract Risk Review',
+          documentName: docResult.fileName,
+          analysis: {
+            fileName: docResult.fileName,
+            riskScore: docResult.riskScore,
+            riskLevel: docResult.riskLevel,
+            summary: docResult.summary,
+            clauses: Array.isArray(docResult.clauses) ? docResult.clauses : [],
+            recommendations: Array.isArray(docResult.recommendations) ? docResult.recommendations : []
+          },
+          generatedAt: new Date().toISOString()
+        })
+      });
+      if (!response.ok) throw new Error('PDF generation failed.');
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const linkEl = document.createElement('a');
+      linkEl.href = url;
+      linkEl.download = 'Navigalex-Contract-Risk-Report.pdf';
+      document.body.appendChild(linkEl);
+      linkEl.click();
+      linkEl.remove();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('Contract report download failed:', err);
+      alert('Unable to generate the personalized PDF report. Please try again.');
+    } finally {
+      setIsDownloadingContractReport(false);
     }
   };
 
@@ -984,26 +1024,29 @@ export default function App() {
               {/* Live Contract Scan Results */}
               {docResult && (
                 <div className="mt-8 p-6 bg-slate-50 border border-slate-300 rounded-xl space-y-6 animate-fadeIn">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 pb-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 pb-4">
                     <div>
-                      <h4 className="text-base font-bold text-slate-900">Contract Scan Diagnostic</h4>
-                      <p className="text-xs text-slate-500">File / Clause: {docResult.fileName}</p>
+                      <h4 className="text-base font-bold text-slate-900">Your Contract Risk Summary</h4>
+                      <p className="text-xs text-slate-500">Reviewed document: {docResult.fileName}</p>
                     </div>
                     <span className="px-3.5 py-1 rounded-full bg-rose-100 border border-rose-300 text-rose-800 text-xs font-bold">
-                      Risk Score: {docResult.riskScore} â€” {docResult.riskLevel}
+                      {docResult.riskScore} - {docResult.riskLevel}
                     </span>
                   </div>
 
-                  <p className="text-xs text-slate-700 leading-relaxed font-medium">{docResult.summary}</p>
+                  <div className="rounded-xl bg-white border border-slate-200 p-4">
+                    <h5 className="text-xs font-bold uppercase tracking-wider text-blue-700 mb-2">Executive Summary</h5>
+                    <p className="text-sm text-slate-700 leading-relaxed">{docResult.summary}</p>
+                  </div>
 
                   <div className="space-y-3">
                     <h5 className="text-xs font-bold uppercase tracking-wider text-rose-700 flex items-center gap-1.5">
-                      <AlertTriangle className="w-4 h-4" /> Danger Clauses Detected (What can hurt you)
+                      <AlertTriangle className="w-4 h-4" /> Key Findings
                     </h5>
                     <div className="space-y-2">
-                      {docResult.clauses?.map((c: string, idx: number) => (
+                      {(docResult.clauses || []).slice(0, 5).map((c: string, idx: number) => (
                         <div key={idx} className="p-3 bg-white border border-rose-200 rounded-lg text-xs text-slate-800 shadow-sm flex items-start gap-2">
-                          <span className="text-rose-600 font-bold shrink-0">âš ï¸</span>
+                          <span className="text-rose-600 font-bold shrink-0">{idx + 1}.</span>
                           <span>{c}</span>
                         </div>
                       ))}
@@ -1012,23 +1055,39 @@ export default function App() {
 
                   <div className="space-y-3">
                     <h5 className="text-xs font-bold uppercase tracking-wider text-emerald-700 flex items-center gap-1.5">
-                      <CheckCircle2 className="w-4 h-4" /> Recommended Safe Counter-Clauses (What to ask for)
+                      <CheckCircle2 className="w-4 h-4" /> Recommended Actions
                     </h5>
                     <div className="space-y-2">
-                      {docResult.recommendations?.map((r: string, idx: number) => (
+                      {(docResult.recommendations || []).slice(0, 5).map((r: string, idx: number) => (
                         <div key={idx} className="p-3 bg-white border border-emerald-200 rounded-lg text-xs text-slate-800 shadow-sm flex items-start gap-2">
-                          <span className="text-emerald-600 font-bold shrink-0">âœ“</span>
+                          <span className="text-emerald-600 font-bold shrink-0">{idx + 1}.</span>
                           <span>{r}</span>
                         </div>
                       ))}
                     </div>
                   </div>
-                  <a
-                    href={getFreeToolHandoffUrl('contract-43b-h')}
-                    className="block rounded-xl bg-blue-50 hover:bg-blue-100 border border-blue-200 px-4 py-3 text-sm font-bold text-blue-800 transition-colors"
-                  >
-                    Check whether your buyer owes you under 43B(h)
-                  </a>
+
+                  <div className="flex flex-col sm:flex-row gap-3 pt-2 border-t border-slate-200">
+                    <button
+                      type="button"
+                      onClick={handleDownloadContractReport}
+                      disabled={isDownloadingContractReport}
+                      className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-500 disabled:opacity-60 px-4 py-3 text-xs font-bold text-white transition-colors"
+                    >
+                      <Download className="w-4 h-4" />
+                      {isDownloadingContractReport ? 'Generating Personalized PDF...' : 'Download Personalized PDF'}
+                    </button>
+                    <a
+                      href={getFreeToolHandoffUrl('contract-43b-h')}
+                      className="flex-1 inline-flex items-center justify-center rounded-xl bg-blue-50 hover:bg-blue-100 border border-blue-200 px-4 py-3 text-xs font-bold text-blue-800 transition-colors text-center"
+                    >
+                      Check whether your buyer owes you under 43B(h)
+                    </a>
+                  </div>
+
+                  <p className="text-[11px] text-slate-500">
+                    The page shows only the executive summary and key points. The PDF contains the document-specific findings and recommended actions.
+                  </p>
                 </div>
               )}
             </section>
