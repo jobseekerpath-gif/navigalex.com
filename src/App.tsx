@@ -298,6 +298,26 @@ const LC_STAT_CONFIG = {
 };
 
 
+const FREE_TOOL_HANDOFFS: Record<string, { serviceId: string; persona: string; campaign: string }> = {
+  "compliance-calendar": { serviceId: "regtech", persona: "nbfc", campaign: "compliance-calendar" },
+  "loan-eligibility": { serviceId: "lenderready", persona: "growing", campaign: "loan-eligibility" },
+  "do-key-person-gap": { serviceId: "board-box", persona: "growing", campaign: "do-key-person-gap" },
+  "contract-43b-h": { serviceId: "contract-to-cash", persona: "growing", campaign: "contract-43b-h" }
+};
+
+const getFreeToolHandoffUrl = (tool: string) => {
+  const handoff = FREE_TOOL_HANDOFFS[tool];
+  if (!handoff) return "/services";
+  const params = new URLSearchParams({
+    persona: handoff.persona,
+    service: handoff.serviceId,
+    utm_source: "free_tool",
+    utm_campaign: handoff.campaign
+  });
+  return "/services?" + params.toString();
+};
+
+
 export default function App() {
   // Check if URL is /admin or ?admin=true
   const getInitialTab = () => {
@@ -1008,6 +1028,12 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                       ))}
                     </div>
                   </div>
+                  <a
+                    href={getFreeToolHandoffUrl('contract-43b-h')}
+                    className="block rounded-xl bg-blue-50 hover:bg-blue-100 border border-blue-200 px-4 py-3 text-sm font-bold text-blue-800 transition-colors"
+                  >
+                    Check whether your buyer owes you under 43B(h)
+                  </a>
                 </div>
               )}
             </section>
@@ -1125,6 +1151,12 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                   <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg text-xs text-blue-900">
                     <strong>Navigalex Advisory Note:</strong> {cibilResult.advice}
                   </div>
+                  <a
+                    href={getFreeToolHandoffUrl('loan-eligibility')}
+                    className="block rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-4 py-3 text-sm font-bold text-emerald-800 transition-colors"
+                  >
+                    Next step: LenderReady Credit & Recovery Office
+                  </a>
                 </div>
               )}
             </section>
@@ -1340,6 +1372,12 @@ Payment shall be released within 90 days after delivery and final acceptance. In
               </p>
             </div>
 
+            {typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('utm_source') === 'free_tool' && (
+              <div className="rounded-2xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-900" role="status">
+                <strong>Recommended next step:</strong> your free-tool result maps to a Navigalex advisory service below.
+              </div>
+            )}
+
             {isResolvedPlaceholder(SITE_TRUST.clientCount) &&
               isResolvedPlaceholder(SITE_TRUST.credential) &&
               isResolvedPlaceholder(SITE_TRUST.anonymisedCaseOutcome) && (
@@ -1459,6 +1497,14 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                       >
                         Referral partners: CAs, CS, employment lawyers
                       </button>
+                    )}
+                    {srv.id === 'contract-to-cash' && (
+                      <a
+                        href={getFreeToolHandoffUrl('contract-43b-h')}
+                        className="inline-flex w-full items-center justify-center rounded-xl bg-blue-50 hover:bg-blue-100 border border-blue-200 px-3 py-2 text-xs font-bold text-blue-800 transition-colors"
+                      >
+                        Check whether your buyer owes you under 43B(h)
+                      </a>
                     )}
                     {srv.id === 'family-wealth' && (
                       <button
