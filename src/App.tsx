@@ -13,9 +13,9 @@ import {
 export const ADVISORY_DESKS = [
     {
     id: "lenderready",
-    title: "1. LenderReady Credit & Recovery Office",
-    tagline: "Bank Sanction Acceleration & Debt Restructuring",
-    badge: "Initial Launch Priority",
+    title: "1. LenderReady Credit Readiness & Debt Structuring Office",
+    tagline: "Bank Credit Readiness & Debt Structuring",
+    badge: "Core Advisory Desk",
     summary: "Prepares lender-ready financial files, reconciliations and debt-service models so your credit proposal is easier to review and challenge before submission.",
     problem: "Credit proposals can become difficult to assess when financial statements, GST data, bank turnover and borrowing data do not reconcile.",
     deliverables: [
@@ -32,7 +32,7 @@ export const ADVISORY_DESKS = [
     ],
     clientInputsNeeded: "Last 2 years Audited Balance Sheets, provisional P&L, 12 months Bank Statements, GST returns.",
     timeframe: "14â€“21 Days",
-    humanSignoff: "Former Senior Credit Officer & Chartered Accountant",
+    humanSignoff: "Professional review as specified in the agreed engagement scope",
     price: "â‚¹75,000â€“â‚¹3 Lakh + lawful success fee"
   },
     {
@@ -57,7 +57,7 @@ export const ADVISORY_DESKS = [
     ],
     clientInputsNeeded: "Last 12 months Bank Statements, Tally / ERP backup, Top 5 Customer Agreements, GST 3B vs 2B returns.",
     timeframe: "30 Days Fixed Sprint",
-    humanSignoff: "Senior CA & Corporate Advocate Dual Review",
+    humanSignoff: "Professional review as specified in the agreed engagement scope",
     price: "â‚¹1.5â€“4 Lakh fixed"
   },
     {
@@ -81,14 +81,14 @@ export const ADVISORY_DESKS = [
     ],
     clientInputsNeeded: "Top 5-10 Customer Master Services Agreements (MSAs), unpaid invoice list >60 days.",
     timeframe: "14-Day Setup + Monthly Retainer",
-    humanSignoff: "Corporate Contracts Advocate",
+    humanSignoff: "Professional review as specified in the agreed engagement scope",
     price: "â‚¹75,000â€“â‚¹3 Lakh setup + â‚¹25,000â€“â‚¹1 Lakh/month"
   },
     {
     id: "internal-audit",
     title: "4. AI-Assisted Internal Audit Factory",
     tagline: "Continuous Risk & Internal Financial Control Auditing",
-    badge: "Continuous Controls",
+    badge: "Ongoing Controls",
     summary: "Continuous, risk-based internal control testing that catches billing errors, inventory leakages, and unauthorized expenditures every quarter.",
     problem: "A statutory audit and an internal control review serve different purposes; this engagement focuses on the control areas and transactions agreed in scope.",
     deliverables: [
@@ -105,7 +105,7 @@ export const ADVISORY_DESKS = [
     ],
     clientInputsNeeded: "ERP raw dump, chart of accounts, delegation of authority matrix, sample vouchers.",
     timeframe: "Quarterly Audit Cycles",
-    humanSignoff: "Internal Audit Partner (CA / CIA)",
+    humanSignoff: "Professional review as specified in the agreed engagement scope",
     price: "â‚¹2â€“10 Lakh per cycle"
   },
     {
@@ -129,7 +129,7 @@ export const ADVISORY_DESKS = [
     ],
     clientInputsNeeded: "Certificate of Incorporation, MOA/AOA, past 12 months Board Minutes, Statutory Registers.",
     timeframe: "4-Week Setup + Monthly Retainer",
-    humanSignoff: "Company Secretary (CS) & Corporate Counsel",
+    humanSignoff: "Professional review as specified in the agreed engagement scope",
     price: "â‚¹2â€“6 Lakh setup + â‚¹50,000â€“â‚¹1.5 Lakh/month"
   },
     {
@@ -153,7 +153,7 @@ export const ADVISORY_DESKS = [
     ],
     clientInputsNeeded: "Current onboarding workflows, data architecture diagram, vendor master agreements.",
     timeframe: "6â€“12 Weeks Project",
-    humanSignoff: "Fintech Regulatory Lawyer & Senior Systems Auditor",
+    humanSignoff: "Professional review as specified in the agreed engagement scope",
     price: "â‚¹5â€“25 Lakh per project"
   },
     {
@@ -171,13 +171,13 @@ export const ADVISORY_DESKS = [
       "Investigation report formatted for review by the board and, where appropriate, external counsel or authorities"
     ],
     deliverySchedule: [
-      "Week 1: Covert Data Extraction (ERP logs, Bank statements, Vendor masters)",
+      "Week 1: Controlled data collection from agreed ERP, bank and vendor records",
       "Week 2: Forensic Analytics, Pattern Matching & Interview Planning",
       "Week 3-4: Evidence Corroboration & Comprehensive Counsel-Ready Report"
     ],
     clientInputsNeeded: "Vendor ledgers, ERP audit logs, bank statements, whistleblower details (strictly confidential).",
     timeframe: "2â€“4 Weeks per Investigation",
-    humanSignoff: "Certified Fraud Examiner (CFE) & Senior Forensic Auditor",
+    humanSignoff: "Professional review as specified in the agreed engagement scope",
     price: "â‚¹3â€“15 Lakh per investigation"
   },
     {
@@ -190,7 +190,7 @@ export const ADVISORY_DESKS = [
     deliverables: [
       "Pre-Issuance Letter of Credit (LC) Clause Audit",
       "Transaction-specific export document checklist covering the supplied LC/BG and trade documents",
-      "Bank Guarantee (BG) Wording Review to Prevent Unfair Encashment",
+      "Bank Guarantee (BG) wording review for presentation and encashment risk",
       "Trade-compliance issue log against the requirements applicable to the supplied transaction",
       "Coordination support with issuing and advising banks, subject to the agreed mandate"
     ],
@@ -200,7 +200,7 @@ export const ADVISORY_DESKS = [
     ],
     clientInputsNeeded: "Draft LC / Sanction letter, Proforma Invoice, Bill of Lading draft, Bank Guarantee text.",
     timeframe: "24â€“48 Hours per Transaction / Monthly Retainer",
-    humanSignoff: "Trade Finance & International Banking Specialist",
+    humanSignoff: "Professional review as specified in the agreed engagement scope",
     price: "â‚¹50,000â€“â‚¹2 Lakh per transaction/retainer"
   },
     {
@@ -225,7 +225,7 @@ export const ADVISORY_DESKS = [
     ],
     clientInputsNeeded: "Entity ownership cap tables, property title documents, family tree and key promoter objectives.",
     timeframe: "8â€“12 Weeks Setup + Quarterly Retainer",
-    humanSignoff: "Senior Estate Planning Advocate & Wealth Governance Advisor",
+    humanSignoff: "Professional review as specified in the agreed engagement scope",
     price: "â‚¹2â€“10 Lakh setup + â‚¹75,000â€“â‚¹3 Lakh/month"
   }
 ]
@@ -1076,7 +1076,7 @@ export default function App() {
 
               {/* WHY PICK THIS PRODUCT GUIDE */}
               <div className="p-4 bg-blue-50/70 border border-blue-200 rounded-xl space-y-2">
-                <span className="text-xs font-bold text-blue-900 uppercase">ðŸ’¡ Why pick this product?</span>
+                <span className="text-xs font-bold text-blue-900 uppercase">ðŸ’¡ What this assessment provides</span>
                 <p className="text-xs text-slate-700 leading-relaxed">
                   <strong>Best fit:</strong> Teams reviewing customer, vendor or service agreements where commercial exposure matters.<br />
                   <strong>What it checks:</strong> Liability, indemnity, payment, termination, IP, jurisdiction and dispute terms actually present in the supplied text.<br />
