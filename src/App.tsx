@@ -261,6 +261,14 @@ const REGULATORY_TRIGGERS: Record<string, { label: string; value: string }> = {
 };
 
 
+const PRICING_CONFIG: Record<string, { anchor?: string; successFeeBasis?: string; minimumTerm?: string; entryAssessmentPrice?: string; outcomeClaim?: string }> = {
+  "lenderready": { successFeeBasis: "{{SUCCESS_FEE_BASIS}}" },
+  "board-box": { anchor: "From ₹50,000/month", minimumTerm: "{{MIN_TERM}}" },
+  "regtech": { anchor: "From ₹5 Lakh", entryAssessmentPrice: "{{DPDP_ASSESSMENT_PRICE}}" },
+  "controlcfo-sprint": { outcomeClaim: "{{OUTCOME_CLAIM}}" }
+};
+
+
 export default function App() {
   // Check if URL is /admin or ?admin=true
   const getInitialTab = () => {
@@ -1369,6 +1377,11 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                         </div>
                       )}
                       <span className="block text-xs font-semibold text-blue-600 mt-1">{srv.tagline}</span>
+                      {PRICING_CONFIG[srv.id]?.outcomeClaim && isResolvedPlaceholder(PRICING_CONFIG[srv.id].outcomeClaim) && (
+                        <div className="mt-2 rounded-lg bg-emerald-50 border border-emerald-200 px-3 py-2 text-xs font-bold text-emerald-900">
+                          {PRICING_CONFIG[srv.id].outcomeClaim}
+                        </div>
+                      )}
                     </div>
 
                     <p className="text-xs text-slate-600 leading-relaxed font-normal">{srv.summary}</p>
@@ -1397,9 +1410,29 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                   </div>
 
                   <div className="pt-4 border-t border-slate-100 space-y-3">
-                    <div className="flex items-baseline justify-between">
-                      <span className="text-xs text-slate-500 font-medium">Indicative Fee:</span>
-                      <span className="text-sm font-bold text-slate-900">{srv.price}</span>
+                    <div className="flex flex-col gap-1">
+                      <div className="flex items-baseline justify-between gap-3">
+                        <span className="text-xs text-slate-500 font-medium">Indicative Fee:</span>
+                        <span className="text-sm font-bold text-slate-900">{srv.price}</span>
+                      </div>
+                      {PRICING_CONFIG[srv.id]?.anchor && (
+                        <span className="text-xs font-bold text-blue-700">{PRICING_CONFIG[srv.id].anchor}</span>
+                      )}
+                      {srv.id === 'lenderready' && PRICING_CONFIG[srv.id]?.successFeeBasis && isResolvedPlaceholder(PRICING_CONFIG[srv.id].successFeeBasis) && (
+                        <span className="text-[11px] text-slate-600">Success fee: {PRICING_CONFIG[srv.id].successFeeBasis}</span>
+                      )}
+                      {srv.id === 'board-box' && PRICING_CONFIG[srv.id]?.minimumTerm && isResolvedPlaceholder(PRICING_CONFIG[srv.id].minimumTerm) && (
+                        <span className="text-[11px] text-slate-600">Minimum term / first-quarter review: {PRICING_CONFIG[srv.id].minimumTerm}</span>
+                      )}
+                      {srv.id === 'regtech' && (
+                        <button
+                          type="button"
+                          onClick={() => handleSelectDeskForBooking('DPDP Gap Assessment')}
+                          className="w-full py-2 px-3 bg-indigo-50 hover:bg-indigo-100 text-indigo-800 text-xs font-bold rounded-xl border border-indigo-200 transition-colors text-left"
+                        >
+                          DPDP Gap Assessment{isResolvedPlaceholder(PRICING_CONFIG[srv.id].entryAssessmentPrice) ? ' — ' + PRICING_CONFIG[srv.id].entryAssessmentPrice : ''}
+                        </button>
+                      )}
                     </div>
 
                     <div className="grid grid-cols-2 gap-2">
