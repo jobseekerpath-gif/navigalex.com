@@ -599,99 +599,33 @@ Respond with ONLY a JSON object (no markdown fences, no extra commentary) in exa
     return { text: response.text, model };
   }
 
-  // Bot Chat Endpoint
+  // Bot Chat Endpoint - provider-only, evidence-grounded responses
   app.post('/api/bot/chat', async (req, res) => {
     const { message, history, visitorId } = req.body;
-    if (!message || typeof message !== 'string') {
-      return res.status(400).json({ error: 'Message is required' });
+    if (!message || typeof message !== 'string') return res.status(400).json({ error: 'Message is required' });
+    recordVisitorActivity(req, visitorId || '', 'BOT_CHAT', '/live-bot', 'Customer asked the advisory bot a question.');
+    const recentHistory = Array.isArray(history) ? history.slice(-8) : [];
+    const conversation = recentHistory
+      .filter((item: any) => item && item.text)
+      .map((item: any) => (item.role === 'user' ? 'User' : 'Navigalex Live') + ': ' + String(item.text).slice(0, 1200))
+      .join('\n');
+    const prompt = 'You are Navigalex Live, a senior business advisory assistant. Answer the exact user question using ONLY the facts in the conversation and the user message. Do not invent financial figures, legal conclusions, approvals, client outcomes, benchmarks, fees, deadlines, credentials or access to external systems. Do not promise an outcome. If a number or fact is missing, ask for it. For legal, tax or regulatory topics, clearly distinguish general information from professional advice. Keep the answer concise and useful.\n\nConversation:\n' +
+      (conversation || '(none)') + '\n\nCurrent question:\n' + message;
+    const providers: Array<{ name: string; run: () => Promise<ProviderResponse | null> }> = [
+      { name: 'claude', run: () => analyzeWithClaude(prompt) },
+      { name: 'gemini', run: () => analyzeWithGemini(prompt) },
+      { name: 'vertex', run: () => analyzeWithVertex(prompt) }
+    ];
+    const failures: string[] = [];
+    for (const provider of providers) {
+      try {
+        const result = await provider.run();
+        if (result?.text?.trim()) return res.json({ success: true, reply: result.text.trim(), modelUsed: result.model, provider: provider.name });
+        failures.push(provider.name + ': unavailable');
+      } catch (err: any) { failures.push(provider.name + ': ' + (err?.message || String(err))); }
     }
-
-    // Record real visitor bot interaction
-    recordVisitorActivity(
-      req, 
-      visitorId || '', 
-      'BOT_CHAT', 
-      '/live-bot', 
-      `Asked bot: "${message.slice(0, 75)}${message.length > 75 ? '...' : ''}"`
-    );
-
-    // Build chat contents array
-    const contents: any[] = [];
-    if (Array.isArray(history)) {
-      for (const item of history.slice(-8)) {
-        if (item.role && item.text) {
-          contents.push({
-            role: item.role === 'user' ? 'user' : 'model',
-            parts: [{ text: item.text }]
-          });
-        }
-      }
-    }
-    contents.push({
-      role: 'user',
-      parts: [{ text: message }]
-    });
-
-    const systemInstruction = `You are Navigalex Live, a seasoned Senior Corporate Advisor and Virtual CFO helping Indian business owners, MSME promoters, and directors protect their business from financial, contract, and banking traps.
-
-Your Personality & Voice:
-- Conversational, human, sharp, and direct — like an experienced senior partner sitting across the table with a founder over coffee.
-- Speak in natural, plain business terms that Indian entrepreneurs relate to (e.g. Tally reconciliations, delayed client payments, bank CC limit drawing power, MSME Samadhaan, LC discrepancies).
-- Never sound like an automated robotic script or repeat canned generic disclaimers.
-- Answer the user's exact query immediately and specifically. If they ask "what can you do for me", give a crisp, compelling 3-point breakdown of the exact high-stakes problems you solve (e.g., catching uncapped contract liability before signing, fixing bank DSCR so loan renewals aren't blocked, and running 30-day ControlCFO sprints for cash flow).
-- Keep replies punchy (under 130 words), formatted with bullet points for effortless mobile reading, and always end with a warm, relevant follow-up question.`;
-
-    // Try primary models in sequence
-    const candidateModels = ['gemini-3.1-flash-lite', 'gemini-flash-latest', 'gemini-3.8-flash'];
-    
-    if (ai) {
-      for (const modelName of candidateModels) {
-        try {
-          const response = await ai.models.generateContent({
-            model: modelName,
-            contents,
-            config: { systemInstruction }
-          });
-
-          if (response.text && response.text.trim()) {
-            return res.json({
-              success: true,
-              reply: response.text.trim(),
-              modelUsed: modelName
-            });
-          }
-        } catch (modelErr: any) {
-          console.warn(`Model ${modelName} call failed, trying next:`, modelErr?.message || modelErr?.status);
-        }
-      }
-    }
-
-    // Contextual response fallback
-    const lower = message.toLowerCase();
-    let reply = "";
-
-    if (lower.includes("what can you do") || lower.includes("who are you") || lower.includes("help me") || lower.includes("how can you help")) {
-      reply = "Think of me as your on-demand CFO and legal risk partner. Here is specifically what I do for business owners:\n\n• **Protect Your Contracts:** I review your client and vendor MSAs to eliminate unlimited liability clauses and 90-day payment delay traps.\n• **Fix Bank Loan Rejections:** I calculate your Debt Service Coverage (DSCR) and reconcile bank statements so your CC limit renewals get sanctioned without friction.\n• **Stop Cash Leakages:** Through our **ControlCFO™ 30-Day Sprint**, we give you a 13-week cash runway model and a prioritized action plan to unlock trapped receivables.\n\nAre you currently dealing with a delayed customer payment, a contract negotiation, or a bank loan issue?";
-    } else if (lower.includes("cfo") || lower.includes("controlcfo") || lower.includes("cash") || lower.includes("sprint")) {
-      reply = "Our **ControlCFO™ 30-Day Sprint** is built for businesses doing ₹5 Cr–₹50 Cr who need senior financial leadership without paying ₹35 Lakh/year for a full-time CFO. In 30 days, we deliver a 13-week dynamic cash flow model, review your top 5 contracts, audit your debtor ledger, and provide a 90-day action matrix signed off by a Chartered Accountant for a fixed ₹1.5–4 Lakh fee.\n\nWould you like to see the week-by-week delivery schedule?";
-    } else if (lower.includes("contract") || lower.includes("agreement") || lower.includes("clause") || lower.includes("indemnity") || lower.includes("review")) {
-      reply = "Most Indian MSMEs sign customer agreements where the client has inserted unlimited indemnities or unilateral termination rights. If a dispute happens, your payments freeze.\n\nWe screen contracts clause-by-clause, insert protective MSME Samadhaan terms, and cap your total liability. You can test a contract right now on our **Live Contract Scanner** tab, or I can connect you with our legal desk. What agreement are you reviewing?";
-    } else if (lower.includes("bank") || lower.includes("loan") || lower.includes("dscr") || lower.includes("cc limit") || lower.includes("cibil") || lower.includes("limit")) {
-      reply = "Banks reject loan enhancements when your DSCR drops below 1.30x or when GST returns don't reconcile with your bank statements. Our **LenderReady Credit Office** audits your financial data room, fixes DSCR ratios, and helps negotiate 50–75 bps lower interest rates.\n\nYou can calculate your current loan eligibility in 30 seconds using our **Live Bank DSCR Scanner** tab. What is your current CC limit?";
-    } else if (lower.includes("lc") || lower.includes("letter of credit") || lower.includes("export") || lower.includes("trade") || lower.includes("bg") || lower.includes("demurrage")) {
-      reply = "Over 60% of export LCs face discrepancy rejections under UCP 600 rules, stranding containers at ports. Our **TradeShield Desk** provides rapid 24–48 hour pre-shipment clause audits to guarantee zero-defect documents before dispatch.\n\nAre you currently exporting under an active Letter of Credit?";
-    } else if (lower.includes("cost") || lower.includes("price") || lower.includes("fee") || lower.includes("charges")) {
-      reply = "Every service operates on transparent, fixed milestone fees:\n\n• **ControlCFO™ 30-Day Sprint:** ₹1.5–4 Lakh fixed\n• **Contract-to-Cash Desk:** ₹75,000–₹3 Lakh setup\n• **LenderReady Credit Desk:** ₹75,000–₹3 Lakh + success fee\n• **TradeShield Export LC Review:** ₹50,000–₹2 Lakh per transaction\n\nAll tools on the site are 100% free to test. Which desk are you evaluating?";
-    } else {
-      reply = `I hear you. As a business owner, you're constantly balancing cash flow, client demands, and banking compliance. \n\nWhether you need to review a risky customer contract, fix a stalled bank credit renewal, or run a 30-day financial health cleanup, we give you actionable answers backed by real CAs and Advocates.\n\nTell me a bit about your business—what industry are you in, or what is the main hurdle you're facing right now?`;
-    }
-
-    res.json({
-      success: true,
-      reply
-    });
+    return res.status(503).json({ success: false, error: 'The advisory assistant is unavailable because no configured AI provider returned a response.', providers: failures.map((item) => item.split(':')[0]) });
   });
-
   // Diagnostics API Routes: Real Activity Hook
   app.post('/api/assessments/run', async (req, res) => {
     const { industry, revenue, serviceType, financialSummary, visitorId } = req.body;
