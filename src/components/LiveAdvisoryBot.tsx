@@ -74,15 +74,18 @@ export default function LiveAdvisoryBot({ onOpenAssessment, onNavigateTab }: Liv
       });
 
       const data = await res.json();
-      const botReply = data.reply || "I am here to guide you on financial controls, contracts, and banking credit readiness. Feel free to ask any specific business question.";
+      if (!res.ok || !data.reply) {
+        throw new Error(data.error || 'No advisory response was returned.');
+      }
+      const botReply = data.reply;
 
       // Determine contextual action button if relevant
       let action: Message['action'];
       const lower = textToSend.toLowerCase();
       if (lower.includes('contract') || lower.includes('clause') || lower.includes('agreement')) {
-        action = { label: 'Test Live Contract Scanner', actionType: 'scanner' };
+        action = { label: 'Open Contract Risk Assessment', actionType: 'scanner' };
       } else if (lower.includes('bank') || lower.includes('loan') || lower.includes('dscr') || lower.includes('cibil')) {
-        action = { label: 'Calculate Bank DSCR Now', actionType: 'cibil' };
+        action = { label: 'Open Bank Readiness Calculator', actionType: 'cibil' };
       } else if (lower.includes('cfo') || lower.includes('sprint') || lower.includes('hire') || lower.includes('assessment')) {
         action = { label: 'Request Confidential Assessment', actionType: 'assessment', param: 'ControlCFO™ 30-Day Sprint' };
       }
@@ -101,7 +104,7 @@ export default function LiveAdvisoryBot({ onOpenAssessment, onNavigateTab }: Liv
       const errorMessage: Message = {
         id: `bot-err-${Date.now()}`,
         sender: 'bot',
-        text: "Navigalex advisory desks protect businesses against contract liability, delayed receivables, and bank limit rejections. Would you like to request an assessment or try our free live scanners?",
+        text: "The advisory assistant could not return a response right now. Please try again, or request a confidential assessment if you need a human-led review.",
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         action: { label: 'Request Confidential Assessment', actionType: 'assessment' }
       };
@@ -305,7 +308,7 @@ export default function LiveAdvisoryBot({ onOpenAssessment, onNavigateTab }: Liv
           {/* Privacy Note */}
           <div className="px-3 py-1.5 bg-slate-100 border-t border-slate-200 text-[10px] text-slate-500 flex items-center justify-center gap-1.5 shrink-0">
             <Lock className="w-3 h-3 text-slate-400" />
-            <span>Encrypted & Confidential under DPDP standards.</span>
+            <span>Please do not enter information you are not authorised to share. Use the agreed engagement channel for sensitive records.</span>
           </div>
 
           {/* Input Area */}
