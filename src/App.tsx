@@ -10,9 +10,33 @@ import {
 } from 'lucide-react';
 
 export const ADVISORY_DESKS = [
-  {
+    {
+    id: "lenderready",
+    title: "1. LenderReady Credit & Recovery Office",
+    tagline: "Bank Sanction Acceleration & Debt Restructuring",
+    badge: "Initial Launch Priority",
+    summary: "Prepares bank-grade financial files and debt service models so banks approve loans and CC limit enhancements 3x faster with lower interest.",
+    problem: "Banks reject loan proposals or slash Cash Credit limits because DSCR is weak, GST returns don't match bank turnover, or drawing power calculations have errors.",
+    deliverables: [
+      "Bank-Grade Borrower Information Memorandum & CMA Data Pack",
+      "Dynamic DSCR & Monthly Cash-Flow Coverage Model",
+      "Loan Covenant Tracker to Prevent Penal Interest Sanctions",
+      "One-Time Settlement (OTS) & Debt Restructuring Proposal (if stressed)",
+      "Professional Representation During Bank Credit Committee Discussions"
+    ],
+    deliverySchedule: [
+      "Week 1: Reconciliation of Last 24 Months Bank Statements, GST & ITR",
+      "Week 2: Construction of Certified CMA Data & DSCR Model",
+      "Week 3: Final Borrower Data Room Assembly & Bank Meeting Briefing"
+    ],
+    clientInputsNeeded: "Last 2 years Audited Balance Sheets, provisional P&L, 12 months Bank Statements, GST returns.",
+    timeframe: "14â€“21 Days",
+    humanSignoff: "Former Senior Credit Officer & Chartered Accountant",
+    price: "â‚¹75,000â€“â‚¹3 Lakh + lawful success fee"
+  },
+    {
     id: "controlcfo-sprint",
-    title: "1. ControlCFOâ„¢ 30-Day Readiness Sprint",
+    title: "2. ControlCFO 90-Day Readiness Sprint",
     tagline: "Flagship Outsourced Finance, Risk & Governance Command Centre",
     badge: "Initial Launch Priority",
     summary: "Like having an experienced, senior CFO and risk director running your financial governance on a part-time sprintâ€”without paying â‚¹35 Lakh/year full-time salary.",
@@ -35,31 +59,7 @@ export const ADVISORY_DESKS = [
     humanSignoff: "Senior CA & Corporate Advocate Dual Review",
     price: "â‚¹1.5â€“4 Lakh fixed"
   },
-  {
-    id: "board-box",
-    title: "2. Board-in-a-Box Governance OS",
-    tagline: "Statutory Director Protection & Board Cadence",
-    badge: "Turnkey System",
-    summary: "Complete corporate governance system that protects promoter-directors from personal statutory liability and prepares the company for institutional funding or M&A.",
-    problem: "Missing board minutes, undocumented shareholder agreements, ambiguous director authorities, and compliance lapses exposing founders to personal fines.",
-    deliverables: [
-      "Annual Board & Committee Calendar with Statutory Timelines",
-      "Institutional Board Agenda, Resolutions & Minutes Packs",
-      "Delegation of Authority (DoA) Financial Approval Matrix",
-      "Director Conflicts of Interest & Related-Party Register",
-      "Encrypted Evidence Vault for Audit & Due Diligence"
-    ],
-    deliverySchedule: [
-      "Week 1-2: Corporate Secretarial & Governance Gap Analysis",
-      "Week 3-4: Drafting Customized Delegation Matrix & Meeting Templates",
-      "Month 2+: Monthly / Quarterly Board Pack Orchestration & Minutes Management"
-    ],
-    clientInputsNeeded: "Certificate of Incorporation, MOA/AOA, past 12 months Board Minutes, Statutory Registers.",
-    timeframe: "4-Week Setup + Monthly Retainer",
-    humanSignoff: "Company Secretary (CS) & Corporate Counsel",
-    price: "â‚¹2â€“6 Lakh setup + â‚¹50,000â€“â‚¹1.5 Lakh/month"
-  },
-  {
+    {
     id: "contract-to-cash",
     title: "3. Contract-to-Cash Risk Desk",
     tagline: "Stop Unfair Contract Clauses & Accelerate Stuck Payments",
@@ -83,129 +83,9 @@ export const ADVISORY_DESKS = [
     humanSignoff: "Corporate Contracts Advocate",
     price: "â‚¹75,000â€“â‚¹3 Lakh setup + â‚¹25,000â€“â‚¹1 Lakh/month"
   },
-  {
-    id: "tradeshield",
-    title: "4. TradeShield LC/BG Desk",
-    tagline: "Pre-Shipment LC Screening & Bank Guarantee Protection",
-    badge: "Export & Tender Desk",
-    summary: "Specialist documentary trade finance review to prevent foreign bank discrepancy rejections, frozen containers, and invoked bank guarantees.",
-    problem: "Over 60% of export Letters of Credit get rejected due to minor paperwork mismatches under UCP 600 rules, delaying payment by months and incurring heavy demurrage.",
-    deliverables: [
-      "Pre-Issuance Letter of Credit (LC) Clause Audit",
-      "Zero-Defect Export Document Checklist (BL, Certificate of Origin, Invoice)",
-      "Bank Guarantee (BG) Wording Review to Prevent Unfair Encashment",
-      "FEMA & RBI Trade Compliance Validation Report",
-      "Direct Liaison Support with Issuing & Advising Banks"
-    ],
-    deliverySchedule: [
-      "24-48 Hours: Rapid turnaround per LC or Bank Guarantee transaction",
-      "Continuous: Monthly retainer for active exporters and EPC contractors"
-    ],
-    clientInputsNeeded: "Draft LC / Sanction letter, Proforma Invoice, Bill of Lading draft, Bank Guarantee text.",
-    timeframe: "24â€“48 Hours per Transaction / Monthly Retainer",
-    humanSignoff: "Trade Finance & International Banking Specialist",
-    price: "â‚¹50,000â€“â‚¹2 Lakh per transaction/retainer"
-  },
-  {
-    id: "fraudsignal",
-    title: "5. FraudSignal Investigation Cell",
-    tagline: "Forensic Accounting & Internal Leakage Detection",
-    badge: "Forensic & Whistleblower",
-    summary: "Discreet forensic audits to detect vendor kickbacks, ghost billing, employee theft, and fund diversionâ€”backed by court-ready evidence.",
-    problem: "Unexplained drops in gross profit margins, inventory mismatches, anonymous whistleblower tips, or suspected partner embezzlement.",
-    deliverables: [
-      "Forensic Transaction Analytics & Vendor Duplicate Billing Scan",
-      "Whistleblower Complaint Intake & Independent Fact-Finding Brief",
-      "Digital Audit Trail & Electronic Evidence Preservation Pack",
-      "Asset Tracing Brief & Financial Discrepancy Reconciliation",
-      "Counsel-Ready Investigation Report for Board or Police Filing"
-    ],
-    deliverySchedule: [
-      "Week 1: Covert Data Extraction (ERP logs, Bank statements, Vendor masters)",
-      "Week 2: Forensic Analytics, Pattern Matching & Interview Planning",
-      "Week 3-4: Evidence Corroboration & Comprehensive Counsel-Ready Report"
-    ],
-    clientInputsNeeded: "Vendor ledgers, ERP audit logs, bank statements, whistleblower details (strictly confidential).",
-    timeframe: "2â€“4 Weeks per Investigation",
-    humanSignoff: "Certified Fraud Examiner (CFE) & Senior Forensic Auditor",
-    price: "â‚¹3â€“15 Lakh per investigation"
-  },
-  {
-    id: "lenderready",
-    title: "6. LenderReady Credit & Recovery Office",
-    tagline: "Bank Sanction Acceleration & Debt Restructuring",
-    badge: "Initial Launch Priority",
-    summary: "Prepares bank-grade financial files and debt service models so banks approve loans and CC limit enhancements 3x faster with lower interest.",
-    problem: "Banks reject loan proposals or slash Cash Credit limits because DSCR is weak, GST returns don't match bank turnover, or drawing power calculations have errors.",
-    deliverables: [
-      "Bank-Grade Borrower Information Memorandum & CMA Data Pack",
-      "Dynamic DSCR & Monthly Cash-Flow Coverage Model",
-      "Loan Covenant Tracker to Prevent Penal Interest Sanctions",
-      "One-Time Settlement (OTS) & Debt Restructuring Proposal (if stressed)",
-      "Professional Representation During Bank Credit Committee Discussions"
-    ],
-    deliverySchedule: [
-      "Week 1: Reconciliation of Last 24 Months Bank Statements, GST & ITR",
-      "Week 2: Construction of Certified CMA Data & DSCR Model",
-      "Week 3: Final Borrower Data Room Assembly & Bank Meeting Briefing"
-    ],
-    clientInputsNeeded: "Last 2 years Audited Balance Sheets, provisional P&L, 12 months Bank Statements, GST returns.",
-    timeframe: "14â€“21 Days",
-    humanSignoff: "Former Senior Credit Officer & Chartered Accountant",
-    price: "â‚¹75,000â€“â‚¹3 Lakh + lawful success fee"
-  },
-  {
-    id: "regtech",
-    title: "7. RegTech Journey Lab",
-    tagline: "Compliance Architecture for NBFCs, Fintechs & Tech Vendors",
-    badge: "Institutional RegTech",
-    summary: "Turn statutory compliance into an automated, audit-proof workflow for co-lending, digital onboarding, DPDP privacy, and RBI outsourcing rules.",
-    problem: "Fintechs and NBFC vendors getting penalized or rejected by enterprise partners due to loose KYC controls, missing data logs, or RBI audit deficiencies.",
-    deliverables: [
-      "End-to-End Regulatory Controls Matrix & Gap Analysis",
-      "KYC / AML Onboarding Architecture & Edge-Case Rules",
-      "Digital Personal Data Protection (DPDP) Privacy Compliance Pack",
-      "Vendor Outsourcing Risk Assessment & Service Level Agreement Audits",
-      "Pre-Audit Remediation Plan for Institutional Compliance"
-    ],
-    deliverySchedule: [
-      "Month 1: Gap Assessment & Architecture Blueprint",
-      "Month 2: Controls Matrix Engineering & SLA Drafting",
-      "Month 3: Simulated Regulatory Stress Test & Team Training"
-    ],
-    clientInputsNeeded: "Current onboarding workflows, data architecture diagram, vendor master agreements.",
-    timeframe: "6â€“12 Weeks Project",
-    humanSignoff: "Fintech Regulatory Lawyer & Senior Systems Auditor",
-    price: "â‚¹5â€“25 Lakh per project"
-  },
-  {
-    id: "family-wealth",
-    title: "8. Family Wealth Governance Office",
-    tagline: "Multi-Entity Asset Consolidation & Succession Peace",
-    badge: "Promoter & Family Office",
-    summary: "Structures family businesses across siblings, holding entities, and trustsâ€”preventing family disputes and preserving wealth across generations.",
-    problem: "Messy cross-holdings between family members, informal loans, lack of a clear succession plan, and vulnerability to future family litigation.",
-    deliverables: [
-      "Consolidated Family Balance Sheet & Cross-Entity Asset Map",
-      "Legally Binding Family Constitution & Decision Charter",
-      "Succession & Inter-Generational Transfer Roadmap (Will & Trust Deeds)",
-      "Family Investment Policy Statement & Risk Allocation Guide",
-      "Quarterly Family Council Governance Pack & Review Facilitation"
-    ],
-    deliverySchedule: [
-      "Month 1: Confidential Family Stakeholder Interviews & Asset Mapping",
-      "Month 2: Drafting Family Constitution & Authority Matrices",
-      "Month 3: Legal Formalization of Wills, Trusts, and Shareholder Pacts",
-      "Ongoing: Quarterly Family Governance Review"
-    ],
-    clientInputsNeeded: "Entity ownership cap tables, property title documents, family tree and key promoter objectives.",
-    timeframe: "8â€“12 Weeks Setup + Quarterly Retainer",
-    humanSignoff: "Senior Estate Planning Advocate & Wealth Governance Advisor",
-    price: "â‚¹2â€“10 Lakh setup + â‚¹75,000â€“â‚¹3 Lakh/month"
-  },
-  {
+    {
     id: "internal-audit",
-    title: "9. AI-Assisted Internal Audit Factory",
+    title: "4. AI-Assisted Internal Audit Factory",
     tagline: "Continuous Risk & Internal Financial Control Auditing",
     badge: "Continuous Controls",
     summary: "Continuous, risk-based internal control testing that catches billing errors, inventory leakages, and unauthorized expenditures every quarter.",
@@ -227,13 +107,230 @@ export const ADVISORY_DESKS = [
     humanSignoff: "Internal Audit Partner (CA / CIA)",
     price: "â‚¹2â€“10 Lakh per cycle"
   }
+],
+    {
+    id: "board-box",
+    title: "5. Board-in-a-Box Governance OS",
+    tagline: "Statutory Director Protection & Board Cadence",
+    badge: "Turnkey System",
+    summary: "Complete corporate governance system that protects promoter-directors from personal statutory liability and prepares the company for institutional funding or M&A.",
+    problem: "Missing board minutes, undocumented shareholder agreements, ambiguous director authorities, and compliance lapses exposing founders to personal fines.",
+    deliverables: [
+      "Annual Board & Committee Calendar with Statutory Timelines",
+      "Institutional Board Agenda, Resolutions & Minutes Packs",
+      "Delegation of Authority (DoA) Financial Approval Matrix",
+      "Director Conflicts of Interest & Related-Party Register",
+      "Encrypted Evidence Vault for Audit & Due Diligence"
+    ],
+    deliverySchedule: [
+      "Week 1-2: Corporate Secretarial & Governance Gap Analysis",
+      "Week 3-4: Drafting Customized Delegation Matrix & Meeting Templates",
+      "Month 2+: Monthly / Quarterly Board Pack Orchestration & Minutes Management"
+    ],
+    clientInputsNeeded: "Certificate of Incorporation, MOA/AOA, past 12 months Board Minutes, Statutory Registers.",
+    timeframe: "4-Week Setup + Monthly Retainer",
+    humanSignoff: "Company Secretary (CS) & Corporate Counsel",
+    price: "â‚¹2â€“6 Lakh setup + â‚¹50,000â€“â‚¹1.5 Lakh/month"
+  },
+    {
+    id: "regtech",
+    title: "6. RegTech Journey Lab",
+    tagline: "Compliance Architecture for NBFCs, Fintechs & Tech Vendors",
+    badge: "Institutional RegTech",
+    summary: "Turn statutory compliance into an automated, audit-proof workflow for co-lending, digital onboarding, DPDP privacy, and RBI outsourcing rules.",
+    problem: "Fintechs and NBFC vendors getting penalized or rejected by enterprise partners due to loose KYC controls, missing data logs, or RBI audit deficiencies.",
+    deliverables: [
+      "End-to-End Regulatory Controls Matrix & Gap Analysis",
+      "KYC / AML Onboarding Architecture & Edge-Case Rules",
+      "Digital Personal Data Protection (DPDP) Privacy Compliance Pack",
+      "Vendor Outsourcing Risk Assessment & Service Level Agreement Audits",
+      "Pre-Audit Remediation Plan for Institutional Compliance"
+    ],
+    deliverySchedule: [
+      "Month 1: Gap Assessment & Architecture Blueprint",
+      "Month 2: Controls Matrix Engineering & SLA Drafting",
+      "Month 3: Simulated Regulatory Stress Test & Team Training"
+    ],
+    clientInputsNeeded: "Current onboarding workflows, data architecture diagram, vendor master agreements.",
+    timeframe: "6â€“12 Weeks Project",
+    humanSignoff: "Fintech Regulatory Lawyer & Senior Systems Auditor",
+    price: "â‚¹5â€“25 Lakh per project"
+  },
+    {
+    id: "fraudsignal",
+    title: "7. FraudSignal Investigation Cell",
+    tagline: "Forensic Accounting & Internal Leakage Detection",
+    badge: "Forensic & Whistleblower",
+    summary: "Discreet forensic audits to detect vendor kickbacks, ghost billing, employee theft, and fund diversionâ€”backed by court-ready evidence.",
+    problem: "Unexplained drops in gross profit margins, inventory mismatches, anonymous whistleblower tips, or suspected partner embezzlement.",
+    deliverables: [
+      "Forensic Transaction Analytics & Vendor Duplicate Billing Scan",
+      "Whistleblower Complaint Intake & Independent Fact-Finding Brief",
+      "Digital Audit Trail & Electronic Evidence Preservation Pack",
+      "Asset Tracing Brief & Financial Discrepancy Reconciliation",
+      "Counsel-Ready Investigation Report for Board or Police Filing"
+    ],
+    deliverySchedule: [
+      "Week 1: Covert Data Extraction (ERP logs, Bank statements, Vendor masters)",
+      "Week 2: Forensic Analytics, Pattern Matching & Interview Planning",
+      "Week 3-4: Evidence Corroboration & Comprehensive Counsel-Ready Report"
+    ],
+    clientInputsNeeded: "Vendor ledgers, ERP audit logs, bank statements, whistleblower details (strictly confidential).",
+    timeframe: "2â€“4 Weeks per Investigation",
+    humanSignoff: "Certified Fraud Examiner (CFE) & Senior Forensic Auditor",
+    price: "â‚¹3â€“15 Lakh per investigation"
+  },
+    {
+    id: "tradeshield",
+    title: "8. TradeShield LC/BG Desk",
+    tagline: "Pre-Shipment LC Screening & Bank Guarantee Protection",
+    badge: "Export & Tender Desk",
+    summary: "Specialist documentary trade finance review to prevent foreign bank discrepancy rejections, frozen containers, and invoked bank guarantees.",
+    problem: "Over 60% of export Letters of Credit get rejected due to minor paperwork mismatches under UCP 600 rules, delaying payment by months and incurring heavy demurrage.",
+    deliverables: [
+      "Pre-Issuance Letter of Credit (LC) Clause Audit",
+      "Zero-Defect Export Document Checklist (BL, Certificate of Origin, Invoice)",
+      "Bank Guarantee (BG) Wording Review to Prevent Unfair Encashment",
+      "FEMA & RBI Trade Compliance Validation Report",
+      "Direct Liaison Support with Issuing & Advising Banks"
+    ],
+    deliverySchedule: [
+      "24-48 Hours: Rapid turnaround per LC or Bank Guarantee transaction",
+      "Continuous: Monthly retainer for active exporters and EPC contractors"
+    ],
+    clientInputsNeeded: "Draft LC / Sanction letter, Proforma Invoice, Bill of Lading draft, Bank Guarantee text.",
+    timeframe: "24â€“48 Hours per Transaction / Monthly Retainer",
+    humanSignoff: "Trade Finance & International Banking Specialist",
+    price: "â‚¹50,000â€“â‚¹2 Lakh per transaction/retainer"
+  },
+    {
+    id: "family-wealth",
+    title: "9. Family Wealth Governance Office",
+    tagline: "Multi-Entity Asset Consolidation & Succession Peace",
+    badge: "Promoter & Family Office",
+    summary: "Structures family businesses across siblings, holding entities, and trustsâ€”preventing family disputes and preserving wealth across generations.",
+    problem: "Messy cross-holdings between family members, informal loans, lack of a clear succession plan, and vulnerability to future family litigation.",
+    deliverables: [
+      "Consolidated Family Balance Sheet & Cross-Entity Asset Map",
+      "Legally Binding Family Constitution & Decision Charter",
+      "Succession & Inter-Generational Transfer Roadmap (Will & Trust Deeds)",
+      "Family Investment Policy Statement & Risk Allocation Guide",
+      "Quarterly Family Council Governance Pack & Review Facilitation"
+    ],
+    deliverySchedule: [
+      "Month 1: Confidential Family Stakeholder Interviews & Asset Mapping",
+      "Month 2: Drafting Family Constitution & Authority Matrices",
+      "Month 3: Legal Formalization of Wills, Trusts, and Shareholder Pacts",
+      "Ongoing: Quarterly Family Governance Review"
+    ],
+    clientInputsNeeded: "Entity ownership cap tables, property title documents, family tree and key promoter objectives.",
+    timeframe: "8â€“12 Weeks Setup + Quarterly Retainer",
+    humanSignoff: "Senior Estate Planning Advocate & Wealth Governance Advisor",
+    price: "â‚¹2â€“10 Lakh setup + â‚¹75,000â€“â‚¹3 Lakh/month"
+  }
+]
+
+const PERSONA_SERVICE_IDS: Record<string, string[]> = {
+  all: ADVISORY_DESKS.map((srv) => srv.id),
+  growing: ["controlcfo-sprint", "lenderready", "contract-to-cash", "board-box", "internal-audit", "fraudsignal"],
+  exporter: ["tradeshield", "contract-to-cash"],
+  nbfc: ["regtech", "board-box"],
+  family: ["family-wealth"]
+};
+
+const PERSONA_OPTIONS = [
+  { key: "all", label: "All" },
+  { key: "growing", label: "Growing Business" },
+  { key: "exporter", label: "Exporter/Importer" },
+  { key: "nbfc", label: "NBFC & Fintech" },
+  { key: "family", label: "Family Office" }
 ];
+
+const readPersonaParam = () => {
+  if (typeof window === "undefined") return "all";
+  const value = new URLSearchParams(window.location.search).get("persona");
+  return PERSONA_OPTIONS.some((option) => option.key === value) ? value || "all" : "all";
+};
+
+
+const isResolvedPlaceholder = (value?: string) => Boolean(
+  value && !(value.trim().startsWith('{{') && value.trim().endsWith('}}'))
+);
+
+const REGULATORY_TRIGGERS: Record<string, { label: string; value: string }> = {
+  "regtech": { label: "DPDP compliance deadline", value: "{{DPDP_DEADLINE}}" },
+  "board-box": { label: "Directors' personal liability", value: "{{COMPANIES_ACT_SECTION}}" }
+};
+
+
+const PRICING_CONFIG: Record<string, { anchor?: string; successFeeBasis?: string; minimumTerm?: string; entryAssessmentPrice?: string; outcomeClaim?: string }> = {
+  "lenderready": { successFeeBasis: "{{SUCCESS_FEE_BASIS}}" },
+  "board-box": { anchor: "From ₹50,000/month", minimumTerm: "{{MIN_TERM}}" },
+  "regtech": { anchor: "From ₹5 Lakh", entryAssessmentPrice: "{{DPDP_ASSESSMENT_PRICE}}" },
+  "controlcfo-sprint": { outcomeClaim: "{{OUTCOME_CLAIM}}" }
+};
+
+
+const BRAND_MARKS: Record<string, boolean> = {
+  "ControlCFO": true,
+  "LenderReady": false,
+  "Contract-to-Cash": false,
+  "AI-Assisted Internal Audit Factory": false,
+  "Board-in-a-Box": false,
+  "RegTech Journey Lab": false,
+  "FraudSignal": false,
+  "TradeShield": false,
+  "Family Wealth Governance": false
+};
+
+const formatServiceTitle = (title: string) => BRAND_MARKS.ControlCFO && title.includes("ControlCFO") && !title.includes("™")
+  ? title.replace("ControlCFO", "ControlCFO™")
+  : title;
+
+const SITE_TRUST = {
+  clientCount: "{{CLIENT_COUNT}}",
+  credential: "{{CREDENTIAL}}",
+  anonymisedCaseOutcome: "{{ANONYMISED_CASE_OUTCOME}}"
+};
+
+const FRAUDSIGNAL_CREDENTIAL = "{{CREDENTIAL}}";
+const LC_STAT_CONFIG = {
+  value: "{{LC_REJECTION_RATE_STAT}}",
+  source: "{{LC_STAT_SOURCE}}"
+};
+
+
+const FREE_TOOL_HANDOFFS: Record<string, { serviceId: string; persona: string; campaign: string }> = {
+  "compliance-calendar": { serviceId: "regtech", persona: "nbfc", campaign: "compliance-calendar" },
+  "loan-eligibility": { serviceId: "lenderready", persona: "growing", campaign: "loan-eligibility" },
+  "do-key-person-gap": { serviceId: "board-box", persona: "growing", campaign: "do-key-person-gap" },
+  "contract-43b-h": { serviceId: "contract-to-cash", persona: "growing", campaign: "contract-43b-h" }
+};
+
+const getFreeToolHandoffUrl = (tool: string) => {
+  const handoff = FREE_TOOL_HANDOFFS[tool];
+  if (!handoff) return "/services";
+  const params = new URLSearchParams({
+    persona: handoff.persona,
+    service: handoff.serviceId,
+    utm_source: "free_tool",
+    utm_campaign: handoff.campaign
+  });
+  return "/services?" + params.toString();
+};
+
 
 export default function App() {
   // Check if URL is /admin or ?admin=true
   const getInitialTab = () => {
     if (typeof window !== 'undefined') {
       const p = window.location.pathname.toLowerCase();
+      if (p === '/family-office' || p.startsWith('/family-office')) {
+        return 'family-office';
+      }
+      if (p === '/services' || p.startsWith('/services') || new URLSearchParams(window.location.search).has('persona')) {
+        return 'services';
+      }
       if (p === '/admin' || p.startsWith('/admin') || window.location.search.includes('admin') || window.location.hash.includes('admin')) {
         return 'admin';
       }
@@ -244,6 +341,8 @@ export default function App() {
   const [activeTab, setActiveTab] = useState(getInitialTab);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [persona, setPersona] = useState(readPersonaParam);
+
 
   // Persistent Real Visitor ID
   const [visitorId] = useState(() => {
@@ -262,9 +361,15 @@ export default function App() {
   useEffect(() => {
     const handleLocationChange = () => {
       const p = window.location.pathname.toLowerCase();
-      if (p === '/admin' || p.startsWith('/admin') || window.location.search.includes('admin') || window.location.hash.includes('admin')) {
+      const urlPersona = new URLSearchParams(window.location.search).get('persona');
+      setPersona(PERSONA_OPTIONS.some((option) => option.key === urlPersona) ? urlPersona || 'all' : 'all');
+      if (p === '/family-office' || p.startsWith('/family-office')) {
+        setActiveTab('family-office');
+      } else if (p === '/services' || p.startsWith('/services') || urlPersona) {
+        setActiveTab('services');
+      } else if (p === '/admin' || p.startsWith('/admin') || window.location.search.includes('admin') || window.location.hash.includes('admin')) {
         setActiveTab('admin');
-      } else if (activeTab === 'admin') {
+      } else if (activeTab === 'admin' || activeTab === 'family-office' || activeTab === 'services') {
         setActiveTab('home');
       }
     };
@@ -483,6 +588,24 @@ Payment shall be released within 90 days after delivery and final acceptance. In
       console.error('Error posting inquiry:', err);
     }
     setLeadSubmitted(true);
+  };
+
+  const navigateToFamilyOffice = () => {
+    window.history.pushState(null, '', '/family-office');
+    setActiveTab('family-office');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const visibleAdvisoryDesks = PERSONA_SERVICE_IDS[persona]
+    ? ADVISORY_DESKS.filter((srv) => PERSONA_SERVICE_IDS[persona].includes(srv.id))
+    : ADVISORY_DESKS;
+
+  const selectPersona = (nextPersona: string) => {
+    setPersona(nextPersona);
+    const url = new URL(window.location.href);
+    if (nextPersona === 'all') url.searchParams.delete('persona');
+    else url.searchParams.set('persona', nextPersona);
+    window.history.replaceState(null, '', url.pathname + (url.search ? url.search : '') + url.hash);
   };
 
   if (activeTab === 'admin') {
@@ -907,6 +1030,12 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                       ))}
                     </div>
                   </div>
+                  <a
+                    href={getFreeToolHandoffUrl('contract-43b-h')}
+                    className="block rounded-xl bg-blue-50 hover:bg-blue-100 border border-blue-200 px-4 py-3 text-sm font-bold text-blue-800 transition-colors"
+                  >
+                    Check whether your buyer owes you under 43B(h)
+                  </a>
                 </div>
               )}
             </section>
@@ -1024,6 +1153,12 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                   <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg text-xs text-blue-900">
                     <strong>Navigalex Advisory Note:</strong> {cibilResult.advice}
                   </div>
+                  <a
+                    href={getFreeToolHandoffUrl('loan-eligibility')}
+                    className="block rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-4 py-3 text-sm font-bold text-emerald-800 transition-colors"
+                  >
+                    Next step: LenderReady Credit & Recovery Office
+                  </a>
                 </div>
               )}
             </section>
@@ -1239,6 +1374,31 @@ Payment shall be released within 90 days after delivery and final acceptance. In
               </p>
             </div>
 
+            {typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('utm_source') === 'free_tool' && (
+              <div className="rounded-2xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-900" role="status">
+                <strong>Recommended next step:</strong> your free-tool result maps to a Navigalex advisory service below.
+              </div>
+            )}
+
+            {isResolvedPlaceholder(SITE_TRUST.clientCount) &&
+              isResolvedPlaceholder(SITE_TRUST.credential) &&
+              isResolvedPlaceholder(SITE_TRUST.anonymisedCaseOutcome) && (
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 rounded-2xl border border-blue-100 bg-blue-50/60 p-4 shadow-sm" aria-label="Navigalex trust signals">
+                  <div className="text-center sm:text-left">
+                    <span className="block text-[10px] font-bold uppercase tracking-wider text-blue-700">Clients</span>
+                    <span className="text-sm font-bold text-slate-900">{SITE_TRUST.clientCount}</span>
+                  </div>
+                  <div className="text-center sm:text-left">
+                    <span className="block text-[10px] font-bold uppercase tracking-wider text-blue-700">Credential</span>
+                    <span className="text-sm font-bold text-slate-900">{SITE_TRUST.credential}</span>
+                  </div>
+                  <div className="text-center sm:text-left">
+                    <span className="block text-[10px] font-bold uppercase tracking-wider text-blue-700">Case Outcome</span>
+                    <span className="text-sm font-bold text-slate-900">{SITE_TRUST.anonymisedCaseOutcome}</span>
+                  </div>
+                </div>
+              )}
+
             {/* THE 4-STEP OPERATING MODEL: HOW WE DELIVER */}
             <div className="bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 text-white rounded-2xl p-8 sm:p-10 shadow-xl space-y-6">
               <div className="text-center max-w-2xl mx-auto space-y-2">
@@ -1275,8 +1435,27 @@ Payment shall be released within 90 days after delivery and final acceptance. In
             </div>
 
             {/* THE 9 DETAILED SERVICE CARDS */}
+            <div
+              role="tablist"
+              aria-label="Filter services by buyer persona"
+              className="flex flex-wrap gap-2 rounded-2xl border border-slate-200 bg-white p-2 shadow-sm"
+            >
+              {PERSONA_OPTIONS.map((option) => (
+                <button
+                  key={option.key}
+                  type="button"
+                  role="tab"
+                  aria-selected={persona === option.key}
+                  onClick={() => selectPersona(option.key)}
+                  className={`flex-1 min-w-[140px] px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-colors ${persona === option.key ? 'bg-blue-600 text-white shadow-md' : 'text-slate-700 hover:bg-slate-100'}`}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {ADVISORY_DESKS.map((srv) => (
+              {visibleAdvisoryDesks.map((srv) => (
                 <div key={srv.id} className="navigalex-card p-7 rounded-2xl flex flex-col justify-between space-y-6 relative shadow-lg border-t-4 border-blue-600 hover:border-blue-500 transition-all">
                   <div className="space-y-4">
                     <div className="flex items-center justify-between gap-2">
@@ -1287,16 +1466,72 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                     </div>
 
                     <div>
-                      <h3 className="text-xl font-bold text-slate-900 leading-tight">{srv.title}</h3>
+                      <h3 className="text-xl font-bold text-slate-900 leading-tight">{formatServiceTitle(srv.title)}</h3>
+                      {srv.id === 'contract-to-cash' && (
+                        <div className="mt-2 rounded-lg bg-amber-50 border border-amber-200 px-3 py-2 text-xs font-bold text-amber-900">
+                          Use Section 43B(h) to get paid on time
+                        </div>
+                      )}
+                      {REGULATORY_TRIGGERS[srv.id] && isResolvedPlaceholder(REGULATORY_TRIGGERS[srv.id].value) && (
+                        <div className="mt-2 inline-flex max-w-full items-center rounded-full bg-blue-50 border border-blue-200 px-3 py-1 text-[11px] font-semibold text-blue-800">
+                          {REGULATORY_TRIGGERS[srv.id].label}: {REGULATORY_TRIGGERS[srv.id].value}
+                        </div>
+                      )}
                       <span className="block text-xs font-semibold text-blue-600 mt-1">{srv.tagline}</span>
+                      {PRICING_CONFIG[srv.id]?.outcomeClaim && isResolvedPlaceholder(PRICING_CONFIG[srv.id].outcomeClaim) && (
+                        <div className="mt-2 rounded-lg bg-emerald-50 border border-emerald-200 px-3 py-2 text-xs font-bold text-emerald-900">
+                          {PRICING_CONFIG[srv.id].outcomeClaim}
+                        </div>
+                      )}
                     </div>
 
                     <p className="text-xs text-slate-600 leading-relaxed font-normal">{srv.summary}</p>
+                    {srv.id === 'internal-audit' && (
+                      <span className="inline-flex rounded-full bg-indigo-50 border border-indigo-200 px-3 py-1 text-[11px] font-bold text-indigo-800">
+                        Next step after ControlCFO or FraudSignal
+                      </span>
+                    )}
+                    {srv.id === 'fraudsignal' && (
+                      <button
+                        type="button"
+                        onClick={() => handleSelectDeskForBooking('FraudSignal Referral Partner — CA / CS / Employment Lawyer')}
+                        className="w-full rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 px-3 py-2 text-left text-[11px] font-semibold text-slate-700"
+                      >
+                        Referral partners: CAs, CS, employment lawyers
+                      </button>
+                    )}
+                    {srv.id === 'contract-to-cash' && (
+                      <a
+                        href={getFreeToolHandoffUrl('contract-43b-h')}
+                        className="inline-flex w-full items-center justify-center rounded-xl bg-blue-50 hover:bg-blue-100 border border-blue-200 px-3 py-2 text-xs font-bold text-blue-800 transition-colors"
+                      >
+                        Check whether your buyer owes you under 43B(h)
+                      </a>
+                    )}
+                    {srv.id === 'family-wealth' && (
+                      <button
+                        type="button"
+                        onClick={navigateToFamilyOffice}
+                        className="inline-flex items-center rounded-full bg-blue-50 border border-blue-200 px-3 py-1 text-[11px] font-bold text-blue-800 hover:bg-blue-100"
+                      >
+                        View dedicated Family Office page
+                      </button>
+                    )}
 
                     <div className="p-3 bg-rose-50/80 border border-rose-200 rounded-xl space-y-1">
-                      <span className="text-[10px] font-bold text-rose-800 uppercase tracking-wider block">âš ï¸ The Problem Solved</span>
+                      <span className="text-[10px] font-bold text-rose-800 uppercase tracking-wider block">Problem Solved</span>
                       <p className="text-xs text-slate-800 leading-relaxed">{srv.problem}</p>
                     </div>
+                    {srv.id === 'fraudsignal' && isResolvedPlaceholder(FRAUDSIGNAL_CREDENTIAL) && (
+                      <div className="rounded-lg bg-slate-50 border border-slate-200 px-3 py-2 text-[11px] font-semibold text-slate-700">
+                        Credential: {FRAUDSIGNAL_CREDENTIAL}
+                      </div>
+                    )}
+                    {srv.id === 'tradeshield' && isResolvedPlaceholder(LC_STAT_CONFIG.value) && isResolvedPlaceholder(LC_STAT_CONFIG.source) && (
+                      <div className="rounded-lg bg-slate-50 border border-slate-200 px-3 py-2 text-[11px] text-slate-700">
+                        {LC_STAT_CONFIG.value} <span className="text-slate-500">Source: {LC_STAT_CONFIG.source}</span>
+                      </div>
+                    )}
 
                     <div className="space-y-2 pt-1">
                       <span className="text-[11px] font-bold text-slate-900 uppercase tracking-wider block">What You Receive:</span>
@@ -1317,9 +1552,29 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                   </div>
 
                   <div className="pt-4 border-t border-slate-100 space-y-3">
-                    <div className="flex items-baseline justify-between">
-                      <span className="text-xs text-slate-500 font-medium">Indicative Fee:</span>
-                      <span className="text-sm font-bold text-slate-900">{srv.price}</span>
+                    <div className="flex flex-col gap-1">
+                      <div className="flex items-baseline justify-between gap-3">
+                        <span className="text-xs text-slate-500 font-medium">Indicative Fee:</span>
+                        <span className="text-sm font-bold text-slate-900">{srv.price}</span>
+                      </div>
+                      {PRICING_CONFIG[srv.id]?.anchor && (
+                        <span className="text-xs font-bold text-blue-700">{PRICING_CONFIG[srv.id].anchor}</span>
+                      )}
+                      {srv.id === 'lenderready' && PRICING_CONFIG[srv.id]?.successFeeBasis && isResolvedPlaceholder(PRICING_CONFIG[srv.id].successFeeBasis) && (
+                        <span className="text-[11px] text-slate-600">Success fee: {PRICING_CONFIG[srv.id].successFeeBasis}</span>
+                      )}
+                      {srv.id === 'board-box' && PRICING_CONFIG[srv.id]?.minimumTerm && isResolvedPlaceholder(PRICING_CONFIG[srv.id].minimumTerm) && (
+                        <span className="text-[11px] text-slate-600">Minimum term / first-quarter review: {PRICING_CONFIG[srv.id].minimumTerm}</span>
+                      )}
+                      {srv.id === 'regtech' && (
+                        <button
+                          type="button"
+                          onClick={() => handleSelectDeskForBooking('DPDP Gap Assessment')}
+                          className="w-full py-2 px-3 bg-indigo-50 hover:bg-indigo-100 text-indigo-800 text-xs font-bold rounded-xl border border-indigo-200 transition-colors text-left"
+                        >
+                          DPDP Gap Assessment{isResolvedPlaceholder(PRICING_CONFIG[srv.id].entryAssessmentPrice) ? ' — ' + PRICING_CONFIG[srv.id].entryAssessmentPrice : ''}
+                        </button>
+                      )}
                     </div>
 
                     <div className="grid grid-cols-2 gap-2">
@@ -1340,6 +1595,68 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                 </div>
               ))}
             </div>
+          </div>
+        )}
+
+        {activeTab === 'family-office' && (
+          <div className="py-20 px-6 max-w-5xl mx-auto space-y-10">
+            <button
+              type="button"
+              onClick={() => { window.history.pushState(null, '', '/services'); setActiveTab('services'); }}
+              className="text-xs font-bold text-blue-700 hover:text-blue-600"
+            >
+              ← Back to all services
+            </button>
+            <div className="space-y-3">
+              <span className="text-xs font-bold text-blue-600 uppercase tracking-widest">FAMILY OFFICE</span>
+              <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900">Family Wealth Governance Office</h2>
+              <p className="text-slate-600 max-w-3xl">A dedicated governance and coordination service for multi-entity family businesses, succession planning and cross-entity risk.</p>
+            </div>
+            {(() => {
+              const srv = ADVISORY_DESKS.find((item) => item.id === 'family-wealth');
+              if (!srv) return null;
+              return (
+                <div className="navigalex-card rounded-2xl p-7 sm:p-9 space-y-7 shadow-xl border-t-4 border-blue-600">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                    <div>
+                      <h3 className="text-2xl font-bold text-slate-900">{formatServiceTitle(srv.title)}</h3>
+                      <p className="text-xs font-semibold text-blue-600 mt-1">{srv.tagline}</p>
+                    </div>
+                    <span className="text-sm font-bold text-slate-900">{srv.price}</span>
+                  </div>
+                  <p className="text-sm text-slate-700 leading-relaxed">{srv.summary}</p>
+                  <div>
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 mb-3">What You Receive</h4>
+                    <ul className="space-y-2 text-sm text-slate-700">
+                      {srv.deliverables.map((item, i) => (
+                        <li key={i} className="flex items-start gap-2">
+                          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 mb-3">Delivery Schedule</h4>
+                    <div className="space-y-2">
+                      {srv.deliverySchedule.map((item, i) => (
+                        <div key={i} className="rounded-xl bg-slate-50 border border-slate-200 px-4 py-3 text-sm text-slate-700">{item}</div>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-t border-slate-200 pt-5">
+                    <span className="text-xs text-slate-500">{srv.timeframe}</span>
+                    <button
+                      type="button"
+                      onClick={() => handleSelectDeskForBooking(srv.title)}
+                      className="px-5 py-3 bg-blue-600 hover:bg-blue-500 text-white text-sm font-bold rounded-xl shadow-md"
+                    >
+                      Inquire Family Office
+                    </button>
+                  </div>
+                </div>
+              );
+            })()}
           </div>
         )}
 
