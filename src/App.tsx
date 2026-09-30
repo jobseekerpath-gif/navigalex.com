@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import LiveAdvisoryBot from './components/LiveAdvisoryBot';
 import AdminPanel from './components/AdminPanel';
+import ModalCloseButton from './components/ModalCloseButton';
 import { 
   Shield, Scale, FileText, BarChart3, ArrowRight, CheckCircle2, 
   Sparkles, Activity, Lock, Users, Building2, ChevronRight, Menu, X, 
@@ -646,7 +647,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
       <div className="bg-slate-900 border-b border-slate-800 py-2.5 px-4 text-center text-xs text-slate-300 tracking-wide flex items-center justify-center gap-2 relative z-10">
         <Shield className="w-4 h-4 text-blue-400 shrink-0" />
         <span>
-          <strong>Navigalex Advisory:</strong> We protect Indian business owners from hidden financial, legal, and bank-loan risks. Real senior advisors powered by smart AI tools.
+          <strong>Navigalex Advisory:</strong> We protect Indian business owners from hidden financial, legal, and bank-loan risks. Real senior advisors powered by smart AI.
         </span>
       </div>
 
@@ -731,7 +732,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                 </h1>
 
                 <p className="text-base sm:text-xl text-slate-700 max-w-3xl leading-relaxed font-normal">
-                  We help Indian business owners, MSMEs, and directors spot the hidden cash leakages, bad contract terms, and loan rejection traps that accountants, lawyers, and software missâ€”before they cost you money.
+                  Navigalex helps lenders, founders and boards turn financial, risk and governance signals into clear decisions — before small issues become expensive problems.
                 </p>
 
                 <div className="pt-4 flex flex-col sm:flex-row items-start sm:items-center gap-4">
@@ -746,7 +747,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                     onClick={() => { setActiveTab('live-tools'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
                     className="flex items-center gap-2 px-7 py-3.5 text-sm font-semibold text-slate-700 bg-white hover:bg-slate-50 border border-slate-300 rounded-xl shadow-sm transition-all cursor-pointer"
                   >
-                    <span>Test Free Live Scanners</span>
+                    <span>Try Free Live Assessments</span>
                   </button>
                 </div>
 
@@ -766,7 +767,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                   <h3 className="font-bold text-slate-900 text-base">Contract Risk Scanner</h3>
                   <p className="text-xs text-slate-600 mt-1 mb-3">Upload any client/vendor agreement or paste text. Catch unlimited liability and payment default traps.</p>
                   <button onClick={() => { setActiveTab('live-tools'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="text-xs font-bold text-blue-600 hover:text-blue-700 flex items-center gap-1 cursor-pointer">
-                    Try scanner free <ChevronRight className="w-3 h-3" />
+                    Try free assessment <ChevronRight className="w-3 h-3" />
                   </button>
                 </div>
 
@@ -788,7 +789,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                     <Briefcase className="w-4 h-4 text-indigo-600" />
                   </div>
                   <h3 className="font-bold text-slate-900 text-base">ControlCFOâ„¢ 30-Day Sprint</h3>
-                  <p className="text-xs text-slate-600 mt-1 mb-3">Your part-time senior CFO and risk command centre without paying â‚¹35 Lakh/year full-time salary.</p>
+                  <p className="text-xs text-slate-600 mt-1 mb-3">Your part-time senior CFO and risk command centre, designed to give you senior oversight without a full-time CFO structure.</p>
                   <button onClick={() => { setSelectedDeskModal(ADVISORY_DESKS[0]); }} className="text-xs font-bold text-indigo-600 hover:text-indigo-700 flex items-center gap-1 cursor-pointer">
                     See sprint details <ChevronRight className="w-3 h-3" />
                   </button>
@@ -832,7 +833,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                 </p>
                 <div className="pt-2">
                   <button onClick={() => { setActiveTab('live-tools'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="px-6 py-3 bg-blue-500 hover:bg-blue-400 text-white text-xs font-bold rounded-xl transition-all shadow-md cursor-pointer">
-                    Experience Our Live Diagnostic Tools
+                    Explore Live Diagnostic Assessments
                   </button>
                 </div>
               </div>
@@ -894,8 +895,8 @@ Payment shall be released within 90 days after delivery and final acceptance. In
           <div className="py-16 px-6 max-w-7xl mx-auto space-y-20">
             <div className="text-center max-w-3xl mx-auto space-y-3">
               <span className="text-xs font-bold text-blue-600 uppercase tracking-widest">COMMERCIAL-GRADE WORKING ENGINES</span>
-              <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900">Live AI Financial & Legal Scanners</h2>
-              <p className="text-slate-600">Test real contracts, calculate bank loan readiness, and generate instant business diagnostic reports right now.</p>
+              <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900">Live AI Financial & Legal Assessments</h2>
+              <p className="text-slate-600">Assess real contracts, check loan readiness, and generate an instant business diagnostic report.</p>
             </div>
 
             {/* LIVE 1: Contract & Agreement Risk Analyzer */}
@@ -1963,7 +1964,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
               <span className="text-sm font-bold text-white">NAVIGALEX</span>
             </div>
             <p className="text-slate-400 leading-relaxed">
-              Navigalex Advisory: We protect Indian business owners from hidden financial, legal, and bank-loan risks. Real senior advisors powered by smart AI tools.
+              Navigalex Advisory: We protect Indian business owners from hidden financial, legal, and bank-loan risks. Real senior advisors powered by smart AI.
             </p>
           </div>
 
@@ -2006,7 +2007,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
           </div>
 
           <div>
-            <h4 className="font-bold uppercase tracking-wider text-white mb-4">Live Tools & Guides</h4>
+            <h4 className="font-bold uppercase tracking-wider text-white mb-4">Live Assessments & Guides</h4>
             <ul className="space-y-2.5 text-slate-400">
               <li>
                 <button 
@@ -2086,7 +2087,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
       {/* MODAL 1: DETAILED DESK SCOPE & DELIVERY MODAL */}
       {selectedDeskModal && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto animate-fadeIn">
-          <div className="bg-white rounded-2xl max-w-2xl w-full p-6 sm:p-8 space-y-6 shadow-2xl border border-slate-200 my-8">
+          <div className="relative bg-white rounded-2xl max-w-2xl w-full p-6 sm:p-8 space-y-6 shadow-2xl border border-slate-200 my-8">
             <div className="flex items-start justify-between border-b border-slate-200 pb-4">
               <div>
                 <div className="inline-block px-2.5 py-0.5 rounded bg-blue-50 border border-blue-200 text-[10px] font-bold text-blue-700 uppercase mb-1">
@@ -2095,12 +2096,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                 <h3 className="text-2xl font-bold text-slate-900">{selectedDeskModal.title}</h3>
                 <p className="text-xs font-semibold text-blue-600">{selectedDeskModal.tagline}</p>
               </div>
-              <button 
-                onClick={() => setSelectedDeskModal(null)}
-                className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors cursor-pointer"
-              >
-                <X className="w-5 h-5" />
-              </button>
+
             </div>
 
             <div className="space-y-3">
@@ -2152,17 +2148,14 @@ Payment shall be released within 90 days after delivery and final acceptance. In
               <span><strong>Human Quality Gate:</strong> {selectedDeskModal.humanSignoff}. AI accelerates discovery; experienced practitioners review and sign off every document.</span>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2 border-t border-slate-200">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-slate-200">
               <div>
                 <span className="text-xs text-slate-500 block">Indicative Scope Fee</span>
                 <span className="text-lg font-bold text-slate-900">{selectedDeskModal.price}</span>
               </div>
-              <button 
-                onClick={() => handleSelectDeskForBooking(selectedDeskModal.title)}
-                className="w-full sm:w-auto px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow-lg transition-all cursor-pointer"
-              >
-                Book Confidential Session on This Desk
-              </button>
+              <div className="flex items-center justify-end w-full sm:w-auto">
+                <ModalCloseButton onClick={() => setSelectedDeskModal(null)} label="Close service details" />
+              </div>
             </div>
           </div>
         </div>
@@ -2182,18 +2175,13 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                   <p className="text-xs text-slate-500">Digital Personal Data Protection Act (DPDP) & Confidentiality Standards</p>
                 </div>
               </div>
-              <button 
-                onClick={() => setShowPrivacyModal(false)}
-                className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors cursor-pointer"
-              ><span aria-label="Close" className="text-xl leading-none">×</span>
-                <X className="w-5 h-5" />
-              </button>
+
             </div>
 
             <div className="space-y-4 text-xs text-slate-700 leading-relaxed">
               <div className="p-3.5 bg-blue-50/70 border border-blue-200 rounded-xl">
                 <strong className="text-blue-900 block font-bold mb-1">Our Core Confidentiality Guarantee:</strong>
-                <span>We never upload or train public consumer AI tools on your company’s financial records, Tally dumps, or customer contracts. All data ingestion operates in isolated enterprise-grade sandboxes with AES-256 encryption.</span>
+                <span>We never upload or train public consumer AI systems on your company’s financial records, Tally dumps, or customer contracts. All data ingestion operates in isolated enterprise-grade sandboxes with AES-256 encryption.</span>
               </div>
 
               <div>
@@ -2213,12 +2201,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
             </div>
 
             <div className="flex justify-end pt-4 border-t border-slate-200">
-              <button 
-                onClick={() => setShowPrivacyModal(false)}
-                className="px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl cursor-pointer"
-              ><span aria-label="Close" className="text-xl leading-none">×</span>
-                Close Privacy Policy
-              </button>
+              <ModalCloseButton onClick={() => setShowPrivacyModal(false)} label="Close privacy policy" />
             </div>
           </div>
         </div>
@@ -2238,12 +2221,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                   <p className="text-xs text-slate-500">Statutory Compliance Framework & Qualified Professional Coordination</p>
                 </div>
               </div>
-              <button 
-                onClick={() => setShowGuardrailsModal(false)}
-                className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors cursor-pointer"
-              ><span aria-label="Close" className="text-xl leading-none">×</span>
-                <X className="w-5 h-5" />
-              </button>
+
             </div>
 
             <div className="space-y-4 text-xs text-slate-700 leading-relaxed">
@@ -2270,12 +2248,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
             </div>
 
             <div className="flex justify-end pt-4 border-t border-slate-200">
-              <button 
-                onClick={() => setShowGuardrailsModal(false)}
-                className="px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl cursor-pointer"
-              ><span aria-label="Close" className="text-xl leading-none">×</span>
-                Acknowledge & Close
-              </button>
+              <ModalCloseButton onClick={() => setShowGuardrailsModal(false)} label="Close regulatory guardrails" />
             </div>
           </div>
         </div>
