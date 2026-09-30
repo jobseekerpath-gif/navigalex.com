@@ -1044,7 +1044,7 @@ export default function App() {
                       <AlertTriangle className="w-4 h-4" /> Key Findings
                     </h5>
                     <div className="space-y-2">
-                      {(docResult.clauses || []).slice(0, 5).map((c: string, idx: number) => (
+                      {(docResult.clauses || []).slice(0, 3).map((c: string, idx: number) => (
                         <div key={idx} className="p-3 bg-white border border-rose-200 rounded-lg text-xs text-slate-800 shadow-sm flex items-start gap-2">
                           <span className="text-rose-600 font-bold shrink-0">{idx + 1}.</span>
                           <span>{c}</span>
@@ -1058,7 +1058,7 @@ export default function App() {
                       <CheckCircle2 className="w-4 h-4" /> Recommended Actions
                     </h5>
                     <div className="space-y-2">
-                      {(docResult.recommendations || []).slice(0, 5).map((r: string, idx: number) => (
+                      {(docResult.recommendations || []).slice(0, 3).map((r: string, idx: number) => (
                         <div key={idx} className="p-3 bg-white border border-emerald-200 rounded-lg text-xs text-slate-800 shadow-sm flex items-start gap-2">
                           <span className="text-emerald-600 font-bold shrink-0">{idx + 1}.</span>
                           <span>{r}</span>
@@ -1086,7 +1086,7 @@ export default function App() {
                   </div>
 
                   <p className="text-[11px] text-slate-500">
-                    The page shows only the executive summary and key points. The PDF contains the document-specific findings and recommended actions.
+                    The page shows a concise decision summary. Download the personalized PDF for the detailed findings and actions.
                   </p>
                 </div>
               )}
