@@ -185,7 +185,7 @@ export const ADVISORY_DESKS = [
     tagline: "Pre-Shipment LC Screening & Bank Guarantee Protection",
     badge: "Export & Tender Desk",
     summary: "Specialist documentary trade finance review to prevent foreign bank discrepancy rejections, frozen containers, and invoked bank guarantees.",
-    problem: "Over 60% of export Letters of Credit get rejected due to minor paperwork mismatches under UCP 600 rules, delaying payment by months and incurring heavy demurrage.",
+    problem: "Documentary discrepancies, wording mismatches, and incomplete trade paperwork can delay payment or trigger disputes.",
     deliverables: [
       "Pre-Issuance Letter of Credit (LC) Clause Audit",
       "Zero-Defect Export Document Checklist (BL, Certificate of Origin, Invoice)",
@@ -596,11 +596,17 @@ Payment shall be released within 90 days after delivery and final acceptance. In
   };
 
   const visibleAdvisoryDesks = PERSONA_SERVICE_IDS[persona]
-    ? ADVISORY_DESKS.filter((srv) => PERSONA_SERVICE_IDS[persona].includes(srv.id))
-    : ADVISORY_DESKS;
+    ? ADVISORY_DESKS.filter((srv) => PERSONA_SERVICE_IDS[persona].includes(srv.id) && srv.id !== 'family-wealth')
+    : ADVISORY_DESKS.filter((srv) => srv.id !== 'family-wealth');
 
   const selectPersona = (nextPersona: string) => {
     setPersona(nextPersona);
+    if (nextPersona === 'family') {
+      window.history.pushState(null, '', '/family-office?persona=family');
+      setActiveTab('family-office');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
     const url = new URL(window.location.href);
     if (nextPersona === 'all') url.searchParams.delete('persona');
     else url.searchParams.set('persona', nextPersona);
@@ -1367,9 +1373,9 @@ Payment shall be released within 90 days after delivery and final acceptance. In
           <div className="py-20 px-6 max-w-7xl mx-auto space-y-16">
             <div className="text-center max-w-3xl mx-auto space-y-3">
               <span className="text-xs font-bold text-blue-600 uppercase tracking-widest">PRODUCT ARCHITECTURE & DELIVERABLES</span>
-              <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900">All 9 Specialized Advisory Desks</h2>
+              <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900">8 Core Advisory Desks + Dedicated Family Office</h2>
               <p className="text-slate-600">
-                Real, commercial advisory services combining 70% AI data ingestion with 100% senior CA and Advocate review. Click any desk below to see exact deliverables and the delivery schedule.
+                Real, commercial advisory services combining AI-assisted analysis with senior professional review. The Family Office is handled on its dedicated page.
               </p>
             </div>
 
@@ -1453,6 +1459,16 @@ Payment shall be released within 90 days after delivery and final acceptance. In
               ))}
             </div>
 
+            <div className="flex justify-end">
+              <button
+                type="button"
+                onClick={navigateToFamilyOffice}
+                className="text-xs font-bold text-blue-700 hover:text-blue-600 underline underline-offset-4"
+              >
+                Family Wealth Governance → Dedicated Family Office
+              </button>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {visibleAdvisoryDesks.map((srv) => (
                 <div key={srv.id} className="navigalex-card p-7 rounded-2xl flex flex-col justify-between space-y-6 relative shadow-lg border-t-4 border-blue-600 hover:border-blue-500 transition-all">
@@ -1507,15 +1523,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                         Check whether your buyer owes you under 43B(h)
                       </a>
                     )}
-                    {srv.id === 'family-wealth' && (
-                      <button
-                        type="button"
-                        onClick={navigateToFamilyOffice}
-                        className="inline-flex items-center rounded-full bg-blue-50 border border-blue-200 px-3 py-1 text-[11px] font-bold text-blue-800 hover:bg-blue-100"
-                      >
-                        View dedicated Family Office page
-                      </button>
-                    )}
+
 
                     <div className="p-3 bg-rose-50/80 border border-rose-200 rounded-xl space-y-1">
                       <span className="text-[10px] font-bold text-rose-800 uppercase tracking-wider block">Problem Solved</span>
