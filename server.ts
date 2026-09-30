@@ -1,5 +1,6 @@
 import express from 'express';
 import path from 'node:path';
+import crypto from 'node:crypto';
 import { GoogleGenAI } from '@google/genai';
 
 async function startServer() {
