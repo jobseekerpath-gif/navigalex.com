@@ -253,6 +253,14 @@ const readPersonaParam = () => {
 };
 
 
+const isResolvedPlaceholder = (value?: string) => Boolean(value && !/^\\{\\{[^}]+\\}\\}$/.test(value));
+
+const REGULATORY_TRIGGERS: Record<string, { label: string; value: string }> = {
+  "regtech": { label: "DPDP compliance deadline", value: "{{DPDP_DEADLINE}}" },
+  "board-box": { label: "Directors' personal liability", value: "{{COMPANIES_ACT_SECTION}}" }
+};
+
+
 export default function App() {
   // Check if URL is /admin or ?admin=true
   const getInitialTab = () => {
@@ -1350,6 +1358,16 @@ Payment shall be released within 90 days after delivery and final acceptance. In
 
                     <div>
                       <h3 className="text-xl font-bold text-slate-900 leading-tight">{srv.title}</h3>
+                      {srv.id === 'contract-to-cash' && (
+                        <div className="mt-2 rounded-lg bg-amber-50 border border-amber-200 px-3 py-2 text-xs font-bold text-amber-900">
+                          Use Section 43B(h) to get paid on time
+                        </div>
+                      )}
+                      {REGULATORY_TRIGGERS[srv.id] && isResolvedPlaceholder(REGULATORY_TRIGGERS[srv.id].value) && (
+                        <div className="mt-2 inline-flex max-w-full items-center rounded-full bg-blue-50 border border-blue-200 px-3 py-1 text-[11px] font-semibold text-blue-800">
+                          {REGULATORY_TRIGGERS[srv.id].label}: {REGULATORY_TRIGGERS[srv.id].value}
+                        </div>
+                      )}
                       <span className="block text-xs font-semibold text-blue-600 mt-1">{srv.tagline}</span>
                     </div>
 
