@@ -80,11 +80,11 @@ interface AdminPanelProps {
 }
 
 export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
-  // Authentication State with specified credentials: username: admin, password: Jackyu@62.
+  // Authentication state; administrator credentials are supplied through secure server configuration.
   const [token, setToken] = useState<string | null>(() => sessionStorage.getItem('nvx_admin_token'));
   const [adminUser, setAdminUser] = useState<any>(null);
   const [loginUsername, setLoginUsername] = useState('admin');
-  const [loginPassword, setLoginPassword] = useState('Jackyu@62.');
+  const [loginPassword, setLoginPassword] = useState('');
   const [loginError, setLoginError] = useState('');
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
@@ -119,12 +119,12 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
   const [caseStudyForm, setCaseStudyForm] = useState({
     title: '',
     clientSector: 'Manufacturing & Engineering',
-    region: 'Noida Sector 63, ',
-    dealSize: 'â‚¹25 Cr Annual Turnover',
+    region: '',
+    dealSize: '',
     riskIdentified: '',
     advisoryProvided: '',
     concreteRoi: '',
-    status: 'Published' as 'Published' | 'Under Review' | 'Draft'
+    status: 'Draft' as 'Published' | 'Under Review' | 'Draft'
   });
 
   // Verify token on mount
@@ -348,7 +348,7 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
         riskIdentified: '',
         advisoryProvided: '',
         concreteRoi: '',
-        status: 'Published'
+        status: 'Draft'
       });
       fetchDashboardData(token, false);
     } catch (err) {
@@ -438,7 +438,7 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
               </div>
               <div>
                 <span className="text-slate-400 block text-[9px] uppercase font-bold">Password</span>
-                <strong className="text-slate-900 select-all font-bold">Jackyu@62.</strong>
+                <strong className="text-slate-900 font-bold">Configured in Railway environment variables</strong>
               </div>
             </div>
 
@@ -464,7 +464,7 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
                   required
                   value={loginUsername}
                   onChange={e => setLoginUsername(e.target.value)}
-                  placeholder="admin"
+                  placeholder="Admin username or email"
                   className="w-full bg-slate-50 border border-slate-300 rounded-xl pl-10 pr-4 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:bg-white transition-all font-mono"
                 />
               </div>
@@ -479,7 +479,7 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
                   required
                   value={loginPassword}
                   onChange={e => setLoginPassword(e.target.value)}
-                  placeholder="Jackyu@62."
+                  placeholder="Enter admin password"
                   className="w-full bg-slate-50 border border-slate-300 rounded-xl pl-10 pr-4 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:bg-white transition-all font-mono"
                 />
               </div>
@@ -576,7 +576,7 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
         {/* KPI Summary Cards in White with Blue Accents */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="p-5 bg-white border border-blue-100 rounded-2xl space-y-2 shadow-xs hover:border-blue-300 transition-colors">
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block">Real Visitors Today</span>
+            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block">Real Visitor Sessions</span>
             <div className="flex items-baseline justify-between">
               <span className="text-3xl font-extrabold text-slate-900">{visitors.length}</span>
               <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1">
@@ -587,11 +587,11 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
           </div>
 
           <div className="p-5 bg-white border border-blue-100 rounded-2xl space-y-2 shadow-xs hover:border-blue-300 transition-colors">
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block">Live Activity Events</span>
+            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block">Live Server Activity</span>
             <div className="flex items-baseline justify-between">
               <span className="text-3xl font-extrabold text-slate-900">{visitorActivities.length}</span>
               <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
-                100% Real IPs
+                Server-captured IPs
               </span>
             </div>
           </div>
@@ -855,7 +855,7 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
                     Live Real-Time Activity Feed ({filteredActivities.length} Events)
                   </h4>
                 </div>
-                <span className="text-[11px] text-slate-500">Auto-updating as real visitors browse</span>
+                <span className="text-[11px] text-slate-500">Live server-captured activity</span>
               </div>
 
               <div className="overflow-x-auto">
@@ -983,7 +983,7 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
             <div className="flex items-center justify-between bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
               <div>
                 <h3 className="text-base font-bold text-slate-900">Client Case Study Submissions</h3>
-                <p className="text-xs text-slate-500">Manage real-world corporate turnarounds and verified ROI case studies.</p>
+                <p className="text-xs text-slate-500">Manage verified client case studies. Publish only outcomes supported by client records and approval.</p>
               </div>
               <button
                 onClick={() => {
@@ -1344,7 +1344,7 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
                   required
                   value={caseStudyForm.concreteRoi}
                   onChange={e => setCaseStudyForm({...caseStudyForm, concreteRoi: e.target.value})}
-                  placeholder="e.g. Recovered 100% of trapped â‚¹1.8 Cr within 38 days, saving â‚¹12L legal fees"
+                  placeholder="Enter only a verified, evidence-backed client outcome; do not use estimates presented as facts."
                   className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs text-slate-900 focus:outline-none focus:border-blue-600"
                 />
               </div>
@@ -1367,7 +1367,7 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
                   type="submit"
                   className="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow-md shadow-blue-500/20 transition-colors cursor-pointer"
                 >
-                  {editingCaseStudy ? 'Update Case Study' : 'Save & Publish'}
+                  {editingCaseStudy ? 'Update Case Study' : 'Save Case Study'}
                 </button>
               </div>
             </form>
