@@ -697,7 +697,7 @@ async function startServer() {
   }
 
   function buildAnalysisPrompt(documentText: string, fileName: string): string {
-    return `You are a senior Indian corporate contracts advisor. Analyze the following document for financial and legal risk exposure to the business signing it (e.g. indemnity, termination, jurisdiction, penalties, payment terms, IP transfer).
+    return `You are a senior Indian corporate contracts advisor. Review ONLY the document text supplied below and produce a personalized risk assessment for the business that submitted it.
 
 Document name: ${fileName}
 Document text:
@@ -705,16 +705,25 @@ Document text:
 ${documentText.slice(0, 12000)}
 """
 
+Rules:
+- Base every finding on the supplied text. Never invent clauses, facts, statistics, deadlines, fees, legal section numbers, benchmarks, or outcomes.
+- Make findings document-specific: name the actual provision/topic and explain its practical commercial impact.
+- Do not produce generic boilerplate warnings simply because a category was not found.
+- If the submission is a report, summary, screenshot export, or otherwise not the underlying contract text, state that clearly and limit findings to what is actually visible. Do not fabricate missing contract terms.
+- Keep the summary to 2-3 sentences.
+- Return 3-8 meaningful findings and 3-8 concrete recommendations. Each recommendation must respond to a finding.
+- Prefer concise bullet-ready wording.
+- Use Indian context only when the supplied document itself supports it.
+
 Respond with ONLY a JSON object (no markdown fences, no extra commentary) in exactly this shape:
 {
   "riskScore": <integer 0-100>,
-  "riskLevel": "<short risk level label, e.g. 'High Risk (Immediate Review Needed)'>",
-  "summary": "<2-3 sentence executive summary>",
-  "clauses": ["<red flag clause 1>", "<red flag clause 2>", "..."],
-  "recommendations": ["<recommendation 1>", "<recommendation 2>", "..."]
+  "riskLevel": "<short risk level label>",
+  "summary": "<2-3 sentence personalized executive summary>",
+  "clauses": ["<document-specific finding 1>", "<document-specific finding 2>", "..."],
+  "recommendations": ["<document-specific action 1>", "<document-specific action 2>", "..."]
 }`;
   }
-
   function parseAnalysisJson(raw: string): DocumentAnalysisResult | null {
     try {
       const cleaned = raw.trim().replace(/^```(?:json)?/i, '').replace(/```$/i, '').trim();
