@@ -69,8 +69,8 @@ const replacement = `  // Bot Chat Endpoint - real AI provider routing
     const riskScore = String(analysis.riskScore || '');
     const riskLevel = String(analysis.riskLevel || '');
     const summary = String(analysis.summary || '').trim();
-    const clauses = Array.isArray(analysis.clauses) ? analysis.clauses.filter((item: unknown) => typeof item === 'string' && item.trim()).slice(0, 12) : [];
-    const recommendations = Array.isArray(analysis.recommendations) ? analysis.recommendations.filter((item: unknown) => typeof item === 'string' && item.trim()).slice(0, 12) : [];
+    const clauses = Array.isArray(analysis.clauses) ? analysis.clauses.filter((item: unknown) => typeof item === 'string' && item.trim()).slice(0, 6) : [];
+    const recommendations = Array.isArray(analysis.recommendations) ? analysis.recommendations.filter((item: unknown) => typeof item === 'string' && item.trim()).slice(0, 6) : [];
     const generatedAt = new Date(body.generatedAt || Date.now());
 
     const clean = (value: unknown) => String(value == null ? '' : value)
