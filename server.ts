@@ -14,8 +14,8 @@ async function startServer() {
   // In-Memory Secure Admin Store
   const adminTokens = new Set<string>();
   const ADMIN_CREDENTIALS = {
-    username: process.env.ADMIN_USERNAME || '',
-    email: process.env.ADMIN_EMAIL || '',
+    username: process.env.ADMIN_USERNAME || 'admin',
+    email: process.env.ADMIN_EMAIL || 'admin@navigalex.com',
     password: process.env.ADMIN_PASSWORD || ''
   };
 
