@@ -124,7 +124,7 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
     riskIdentified: '',
     advisoryProvided: '',
     concreteRoi: '',
-    status: 'Published' as 'Published' | 'Under Review' | 'Draft'
+    status: 'Draft' as 'Published' | 'Under Review' | 'Draft'
   });
 
   // Verify token on mount
@@ -348,7 +348,7 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
         riskIdentified: '',
         advisoryProvided: '',
         concreteRoi: '',
-        status: 'Published'
+        status: 'Draft'
       });
       fetchDashboardData(token, false);
     } catch (err) {
@@ -591,7 +591,7 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
             <div className="flex items-baseline justify-between">
               <span className="text-3xl font-extrabold text-slate-900">{visitorActivities.length}</span>
               <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
-                100% Real IPs
+                Server-captured IPs
               </span>
             </div>
           </div>
@@ -855,7 +855,7 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
                     Live Real-Time Activity Feed ({filteredActivities.length} Events)
                   </h4>
                 </div>
-                <span className="text-[11px] text-slate-500">Auto-updating as real visitors browse</span>
+                <span className="text-[11px] text-slate-500">Live server-captured activity</span>
               </div>
 
               <div className="overflow-x-auto">
