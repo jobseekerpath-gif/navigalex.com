@@ -369,9 +369,9 @@ export default function App() {
       setPersona(PERSONA_OPTIONS.some((option) => option.key === urlPersona) ? urlPersona || 'all' : 'all');
       if (p === '/43b-h-check' || p.startsWith('/43b-h-check')) {
         setActiveTab('43b-h-check');
-      } else       if (p === '/family-office' || p.startsWith('/family-office')) {
+      } else if (p === '/family-office' || p.startsWith('/family-office')) {
         setActiveTab('family-office');
-       else if (p === '/services' || p.startsWith('/services') || urlPersona) {
+      } else if (p === '/services' || p.startsWith('/services') || urlPersona) {
         setActiveTab('services');
       } else if (p === '/admin' || p.startsWith('/admin') || window.location.search.includes('admin') || window.location.hash.includes('admin')) {
         setActiveTab('admin');
