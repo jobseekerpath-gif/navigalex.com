@@ -802,7 +802,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
               <div className="text-center max-w-3xl mx-auto space-y-3">
                 <span className="text-xs font-bold text-blue-600 uppercase tracking-widest">THE REAL PROBLEM IN EVERY BUSINESS</span>
                 <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900">
-                  Find the risks your accountant, lawyer, and software only partially see
+                  Turn financial and business signals into clear decisions
                 </h2>
                 <p className="text-base text-slate-600 leading-relaxed">
                   As an Indian business owner, you pay your CA for tax filings and your lawyer for disputes. But neither of them connects your cash flow with your contract risks or bank limits. That is where money leaks.
@@ -827,9 +827,9 @@ Payment shall be released within 90 days after delivery and final acceptance. In
               {/* The Navigalex Solution in Layman Terms */}
               <div className="navigalex-card p-8 sm:p-10 rounded-2xl bg-gradient-to-r from-blue-900 via-slate-900 to-indigo-950 text-white text-center space-y-4 shadow-xl">
                 <span className="text-xs font-bold uppercase tracking-widest text-blue-300">HOW NAVIGALEX SOLVES THIS</span>
-                <h3 className="text-2xl sm:text-3xl font-bold text-white">One Unified Command System For Your Money & Safety</h3>
+                <h3 className="text-2xl sm:text-3xl font-bold text-white">One Unified Decision System For Your Money & Risk</h3>
                 <p className="text-sm text-slate-200 max-w-2xl mx-auto leading-relaxed">
-                  We connect every risk to proof, an action item, a responsible owner, and a firm deadline. No assumptions, no academic theoriesâ€”just clear steps to protect your profits.
+                  We connect each signal to evidence, an action owner, and a practical next step. Clear decisions, clear accountability, no unnecessary complexity.
                 </p>
                 <div className="pt-2">
                   <button onClick={() => { setActiveTab('live-tools'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="px-6 py-3 bg-blue-500 hover:bg-blue-400 text-white text-xs font-bold rounded-xl transition-all shadow-md cursor-pointer">
@@ -1778,7 +1778,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
             <div className="text-center space-y-3">
               <span className="text-xs font-bold text-blue-600 uppercase tracking-widest">CONFIDENTIAL CONSULTATION</span>
               <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900">Request a Confidential Assessment</h2>
-              <p className="text-slate-600">Speak directly with a senior finance or legal advisory lead. All inquiries protected under strict NDA.</p>
+              <p className="text-slate-600">Speak directly with a senior finance or legal advisory lead. Tell us what changed in your business or market; inquiries are handled confidentially.</p>
             </div>
 
             <div className="navigalex-card p-8 sm:p-10 rounded-2xl shadow-xl">
@@ -2226,7 +2226,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
 
             <div className="space-y-4 text-xs text-slate-700 leading-relaxed">
               <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-amber-900">
-                <strong>Statutory Notice:</strong> Navigalex provides management advisory, risk intelligence, and financial oversight. To protect clients and adhere to statutory standards, our operations maintain strict institutional boundaries.
+                <strong>Statutory Notice:</strong> Navigalex provides management advisory, risk intelligence, and financial oversight. To protect clients and maintain clear professional boundaries, our operations follow defined engagement limits.
               </div>
 
               <div className="space-y-2">
