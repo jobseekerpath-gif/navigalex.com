@@ -681,8 +681,8 @@ Respond with ONLY a JSON object (no markdown fences, no extra commentary) in exa
       `Analyzed contract clauses in "${effectiveFileName}" (${text.length} chars)`
     );
 
-    if (!text) {
-      return res.status(400).json({ error: 'documentText is required.' });
+    if (!text || text.length < 80 || /^Uploaded file analysis:/i.test(text)) {
+      return res.status(400).json({ error: 'Provide the actual contract text. The system does not generate a substantive review from a filename or upload acknowledgement alone.' });
     }
 
     const prompt = buildAnalysisPrompt(text, effectiveFileName);
