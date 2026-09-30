@@ -230,11 +230,37 @@ export const ADVISORY_DESKS = [
   }
 ]
 
+const PERSONA_SERVICE_IDS: Record<string, string[]> = {
+  all: ADVISORY_DESKS.map((srv) => srv.id),
+  growing: ["controlcfo-sprint", "lenderready", "contract-to-cash", "board-box", "internal-audit", "fraudsignal"],
+  exporter: ["tradeshield", "contract-to-cash"],
+  nbfc: ["regtech", "board-box"],
+  family: ["family-wealth"]
+};
+
+const PERSONA_OPTIONS = [
+  { key: "all", label: "All" },
+  { key: "growing", label: "Growing Business" },
+  { key: "exporter", label: "Exporter/Importer" },
+  { key: "nbfc", label: "NBFC & Fintech" },
+  { key: "family", label: "Family Office" }
+];
+
+const readPersonaParam = () => {
+  if (typeof window === "undefined") return "all";
+  const value = new URLSearchParams(window.location.search).get("persona");
+  return PERSONA_OPTIONS.some((option) => option.key === value) ? value || "all" : "all";
+};
+
+
 export default function App() {
   // Check if URL is /admin or ?admin=true
   const getInitialTab = () => {
     if (typeof window !== 'undefined') {
       const p = window.location.pathname.toLowerCase();
+      if (p === '/services' || p.startsWith('/services') || new URLSearchParams(window.location.search).has('persona')) {
+        return 'services';
+      }
       if (p === '/admin' || p.startsWith('/admin') || window.location.search.includes('admin') || window.location.hash.includes('admin')) {
         return 'admin';
       }
@@ -245,6 +271,8 @@ export default function App() {
   const [activeTab, setActiveTab] = useState(getInitialTab);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [persona, setPersona] = useState(readPersonaParam);
+
 
   // Persistent Real Visitor ID
   const [visitorId] = useState(() => {
@@ -263,6 +291,8 @@ export default function App() {
   useEffect(() => {
     const handleLocationChange = () => {
       const p = window.location.pathname.toLowerCase();
+      const urlPersona = new URLSearchParams(window.location.search).get('persona');
+      setPersona(PERSONA_OPTIONS.some((option) => option.key === urlPersona) ? urlPersona || 'all' : 'all');
       if (p === '/admin' || p.startsWith('/admin') || window.location.search.includes('admin') || window.location.hash.includes('admin')) {
         setActiveTab('admin');
       } else if (activeTab === 'admin') {
@@ -484,6 +514,18 @@ Payment shall be released within 90 days after delivery and final acceptance. In
       console.error('Error posting inquiry:', err);
     }
     setLeadSubmitted(true);
+  };
+
+  const visibleAdvisoryDesks = PERSONA_SERVICE_IDS[persona]
+    ? ADVISORY_DESKS.filter((srv) => PERSONA_SERVICE_IDS[persona].includes(srv.id))
+    : ADVISORY_DESKS;
+
+  const selectPersona = (nextPersona: string) => {
+    setPersona(nextPersona);
+    const url = new URL(window.location.href);
+    if (nextPersona === 'all') url.searchParams.delete('persona');
+    else url.searchParams.set('persona', nextPersona);
+    window.history.replaceState(null, '', url.pathname + (url.search ? url.search : '') + url.hash);
   };
 
   if (activeTab === 'admin') {
@@ -1276,8 +1318,27 @@ Payment shall be released within 90 days after delivery and final acceptance. In
             </div>
 
             {/* THE 9 DETAILED SERVICE CARDS */}
+            <div
+              role="tablist"
+              aria-label="Filter services by buyer persona"
+              className="flex flex-wrap gap-2 rounded-2xl border border-slate-200 bg-white p-2 shadow-sm"
+            >
+              {PERSONA_OPTIONS.map((option) => (
+                <button
+                  key={option.key}
+                  type="button"
+                  role="tab"
+                  aria-selected={persona === option.key}
+                  onClick={() => selectPersona(option.key)}
+                  className={`flex-1 min-w-[140px] px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-colors ${persona === option.key ? 'bg-blue-600 text-white shadow-md' : 'text-slate-700 hover:bg-slate-100'}`}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {ADVISORY_DESKS.map((srv) => (
+              {visibleAdvisoryDesks.map((srv) => (
                 <div key={srv.id} className="navigalex-card p-7 rounded-2xl flex flex-col justify-between space-y-6 relative shadow-lg border-t-4 border-blue-600 hover:border-blue-500 transition-all">
                   <div className="space-y-4">
                     <div className="flex items-center justify-between gap-2">
