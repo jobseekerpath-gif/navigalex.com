@@ -106,8 +106,7 @@ export const ADVISORY_DESKS = [
     timeframe: "Quarterly Audit Cycles",
     humanSignoff: "Internal Audit Partner (CA / CIA)",
     price: "â‚¹2â€“10 Lakh per cycle"
-  }
-],
+  },
     {
     id: "board-box",
     title: "5. Board-in-a-Box Governance OS",
