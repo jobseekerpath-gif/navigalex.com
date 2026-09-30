@@ -61,12 +61,16 @@ const replacement = `  // Bot Chat Endpoint - real AI provider routing
     });
   });
 
-  // System-level Navigalex branded PDF report endpoint.
+  // System-level Navigalex personalized PDF report endpoint.
   app.post('/api/report/pdf', (req, res) => {
     const body = req.body || {};
-    const title = String(body.title || 'Advisory Diagnostic Report');
-    const client = body.client && typeof body.client === 'object' ? body.client : {};
-    const rawReport = String(body.report || '').slice(0, 18000);
+    const analysis = body.analysis && typeof body.analysis === 'object' ? body.analysis : {};
+    const documentName = String(analysis.fileName || body.documentName || 'Submitted document');
+    const riskScore = String(analysis.riskScore || '');
+    const riskLevel = String(analysis.riskLevel || '');
+    const summary = String(analysis.summary || '').trim();
+    const clauses = Array.isArray(analysis.clauses) ? analysis.clauses.filter((item: unknown) => typeof item === 'string' && item.trim()).slice(0, 6) : [];
+    const recommendations = Array.isArray(analysis.recommendations) ? analysis.recommendations.filter((item: unknown) => typeof item === 'string' && item.trim()).slice(0, 6) : [];
     const generatedAt = new Date(body.generatedAt || Date.now());
 
     const clean = (value: unknown) => String(value == null ? '' : value)
@@ -82,135 +86,80 @@ const replacement = `  // Bot Chat Endpoint - real AI provider routing
       .replaceAll('▪', '*')
       .replaceAll('\\u00a0', ' ')
       .replaceAll('\\t', ' ')
-      .split('\\n')
-      .map((part) => part.trim())
-      .filter(Boolean)
-      .join(' ')
+      .replace(/[^\\x09\\x0A\\x0D\\x20-\\x7E]/g, '')
       .trim();
 
-    const wrap = (text: string, width = 88) => {
-      const words = clean(text).split(' ').filter(Boolean);
-      const out: string[] = [];
+    const wrap = (value: string, width = 84) => {
+      const words = clean(value).split(/\\s+/).filter(Boolean);
+      const lines: string[] = [];
       let line = '';
       for (const word of words) {
-        const candidate = line ? line + ' ' + word : word;
-        if (candidate.length > width && line) {
-          out.push(line);
+        const next = line ? line + ' ' + word : word;
+        if (next.length > width && line) {
+          lines.push(line);
           line = word;
         } else {
-          line = candidate;
+          line = next;
         }
       }
-      if (line) out.push(line);
-      return out.length ? out : [''];
+      if (line) lines.push(line);
+      return lines.length ? lines : [''];
     };
 
-    const sourceLines = rawReport
-      .split('\\n')
-      .map(clean)
-      .filter(Boolean);
+    const detail = (item: string) => wrap(item, 84);
+    const reportLines: Array<{ text: string; kind: string }> = [];
+    reportLines.push({ text: 'NAVIGALEX', kind: 'brand' });
+    reportLines.push({ text: 'Contract Risk Review', kind: 'title' });
+    reportLines.push({ text: 'Personalized report based only on the submitted document analysis', kind: 'subtitle' });
+    reportLines.push({ text: 'Document: ' + clean(documentName), kind: 'meta' });
+    reportLines.push({ text: 'Generated: ' + generatedAt.toLocaleString('en-IN'), kind: 'meta' });
+    if (riskScore || riskLevel) reportLines.push({ text: 'Risk: ' + clean(riskScore) + (riskLevel ? ' - ' + clean(riskLevel) : ''), kind: 'risk' });
 
-    const bullets: string[] = [];
-    const normal: string[] = [];
-    const isNumbered = (line: string) => {
-      if (!line || line.length < 2) return false;
-      let i = 0;
-      while (i < line.length && line.charCodeAt(i) >= 48 && line.charCodeAt(i) <= 57) i += 1;
-      return i > 0 && i < line.length && (line[i] === '.' || line[i] === ')') && line[i + 1] === ' ';
-    };
+    reportLines.push({ text: 'EXECUTIVE SUMMARY', kind: 'section' });
+    detail(summary || 'No document-specific summary was returned.').forEach((line) => reportLines.push({ text: line, kind: 'body' }));
 
-    for (const line of sourceLines) {
-      const first = line.charAt(0);
-      const isBullet = first === '-' || first === '*' || first === '•' || first === '▪' || isNumbered(line);
-      let normalized = line;
-      if (isBullet) {
-        normalized = line.replace(/^[-*•▪]/, '').trim();
-        if (isNumbered(normalized)) normalized = normalized.slice(2).trim();
-        bullets.push(normalized);
-      } else {
-        normal.push(normalized);
-      }
+    reportLines.push({ text: 'KEY FINDINGS', kind: 'section' });
+    if (clauses.length) {
+      clauses.forEach((item) => detail(item).forEach((line, index) => reportLines.push({ text: '* ' + (index === 0 ? line : '  ' + line), kind: 'bullet' })));
+    } else {
+      reportLines.push({ text: '* No document-specific findings were returned.', kind: 'bullet' });
     }
 
-    const summarySource = sourceLines.find((line) => {
-      const lower = line.toLowerCase();
-      return (lower.includes('executive summary') || lower === 'summary' || lower.includes('overall assessment') || lower.includes('assessment summary')) && line.length > 20;
-    });
-    const executiveSummary = clean(summarySource ? summarySource.split(':').slice(1).join(':') : normal.slice(0, 2).join(' ')).slice(0, 700);
-
-    const findingWords = ['risk', 'red flag', 'issue', 'exposure', 'liabil', 'payment', 'termination', 'indemn', 'jurisdiction', 'penalt', 'concern', 'finding'];
-    const recommendationWords = ['recommend', 'action', 'should', 'consider', 'revise', 'remove', 'add', 'negotiate', 'protect', 'mitigat', 'next'];
-    const hasAny = (text: string, words: string[]) => words.some((word) => text.toLowerCase().includes(word));
-    const findingLines = bullets.filter((item) => hasAny(item, findingWords));
-    const recommendationLines = bullets.filter((item) => hasAny(item, recommendationWords));
-    const selectedFindings = (findingLines.length ? findingLines : bullets).slice(0, 8);
-    const selectedRecommendations = (recommendationLines.length ? recommendationLines : bullets).slice(0, 8);
-
-    const clientFields: Array<[string, string]> = [
-      ['Name', client.name],
-      ['Company', client.company],
-      ['Designation', client.designation],
-      ['Email', client.email],
-      ['Phone', client.phone],
-      ['Business Type', client.businessType],
-      ['Turnover', client.turnover],
-      ['Primary Concern', client.primaryConcern]
-    ].filter((entry) => Boolean(entry[1]));
-
-    const lines: Array<{ text: string; kind: string }> = [];
-    lines.push({ text: 'NAVIGALEX', kind: 'brand' });
-    lines.push({ text: title, kind: 'title' });
-    lines.push({ text: 'Executive Advisory | Confidential Diagnostic Report', kind: 'subtitle' });
-    lines.push({ text: 'Generated: ' + generatedAt.toLocaleString('en-IN'), kind: 'small' });
-    lines.push({ text: '', kind: 'rule' });
-
-    if (clientFields.length) {
-      lines.push({ text: 'CLIENT SNAPSHOT', kind: 'section' });
-      for (const entry of clientFields) lines.push({ text: entry[0] + ': ' + clean(entry[1]), kind: 'body' });
+    reportLines.push({ text: 'RECOMMENDED ACTIONS', kind: 'section' });
+    if (recommendations.length) {
+      recommendations.forEach((item) => detail(item).forEach((line, index) => reportLines.push({ text: '* ' + (index === 0 ? line : '  ' + line), kind: 'bullet' })));
+    } else {
+      reportLines.push({ text: '* No document-specific recommendations were returned.', kind: 'bullet' });
     }
 
-    lines.push({ text: 'EXECUTIVE SUMMARY', kind: 'section' });
-    for (const part of wrap(executiveSummary || 'No executive summary was returned by the diagnostic.', 88)) lines.push({ text: part, kind: 'body' });
+    reportLines.push({ text: 'NAVIGALEX | Executive Advisory', kind: 'footer' });
 
-    lines.push({ text: 'KEY FINDINGS', kind: 'section' });
-    for (const item of selectedFindings) for (const part of wrap(item, 82)) lines.push({ text: '* ' + part, kind: 'bullet' });
-    if (!selectedFindings.length) lines.push({ text: '* No discrete findings were returned.', kind: 'bullet' });
-
-    lines.push({ text: 'RECOMMENDED ACTIONS', kind: 'section' });
-    for (const item of selectedRecommendations) for (const part of wrap(item, 82)) lines.push({ text: '* ' + part, kind: 'bullet' });
-    if (!selectedRecommendations.length) lines.push({ text: '* Obtain qualified professional review before acting.', kind: 'bullet' });
-
-    lines.push({ text: 'FULL DIAGNOSTIC OUTPUT', kind: 'section' });
-    for (const line of sourceLines.slice(0, 180)) {
-      const lower = line.toLowerCase();
-      if (lower === 'contract scan diagnostic' || lower === 'download pdf report') continue;
-      for (const part of wrap(line, 88)) lines.push({ text: part, kind: part.charAt(0) === '*' ? 'bullet' : 'body' });
-    }
-    lines.push({ text: 'NAVIGALEX | Executive Advisory', kind: 'small' });
-
-    const esc = (value: string) => clean(value)
-      .replaceAll('\\\\', '\\\\\\\\')
-      .replaceAll('(', '\\\\(')
-      .replaceAll(')', '\\\\)');
-
-    const top = 748;
-    const bottom = 54;
-    const pages: Array<typeof lines> = [];
-    let page: typeof lines = [];
+    const pageTop = 748;
+    const pageBottom = 62;
+    const lineHeight = 14;
+    const sectionGap = 7;
+    const pages: Array<typeof reportLines> = [];
+    let page: typeof reportLines = [];
     let used = 0;
-    const heightFor = (kind: string) => kind === 'brand' ? 25 : kind === 'title' ? 22 : kind === 'section' ? 20 : kind === 'rule' ? 10 : kind === 'subtitle' ? 16 : 14;
 
-    for (const item of lines) {
-      const height = heightFor(item.kind);
-      if (used + height > top - bottom && page.length) {
+    for (const item of reportLines) {
+      const height = item.kind === 'brand' ? 24 : item.kind === 'title' ? 24 : item.kind === 'subtitle' ? 16 :
+        item.kind === 'section' ? 20 : item.kind === 'footer' ? 12 : lineHeight;
+      if (used + height > pageTop - pageBottom && page.length) {
         pages.push(page);
         page = [];
         used = 0;
       }
       page.push(item);
       used += height;
+      if (item.kind === 'section') used += sectionGap;
     }
     if (page.length) pages.push(page);
+
+    const esc = (value: string) => clean(value)
+      .replaceAll('\\\\', '\\\\\\\\')
+      .replaceAll('(', '\\\\(')
+      .replaceAll(')', '\\\\)');
 
     const objects: string[] = [];
     objects.push('<< /Type /Catalog /Pages 2 0 R >>');
@@ -218,28 +167,33 @@ const replacement = `  // Bot Chat Endpoint - real AI provider routing
     objects.push('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>');
 
     pages.forEach((pageItems, index) => {
-      const content: string[] = ['q', '0.96 0.98 1 rg', '0 0 612 792 re', 'f', 'Q', 'BT'];
+      const content: string[] = [
+        'q',
+        '0.97 0.98 1 rg',
+        '0 0 612 792 re',
+        'f',
+        'Q',
+        'BT'
+      ];
       content.push('/F1 18 Tf', '0.08 0.18 0.35 rg', '1 0 0 1 50 760 Tm', '(' + esc('NAVIGALEX') + ') Tj');
-      content.push('/F1 7 Tf', '0.35 0.40 0.48 rg', '1 0 0 1 500 760 Tm', '(' + esc('CONFIDENTIAL') + ') Tj');
-      let y = 730;
+      content.push('/F1 7 Tf', '0.38 0.42 0.50 rg', '1 0 0 1 498 760 Tm', '(' + esc('CONFIDENTIAL') + ') Tj');
 
+      let y = 731;
       for (const item of pageItems) {
-        if (item.kind === 'rule') {
-          content.push('ET', '0.82 0.86 0.92 RG', '50 ' + y + ' m', '562 ' + y + ' l', 'S', 'BT');
-          y -= 10;
-          continue;
-        }
         if (item.kind === 'brand') continue;
+        if (item.kind === 'section') y -= 4;
 
         let size = 9;
         let color = '0.15 0.19 0.26';
         if (item.kind === 'title') { size = 16; color = '0.08 0.18 0.35'; }
-        else if (item.kind === 'subtitle') { size = 9; color = '0.25 0.35 0.50'; }
-        else if (item.kind === 'section') { size = 10; color = '0.08 0.36 0.85'; y -= 5; }
-        else if (item.kind === 'small') { size = 7; color = '0.40 0.44 0.50'; }
+        else if (item.kind === 'subtitle') { size = 8; color = '0.31 0.37 0.46'; }
+        else if (item.kind === 'meta') { size = 8; color = '0.35 0.40 0.48'; }
+        else if (item.kind === 'risk') { size = 10; color = '0.70 0.18 0.18'; }
+        else if (item.kind === 'section') { size = 10; color = '0.08 0.36 0.85'; }
+        else if (item.kind === 'footer') { size = 7; color = '0.40 0.44 0.50'; }
 
-        content.push('/F1 ' + size + ' Tf', color + ' rg', '1 0 0 1 50 ' + y + ' Tm', '(' + esc(item.text.slice(0, 105)) + ') Tj');
-        y -= heightFor(item.kind);
+        content.push('/F1 ' + size + ' Tf', color + ' rg', '1 0 0 1 50 ' + y + ' Tm', '(' + esc(item.text.slice(0, 110)) + ') Tj');
+        y -= item.kind === 'section' ? 20 : item.kind === 'title' ? 24 : item.kind === 'subtitle' ? 16 : item.kind === 'footer' ? 12 : lineHeight;
       }
       content.push('ET');
 
@@ -254,14 +208,15 @@ const replacement = `  // Bot Chat Endpoint - real AI provider routing
       offsets.push(Buffer.byteLength(pdf, 'utf8'));
       pdf += (index + 1) + ' 0 obj\\n' + object + '\\nendobj\\n';
     });
-
     const xref = Buffer.byteLength(pdf, 'utf8');
     pdf += 'xref\\n0 ' + (objects.length + 1) + '\\n0000000000 65535 f \\n';
-    for (let index = 1; index < offsets.length; index++) pdf += String(offsets[index]).padStart(10, '0') + ' 00000 n \\n';
+    for (let index = 1; index < offsets.length; index++) {
+      pdf += String(offsets[index]).padStart(10, '0') + ' 00000 n \\n';
+    }
     pdf += 'trailer\\n<< /Size ' + (objects.length + 1) + ' /Root 1 0 R >>\\nstartxref\\n' + xref + '\\n%%EOF';
 
     res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', 'attachment; filename="Navigalex-Contract-Scan-Report.pdf"');
+    res.setHeader('Content-Disposition', 'attachment; filename="Navigalex-Contract-Risk-Report.pdf"');
     return res.send(Buffer.from(pdf, 'utf8'));
   });
 
