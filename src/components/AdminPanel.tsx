@@ -119,8 +119,8 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
   const [caseStudyForm, setCaseStudyForm] = useState({
     title: '',
     clientSector: 'Manufacturing & Engineering',
-    region: 'Noida Sector 63, ',
-    dealSize: 'â‚¹25 Cr Annual Turnover',
+    region: '',
+    dealSize: '',
     riskIdentified: '',
     advisoryProvided: '',
     concreteRoi: '',
@@ -576,7 +576,7 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
         {/* KPI Summary Cards in White with Blue Accents */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="p-5 bg-white border border-blue-100 rounded-2xl space-y-2 shadow-xs hover:border-blue-300 transition-colors">
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block">Real Visitors Today</span>
+            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block">Real Visitor Sessions</span>
             <div className="flex items-baseline justify-between">
               <span className="text-3xl font-extrabold text-slate-900">{visitors.length}</span>
               <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1">
@@ -587,7 +587,7 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
           </div>
 
           <div className="p-5 bg-white border border-blue-100 rounded-2xl space-y-2 shadow-xs hover:border-blue-300 transition-colors">
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block">Live Activity Events</span>
+            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block">Live Server Activity</span>
             <div className="flex items-baseline justify-between">
               <span className="text-3xl font-extrabold text-slate-900">{visitorActivities.length}</span>
               <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
@@ -1367,7 +1367,7 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
                   type="submit"
                   className="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow-md shadow-blue-500/20 transition-colors cursor-pointer"
                 >
-                  {editingCaseStudy ? 'Update Case Study' : 'Save & Publish'}
+                  {editingCaseStudy ? 'Update Case Study' : 'Save Case Study'}
                 </button>
               </div>
             </form>
