@@ -1634,32 +1634,32 @@ export default function App() {
               <div className="text-center max-w-2xl mx-auto space-y-2">
                 <span className="text-xs font-bold text-blue-400 uppercase tracking-widest">TRANSPARENT OPERATING MODEL</span>
                 <h3 className="text-2xl font-bold">How Any Advisory Desk Is Delivered To Your Business</h3>
-                <p className="text-xs text-slate-300">Zero academic theories. Here is the exact 4-step delivery pipeline from NDA to verified results.</p>
+                <p className="text-xs text-slate-300">A clear four-step delivery model from intake through documented recommendations.</p>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pt-4">
                 <div className="p-4 bg-white/10 rounded-xl border border-white/10 space-y-2">
                   <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center font-bold text-xs text-white">01</div>
-                  <h4 className="font-bold text-sm">30-Min Intake & Mutual NDA</h4>
-                  <p className="text-xs text-slate-300">We agree confidentiality terms, including an NDA where required, and identify the business issue you want assessed.</p>
+                  <h4 className="font-bold text-sm">01. Intake & Confidentiality</h4>
+                  <p className="text-xs text-slate-300">We identify the business question, agree the scope and put appropriate confidentiality terms in place before sensitive material is shared.</p>
                 </div>
 
                 <div className="p-4 bg-white/10 rounded-xl border border-white/10 space-y-2">
                   <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center font-bold text-xs text-white">02</div>
-                  <h4 className="font-bold text-sm">Secure Data Room Ingestion</h4>
-                  <p className="text-xs text-slate-300">You provide the financial records, bank data or contracts needed for the agreed assessment through the agreed secure channel.</p>
+                  <h4 className="font-bold text-sm">02. Evidence Collection</h4>
+                  <p className="text-xs text-slate-300">You provide the records needed for the agreed assessment through the agreed secure channel.</p>
                 </div>
 
                 <div className="p-4 bg-white/10 rounded-xl border border-white/10 space-y-2">
                   <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center font-bold text-xs text-white">03</div>
-                  <h4 className="font-bold text-sm">AI Speed + Senior Dual Sign-off</h4>
-                  <p className="text-xs text-slate-300">AI extracts clauses and calculates DSCR in minutes. Practicing CAs and Advocates independently verify every figure.</p>
+                  <h4 className="font-bold text-sm">03. AI Analysis + Human Review</h4>
+                  <p className="text-xs text-slate-300">AI assists with structured analysis; professional review is performed where it is included in the engagement scope.</p>
                 </div>
 
                 <div className="p-4 bg-white/10 rounded-xl border border-white/10 space-y-2">
                   <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center font-bold text-xs text-white">04</div>
-                  <h4 className="font-bold text-sm">Executive Pack & Action Matrix</h4>
-                  <p className="text-xs text-slate-300">You receive a 1-page Risk Heatmap, ready-to-use contract redlines, bank packs, and a 90-day action plan.</p>
+                  <h4 className="font-bold text-sm">04. Decision Pack</h4>
+                  <p className="text-xs text-slate-300">You receive the agreed summary, evidence-linked findings, recommendations and action tracker.</p>
                 </div>
               </div>
             </div>
