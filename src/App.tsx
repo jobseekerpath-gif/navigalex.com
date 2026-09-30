@@ -826,7 +826,7 @@ export default function App() {
               <Sparkles className="w-3.5 h-3.5 text-blue-600" />
               <span>Live AI Scanners</span>
             </button>
-            <button onClick={() => { setActiveTab('services'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className={`hover:text-blue-600 transition-colors ${activeTab === 'services' ? 'text-blue-600 border-b-2 border-blue-600 pb-1' : ''}`}>Our 9 Services</button>
+            <button onClick={() => { setActiveTab('services'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className={`hover:text-blue-600 transition-colors ${activeTab === 'services' ? 'text-blue-600 border-b-2 border-blue-600 pb-1' : ''}`}>Our Services</button>
             <button onClick={() => { setActiveTab('why-pick-us'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className={`hover:text-blue-600 transition-colors ${activeTab === 'why-pick-us' ? 'text-blue-600 border-b-2 border-blue-600 pb-1' : ''}`}>Why Pick These Products</button>
             <button onClick={() => { setActiveTab('industries'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className={`hover:text-blue-600 transition-colors ${activeTab === 'industries' ? 'text-blue-600 border-b-2 border-blue-600 pb-1' : ''}`}>Industries</button>
             <button onClick={() => { setActiveTab('how-it-works'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className={`hover:text-blue-600 transition-colors ${activeTab === 'how-it-works' ? 'text-blue-600 border-b-2 border-blue-600 pb-1' : ''}`}>How It Works</button>
@@ -854,16 +854,16 @@ export default function App() {
         {/* Mobile Navigation Drawer */}
         {mobileMenuOpen && (
           <div className="lg:hidden bg-white border-b border-slate-200 px-6 py-6 space-y-4 shadow-xl">
-            <button onClick={() => { setActiveTab('home'); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="block w-full text-left text-sm font-medium py-2 text-slate-700"><span aria-label="Close" className="text-xl leading-none">×</span>Home</button>
-            <button onClick={() => { setActiveTab('live-tools'); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="block w-full text-left text-sm font-medium py-2 text-blue-600 font-bold"><span aria-label="Close" className="text-xl leading-none">×</span>Live AI Scanners</button>
-            <button onClick={() => { setActiveTab('services'); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="block w-full text-left text-sm font-medium py-2 text-slate-700"><span aria-label="Close" className="text-xl leading-none">×</span>Our 9 Services</button>
-            <button onClick={() => { setActiveTab('why-pick-us'); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="block w-full text-left text-sm font-medium py-2 text-slate-700"><span aria-label="Close" className="text-xl leading-none">×</span>Why Pick These Products</button>
-            <button onClick={() => { setActiveTab('industries'); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="block w-full text-left text-sm font-medium py-2 text-slate-700"><span aria-label="Close" className="text-xl leading-none">×</span>Industries</button>
-            <button onClick={() => { setActiveTab('how-it-works'); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="block w-full text-left text-sm font-medium py-2 text-slate-700"><span aria-label="Close" className="text-xl leading-none">×</span>How It Works</button>
-            <button onClick={() => { setActiveTab('about'); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="block w-full text-left text-sm font-medium py-2 text-slate-700"><span aria-label="Close" className="text-xl leading-none">×</span>About</button>
-            <button onClick={() => { setActiveTab('contact'); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="block w-full text-left text-sm font-medium py-2 text-slate-700"><span aria-label="Close" className="text-xl leading-none">×</span>Contact</button>
+            <button onClick={() => { setActiveTab('home'); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="block w-full text-left text-sm font-medium py-2 text-slate-700">Home</button>
+            <button onClick={() => { setActiveTab('live-tools'); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="block w-full text-left text-sm font-medium py-2 text-blue-600 font-bold">Live AI Scanners</button>
+            <button onClick={() => { setActiveTab('services'); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="block w-full text-left text-sm font-medium py-2 text-slate-700">Our Services</button>
+            <button onClick={() => { setActiveTab('why-pick-us'); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="block w-full text-left text-sm font-medium py-2 text-slate-700">Why Pick These Products</button>
+            <button onClick={() => { setActiveTab('industries'); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="block w-full text-left text-sm font-medium py-2 text-slate-700">Industries</button>
+            <button onClick={() => { setActiveTab('how-it-works'); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="block w-full text-left text-sm font-medium py-2 text-slate-700">How It Works</button>
+            <button onClick={() => { setActiveTab('about'); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="block w-full text-left text-sm font-medium py-2 text-slate-700">About</button>
+            <button onClick={() => { setActiveTab('contact'); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="block w-full text-left text-sm font-medium py-2 text-slate-700">Contact</button>
             <div className="pt-4 border-t border-slate-200">
-              <button onClick={() => { openAssessmentForm(); setMobileMenuOpen(false); }} className="w-full py-3 bg-blue-600 text-white font-semibold text-xs rounded-lg shadow-md"><span aria-label="Close" className="text-xl leading-none">×</span>
+              <button onClick={() => { openAssessmentForm(); setMobileMenuOpen(false); }} className="w-full py-3 bg-blue-600 text-white font-semibold text-xs rounded-lg shadow-md">
                 Request a Confidential Assessment
               </button>
             </div>
@@ -1009,7 +1009,7 @@ export default function App() {
                   { key: 'contract', label: '2. Customer & Vendor Contracts', desc: 'Do you sign customer contracts without lawyer review or with unlimited penalties? (1 = fully capped, 5 = unlimited liability).' },
                   { key: 'funding', label: '3. Bank Loan & CC Limits', desc: 'Is your bank CC limit frequently 90%+ utilized with tight interest coverage? (1 = healthy cushion, 5 = near default).' },
                   { key: 'fraud', label: '4. Internal Billing & Inventory Checks', desc: 'Can employees or partners release money or dispatch inventory without dual approvals? (1 = strict controls, 5 = blind trust).' },
-                  { key: 'governance', label: '5. Board Minutes & Director Protection', desc: 'Are company resolutions and director meeting records properly drafted and signed? (1 = 100% compliant, 5 = missing records).' }
+                  { key: 'governance', label: '5. Board Minutes & Director Protection', desc: 'Are company resolutions and director meeting records properly drafted and signed? (1 = well documented, 5 = records are missing or unclear).' }
                 ].map((dim) => (
                   <div key={dim.key} className="space-y-2">
                     <div className="flex justify-between items-center text-sm">
@@ -2080,8 +2080,8 @@ export default function App() {
 
             {/* Quality Gates */}
             <div className="navigalex-card p-8 rounded-2xl border border-blue-200 space-y-4 bg-blue-50/40 shadow-sm">
-              <h3 className="text-xl font-bold text-slate-900">Our Strict Human Quality Gates</h3>
-              <p className="text-xs text-slate-600">AI does not make final professional decisions. Professional review and sign-off are provided where included in the engagement:</p>
+              <h3 className="text-xl font-bold text-slate-900">Professional Review & Quality Controls</h3>
+              <p className="text-xs text-slate-600">AI does not make final professional decisions. Human review and sign-off are provided where included in the engagement:</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-slate-700">
                 <div className="p-3 bg-white rounded-lg border border-slate-200 shadow-sm"><strong>Finance:</strong> Dual review of cash models by qualified finance heads.</div>
                 <div className="p-3 bg-white rounded-lg border border-slate-200 shadow-sm"><strong>Legal:</strong> Review and sign-off by practicing advocates & counsel.</div>
@@ -2143,7 +2143,7 @@ export default function App() {
                   <p className="text-sm text-slate-600 max-w-md mx-auto">
                     Thank you, {leadForm.name || 'there'}. Your request has been recorded. Our team will contact you using the method you selected.
                   </p>
-                  <button onClick={() => setLeadSubmitted(false)} className="px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-xs font-semibold text-white rounded-xl cursor-pointer"><span aria-label="Close" className="text-xl leading-none">×</span>
+                  <button onClick={() => setLeadSubmitted(false)} className="px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-xs font-semibold text-white rounded-xl cursor-pointer">
                     Submit Another Inquiry
                   </button>
                 </div>
