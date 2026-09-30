@@ -1376,7 +1376,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
 
             {typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('utm_source') === 'free_tool' && (
               <div className="rounded-2xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-900" role="status">
-                <strong>Recommended next step:</strong> your free-tool result maps to a Navigalex advisory service below.
+                <strong>Recommended next step:</strong> your free-assessment result maps to the relevant Navigalex advisory service below.
               </div>
             )}
 
