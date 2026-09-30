@@ -303,6 +303,9 @@ export default function App() {
   const getInitialTab = () => {
     if (typeof window !== 'undefined') {
       const p = window.location.pathname.toLowerCase();
+      if (p === '/family-office' || p.startsWith('/family-office')) {
+        return 'family-office';
+      }
       if (p === '/services' || p.startsWith('/services') || new URLSearchParams(window.location.search).has('persona')) {
         return 'services';
       }
@@ -338,9 +341,13 @@ export default function App() {
       const p = window.location.pathname.toLowerCase();
       const urlPersona = new URLSearchParams(window.location.search).get('persona');
       setPersona(PERSONA_OPTIONS.some((option) => option.key === urlPersona) ? urlPersona || 'all' : 'all');
-      if (p === '/admin' || p.startsWith('/admin') || window.location.search.includes('admin') || window.location.hash.includes('admin')) {
+      if (p === '/family-office' || p.startsWith('/family-office')) {
+        setActiveTab('family-office');
+      } else if (p === '/services' || p.startsWith('/services') || urlPersona) {
+        setActiveTab('services');
+      } else if (p === '/admin' || p.startsWith('/admin') || window.location.search.includes('admin') || window.location.hash.includes('admin')) {
         setActiveTab('admin');
-      } else if (activeTab === 'admin') {
+      } else if (activeTab === 'admin' || activeTab === 'family-office' || activeTab === 'services') {
         setActiveTab('home');
       }
     };
@@ -559,6 +566,12 @@ Payment shall be released within 90 days after delivery and final acceptance. In
       console.error('Error posting inquiry:', err);
     }
     setLeadSubmitted(true);
+  };
+
+  const navigateToFamilyOffice = () => {
+    window.history.pushState(null, '', '/family-office');
+    setActiveTab('family-office');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const visibleAdvisoryDesks = PERSONA_SERVICE_IDS[persona]
@@ -1433,6 +1446,29 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                     </div>
 
                     <p className="text-xs text-slate-600 leading-relaxed font-normal">{srv.summary}</p>
+                    {srv.id === 'internal-audit' && (
+                      <span className="inline-flex rounded-full bg-indigo-50 border border-indigo-200 px-3 py-1 text-[11px] font-bold text-indigo-800">
+                        Next step after ControlCFO or FraudSignal
+                      </span>
+                    )}
+                    {srv.id === 'fraudsignal' && (
+                      <button
+                        type="button"
+                        onClick={() => handleSelectDeskForBooking('FraudSignal Referral Partner — CA / CS / Employment Lawyer')}
+                        className="w-full rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 px-3 py-2 text-left text-[11px] font-semibold text-slate-700"
+                      >
+                        Referral partners: CAs, CS, employment lawyers
+                      </button>
+                    )}
+                    {srv.id === 'family-wealth' && (
+                      <button
+                        type="button"
+                        onClick={navigateToFamilyOffice}
+                        className="inline-flex items-center rounded-full bg-blue-50 border border-blue-200 px-3 py-1 text-[11px] font-bold text-blue-800 hover:bg-blue-100"
+                      >
+                        View dedicated Family Office page
+                      </button>
+                    )}
 
                     <div className="p-3 bg-rose-50/80 border border-rose-200 rounded-xl space-y-1">
                       <span className="text-[10px] font-bold text-rose-800 uppercase tracking-wider block">Problem Solved</span>
@@ -1511,6 +1547,68 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                 </div>
               ))}
             </div>
+          </div>
+        )}
+
+        {activeTab === 'family-office' && (
+          <div className="py-20 px-6 max-w-5xl mx-auto space-y-10">
+            <button
+              type="button"
+              onClick={() => { window.history.pushState(null, '', '/services'); setActiveTab('services'); }}
+              className="text-xs font-bold text-blue-700 hover:text-blue-600"
+            >
+              ← Back to all services
+            </button>
+            <div className="space-y-3">
+              <span className="text-xs font-bold text-blue-600 uppercase tracking-widest">FAMILY OFFICE</span>
+              <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900">Family Wealth Governance Office</h2>
+              <p className="text-slate-600 max-w-3xl">A dedicated governance and coordination service for multi-entity family businesses, succession planning and cross-entity risk.</p>
+            </div>
+            {(() => {
+              const srv = ADVISORY_DESKS.find((item) => item.id === 'family-wealth');
+              if (!srv) return null;
+              return (
+                <div className="navigalex-card rounded-2xl p-7 sm:p-9 space-y-7 shadow-xl border-t-4 border-blue-600">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                    <div>
+                      <h3 className="text-2xl font-bold text-slate-900">{formatServiceTitle(srv.title)}</h3>
+                      <p className="text-xs font-semibold text-blue-600 mt-1">{srv.tagline}</p>
+                    </div>
+                    <span className="text-sm font-bold text-slate-900">{srv.price}</span>
+                  </div>
+                  <p className="text-sm text-slate-700 leading-relaxed">{srv.summary}</p>
+                  <div>
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 mb-3">What You Receive</h4>
+                    <ul className="space-y-2 text-sm text-slate-700">
+                      {srv.deliverables.map((item, i) => (
+                        <li key={i} className="flex items-start gap-2">
+                          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 mb-3">Delivery Schedule</h4>
+                    <div className="space-y-2">
+                      {srv.deliverySchedule.map((item, i) => (
+                        <div key={i} className="rounded-xl bg-slate-50 border border-slate-200 px-4 py-3 text-sm text-slate-700">{item}</div>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-t border-slate-200 pt-5">
+                    <span className="text-xs text-slate-500">{srv.timeframe}</span>
+                    <button
+                      type="button"
+                      onClick={() => handleSelectDeskForBooking(srv.title)}
+                      className="px-5 py-3 bg-blue-600 hover:bg-blue-500 text-white text-sm font-bold rounded-xl shadow-md"
+                    >
+                      Inquire Family Office
+                    </button>
+                  </div>
+                </div>
+              );
+            })()}
           </div>
         )}
 
