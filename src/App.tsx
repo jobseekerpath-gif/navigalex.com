@@ -269,6 +269,35 @@ const PRICING_CONFIG: Record<string, { anchor?: string; successFeeBasis?: string
 };
 
 
+const BRAND_MARKS: Record<string, boolean> = {
+  "ControlCFO": true,
+  "LenderReady": false,
+  "Contract-to-Cash": false,
+  "AI-Assisted Internal Audit Factory": false,
+  "Board-in-a-Box": false,
+  "RegTech Journey Lab": false,
+  "FraudSignal": false,
+  "TradeShield": false,
+  "Family Wealth Governance": false
+};
+
+const formatServiceTitle = (title: string) => BRAND_MARKS.ControlCFO && title.includes("ControlCFO") && !title.includes("™")
+  ? title.replace("ControlCFO", "ControlCFO™")
+  : title;
+
+const SITE_TRUST = {
+  clientCount: "{{CLIENT_COUNT}}",
+  credential: "{{CREDENTIAL}}",
+  anonymisedCaseOutcome: "{{ANONYMISED_CASE_OUTCOME}}"
+};
+
+const FRAUDSIGNAL_CREDENTIAL = "{{CREDENTIAL}}";
+const LC_STAT_CONFIG = {
+  value: "{{LC_REJECTION_RATE_STAT}}",
+  source: "{{LC_STAT_SOURCE}}"
+};
+
+
 export default function App() {
   // Check if URL is /admin or ?admin=true
   const getInitialTab = () => {
@@ -1298,6 +1327,25 @@ Payment shall be released within 90 days after delivery and final acceptance. In
               </p>
             </div>
 
+            {isResolvedPlaceholder(SITE_TRUST.clientCount) &&
+              isResolvedPlaceholder(SITE_TRUST.credential) &&
+              isResolvedPlaceholder(SITE_TRUST.anonymisedCaseOutcome) && (
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 rounded-2xl border border-blue-100 bg-blue-50/60 p-4 shadow-sm" aria-label="Navigalex trust signals">
+                  <div className="text-center sm:text-left">
+                    <span className="block text-[10px] font-bold uppercase tracking-wider text-blue-700">Clients</span>
+                    <span className="text-sm font-bold text-slate-900">{SITE_TRUST.clientCount}</span>
+                  </div>
+                  <div className="text-center sm:text-left">
+                    <span className="block text-[10px] font-bold uppercase tracking-wider text-blue-700">Credential</span>
+                    <span className="text-sm font-bold text-slate-900">{SITE_TRUST.credential}</span>
+                  </div>
+                  <div className="text-center sm:text-left">
+                    <span className="block text-[10px] font-bold uppercase tracking-wider text-blue-700">Case Outcome</span>
+                    <span className="text-sm font-bold text-slate-900">{SITE_TRUST.anonymisedCaseOutcome}</span>
+                  </div>
+                </div>
+              )}
+
             {/* THE 4-STEP OPERATING MODEL: HOW WE DELIVER */}
             <div className="bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 text-white rounded-2xl p-8 sm:p-10 shadow-xl space-y-6">
               <div className="text-center max-w-2xl mx-auto space-y-2">
@@ -1365,7 +1413,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                     </div>
 
                     <div>
-                      <h3 className="text-xl font-bold text-slate-900 leading-tight">{srv.title}</h3>
+                      <h3 className="text-xl font-bold text-slate-900 leading-tight">{formatServiceTitle(srv.title)}</h3>
                       {srv.id === 'contract-to-cash' && (
                         <div className="mt-2 rounded-lg bg-amber-50 border border-amber-200 px-3 py-2 text-xs font-bold text-amber-900">
                           Use Section 43B(h) to get paid on time
@@ -1387,9 +1435,19 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                     <p className="text-xs text-slate-600 leading-relaxed font-normal">{srv.summary}</p>
 
                     <div className="p-3 bg-rose-50/80 border border-rose-200 rounded-xl space-y-1">
-                      <span className="text-[10px] font-bold text-rose-800 uppercase tracking-wider block">âš ï¸ The Problem Solved</span>
+                      <span className="text-[10px] font-bold text-rose-800 uppercase tracking-wider block">Problem Solved</span>
                       <p className="text-xs text-slate-800 leading-relaxed">{srv.problem}</p>
                     </div>
+                    {srv.id === 'fraudsignal' && isResolvedPlaceholder(FRAUDSIGNAL_CREDENTIAL) && (
+                      <div className="rounded-lg bg-slate-50 border border-slate-200 px-3 py-2 text-[11px] font-semibold text-slate-700">
+                        Credential: {FRAUDSIGNAL_CREDENTIAL}
+                      </div>
+                    )}
+                    {srv.id === 'tradeshield' && isResolvedPlaceholder(LC_STAT_CONFIG.value) && isResolvedPlaceholder(LC_STAT_CONFIG.source) && (
+                      <div className="rounded-lg bg-slate-50 border border-slate-200 px-3 py-2 text-[11px] text-slate-700">
+                        {LC_STAT_CONFIG.value} <span className="text-slate-500">Source: {LC_STAT_CONFIG.source}</span>
+                      </div>
+                    )}
 
                     <div className="space-y-2 pt-1">
                       <span className="text-[11px] font-bold text-slate-900 uppercase tracking-wider block">What You Receive:</span>
