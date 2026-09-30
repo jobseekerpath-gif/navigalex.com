@@ -1568,7 +1568,7 @@ export default function App() {
                   price: "₹2–10 Lakh setup",
                   deskIndex: 8
                 }
-              ]              ].map((p, idx) => (
+              ].map((p, idx) => (
                 <div key={idx} className="navigalex-card p-8 rounded-2xl flex flex-col justify-between space-y-6 shadow-md border-t-4 border-blue-600">
                   <div className="space-y-4">
                     <h3 className="text-xl font-bold text-slate-900">{p.title}</h3>
