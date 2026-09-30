@@ -501,21 +501,6 @@ export default function App() {
     openAssessmentForm(deskTitle);
   };
 
-  // Sample contract loader for instant testing
-  const loadSampleContract = (type: string) => {
-    if (type === 'indemnity') {
-      setDocText(
-        `Clause 14. INDEMNIFICATION AND LIABILITY:
-The Vendor shall defend, indemnify and hold harmless the Client, its affiliates, directors and customers from and against any and all claims, losses, damages, liabilities, and expenses (including attorney fees) arising from any performance delay, defect, or alleged breach of this agreement. The Vendor's liability under this section shall be uncapped and perpetual. The Client reserves the right to terminate this agreement immediately at convenience without penalty, while any dispute shall be subject to the exclusive jurisdiction of the Courts in Singapore.`
-      );
-    } else if (type === 'msme') {
-      setDocText(
-        `Clause 7. PAYMENT TERMS AND PENALTIES:
-Payment shall be released within 90 days after delivery and final acceptance. In case of any dispatch delay beyond 3 days, a penalty of 2% per week of the entire purchase order shall be deducted from pending invoices. In the event of dispute, the Vendor agrees not to approach any MSME arbitration council and agrees that the Client's internal arbitrator decision is final.`
-      );
-    }
-  };
-
   const handleAnalyzeDocument = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!docText.trim() && !docFile) return;
@@ -911,7 +896,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
           </div>
         )}
 
-        {/* LIVE AI TOOLS TAB */}
+        {/* LIVE AI ASSESSMENTS TAB */}
         {activeTab === 'live-tools' && (
           <div className="py-16 px-6 max-w-7xl mx-auto space-y-20">
             <div className="text-center max-w-3xl mx-auto space-y-3">
@@ -930,21 +915,8 @@ Payment shall be released within 90 days after delivery and final acceptance. In
                   <h3 className="text-2xl font-bold text-slate-900">1. Contract & Document Risk Scanner</h3>
                   <p className="text-xs text-slate-600 mt-1">Upload any client MSA, vendor order, or contract clause to detect uncapped indemnity, penalty traps, and unfair termination terms.</p>
                 </div>
-                <div className="flex gap-2">
-                  <button 
-                    type="button" 
-                    onClick={() => loadSampleContract('indemnity')}
-                    className="px-3 py-1.5 text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg border border-slate-300 font-medium cursor-pointer"
-                  >
-                    Load Sample Trap #1
-                  </button>
-                  <button 
-                    type="button" 
-                    onClick={() => loadSampleContract('msme')}
-                    className="px-3 py-1.5 text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg border border-slate-300 font-medium cursor-pointer"
-                  >
-                    Load Sample Trap #2
-                  </button>
+                <div className="hidden sm:block text-xs text-slate-500">
+                  Upload a real agreement or paste the clause you want reviewed.
                 </div>
               </div>
 
