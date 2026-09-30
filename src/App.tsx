@@ -638,7 +638,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
               <div className="mt-12 p-6 bg-white/95 backdrop-blur-md rounded-2xl border border-slate-200 shadow-2xl max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100 hover:border-blue-300 transition-colors">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-bold text-blue-700 uppercase tracking-wider">Live Tool 1</span>
+                    <span className="text-xs font-bold text-blue-700 uppercase tracking-wider">LIVE 1</span>
                     <FileText className="w-4 h-4 text-blue-600" />
                   </div>
                   <h3 className="font-bold text-slate-900 text-base">Contract Risk Scanner</h3>
@@ -650,7 +650,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
 
                 <div className="p-4 bg-emerald-50/60 rounded-xl border border-emerald-100 hover:border-emerald-300 transition-colors">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-bold text-emerald-700 uppercase tracking-wider">Live Tool 2</span>
+                    <span className="text-xs font-bold text-emerald-700 uppercase tracking-wider">LIVE 2</span>
                     <BarChart3 className="w-4 h-4 text-emerald-600" />
                   </div>
                   <h3 className="font-bold text-slate-900 text-base">Bank Loan & CIBIL Check</h3>
@@ -776,7 +776,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
               <p className="text-slate-600">Test real contracts, calculate bank loan readiness, and generate instant business diagnostic reports right now.</p>
             </div>
 
-            {/* LIVE TOOL 1: Contract & Agreement Risk Analyzer */}
+            {/* LIVE 1: Contract & Agreement Risk Analyzer */}
             <section className="navigalex-card rounded-2xl p-8 sm:p-10 shadow-xl border-t-4 border-blue-600 space-y-8">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-6">
                 <div>
@@ -911,7 +911,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
               )}
             </section>
 
-            {/* LIVE TOOL 2: CIBIL & Bank Loan Readiness Calculator */}
+            {/* LIVE 2: CIBIL & Bank Loan Readiness Calculator */}
             <section className="navigalex-card rounded-2xl p-8 sm:p-10 shadow-xl border-t-4 border-emerald-600 space-y-8">
               <div className="border-b border-slate-200 pb-6">
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold mb-2">
@@ -1028,7 +1028,7 @@ Payment shall be released within 90 days after delivery and final acceptance. In
               )}
             </section>
 
-            {/* LIVE TOOL 3: Comprehensive Business Health & P&L Diagnostic */}
+            {/* LIVE 3: Comprehensive Business Health & P&L Diagnostic */}
             <section className="navigalex-card rounded-2xl p-8 sm:p-10 shadow-xl border-t-4 border-indigo-600 space-y-8">
               <div className="border-b border-slate-200 pb-6">
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-bold mb-2">
@@ -1986,5 +1986,6 @@ Payment shall be released within 90 days after delivery and final acceptance. In
     </div>
   );
 }
+
 
 
