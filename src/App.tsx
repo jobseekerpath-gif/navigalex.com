@@ -10,9 +10,33 @@ import {
 } from 'lucide-react';
 
 export const ADVISORY_DESKS = [
-  {
+    {
+    id: "lenderready",
+    title: "1. LenderReady Credit & Recovery Office",
+    tagline: "Bank Sanction Acceleration & Debt Restructuring",
+    badge: "Initial Launch Priority",
+    summary: "Prepares bank-grade financial files and debt service models so banks approve loans and CC limit enhancements 3x faster with lower interest.",
+    problem: "Banks reject loan proposals or slash Cash Credit limits because DSCR is weak, GST returns don't match bank turnover, or drawing power calculations have errors.",
+    deliverables: [
+      "Bank-Grade Borrower Information Memorandum & CMA Data Pack",
+      "Dynamic DSCR & Monthly Cash-Flow Coverage Model",
+      "Loan Covenant Tracker to Prevent Penal Interest Sanctions",
+      "One-Time Settlement (OTS) & Debt Restructuring Proposal (if stressed)",
+      "Professional Representation During Bank Credit Committee Discussions"
+    ],
+    deliverySchedule: [
+      "Week 1: Reconciliation of Last 24 Months Bank Statements, GST & ITR",
+      "Week 2: Construction of Certified CMA Data & DSCR Model",
+      "Week 3: Final Borrower Data Room Assembly & Bank Meeting Briefing"
+    ],
+    clientInputsNeeded: "Last 2 years Audited Balance Sheets, provisional P&L, 12 months Bank Statements, GST returns.",
+    timeframe: "14â€“21 Days",
+    humanSignoff: "Former Senior Credit Officer & Chartered Accountant",
+    price: "â‚¹75,000â€“â‚¹3 Lakh + lawful success fee"
+  },
+    {
     id: "controlcfo-sprint",
-    title: "1. ControlCFOâ„¢ 30-Day Readiness Sprint",
+    title: "2. ControlCFO 90-Day Readiness Sprint",
     tagline: "Flagship Outsourced Finance, Risk & Governance Command Centre",
     badge: "Initial Launch Priority",
     summary: "Like having an experienced, senior CFO and risk director running your financial governance on a part-time sprintâ€”without paying â‚¹35 Lakh/year full-time salary.",
@@ -35,31 +59,7 @@ export const ADVISORY_DESKS = [
     humanSignoff: "Senior CA & Corporate Advocate Dual Review",
     price: "â‚¹1.5â€“4 Lakh fixed"
   },
-  {
-    id: "board-box",
-    title: "2. Board-in-a-Box Governance OS",
-    tagline: "Statutory Director Protection & Board Cadence",
-    badge: "Turnkey System",
-    summary: "Complete corporate governance system that protects promoter-directors from personal statutory liability and prepares the company for institutional funding or M&A.",
-    problem: "Missing board minutes, undocumented shareholder agreements, ambiguous director authorities, and compliance lapses exposing founders to personal fines.",
-    deliverables: [
-      "Annual Board & Committee Calendar with Statutory Timelines",
-      "Institutional Board Agenda, Resolutions & Minutes Packs",
-      "Delegation of Authority (DoA) Financial Approval Matrix",
-      "Director Conflicts of Interest & Related-Party Register",
-      "Encrypted Evidence Vault for Audit & Due Diligence"
-    ],
-    deliverySchedule: [
-      "Week 1-2: Corporate Secretarial & Governance Gap Analysis",
-      "Week 3-4: Drafting Customized Delegation Matrix & Meeting Templates",
-      "Month 2+: Monthly / Quarterly Board Pack Orchestration & Minutes Management"
-    ],
-    clientInputsNeeded: "Certificate of Incorporation, MOA/AOA, past 12 months Board Minutes, Statutory Registers.",
-    timeframe: "4-Week Setup + Monthly Retainer",
-    humanSignoff: "Company Secretary (CS) & Corporate Counsel",
-    price: "â‚¹2â€“6 Lakh setup + â‚¹50,000â€“â‚¹1.5 Lakh/month"
-  },
-  {
+    {
     id: "contract-to-cash",
     title: "3. Contract-to-Cash Risk Desk",
     tagline: "Stop Unfair Contract Clauses & Accelerate Stuck Payments",
@@ -83,129 +83,9 @@ export const ADVISORY_DESKS = [
     humanSignoff: "Corporate Contracts Advocate",
     price: "â‚¹75,000â€“â‚¹3 Lakh setup + â‚¹25,000â€“â‚¹1 Lakh/month"
   },
-  {
-    id: "tradeshield",
-    title: "4. TradeShield LC/BG Desk",
-    tagline: "Pre-Shipment LC Screening & Bank Guarantee Protection",
-    badge: "Export & Tender Desk",
-    summary: "Specialist documentary trade finance review to prevent foreign bank discrepancy rejections, frozen containers, and invoked bank guarantees.",
-    problem: "Over 60% of export Letters of Credit get rejected due to minor paperwork mismatches under UCP 600 rules, delaying payment by months and incurring heavy demurrage.",
-    deliverables: [
-      "Pre-Issuance Letter of Credit (LC) Clause Audit",
-      "Zero-Defect Export Document Checklist (BL, Certificate of Origin, Invoice)",
-      "Bank Guarantee (BG) Wording Review to Prevent Unfair Encashment",
-      "FEMA & RBI Trade Compliance Validation Report",
-      "Direct Liaison Support with Issuing & Advising Banks"
-    ],
-    deliverySchedule: [
-      "24-48 Hours: Rapid turnaround per LC or Bank Guarantee transaction",
-      "Continuous: Monthly retainer for active exporters and EPC contractors"
-    ],
-    clientInputsNeeded: "Draft LC / Sanction letter, Proforma Invoice, Bill of Lading draft, Bank Guarantee text.",
-    timeframe: "24â€“48 Hours per Transaction / Monthly Retainer",
-    humanSignoff: "Trade Finance & International Banking Specialist",
-    price: "â‚¹50,000â€“â‚¹2 Lakh per transaction/retainer"
-  },
-  {
-    id: "fraudsignal",
-    title: "5. FraudSignal Investigation Cell",
-    tagline: "Forensic Accounting & Internal Leakage Detection",
-    badge: "Forensic & Whistleblower",
-    summary: "Discreet forensic audits to detect vendor kickbacks, ghost billing, employee theft, and fund diversionâ€”backed by court-ready evidence.",
-    problem: "Unexplained drops in gross profit margins, inventory mismatches, anonymous whistleblower tips, or suspected partner embezzlement.",
-    deliverables: [
-      "Forensic Transaction Analytics & Vendor Duplicate Billing Scan",
-      "Whistleblower Complaint Intake & Independent Fact-Finding Brief",
-      "Digital Audit Trail & Electronic Evidence Preservation Pack",
-      "Asset Tracing Brief & Financial Discrepancy Reconciliation",
-      "Counsel-Ready Investigation Report for Board or Police Filing"
-    ],
-    deliverySchedule: [
-      "Week 1: Covert Data Extraction (ERP logs, Bank statements, Vendor masters)",
-      "Week 2: Forensic Analytics, Pattern Matching & Interview Planning",
-      "Week 3-4: Evidence Corroboration & Comprehensive Counsel-Ready Report"
-    ],
-    clientInputsNeeded: "Vendor ledgers, ERP audit logs, bank statements, whistleblower details (strictly confidential).",
-    timeframe: "2â€“4 Weeks per Investigation",
-    humanSignoff: "Certified Fraud Examiner (CFE) & Senior Forensic Auditor",
-    price: "â‚¹3â€“15 Lakh per investigation"
-  },
-  {
-    id: "lenderready",
-    title: "6. LenderReady Credit & Recovery Office",
-    tagline: "Bank Sanction Acceleration & Debt Restructuring",
-    badge: "Initial Launch Priority",
-    summary: "Prepares bank-grade financial files and debt service models so banks approve loans and CC limit enhancements 3x faster with lower interest.",
-    problem: "Banks reject loan proposals or slash Cash Credit limits because DSCR is weak, GST returns don't match bank turnover, or drawing power calculations have errors.",
-    deliverables: [
-      "Bank-Grade Borrower Information Memorandum & CMA Data Pack",
-      "Dynamic DSCR & Monthly Cash-Flow Coverage Model",
-      "Loan Covenant Tracker to Prevent Penal Interest Sanctions",
-      "One-Time Settlement (OTS) & Debt Restructuring Proposal (if stressed)",
-      "Professional Representation During Bank Credit Committee Discussions"
-    ],
-    deliverySchedule: [
-      "Week 1: Reconciliation of Last 24 Months Bank Statements, GST & ITR",
-      "Week 2: Construction of Certified CMA Data & DSCR Model",
-      "Week 3: Final Borrower Data Room Assembly & Bank Meeting Briefing"
-    ],
-    clientInputsNeeded: "Last 2 years Audited Balance Sheets, provisional P&L, 12 months Bank Statements, GST returns.",
-    timeframe: "14â€“21 Days",
-    humanSignoff: "Former Senior Credit Officer & Chartered Accountant",
-    price: "â‚¹75,000â€“â‚¹3 Lakh + lawful success fee"
-  },
-  {
-    id: "regtech",
-    title: "7. RegTech Journey Lab",
-    tagline: "Compliance Architecture for NBFCs, Fintechs & Tech Vendors",
-    badge: "Institutional RegTech",
-    summary: "Turn statutory compliance into an automated, audit-proof workflow for co-lending, digital onboarding, DPDP privacy, and RBI outsourcing rules.",
-    problem: "Fintechs and NBFC vendors getting penalized or rejected by enterprise partners due to loose KYC controls, missing data logs, or RBI audit deficiencies.",
-    deliverables: [
-      "End-to-End Regulatory Controls Matrix & Gap Analysis",
-      "KYC / AML Onboarding Architecture & Edge-Case Rules",
-      "Digital Personal Data Protection (DPDP) Privacy Compliance Pack",
-      "Vendor Outsourcing Risk Assessment & Service Level Agreement Audits",
-      "Pre-Audit Remediation Plan for Institutional Compliance"
-    ],
-    deliverySchedule: [
-      "Month 1: Gap Assessment & Architecture Blueprint",
-      "Month 2: Controls Matrix Engineering & SLA Drafting",
-      "Month 3: Simulated Regulatory Stress Test & Team Training"
-    ],
-    clientInputsNeeded: "Current onboarding workflows, data architecture diagram, vendor master agreements.",
-    timeframe: "6â€“12 Weeks Project",
-    humanSignoff: "Fintech Regulatory Lawyer & Senior Systems Auditor",
-    price: "â‚¹5â€“25 Lakh per project"
-  },
-  {
-    id: "family-wealth",
-    title: "8. Family Wealth Governance Office",
-    tagline: "Multi-Entity Asset Consolidation & Succession Peace",
-    badge: "Promoter & Family Office",
-    summary: "Structures family businesses across siblings, holding entities, and trustsâ€”preventing family disputes and preserving wealth across generations.",
-    problem: "Messy cross-holdings between family members, informal loans, lack of a clear succession plan, and vulnerability to future family litigation.",
-    deliverables: [
-      "Consolidated Family Balance Sheet & Cross-Entity Asset Map",
-      "Legally Binding Family Constitution & Decision Charter",
-      "Succession & Inter-Generational Transfer Roadmap (Will & Trust Deeds)",
-      "Family Investment Policy Statement & Risk Allocation Guide",
-      "Quarterly Family Council Governance Pack & Review Facilitation"
-    ],
-    deliverySchedule: [
-      "Month 1: Confidential Family Stakeholder Interviews & Asset Mapping",
-      "Month 2: Drafting Family Constitution & Authority Matrices",
-      "Month 3: Legal Formalization of Wills, Trusts, and Shareholder Pacts",
-      "Ongoing: Quarterly Family Governance Review"
-    ],
-    clientInputsNeeded: "Entity ownership cap tables, property title documents, family tree and key promoter objectives.",
-    timeframe: "8â€“12 Weeks Setup + Quarterly Retainer",
-    humanSignoff: "Senior Estate Planning Advocate & Wealth Governance Advisor",
-    price: "â‚¹2â€“10 Lakh setup + â‚¹75,000â€“â‚¹3 Lakh/month"
-  },
-  {
+    {
     id: "internal-audit",
-    title: "9. AI-Assisted Internal Audit Factory",
+    title: "4. AI-Assisted Internal Audit Factory",
     tagline: "Continuous Risk & Internal Financial Control Auditing",
     badge: "Continuous Controls",
     summary: "Continuous, risk-based internal control testing that catches billing errors, inventory leakages, and unauthorized expenditures every quarter.",
@@ -227,7 +107,128 @@ export const ADVISORY_DESKS = [
     humanSignoff: "Internal Audit Partner (CA / CIA)",
     price: "â‚¹2â€“10 Lakh per cycle"
   }
-];
+],
+    {
+    id: "board-box",
+    title: "5. Board-in-a-Box Governance OS",
+    tagline: "Statutory Director Protection & Board Cadence",
+    badge: "Turnkey System",
+    summary: "Complete corporate governance system that protects promoter-directors from personal statutory liability and prepares the company for institutional funding or M&A.",
+    problem: "Missing board minutes, undocumented shareholder agreements, ambiguous director authorities, and compliance lapses exposing founders to personal fines.",
+    deliverables: [
+      "Annual Board & Committee Calendar with Statutory Timelines",
+      "Institutional Board Agenda, Resolutions & Minutes Packs",
+      "Delegation of Authority (DoA) Financial Approval Matrix",
+      "Director Conflicts of Interest & Related-Party Register",
+      "Encrypted Evidence Vault for Audit & Due Diligence"
+    ],
+    deliverySchedule: [
+      "Week 1-2: Corporate Secretarial & Governance Gap Analysis",
+      "Week 3-4: Drafting Customized Delegation Matrix & Meeting Templates",
+      "Month 2+: Monthly / Quarterly Board Pack Orchestration & Minutes Management"
+    ],
+    clientInputsNeeded: "Certificate of Incorporation, MOA/AOA, past 12 months Board Minutes, Statutory Registers.",
+    timeframe: "4-Week Setup + Monthly Retainer",
+    humanSignoff: "Company Secretary (CS) & Corporate Counsel",
+    price: "â‚¹2â€“6 Lakh setup + â‚¹50,000â€“â‚¹1.5 Lakh/month"
+  },
+    {
+    id: "regtech",
+    title: "6. RegTech Journey Lab",
+    tagline: "Compliance Architecture for NBFCs, Fintechs & Tech Vendors",
+    badge: "Institutional RegTech",
+    summary: "Turn statutory compliance into an automated, audit-proof workflow for co-lending, digital onboarding, DPDP privacy, and RBI outsourcing rules.",
+    problem: "Fintechs and NBFC vendors getting penalized or rejected by enterprise partners due to loose KYC controls, missing data logs, or RBI audit deficiencies.",
+    deliverables: [
+      "End-to-End Regulatory Controls Matrix & Gap Analysis",
+      "KYC / AML Onboarding Architecture & Edge-Case Rules",
+      "Digital Personal Data Protection (DPDP) Privacy Compliance Pack",
+      "Vendor Outsourcing Risk Assessment & Service Level Agreement Audits",
+      "Pre-Audit Remediation Plan for Institutional Compliance"
+    ],
+    deliverySchedule: [
+      "Month 1: Gap Assessment & Architecture Blueprint",
+      "Month 2: Controls Matrix Engineering & SLA Drafting",
+      "Month 3: Simulated Regulatory Stress Test & Team Training"
+    ],
+    clientInputsNeeded: "Current onboarding workflows, data architecture diagram, vendor master agreements.",
+    timeframe: "6â€“12 Weeks Project",
+    humanSignoff: "Fintech Regulatory Lawyer & Senior Systems Auditor",
+    price: "â‚¹5â€“25 Lakh per project"
+  },
+    {
+    id: "fraudsignal",
+    title: "7. FraudSignal Investigation Cell",
+    tagline: "Forensic Accounting & Internal Leakage Detection",
+    badge: "Forensic & Whistleblower",
+    summary: "Discreet forensic audits to detect vendor kickbacks, ghost billing, employee theft, and fund diversionâ€”backed by court-ready evidence.",
+    problem: "Unexplained drops in gross profit margins, inventory mismatches, anonymous whistleblower tips, or suspected partner embezzlement.",
+    deliverables: [
+      "Forensic Transaction Analytics & Vendor Duplicate Billing Scan",
+      "Whistleblower Complaint Intake & Independent Fact-Finding Brief",
+      "Digital Audit Trail & Electronic Evidence Preservation Pack",
+      "Asset Tracing Brief & Financial Discrepancy Reconciliation",
+      "Counsel-Ready Investigation Report for Board or Police Filing"
+    ],
+    deliverySchedule: [
+      "Week 1: Covert Data Extraction (ERP logs, Bank statements, Vendor masters)",
+      "Week 2: Forensic Analytics, Pattern Matching & Interview Planning",
+      "Week 3-4: Evidence Corroboration & Comprehensive Counsel-Ready Report"
+    ],
+    clientInputsNeeded: "Vendor ledgers, ERP audit logs, bank statements, whistleblower details (strictly confidential).",
+    timeframe: "2â€“4 Weeks per Investigation",
+    humanSignoff: "Certified Fraud Examiner (CFE) & Senior Forensic Auditor",
+    price: "â‚¹3â€“15 Lakh per investigation"
+  },
+    {
+    id: "tradeshield",
+    title: "8. TradeShield LC/BG Desk",
+    tagline: "Pre-Shipment LC Screening & Bank Guarantee Protection",
+    badge: "Export & Tender Desk",
+    summary: "Specialist documentary trade finance review to prevent foreign bank discrepancy rejections, frozen containers, and invoked bank guarantees.",
+    problem: "Over 60% of export Letters of Credit get rejected due to minor paperwork mismatches under UCP 600 rules, delaying payment by months and incurring heavy demurrage.",
+    deliverables: [
+      "Pre-Issuance Letter of Credit (LC) Clause Audit",
+      "Zero-Defect Export Document Checklist (BL, Certificate of Origin, Invoice)",
+      "Bank Guarantee (BG) Wording Review to Prevent Unfair Encashment",
+      "FEMA & RBI Trade Compliance Validation Report",
+      "Direct Liaison Support with Issuing & Advising Banks"
+    ],
+    deliverySchedule: [
+      "24-48 Hours: Rapid turnaround per LC or Bank Guarantee transaction",
+      "Continuous: Monthly retainer for active exporters and EPC contractors"
+    ],
+    clientInputsNeeded: "Draft LC / Sanction letter, Proforma Invoice, Bill of Lading draft, Bank Guarantee text.",
+    timeframe: "24â€“48 Hours per Transaction / Monthly Retainer",
+    humanSignoff: "Trade Finance & International Banking Specialist",
+    price: "â‚¹50,000â€“â‚¹2 Lakh per transaction/retainer"
+  },
+    {
+    id: "family-wealth",
+    title: "9. Family Wealth Governance Office",
+    tagline: "Multi-Entity Asset Consolidation & Succession Peace",
+    badge: "Promoter & Family Office",
+    summary: "Structures family businesses across siblings, holding entities, and trustsâ€”preventing family disputes and preserving wealth across generations.",
+    problem: "Messy cross-holdings between family members, informal loans, lack of a clear succession plan, and vulnerability to future family litigation.",
+    deliverables: [
+      "Consolidated Family Balance Sheet & Cross-Entity Asset Map",
+      "Legally Binding Family Constitution & Decision Charter",
+      "Succession & Inter-Generational Transfer Roadmap (Will & Trust Deeds)",
+      "Family Investment Policy Statement & Risk Allocation Guide",
+      "Quarterly Family Council Governance Pack & Review Facilitation"
+    ],
+    deliverySchedule: [
+      "Month 1: Confidential Family Stakeholder Interviews & Asset Mapping",
+      "Month 2: Drafting Family Constitution & Authority Matrices",
+      "Month 3: Legal Formalization of Wills, Trusts, and Shareholder Pacts",
+      "Ongoing: Quarterly Family Governance Review"
+    ],
+    clientInputsNeeded: "Entity ownership cap tables, property title documents, family tree and key promoter objectives.",
+    timeframe: "8â€“12 Weeks Setup + Quarterly Retainer",
+    humanSignoff: "Senior Estate Planning Advocate & Wealth Governance Advisor",
+    price: "â‚¹2â€“10 Lakh setup + â‚¹75,000â€“â‚¹3 Lakh/month"
+  }
+]
 
 export default function App() {
   // Check if URL is /admin or ?admin=true
