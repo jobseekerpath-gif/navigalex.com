@@ -799,78 +799,109 @@ export default function App() {
         <div className="absolute top-1/2 left-1/3 w-80 h-80 bg-cyan-400/5 rounded-full blur-[100px] animate-spaceship-glow"></div>
       </div>
 
-      {/* Top Banner with Preserved Tagline */}
-      <div className="bg-slate-900 border-b border-slate-800 py-2.5 px-4 text-center text-xs text-slate-300 tracking-wide flex items-center justify-center gap-2 relative z-10">
-        <Shield className="w-4 h-4 text-blue-400 shrink-0" />
-        <span>
-          <strong>Navigalex Advisory:</strong> We help Indian business owners assess financial, legal, governance and banking risks using AI-assisted analysis and professional review.
-        </span>
+      {/* Clean brand strip */}
+      <div className="bg-slate-950 text-white/90 border-b border-slate-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-8 flex items-center justify-center text-[10px] sm:text-[11px] font-medium tracking-wide">
+          <span className="inline-flex items-center gap-2">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" aria-hidden="true" />
+            AI-assisted analysis. Professional review where included in scope.
+          </span>
+        </div>
       </div>
 
       {/* Sticky Header */}
-      <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-xl border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-3 cursor-pointer group" onClick={() => { setActiveTab('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center shadow-md shadow-blue-500/20">
+      <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-xl border-b border-slate-200 shadow-[0_1px_12px_rgba(15,23,42,0.05)]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-[72px] flex items-center justify-between gap-4">
+          <button
+            type="button"
+            aria-label="Go to Navigalex home"
+            className="flex items-center gap-2.5 min-w-0 group"
+            onClick={() => { setActiveTab('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+          >
+            <span className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center shadow-sm shadow-blue-600/20 shrink-0">
               <Shield className="w-5 h-5 text-white" />
-            </div>
-            <div>
-              <span className="text-xl font-extrabold tracking-tight text-slate-900">NAVIGALEX</span>
-              <span className="block text-[9px] text-blue-600 font-extrabold tracking-widest uppercase">Executive Advisory</span>
-            </div>
-          </div>
+            </span>
+            <span className="min-w-0 leading-none text-left">
+              <span className="block text-lg sm:text-xl font-extrabold tracking-tight text-slate-950">NAVIGALEX</span>
+              <span className="block mt-1 text-[8px] sm:text-[9px] text-blue-600 font-extrabold tracking-[0.18em] uppercase">Executive Advisory</span>
+            </span>
+          </button>
 
-          <nav className="hidden lg:flex items-center gap-6 text-xs font-semibold text-slate-600">
-            <button onClick={() => { setActiveTab('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className={`hover:text-blue-600 transition-colors ${activeTab === 'home' ? 'text-blue-600 border-b-2 border-blue-600 pb-1' : ''}`}>Home</button>
-            <button onClick={() => { setActiveTab('live-tools'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className={`hover:text-blue-600 transition-colors flex items-center gap-1 ${activeTab === 'live-tools' ? 'text-blue-600 border-b-2 border-blue-600 pb-1' : ''}`}>
-              <Sparkles className="w-3.5 h-3.5 text-blue-600" />
-              <span>Live AI Scanners</span>
-            </button>
-            <button onClick={() => { setActiveTab('services'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className={`hover:text-blue-600 transition-colors ${activeTab === 'services' ? 'text-blue-600 border-b-2 border-blue-600 pb-1' : ''}`}>Our Services</button>
-            <button onClick={() => { setActiveTab('why-pick-us'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className={`hover:text-blue-600 transition-colors ${activeTab === 'why-pick-us' ? 'text-blue-600 border-b-2 border-blue-600 pb-1' : ''}`}>Why Pick These Products</button>
-            <button onClick={() => { setActiveTab('industries'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className={`hover:text-blue-600 transition-colors ${activeTab === 'industries' ? 'text-blue-600 border-b-2 border-blue-600 pb-1' : ''}`}>Industries</button>
-            <button onClick={() => { setActiveTab('how-it-works'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className={`hover:text-blue-600 transition-colors ${activeTab === 'how-it-works' ? 'text-blue-600 border-b-2 border-blue-600 pb-1' : ''}`}>How It Works</button>
-            <button onClick={() => { setActiveTab('about'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className={`hover:text-blue-600 transition-colors ${activeTab === 'about' ? 'text-blue-600 border-b-2 border-blue-600 pb-1' : ''}`}>About</button>
-            <button onClick={() => { setActiveTab('contact'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className={`hover:text-blue-600 transition-colors ${activeTab === 'contact' ? 'text-blue-600 border-b-2 border-blue-600 pb-1' : ''}`}>Contact</button>
+          <nav className="hidden lg:flex items-center gap-1 xl:gap-2 text-[11px] xl:text-xs font-semibold text-slate-600" aria-label="Primary navigation">
+            {[
+              ['home', 'Home'],
+              ['live-tools', 'AI Assessments'],
+              ['services', 'Services'],
+              ['why-pick-us', 'Why Navigalex'],
+              ['industries', 'Industries'],
+              ['how-it-works', 'How It Works'],
+              ['about', 'About'],
+              ['contact', 'Contact']
+            ].map(([tab, label]) => (
+              <button
+                key={tab}
+                type="button"
+                onClick={() => { setActiveTab(tab); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                className={`px-2.5 xl:px-3 py-2 rounded-lg transition-colors hover:text-blue-600 hover:bg-blue-50/70 ${activeTab === tab ? 'text-blue-700 bg-blue-50' : ''}`}
+              >
+                {label}
+              </button>
+            ))}
           </nav>
 
-          <div className="flex items-center gap-4">
-            <button 
+          <div className="flex items-center gap-2 shrink-0">
+            <button
               onClick={() => openAssessmentForm()}
-              className="hidden sm:inline-flex px-5 py-2.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-500 rounded-lg shadow-md shadow-blue-600/20 transition-all cursor-pointer"
+              className="hidden sm:inline-flex items-center justify-center px-4 py-2.5 text-xs font-bold text-white bg-blue-600 hover:bg-blue-500 rounded-xl shadow-sm shadow-blue-600/20 transition-all cursor-pointer"
             >
               Request Assessment
             </button>
-            <button 
+            <button
+              type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label="Toggle mobile menu"
-              className="lg:hidden p-2 rounded-lg bg-slate-100 border border-slate-200 text-slate-700"
+              aria-expanded={mobileMenuOpen}
+              className="lg:hidden inline-flex h-10 w-10 items-center justify-center rounded-xl bg-slate-50 border border-slate-200 text-slate-700 hover:bg-slate-100"
             >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
 
-        {/* Mobile Navigation Drawer */}
         {mobileMenuOpen && (
-          <div className="lg:hidden bg-white border-b border-slate-200 px-6 py-6 space-y-4 shadow-xl">
-            <button onClick={() => { setActiveTab('home'); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="block w-full text-left text-sm font-medium py-2 text-slate-700">Home</button>
-            <button onClick={() => { setActiveTab('live-tools'); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="block w-full text-left text-sm font-medium py-2 text-blue-600 font-bold">Live AI Scanners</button>
-            <button onClick={() => { setActiveTab('services'); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="block w-full text-left text-sm font-medium py-2 text-slate-700">Our Services</button>
-            <button onClick={() => { setActiveTab('why-pick-us'); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="block w-full text-left text-sm font-medium py-2 text-slate-700">Why Pick These Products</button>
-            <button onClick={() => { setActiveTab('industries'); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="block w-full text-left text-sm font-medium py-2 text-slate-700">Industries</button>
-            <button onClick={() => { setActiveTab('how-it-works'); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="block w-full text-left text-sm font-medium py-2 text-slate-700">How It Works</button>
-            <button onClick={() => { setActiveTab('about'); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="block w-full text-left text-sm font-medium py-2 text-slate-700">About</button>
-            <button onClick={() => { setActiveTab('contact'); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="block w-full text-left text-sm font-medium py-2 text-slate-700">Contact</button>
-            <div className="pt-4 border-t border-slate-200">
-              <button onClick={() => { openAssessmentForm(); setMobileMenuOpen(false); }} className="w-full py-3 bg-blue-600 text-white font-semibold text-xs rounded-lg shadow-md">
+          <div className="lg:hidden border-t border-slate-200 bg-white px-4 sm:px-6 py-4 shadow-xl">
+            <div className="grid grid-cols-2 gap-2">
+              {[
+                ['home', 'Home'],
+                ['live-tools', 'AI Assessments'],
+                ['services', 'Services'],
+                ['why-pick-us', 'Why Navigalex'],
+                ['industries', 'Industries'],
+                ['how-it-works', 'How It Works'],
+                ['about', 'About'],
+                ['contact', 'Contact']
+              ].map(([tab, label]) => (
+                <button
+                  key={tab}
+                  type="button"
+                  onClick={() => { setActiveTab(tab); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                  className={`text-left px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors ${activeTab === tab ? 'text-blue-700 bg-blue-50' : 'text-slate-700 hover:bg-slate-50'}`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            <div className="mt-3 pt-3 border-t border-slate-200">
+              <button
+                onClick={() => { openAssessmentForm(); setMobileMenuOpen(false); }}
+                className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm shadow-sm"
+              >
                 Request a Confidential Assessment
               </button>
             </div>
           </div>
         )}
       </header>
-
       {/* Main Content */}
       <main className="flex-1">
         {activeTab === 'home' && (
