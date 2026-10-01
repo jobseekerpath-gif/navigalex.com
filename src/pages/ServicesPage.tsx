@@ -20,6 +20,25 @@ const PERSONA_IDS: Record<string,string[]> = {
   all: ADVISORY_DESKS.map(s => s.id), growing: ['controlcfo-sprint','lenderready','contract-to-cash','board-box','internal-audit','fraudsignal'], exporter: ['tradeshield','contract-to-cash'], nbfc: ['regtech','board-box'], family: ['family-wealth']
 };
 
+const DIAGNOSTIC_OFFERS: Record<string, { price:string; duration:string; label:string; description:string }> = {
+  'contract-to-cash': {
+    price:'₹15,000 fixed', duration:'3–5 working days', label:'Contract Risk Diagnostic',
+    description:'Review a defined set of customer contracts and receivables evidence, identify material commercial risks and produce a short priority action brief.'
+  },
+  'board-box': {
+    price:'₹20,000 fixed', duration:'5–7 working days', label:'Governance Readiness Diagnostic',
+    description:'Review the supplied governance documents and board records, identify priority gaps and produce a practical remediation roadmap.'
+  },
+  regtech: {
+    price:'₹25,000 fixed', duration:'5–7 working days', label:'RegTech Gap Diagnostic',
+    description:'Map the supplied workflow against the agreed compliance scope, identify control gaps and produce a prioritized remediation brief.'
+  },
+  fraudsignal: {
+    price:'₹25,000 fixed', duration:'3–5 working days', label:'FraudSignal Scoping Diagnostic',
+    description:'Review the agreed initial evidence set, identify red-flag patterns and define the evidence and investigation scope before a full forensic engagement.'
+  }
+};
+
 export interface ServicesPageProps { persona:string; onSelectPersona:(nextPersona:string)=>void; onSelectDesk:(desk:any)=>void; onInquiry:(deskTitle:string)=>void; onNavigateFamilyOffice:()=>void; }
 
 export default function ServicesPage({ persona, onSelectPersona, onSelectDesk, onInquiry, onNavigateFamilyOffice }: ServicesPageProps) {
@@ -38,30 +57,59 @@ export default function ServicesPage({ persona, onSelectPersona, onSelectDesk, o
         <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900">Our 9 Services</h2>
         <p className="text-slate-600">Nine defined advisory desks with clear deliverables, delivery timelines and indicative fees.</p>
       </div>
+
+      <div className="rounded-2xl border border-blue-100 bg-blue-50/70 p-5 sm:p-7">
+        <div className="text-center max-w-4xl mx-auto">
+          <span className="text-xs font-bold text-blue-700 uppercase tracking-widest">START SMALL. PROVE THE NEED. SCALE THE ENGAGEMENT.</span>
+          <h3 className="mt-2 text-xl sm:text-2xl font-extrabold text-slate-900">Free assessment → Paid diagnostic → Defined project → Recurring advisory</h3>
+          <p className="mt-2 text-sm text-slate-600">You do not need to commit to a ₹5–25 lakh engagement before the problem, evidence and scope are understood. Start with a low-risk diagnostic where available, then move into the substantive engagement if the findings justify it.</p>
+          <div className="mt-5 grid grid-cols-1 sm:grid-cols-4 gap-3 text-left">
+            {[
+              ['1','Free assessment','Identify the business problem and whether a specialist desk is relevant.'],
+              ['2','Paid diagnostic','Review a defined evidence set and produce a concise findings/action brief.'],
+              ['3','Defined project','Convert confirmed findings into a scoped implementation, investigation or remediation project.'],
+              ['4','Recurring advisory','Continue with a monthly or quarterly operating rhythm where ongoing oversight is required.']
+            ].map(([n,title,copy]) => <div key={n} className="rounded-xl bg-white border border-blue-100 p-4"><span className="inline-flex w-7 h-7 items-center justify-center rounded-full bg-blue-600 text-white text-xs font-bold">{n}</span><h4 className="mt-2 text-sm font-bold text-slate-900">{title}</h4><p className="mt-1 text-xs leading-relaxed text-slate-600">{copy}</p></div>)}
+          </div>
+        </div>
+      </div>
+
       <div className="rounded-2xl bg-slate-950 text-white p-6 sm:p-8">
         <div className="text-center max-w-2xl mx-auto space-y-2"><span className="text-xs font-bold text-blue-400 uppercase tracking-widest">HOW WE DELIVER</span><h3 className="text-xl sm:text-2xl font-bold">Evidence → AI-assisted analysis → Professional review → Decision pack</h3><p className="text-xs text-slate-300">Scope and professional review are confirmed before each engagement.</p></div>
       </div>
+
       <div className="flex flex-col lg:flex-row gap-3">
         <div role="tablist" aria-label="Filter services" className="flex-1 flex gap-2 overflow-x-auto rounded-2xl border border-slate-200 bg-white p-2 shadow-sm">
           {PERSONAS.map(p => <button key={p.key} type="button" role="tab" aria-selected={persona === p.key} onClick={() => onSelectPersona(p.key)} className={`shrink-0 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold ${persona === p.key ? 'bg-blue-600 text-white' : 'text-slate-700 hover:bg-slate-100'}`}>{p.label}</button>)}
         </div>
         <input value={query} onChange={e => setQuery(e.target.value)} placeholder="Search services" aria-label="Search services" className="lg:w-64 rounded-xl border border-slate-300 px-4 py-3 text-sm text-slate-900 bg-white" />
       </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {visible.map(srv => <article key={srv.id} className="navigalex-card p-6 rounded-2xl flex flex-col justify-between gap-6 border-t-4 border-blue-600">
-          <div className="space-y-4">
-            <div className="flex items-center justify-between gap-2"><span className="px-2 py-1 rounded bg-blue-50 border border-blue-200 text-[10px] font-bold text-blue-700 uppercase">{srv.badge}</span><span className="text-[10px] font-bold text-slate-500">{srv.timeframe}</span></div>
-            <div><h3 className="text-lg font-bold text-slate-900 leading-tight">{srv.title}</h3><p className="text-xs font-semibold text-blue-600 mt-1">{srv.tagline}</p></div>
-            <p className="text-xs text-slate-600 leading-relaxed">{srv.summary}</p>
-            <div className="p-3 bg-rose-50 border border-rose-200 rounded-xl"><span className="text-[10px] font-bold text-rose-800 uppercase tracking-wider">Problem addressed</span><p className="text-xs text-slate-800 mt-1">{srv.problem}</p></div>
-            <ul className="space-y-2">{srv.deliverables.slice(0,3).map((d,i)=><li key={i} className="flex gap-2 text-xs text-slate-700"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5"/><span>{d}</span></li>)}<li className="text-[11px] text-blue-600 font-semibold pl-5">+ {Math.max(0,srv.deliverables.length-3)} more deliverables</li></ul>
-          </div>
-          <div className="border-t border-slate-100 pt-4 space-y-3">
-            <div className="flex items-start justify-between gap-3"><span className="text-xs text-slate-500">Indicative fee</span><span className="text-sm font-bold text-slate-900 text-right">{srv.price}</span></div>
-            <div className="grid grid-cols-2 gap-2"><button type="button" onClick={() => onSelectDesk(srv)} className="py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold">See Full Scope</button><button type="button" onClick={() => onInquiry(srv.title)} className="py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold">Inquire Desk</button></div>
-            {srv.id === 'family-wealth' && <button type="button" onClick={onNavigateFamilyOffice} className="w-full inline-flex items-center justify-center gap-1 text-xs font-bold text-blue-700">Dedicated Family Office <ChevronRight className="w-3 h-3"/></button>}
-          </div>
-        </article>)}
+        {visible.map(srv => {
+          const diagnostic = DIAGNOSTIC_OFFERS[srv.id];
+          return <article key={srv.id} className="navigalex-card p-6 rounded-2xl flex flex-col justify-between gap-6 border-t-4 border-blue-600">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between gap-2"><span className="px-2 py-1 rounded bg-blue-50 border border-blue-200 text-[10px] font-bold text-blue-700 uppercase">{srv.badge}</span><span className="text-[10px] font-bold text-slate-500">{srv.timeframe}</span></div>
+              <div><h3 className="text-lg font-bold text-slate-900 leading-tight">{srv.title}</h3><p className="text-xs font-semibold text-blue-600 mt-1">{srv.tagline}</p></div>
+              <p className="text-xs text-slate-600 leading-relaxed">{srv.summary}</p>
+              <div className="p-3 bg-rose-50 border border-rose-200 rounded-xl"><span className="text-[10px] font-bold text-rose-800 uppercase tracking-wider">Problem addressed</span><p className="text-xs text-slate-800 mt-1">{srv.problem}</p></div>
+              <ul className="space-y-2">{srv.deliverables.slice(0,3).map((d,i)=><li key={i} className="flex gap-2 text-xs text-slate-700"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5"/><span>{d}</span></li>)}<li className="text-[11px] text-blue-600 font-semibold pl-5">+ {Math.max(0,srv.deliverables.length-3)} more deliverables</li></ul>
+            </div>
+            <div className="border-t border-slate-100 pt-4 space-y-3">
+              {diagnostic && <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-3">
+                <div className="flex items-center justify-between gap-2"><span className="text-[10px] font-bold uppercase tracking-wider text-emerald-800">Low-risk first transaction</span><span className="text-sm font-extrabold text-emerald-900">{diagnostic.price}</span></div>
+                <p className="mt-1 text-xs font-bold text-slate-900">{diagnostic.label} · {diagnostic.duration}</p>
+                <p className="mt-1 text-xs leading-relaxed text-slate-600">{diagnostic.description}</p>
+                <button type="button" onClick={() => onInquiry(`${diagnostic.label} — ${srv.title}`)} className="mt-3 w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold">Start Paid Diagnostic</button>
+              </div>}
+              <div className="flex items-start justify-between gap-3"><span className="text-xs text-slate-500">Substantive engagement</span><span className="text-sm font-bold text-slate-900 text-right">{srv.price}</span></div>
+              <div className="grid grid-cols-2 gap-2"><button type="button" onClick={() => onSelectDesk(srv)} className="py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold">See Full Scope</button><button type="button" onClick={() => onInquiry(srv.title)} className="py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold">Inquire Desk</button></div>
+              {diagnostic && <button type="button" onClick={() => onInquiry(`Free assessment — ${srv.title}`)} className="w-full inline-flex items-center justify-center gap-1 text-xs font-bold text-blue-700 hover:text-blue-900">Start with Free Assessment <ChevronRight className="w-3 h-3"/></button>}
+              {srv.id === 'family-wealth' && <button type="button" onClick={onNavigateFamilyOffice} className="w-full inline-flex items-center justify-center gap-1 text-xs font-bold text-blue-700">Dedicated Family Office <ChevronRight className="w-3 h-3"/></button>}
+            </div>
+          </article>;
+        })}
       </div>
       {visible.length === 0 && <div className="text-center py-12 text-sm text-slate-500">No matching service found.</div>}
     </section>
