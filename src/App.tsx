@@ -232,6 +232,14 @@ export const ADVISORY_DESKS = [
   }
 ]
 
+const PERSONA_OPTIONS = [
+  { key: "all", label: "All" },
+  { key: "growing", label: "Growing Business" },
+  { key: "exporter", label: "Exporter/Importer" },
+  { key: "nbfc", label: "NBFC & Fintech" },
+  { key: "family", label: "Family Office" }
+];
+
 const readPersonaParam = () => {
   if (typeof window === "undefined") return "all";
   const value = new URLSearchParams(window.location.search).get("persona");
