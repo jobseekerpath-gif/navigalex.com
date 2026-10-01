@@ -232,96 +232,12 @@ export const ADVISORY_DESKS = [
   }
 ]
 
-const PERSONA_SERVICE_IDS: Record<string, string[]> = {
-  all: ADVISORY_DESKS.map((srv) => srv.id),
-  growing: ["controlcfo-sprint", "lenderready", "contract-to-cash", "board-box", "internal-audit", "fraudsignal"],
-  exporter: ["tradeshield", "contract-to-cash"],
-  nbfc: ["regtech", "board-box"],
-  family: ["family-wealth"]
-};
-
-const PERSONA_OPTIONS = [
-  { key: "all", label: "All" },
-  { key: "growing", label: "Growing Business" },
-  { key: "exporter", label: "Exporter/Importer" },
-  { key: "nbfc", label: "NBFC & Fintech" },
-  { key: "family", label: "Family Office" }
-];
-
 const readPersonaParam = () => {
   if (typeof window === "undefined") return "all";
   const value = new URLSearchParams(window.location.search).get("persona");
   return PERSONA_OPTIONS.some((option) => option.key === value) ? value || "all" : "all";
 };
 
-
-const isResolvedPlaceholder = (value?: string) => Boolean(
-  value && !(value.trim().startsWith('{{') && value.trim().endsWith('}}'))
-);
-
-const REGULATORY_TRIGGERS: Record<string, { label: string; value: string }> = {
-  "regtech": { label: "DPDP compliance deadline", value: "{{DPDP_DEADLINE}}" },
-  "board-box": { label: "Directors' personal liability", value: "{{COMPANIES_ACT_SECTION}}" }
-};
-
-
-const PRICING_CONFIG: Record<string, { anchor?: string; successFeeBasis?: string; minimumTerm?: string; entryAssessmentPrice?: string; outcomeClaim?: string }> = {
-  "lenderready": { successFeeBasis: "{{SUCCESS_FEE_BASIS}}" },
-  "board-box": { anchor: "From ₹50,000/month", minimumTerm: "{{MIN_TERM}}" },
-  "regtech": { anchor: "From ₹5 Lakh", entryAssessmentPrice: "{{DPDP_ASSESSMENT_PRICE}}" },
-  "controlcfo-sprint": { outcomeClaim: "{{OUTCOME_CLAIM}}" }
-};
-
-
-const BRAND_MARKS: Record<string, boolean> = {
-  "ControlCFO": true,
-  "LenderReady": false,
-  "Contract-to-Cash": false,
-  "AI-Assisted Internal Audit Factory": false,
-  "Board-in-a-Box": false,
-  "RegTech Journey Lab": false,
-  "FraudSignal": false,
-  "TradeShield": false,
-  "Family Wealth Governance": false
-};
-
-const formatServiceTitle = (title: string) => BRAND_MARKS.ControlCFO && title.includes("ControlCFO") && !title.includes("™")
-  ? title.replace("ControlCFO", "ControlCFO™")
-  : title;
-
-const SITE_TRUST = {
-  clientCount: "{{CLIENT_COUNT}}",
-  credential: "{{CREDENTIAL}}",
-  anonymisedCaseOutcome: "{{ANONYMISED_CASE_OUTCOME}}"
-};
-
-const FRAUDSIGNAL_CREDENTIAL = "{{CREDENTIAL}}";
-const LC_STAT_CONFIG = {
-  value: "{{LC_REJECTION_RATE_STAT}}",
-  source: "{{LC_STAT_SOURCE}}"
-};
-
-
-const FREE_TOOL_HANDOFFS: Record<string, { serviceId: string; persona: string; campaign: string }> = {
-  "compliance-calendar": { serviceId: "regtech", persona: "nbfc", campaign: "compliance-calendar" },
-  "loan-eligibility": { serviceId: "lenderready", persona: "growing", campaign: "loan-eligibility" },
-  "do-key-person-gap": { serviceId: "board-box", persona: "growing", campaign: "do-key-person-gap" },
-  "contract-43b-h": { serviceId: "contract-to-cash", persona: "growing", campaign: "contract-43b-h" },
-  "business-health": { serviceId: "controlcfo-sprint", persona: "growing", campaign: "business-health" }
-};
-
-const getFreeToolHandoffUrl = (tool: string) => {
-  const handoff = FREE_TOOL_HANDOFFS[tool];
-  if (!handoff) return "/services";
-  const params = new URLSearchParams({
-    persona: handoff.persona,
-    service: handoff.serviceId,
-    utm_source: "free_tool",
-    utm_campaign: handoff.campaign
-  });
-  if (tool === 'contract-43b-h') return "/43b-h-check?" + params.toString();
-  return "/services?" + params.toString();
-};
 
 
 
