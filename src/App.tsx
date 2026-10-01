@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import LiveAdvisoryBot from './components/LiveAdvisoryBot';
-import AdminPanel from './components/AdminPanel';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
+const LiveAdvisoryBot = lazy(() => import('./components/LiveAdvisoryBot'));
+const AdminPanel = lazy(() => import('./components/AdminPanel'));
 import ModalCloseButton from './components/ModalCloseButton';
 import { 
   Shield, Scale, FileText, BarChart3, ArrowRight, CheckCircle2, 
@@ -766,7 +766,8 @@ export default function App() {
 
   if (activeTab === 'admin') {
     return (
-      <>
+      <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-white text-slate-600 text-sm">Loading Navigalex Admin…</div>}>
+      <> 
         <AdminPanel onBackToSite={() => {
           if (typeof window !== 'undefined' && window.location.pathname.toLowerCase() === '/admin') {
             window.history.pushState(null, '', '/');
@@ -774,11 +775,14 @@ export default function App() {
           setActiveTab('home');
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }} />
-        <LiveAdvisoryBot 
-          onOpenAssessment={openAssessmentForm} 
-          onNavigateTab={(tab) => { setActiveTab(tab); window.scrollTo({ top: 0, behavior: 'smooth' }); }} 
-        />
+        <Suspense fallback={null}>
+          <LiveAdvisoryBot 
+            onOpenAssessment={openAssessmentForm} 
+            onNavigateTab={(tab) => { setActiveTab(tab); window.scrollTo({ top: 0, behavior: 'smooth' }); }} 
+          />
+        </Suspense>
       </>
+      </Suspense>
     );
   }
 
@@ -802,7 +806,7 @@ export default function App() {
       {/* Clean brand strip */}
       <div className="bg-slate-950 text-white/90 border-b border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-8 flex items-center justify-center text-[10px] sm:text-[11px] font-medium tracking-wide">
-          <span className="inline-flex items-center gap-2">
+          <span className="inline-flex max-w-full items-center justify-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" aria-hidden="true" />
             <><strong className="font-bold">Navigalex Advisory:</strong> We help Indian business owners assess financial, legal, governance and banking risks using AI-assisted analysis and professional review.</>
           </span>
@@ -811,7 +815,7 @@ export default function App() {
 
       {/* Sticky Header */}
       <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-xl border-b border-slate-200 shadow-[0_1px_12px_rgba(15,23,42,0.05)]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-[76px] grid grid-cols-[320px_minmax(0,1fr)_190px] items-center gap-3">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 h-[64px] lg:h-[76px] grid grid-cols-[minmax(0,1fr)_auto] lg:grid-cols-[250px_minmax(0,1fr)_170px] items-center gap-2 lg:gap-3">
           <button
             type="button"
             aria-label="Go to Navigalex home"
@@ -870,7 +874,7 @@ export default function App() {
 
         {mobileMenuOpen && (
           <div className="lg:hidden border-t border-slate-200 bg-white px-4 sm:px-6 py-4 shadow-xl">
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {[
                 ['home', 'Home'],
                 ['live-tools', 'Live AI Scanners'],
@@ -1012,7 +1016,7 @@ export default function App() {
               </div>
 
               {/* The Navigalex Solution in Layman Terms */}
-              <div className="navigalex-card p-8 sm:p-10 rounded-2xl bg-gradient-to-r from-blue-900 via-slate-900 to-indigo-950 text-white text-center space-y-4 shadow-xl">
+              <div className="navigalex-card p-4 sm:p-10 rounded-2xl bg-gradient-to-r from-blue-900 via-slate-900 to-indigo-950 text-white text-center space-y-4 shadow-xl">
                 <span className="text-xs font-bold uppercase tracking-widest text-blue-300">HOW NAVIGALEX SOLVES THIS</span>
                 <h3 className="text-2xl sm:text-3xl font-bold text-white">One Unified Decision System For Your Money & Risk</h3>
                 <p className="text-sm text-slate-200 max-w-2xl mx-auto leading-relaxed">
@@ -1091,7 +1095,7 @@ export default function App() {
             </div>
 
             {/* LIVE 1: Contract & Agreement Risk Analyzer */}
-            <section className="navigalex-card rounded-2xl p-8 sm:p-10 shadow-xl border-t-4 border-blue-600 space-y-8">
+            <section className="navigalex-card rounded-2xl p-4 sm:p-10 shadow-xl border-t-4 border-blue-600 space-y-8">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-6">
                 <div>
                   <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold mb-2">
@@ -1699,7 +1703,7 @@ export default function App() {
             <div
               role="tablist"
               aria-label="Filter services by buyer persona"
-              className="flex flex-wrap gap-2 rounded-2xl border border-slate-200 bg-white p-2 shadow-sm"
+              className="flex gap-2 rounded-2xl border border-slate-200 bg-white p-2 shadow-sm overflow-x-auto overscroll-contain"
             >
               {PERSONA_OPTIONS.map((option) => (
                 <button
@@ -1708,7 +1712,7 @@ export default function App() {
                   role="tab"
                   aria-selected={persona === option.key}
                   onClick={() => selectPersona(option.key)}
-                  className={`flex-1 min-w-[140px] px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-colors ${persona === option.key ? 'bg-blue-600 text-white shadow-md' : 'text-slate-700 hover:bg-slate-100'}`}
+                  className={`shrink-0 min-w-[150px] sm:flex-1 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-colors ${persona === option.key ? 'bg-blue-600 text-white shadow-md' : 'text-slate-700 hover:bg-slate-100'}`}
                 >
                   {option.label}
                 </button>
@@ -2652,10 +2656,12 @@ export default function App() {
       )}
 
       {/* Live AI Advisory Bot */}
-      <LiveAdvisoryBot 
-        onOpenAssessment={openAssessmentForm} 
-        onNavigateTab={(tab) => { setActiveTab(tab); window.scrollTo({ top: 0, behavior: 'smooth' }); }} 
-      />
+      <Suspense fallback={null}>
+        <LiveAdvisoryBot 
+          onOpenAssessment={openAssessmentForm} 
+          onNavigateTab={(tab) => { setActiveTab(tab); window.scrollTo({ top: 0, behavior: 'smooth' }); }} 
+        />
+      </Suspense>
     </div>
   );
 }
