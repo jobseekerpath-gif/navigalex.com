@@ -304,7 +304,8 @@ const FREE_TOOL_HANDOFFS: Record<string, { serviceId: string; persona: string; c
   "compliance-calendar": { serviceId: "regtech", persona: "nbfc", campaign: "compliance-calendar" },
   "loan-eligibility": { serviceId: "lenderready", persona: "growing", campaign: "loan-eligibility" },
   "do-key-person-gap": { serviceId: "board-box", persona: "growing", campaign: "do-key-person-gap" },
-  "contract-43b-h": { serviceId: "contract-to-cash", persona: "growing", campaign: "contract-43b-h" }
+  "contract-43b-h": { serviceId: "contract-to-cash", persona: "growing", campaign: "contract-43b-h" },
+  "business-health": { serviceId: "controlcfo-sprint", persona: "growing", campaign: "business-health" }
 };
 
 const getFreeToolHandoffUrl = (tool: string) => {
@@ -320,6 +321,106 @@ const getFreeToolHandoffUrl = (tool: string) => {
   return "/services?" + params.toString();
 };
 
+
+const COMMERCIAL_PATHS: Record<string, { tool: string; serviceId: string; persona: string; diagnostic: string; service: string; recurring: string; campaign: string }> = {
+  contract: {
+    tool: "contract-43b-h",
+    serviceId: "contract-to-cash",
+    persona: "growing",
+    diagnostic: "Contract-to-Cash Diagnostic",
+    service: "Contract-to-Cash Risk Desk",
+    recurring: "Monthly contract and receivables support, where scoped",
+    campaign: "contract-to-cash-diagnostic"
+  },
+  lenderready: {
+    tool: "loan-eligibility",
+    serviceId: "lenderready",
+    persona: "growing",
+    diagnostic: "Lender Readiness Diagnostic",
+    service: "LenderReady Credit Readiness & Debt Structuring Office",
+    recurring: "Ongoing lender-readiness and debt-structuring support, where scoped",
+    campaign: "lenderreadiness-diagnostic"
+  },
+  controlcfo: {
+    tool: "business-health",
+    serviceId: "controlcfo-sprint",
+    persona: "growing",
+    diagnostic: "Business Control Diagnostic",
+    service: "ControlCFO™ 90-Day Readiness Sprint",
+    recurring: "Ongoing finance, risk and governance advisory, where scoped",
+    campaign: "business-control-diagnostic"
+  }
+};
+
+const DIAGNOSTIC_PRICE = "{{DIAGNOSTIC_PRICE}}";
+
+function CommercialPath({
+  path,
+  onOpenAssessment
+}: {
+  path: typeof COMMERCIAL_PATHS[keyof typeof COMMERCIAL_PATHS];
+  onOpenAssessment: (concern?: string) => void;
+}) {
+  const diagnosticPriceReady = isResolvedPlaceholder(DIAGNOSTIC_PRICE);
+  const serviceParams = new URLSearchParams({
+    persona: path.persona,
+    service: path.serviceId,
+    utm_source: "free_tool",
+    utm_campaign: path.campaign
+  });
+  const serviceUrl = "/services?" + serviceParams.toString();
+
+  return (
+    <div className="rounded-2xl border border-blue-200 bg-blue-50/60 p-4 sm:p-5 space-y-4">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <div>
+          <span className="text-[10px] font-bold uppercase tracking-widest text-blue-700">What happens next</span>
+          <h5 className="text-sm sm:text-base font-bold text-slate-900 mt-1">{path.diagnostic}</h5>
+        </div>
+        {diagnosticPriceReady && (
+          <span className="text-xs font-bold text-blue-900">Diagnostic: {DIAGNOSTIC_PRICE}</span>
+        )}
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-4 gap-2">
+        {[
+          ["01", "Free assessment", "Use your result as the starting evidence."],
+          ["02", "Paid diagnostic", "Review the issue in greater depth using the records in scope."],
+          ["03", "Defined project", path.service],
+          ["04", "Recurring advisory", path.recurring]
+        ].map(([step, title, description]) => (
+          <div key={step} className="rounded-xl bg-white border border-blue-100 p-3">
+            <span className="text-[10px] font-extrabold text-blue-700">{step}</span>
+            <strong className="block text-xs font-bold text-slate-900 mt-1">{title}</strong>
+            <span className="block text-[11px] text-slate-600 leading-relaxed mt-1">{description}</span>
+          </div>
+        ))}
+      </div>
+
+      <div className="flex flex-col sm:flex-row gap-2.5 pt-1">
+        <button
+          type="button"
+          onClick={() => onOpenAssessment(`Paid Diagnostic — ${path.diagnostic}`)}
+          className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-500 px-4 py-3 text-xs font-bold text-white transition-colors"
+        >
+          Start Paid Diagnostic
+          <ArrowRight className="w-3.5 h-3.5" />
+        </button>
+        <a
+          href={serviceUrl}
+          className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-white hover:bg-slate-50 border border-blue-200 px-4 py-3 text-xs font-bold text-blue-800 transition-colors text-center"
+        >
+          View Defined Project
+          <ChevronRight className="w-3.5 h-3.5" />
+        </a>
+      </div>
+
+      <p className="text-[10px] text-slate-500">
+        The diagnostic is a separate paid engagement; its scope and fee are confirmed before work begins.
+      </p>
+    </div>
+  );
+}
 
 export default function App() {
   // Check if URL is /admin or ?admin=true
@@ -1094,6 +1195,23 @@ export default function App() {
               <p className="text-slate-600">Assess real contracts, check loan readiness, and generate an instant business diagnostic report.</p>
             </div>
 
+            <div className="navigalex-card rounded-2xl p-4 sm:p-5 border border-slate-200 bg-white shadow-sm">
+              <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                {[
+                  ["01", "Free assessment", "Identify the issue from your own inputs."],
+                  ["02", "Small paid diagnostic", "Deepen the finding with the records relevant to the issue."],
+                  ["03", "Defined project", "Move into a clearly scoped advisory engagement."],
+                  ["04", "Recurring advisory", "Continue support only where ongoing monitoring is useful."]
+                ].map(([step, title, description]) => (
+                  <div key={step} className="rounded-xl bg-slate-50 border border-slate-200 p-3">
+                    <span className="text-[10px] font-extrabold text-blue-700">{step}</span>
+                    <strong className="block text-xs font-bold text-slate-900 mt-1">{title}</strong>
+                    <span className="block text-[11px] text-slate-600 leading-relaxed mt-1">{description}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             {/* LIVE 1: Contract & Agreement Risk Analyzer */}
             <section className="navigalex-card rounded-2xl p-4 sm:p-10 shadow-xl border-t-4 border-blue-600 space-y-8">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-6">
@@ -1244,6 +1362,7 @@ export default function App() {
                   <p className="text-[11px] text-slate-500">
                     The page shows a concise decision summary. Download the personalized PDF for the detailed findings and actions.
                   </p>
+                  <CommercialPath path={COMMERCIAL_PATHS.contract} onOpenAssessment={openAssessmentForm} />
                 </div>
               )}
             </section>
@@ -1390,6 +1509,7 @@ export default function App() {
                   </div>
 
                   <p className="text-[11px] text-slate-500">This calculation uses only the figures you entered. It is not a lender approval or credit decision.</p>
+                  <CommercialPath path={COMMERCIAL_PATHS.lenderready} onOpenAssessment={openAssessmentForm} />
                 </div>
               )}
             </section>
@@ -1538,6 +1658,7 @@ export default function App() {
                       </div>
                     </div>
                   )}
+                  <CommercialPath path={COMMERCIAL_PATHS.controlcfo} onOpenAssessment={openAssessmentForm} />
                 </div>
               )}
             </section>
