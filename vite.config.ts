@@ -8,9 +8,9 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   resolve: { alias: { '@': path.resolve(__dirname, '.') } },
   build: {
-    rollupOptions: {
+    rolldownOptions: {
       output: {
-        inlineDynamicImports: true
+        codeSplitting: false
       }
     }
   },
