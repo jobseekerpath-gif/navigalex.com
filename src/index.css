@@ -146,7 +146,12 @@ video {
   }
 
   section {
-    scroll-margin-top: 68px;
+    scroll-margin-top: 62px;
+  }
+
+  main > div > section + section {
+    content-visibility: auto;
+    contain-intrinsic-size: 640px;
   }
 }
 
