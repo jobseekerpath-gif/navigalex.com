@@ -324,37 +324,6 @@ const getFreeToolHandoffUrl = (tool: string) => {
 };
 
 
-const COMMERCIAL_PATHS: Record<string, { tool: string; serviceId: string; persona: string; diagnostic: string; service: string; recurring: string; campaign: string }> = {
-  contract: {
-    tool: "contract-43b-h",
-    serviceId: "contract-to-cash",
-    persona: "growing",
-    diagnostic: "Contract-to-Cash Diagnostic",
-    service: "Contract-to-Cash Risk Desk",
-    recurring: "Monthly contract and receivables support, where scoped",
-    campaign: "contract-to-cash-diagnostic"
-  },
-  lenderready: {
-    tool: "loan-eligibility",
-    serviceId: "lenderready",
-    persona: "growing",
-    diagnostic: "Lender Readiness Diagnostic",
-    service: "LenderReady Credit Readiness & Debt Structuring Office",
-    recurring: "Ongoing lender-readiness and debt-structuring support, where scoped",
-    campaign: "lenderreadiness-diagnostic"
-  },
-  controlcfo: {
-    tool: "business-health",
-    serviceId: "controlcfo-sprint",
-    persona: "growing",
-    diagnostic: "Business Control Diagnostic",
-    service: "ControlCFO™ 90-Day Readiness Sprint",
-    recurring: "Ongoing finance, risk and governance advisory, where scoped",
-    campaign: "business-control-diagnostic"
-  }
-};
-
-
 
 export default function App() {
   // Check if URL is /admin or ?admin=true
