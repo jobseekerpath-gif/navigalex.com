@@ -322,9 +322,11 @@ const getFreeToolHandoffUrl = (tool: string) => {
 };
 
 
-const COMMERCIAL_PATHS: Record<string, { tool: string; diagnostic: string; service: string; recurring: string; campaign: string }> = {
+const COMMERCIAL_PATHS: Record<string, { tool: string; serviceId: string; persona: string; diagnostic: string; service: string; recurring: string; campaign: string }> = {
   contract: {
     tool: "contract-43b-h",
+    serviceId: "contract-to-cash",
+    persona: "growing",
     diagnostic: "Contract-to-Cash Diagnostic",
     service: "Contract-to-Cash Risk Desk",
     recurring: "Monthly contract and receivables support, where scoped",
@@ -332,6 +334,8 @@ const COMMERCIAL_PATHS: Record<string, { tool: string; diagnostic: string; servi
   },
   lenderready: {
     tool: "loan-eligibility",
+    serviceId: "lenderready",
+    persona: "growing",
     diagnostic: "Lender Readiness Diagnostic",
     service: "LenderReady Credit Readiness & Debt Structuring Office",
     recurring: "Ongoing lender-readiness and debt-structuring support, where scoped",
@@ -339,6 +343,8 @@ const COMMERCIAL_PATHS: Record<string, { tool: string; diagnostic: string; servi
   },
   controlcfo: {
     tool: "business-health",
+    serviceId: "controlcfo-sprint",
+    persona: "growing",
     diagnostic: "Business Control Diagnostic",
     service: "ControlCFO™ 90-Day Readiness Sprint",
     recurring: "Ongoing finance, risk and governance advisory, where scoped",
@@ -356,7 +362,13 @@ function CommercialPath({
   onOpenAssessment: (concern?: string) => void;
 }) {
   const diagnosticPriceReady = isResolvedPlaceholder(DIAGNOSTIC_PRICE);
-  const serviceUrl = getFreeToolHandoffUrl(path.tool);
+  const serviceParams = new URLSearchParams({
+    persona: path.persona,
+    service: path.serviceId,
+    utm_source: "free_tool",
+    utm_campaign: path.campaign
+  });
+  const serviceUrl = "/services?" + serviceParams.toString();
 
   return (
     <div className="rounded-2xl border border-blue-200 bg-blue-50/60 p-4 sm:p-5 space-y-4">
