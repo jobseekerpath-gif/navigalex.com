@@ -1071,7 +1071,7 @@ export default function App() {
                       {Object.values(diagnosticScores).reduce((a, b) => a + b, 0)} / 25
                     </strong>
                     <span className="block text-[11px] text-slate-500 mt-0.5">
-                      {Object.values(diagnosticScores).reduce((a, b) => a + b, 0) > 16 ? "âš ï¸ High Risk: Immediate cleanup recommended." : "Healthy profile with minor optimization needed."}
+                      {Object.values(diagnosticScores).reduce((a, b) => a + b, 0) > 16 ? "⚠️ High Risk: Immediate cleanup recommended." : "Healthy profile with minor optimization needed."}
                     </span>
                   </div>
                   <button
@@ -1727,7 +1727,7 @@ export default function App() {
                       <span className="px-2.5 py-0.5 rounded bg-blue-50 border border-blue-200 text-[10px] font-bold text-blue-700 uppercase">
                         {srv.badge}
                       </span>
-                      <span className="text-[11px] font-bold text-slate-500">â±ï¸ {srv.timeframe}</span>
+                      <span className="text-[11px] font-bold text-slate-500">⏱️ {srv.timeframe}</span>
                     </div>
 
                     <div>
@@ -2467,7 +2467,7 @@ export default function App() {
           <p>© {new Date().getFullYear()} Navigalex Advisory & Governance Intelligence. All rights reserved.</p>
           <p className="text-[11px] flex items-center gap-1.5">
             <MapPin className="w-3.5 h-3.5 text-blue-500" />
-            <span>â€¢ â€¢ â€¢ </span>
+            <span>• • • </span>
           </p>
         </div>
       </footer>
