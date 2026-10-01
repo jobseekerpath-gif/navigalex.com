@@ -354,75 +354,7 @@ const COMMERCIAL_PATHS: Record<string, { tool: string; serviceId: string; person
   }
 };
 
-const DIAGNOSTIC_PRICE = "{{DIAGNOSTIC_PRICE}}";
 
-function CommercialPath({
-  path,
-  onOpenAssessment
-}: {
-  path: typeof COMMERCIAL_PATHS[keyof typeof COMMERCIAL_PATHS];
-  onOpenAssessment: (concern?: string) => void;
-}) {
-  const diagnosticPriceReady = isResolvedPlaceholder(DIAGNOSTIC_PRICE);
-  const serviceParams = new URLSearchParams({
-    persona: path.persona,
-    service: path.serviceId,
-    utm_source: "free_tool",
-    utm_campaign: path.campaign
-  });
-  const serviceUrl = "/services?" + serviceParams.toString();
-
-  return (
-    <div className="rounded-2xl border border-blue-200 bg-blue-50/60 p-4 sm:p-5 space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <div>
-          <span className="text-[10px] font-bold uppercase tracking-widest text-blue-700">What happens next</span>
-          <h5 className="text-sm sm:text-base font-bold text-slate-900 mt-1">{path.diagnostic}</h5>
-        </div>
-        {diagnosticPriceReady && (
-          <span className="text-xs font-bold text-blue-900">Diagnostic: {DIAGNOSTIC_PRICE}</span>
-        )}
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-4 gap-2">
-        {[
-          ["01", "Free assessment", "Use your result as the starting evidence."],
-          ["02", "Paid diagnostic", "Review the issue in greater depth using the records in scope."],
-          ["03", "Defined project", path.service],
-          ["04", "Recurring advisory", path.recurring]
-        ].map(([step, title, description]) => (
-          <div key={step} className="rounded-xl bg-white border border-blue-100 p-3">
-            <span className="text-[10px] font-extrabold text-blue-700">{step}</span>
-            <strong className="block text-xs font-bold text-slate-900 mt-1">{title}</strong>
-            <span className="block text-[11px] text-slate-600 leading-relaxed mt-1">{description}</span>
-          </div>
-        ))}
-      </div>
-
-      <div className="flex flex-col sm:flex-row gap-2.5 pt-1">
-        <button
-          type="button"
-          onClick={() => onOpenAssessment(`Paid Diagnostic — ${path.diagnostic}`)}
-          className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-500 px-4 py-3 text-xs font-bold text-white transition-colors"
-        >
-          Start Paid Diagnostic
-          <ArrowRight className="w-3.5 h-3.5" />
-        </button>
-        <a
-          href={serviceUrl}
-          className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-white hover:bg-slate-50 border border-blue-200 px-4 py-3 text-xs font-bold text-blue-800 transition-colors text-center"
-        >
-          View Defined Project
-          <ChevronRight className="w-3.5 h-3.5" />
-        </a>
-      </div>
-
-      <p className="text-[10px] text-slate-500">
-        The diagnostic is a separate paid engagement; its scope and fee are confirmed before work begins.
-      </p>
-    </div>
-  );
-}
 
 export default function App() {
   // Check if URL is /admin or ?admin=true
@@ -518,6 +450,16 @@ export default function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Section 43B(h) payment-timing screening state
+  const [paymentCheck, setPaymentCheck] = useState({
+    msmeStatus: 'yes',
+    acceptanceDate: '',
+    agreedDays: '45',
+    paidDate: '',
+    amount: ''
+  });
+  const [paymentCheckResult, setPaymentCheckResult] = useState<any>(null);
+
   // Interactive 5-point slider state
   const [diagnosticScores, setDiagnosticScores] = useState({
     cash: 0,
@@ -586,6 +528,53 @@ export default function App() {
   const handleSelectDeskForBooking = (deskTitle: string) => {
     openAssessmentForm(deskTitle);
   };
+
+  const runPaymentTimingCheck = (e: React.FormEvent) => {
+    e.preventDefault();
+    const { msmeStatus, acceptanceDate, agreedDays, paidDate, amount } = paymentCheck;
+    if (!acceptanceDate) {
+      setPaymentCheckResult({ type: 'input', message: 'Enter the acceptance or deemed-acceptance date.' });
+      return;
+    }
+
+    const accepted = new Date(acceptanceDate + 'T00:00:00');
+    if (Number.isNaN(accepted.getTime())) {
+      setPaymentCheckResult({ type: 'input', message: 'Enter a valid acceptance date.' });
+      return;
+    }
+
+    const agreed = Math.max(0, Number.parseInt(agreedDays || '45', 10) || 0);
+    const statutoryMax = new Date(accepted);
+    statutoryMax.setDate(statutoryMax.getDate() + 45);
+
+    const agreedDue = new Date(accepted);
+    agreedDue.setDate(agreedDue.getDate() + Math.min(agreed, 45));
+
+    const today = new Date();
+    const paid = paidDate ? new Date(paidDate + 'T00:00:00') : today;
+    if (Number.isNaN(paid.getTime())) {
+      setPaymentCheckResult({ type: 'input', message: 'Enter a valid payment date or leave it blank if unpaid.' });
+      return;
+    }
+
+    const daysToPayment = Math.max(0, Math.floor((paid.getTime() - accepted.getTime()) / 86400000));
+    const beyond45 = paid.getTime() > statutoryMax.getTime();
+    const beyondAgreed = paid.getTime() > agreedDue.getTime();
+    const potentialIssue = msmeStatus === 'yes' && (beyond45 || beyondAgreed);
+
+    setPaymentCheckResult({
+      type: potentialIssue ? 'flag' : 'clear',
+      daysToPayment,
+      statutoryMax: statutoryMax.toLocaleDateString('en-IN'),
+      agreedDue: agreedDue.toLocaleDateString('en-IN'),
+      amount: amount || '',
+      potentialIssue,
+      note: msmeStatus === 'yes'
+        ? 'Based on the dates you entered, the payment appears to be beyond the Section 15 timing screen used for this check.'
+        : 'The Section 15 timing screen is intended for a supplier that qualifies as a micro or small enterprise. Your answer indicates that status is not confirmed.'
+    });
+  };
+
 
   const handleLeadSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
