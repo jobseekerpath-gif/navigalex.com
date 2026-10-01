@@ -17,24 +17,6 @@
   </head>
   <body class="bg-white text-slate-900 antialiased selection:bg-blue-600 selection:text-white font-light font-['Inter']">
     <div id="root"></div>
-    <script>
-      (() => {
-        const recoveryKey = 'navigalex-chunk-recovery-20261001';
-        let recovered = false;
-        const recover = (message) => {
-          if (recovered || sessionStorage.getItem(recoveryKey)) return;
-          if (!/chunk|dynamic import|module script|loading/i.test(String(message || ''))) return;
-          recovered = true;
-          sessionStorage.setItem(recoveryKey, '1');
-          const url = new URL(window.location.href);
-          url.searchParams.set('_refresh', Date.now().toString());
-          window.location.replace(url.toString());
-        };
-        window.addEventListener('error', (event) => recover(event.message));
-        window.addEventListener('unhandledrejection', (event) => recover(event.reason?.message || event.reason));
-        window.addEventListener('load', () => sessionStorage.removeItem(recoveryKey));
-      })();
-    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
