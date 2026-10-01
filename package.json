@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsx server.ts",
-    "prebuild": "node scripts/prebuild-stability.cjs",
+    "prebuild": "node scripts/prebuild-stability.cjs && node scripts/fix-service-flow.cjs",
     "build": "vite build",
     "postbuild": "node scripts/patch-server.cjs && node scripts/patch-bot-ui.cjs && node scripts/fix-encoding.cjs && node scripts/patch-report.cjs && node scripts/remove-demo-visitor-data.cjs && node scripts/remove-all-demo-data-safe.cjs && node scripts/patch-spa-assets.cjs",
     "preview": "vite preview",
