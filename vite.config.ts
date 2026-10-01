@@ -4,14 +4,15 @@ import path from 'path';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
+  base: '/',
   plugins: [react(), tailwindcss()],
   resolve: { alias: { '@': path.resolve(__dirname, '.') } },
-  server: { allowedHosts: ['navigalex.com', 'www.navigalex.com'] },
   build: {
     rollupOptions: {
       output: {
         inlineDynamicImports: true
       }
     }
-  }
+  },
+  server: { allowedHosts: ['navigalex.com', 'www.navigalex.com'] }
 });
