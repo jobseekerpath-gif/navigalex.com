@@ -811,7 +811,7 @@ export default function App() {
 
       {/* Sticky Header */}
       <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-xl border-b border-slate-200 shadow-[0_1px_12px_rgba(15,23,42,0.05)]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-[76px] grid grid-cols-[290px_minmax(0,1fr)_190px] items-center gap-3">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-[76px] grid grid-cols-[320px_minmax(0,1fr)_190px] items-center gap-3">
           <button
             type="button"
             aria-label="Go to Navigalex home"
@@ -827,7 +827,7 @@ export default function App() {
             </span>
           </button>
 
-          <nav className="hidden lg:flex min-w-0 items-center justify-center gap-0.5 xl:gap-1 font-semibold" aria-label="Primary navigation">
+          <nav className="hidden lg:flex min-w-0 overflow-hidden items-center justify-start gap-0.5 xl:gap-1 font-semibold" aria-label="Primary navigation">
             {[
               ['home', 'Home'],
               ['live-tools', 'Live AI Scanners'],
@@ -842,7 +842,7 @@ export default function App() {
                 key={tab}
                 type="button"
                 onClick={() => { setActiveTab(tab); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                className={`px-1.5 xl:px-2 py-2 rounded-lg text-[14px] xl:text-[15px] leading-tight whitespace-nowrap text-black transition-colors hover:bg-slate-100 ${activeTab === tab ? 'text-black bg-slate-100' : 'text-black'}`}
+                className={`px-1 xl:px-1.5 py-2 rounded-lg text-[14px] xl:text-[15px] leading-tight whitespace-nowrap text-black transition-colors hover:bg-slate-100 ${activeTab === tab ? 'text-black bg-slate-100' : 'text-black'}`}
               >
                 {label}
               </button>
