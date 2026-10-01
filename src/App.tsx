@@ -304,7 +304,8 @@ const FREE_TOOL_HANDOFFS: Record<string, { serviceId: string; persona: string; c
   "compliance-calendar": { serviceId: "regtech", persona: "nbfc", campaign: "compliance-calendar" },
   "loan-eligibility": { serviceId: "lenderready", persona: "growing", campaign: "loan-eligibility" },
   "do-key-person-gap": { serviceId: "board-box", persona: "growing", campaign: "do-key-person-gap" },
-  "contract-43b-h": { serviceId: "contract-to-cash", persona: "growing", campaign: "contract-43b-h" }
+  "contract-43b-h": { serviceId: "contract-to-cash", persona: "growing", campaign: "contract-43b-h" },
+  "business-health": { serviceId: "controlcfo-sprint", persona: "growing", campaign: "business-health" }
 };
 
 const getFreeToolHandoffUrl = (tool: string) => {
