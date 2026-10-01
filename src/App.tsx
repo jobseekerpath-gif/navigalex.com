@@ -31,9 +31,9 @@ export const ADVISORY_DESKS = [
       "Week 3: Final Borrower Data Room Assembly & Bank Meeting Briefing"
     ],
     clientInputsNeeded: "Last 2 years Audited Balance Sheets, provisional P&L, 12 months Bank Statements, GST returns.",
-    timeframe: "14â€“21 Days",
+    timeframe: "14–21 Days",
     humanSignoff: "Professional review as specified in the agreed engagement scope",
-    price: "â‚¹75,000â€“â‚¹3 Lakh + lawful success fee"
+    price: "₹75,000–₹3 Lakh + lawful success fee"
   },
     {
     id: "controlcfo-sprint",
@@ -58,7 +58,7 @@ export const ADVISORY_DESKS = [
     clientInputsNeeded: "Last 12 months Bank Statements, Tally / ERP backup, Top 5 Customer Agreements, GST 3B vs 2B returns.",
     timeframe: "30 Days Fixed Sprint",
     humanSignoff: "Professional review as specified in the agreed engagement scope",
-    price: "â‚¹1.5â€“4 Lakh fixed"
+    price: "₹1.5–4 Lakh fixed"
   },
     {
     id: "contract-to-cash",
@@ -82,7 +82,7 @@ export const ADVISORY_DESKS = [
     clientInputsNeeded: "Top 5-10 Customer Master Services Agreements (MSAs), unpaid invoice list >60 days.",
     timeframe: "14-Day Setup + Monthly Retainer",
     humanSignoff: "Professional review as specified in the agreed engagement scope",
-    price: "â‚¹75,000â€“â‚¹3 Lakh setup + â‚¹25,000â€“â‚¹1 Lakh/month"
+    price: "₹75,000–₹3 Lakh setup + ₹25,000–₹1 Lakh/month"
   },
     {
     id: "internal-audit",
@@ -106,7 +106,7 @@ export const ADVISORY_DESKS = [
     clientInputsNeeded: "ERP raw dump, chart of accounts, delegation of authority matrix, sample vouchers.",
     timeframe: "Quarterly Audit Cycles",
     humanSignoff: "Professional review as specified in the agreed engagement scope",
-    price: "â‚¹2â€“10 Lakh per cycle"
+    price: "₹2–10 Lakh per cycle"
   },
     {
     id: "board-box",
@@ -130,7 +130,7 @@ export const ADVISORY_DESKS = [
     clientInputsNeeded: "Certificate of Incorporation, MOA/AOA, past 12 months Board Minutes, Statutory Registers.",
     timeframe: "4-Week Setup + Monthly Retainer",
     humanSignoff: "Professional review as specified in the agreed engagement scope",
-    price: "â‚¹2â€“6 Lakh setup + â‚¹50,000â€“â‚¹1.5 Lakh/month"
+    price: "₹2–6 Lakh setup + ₹50,000–₹1.5 Lakh/month"
   },
     {
     id: "regtech",
@@ -152,9 +152,9 @@ export const ADVISORY_DESKS = [
       "Month 3: Simulated Regulatory Stress Test & Team Training"
     ],
     clientInputsNeeded: "Current onboarding workflows, data architecture diagram, vendor master agreements.",
-    timeframe: "6â€“12 Weeks Project",
+    timeframe: "6–12 Weeks Project",
     humanSignoff: "Professional review as specified in the agreed engagement scope",
-    price: "â‚¹5â€“25 Lakh per project"
+    price: "₹5–25 Lakh per project"
   },
     {
     id: "fraudsignal",
@@ -176,9 +176,9 @@ export const ADVISORY_DESKS = [
       "Week 3-4: Evidence Corroboration & Comprehensive Counsel-Ready Report"
     ],
     clientInputsNeeded: "Vendor ledgers, ERP audit logs, bank statements, whistleblower details (strictly confidential).",
-    timeframe: "2â€“4 Weeks per Investigation",
+    timeframe: "2–4 Weeks per Investigation",
     humanSignoff: "Professional review as specified in the agreed engagement scope",
-    price: "â‚¹3â€“15 Lakh per investigation"
+    price: "₹3–15 Lakh per investigation"
   },
     {
     id: "tradeshield",
@@ -199,9 +199,9 @@ export const ADVISORY_DESKS = [
       "Continuous: Monthly retainer for active exporters and EPC contractors"
     ],
     clientInputsNeeded: "Draft LC / Sanction letter, Proforma Invoice, Bill of Lading draft, Bank Guarantee text.",
-    timeframe: "24â€“48 Hours per Transaction / Monthly Retainer",
+    timeframe: "24–48 Hours per Transaction / Monthly Retainer",
     humanSignoff: "Professional review as specified in the agreed engagement scope",
-    price: "â‚¹50,000â€“â‚¹2 Lakh per transaction/retainer"
+    price: "₹50,000–₹2 Lakh per transaction/retainer"
   },
     {
     id: "family-wealth",
@@ -224,9 +224,9 @@ export const ADVISORY_DESKS = [
       "Ongoing: Quarterly Family Governance Review"
     ],
     clientInputsNeeded: "Entity ownership cap tables, property title documents, family tree and key promoter objectives.",
-    timeframe: "8â€“12 Weeks Setup + Quarterly Retainer",
+    timeframe: "8–12 Weeks Setup + Quarterly Retainer",
     humanSignoff: "Professional review as specified in the agreed engagement scope",
-    price: "â‚¹2â€“10 Lakh setup + â‚¹75,000â€“â‚¹3 Lakh/month"
+    price: "₹2–10 Lakh setup + ₹75,000–₹3 Lakh/month"
   }
 ]
 
@@ -471,7 +471,7 @@ export default function App() {
     email: '',
     phone: '',
     businessType: 'MSME / Manufacturing',
-    turnover: 'â‚¹5 Cr - â‚¹25 Cr',
+    turnover: '₹5 Cr - ₹25 Cr',
     primaryConcern: 'Contract & Receivable Cash Flow Risk',
     contactMethod: 'Phone',
     consent: false
@@ -815,7 +815,7 @@ export default function App() {
 
       {/* Sticky Header */}
       <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-xl border-b border-slate-200 shadow-[0_1px_12px_rgba(15,23,42,0.05)]">
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 h-[64px] lg:h-[76px] grid grid-cols-[minmax(0,1fr)_auto] lg:grid-cols-[250px_minmax(0,1fr)_170px] items-center gap-2 lg:gap-3">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 h-[58px] lg:h-[76px] grid grid-cols-[minmax(0,1fr)_auto] lg:grid-cols-[250px_minmax(0,1fr)_170px] items-center gap-2 lg:gap-3">
           <button
             type="button"
             aria-label="Go to Navigalex home"
@@ -865,7 +865,7 @@ export default function App() {
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label="Toggle mobile menu"
               aria-expanded={mobileMenuOpen}
-              className="lg:hidden inline-flex h-10 w-10 items-center justify-center rounded-xl bg-slate-50 border border-slate-200 text-slate-700 hover:bg-slate-100"
+              className="lg:hidden inline-flex h-9 w-9 items-center justify-center rounded-xl bg-slate-50 border border-slate-200 text-slate-700 hover:bg-slate-100"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -909,24 +909,24 @@ export default function App() {
       {/* Main Content */}
       <main className="flex-1">
         {activeTab === 'home' && (
-          <div className="space-y-24 pb-24">
+          <div className="space-y-12 sm:space-y-24 pb-16 sm:pb-24">
             {/* Hero Section in Simple Layman Language */}
-            <section className="relative pt-20 pb-20 px-6 max-w-7xl mx-auto overflow-hidden navigalex-light-gradient rounded-b-3xl border-b border-slate-200">
-              <div className="max-w-4xl space-y-6">
+            <section className="relative pt-8 sm:pt-20 pb-12 sm:pb-20 px-4 sm:px-6 max-w-7xl mx-auto overflow-hidden navigalex-light-gradient rounded-b-3xl border-b border-slate-200">
+              <div className="max-w-4xl space-y-5 sm:space-y-6">
                 <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-xs font-semibold text-blue-700 shadow-sm">
                   <Sparkles className="w-3.5 h-3.5 text-blue-600" />
                   <span>Business & Legal Advisory, Built for Complex Decisions</span>
                 </div>
 
-                <h1 className="text-2xl sm:text-3xl font-bold tracking-tight leading-snug bg-gradient-to-r from-slate-900 via-blue-950 to-indigo-900 bg-clip-text text-transparent">
+                <h1 className="text-[30px] sm:text-3xl font-bold tracking-tight leading-[1.15] bg-gradient-to-r from-slate-900 via-blue-950 to-indigo-900 bg-clip-text text-transparent">
                   Navigate Business Decisions With <span className="bg-gradient-to-r from-blue-700 via-indigo-700 to-blue-800 bg-clip-text text-transparent font-extrabold">Absolute Clarity.</span>
                 </h1>
 
-                <p className="text-base sm:text-xl text-slate-700 max-w-3xl leading-relaxed font-normal">
+                <p className="text-[15px] sm:text-xl text-slate-700 max-w-3xl leading-7 sm:leading-relaxed font-normal">
                   Navigalex helps lenders, founders and boards turn financial, risk and governance signals into clear decisions — before small issues become expensive problems.
                 </p>
 
-                <div className="pt-4 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                <div className="pt-3 sm:pt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
                   <button
                     onClick={() => openAssessmentForm()}
                     className="flex items-center gap-2 px-7 py-3.5 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-500 rounded-xl shadow-lg shadow-blue-600/25 transition-all cursor-pointer"
@@ -979,7 +979,7 @@ export default function App() {
                     <span className="text-xs font-bold text-indigo-700 uppercase tracking-wider">Flagship Product</span>
                     <Briefcase className="w-4 h-4 text-indigo-600" />
                   </div>
-                  <h3 className="font-bold text-slate-900 text-base">ControlCFOâ„¢ 30-Day Sprint</h3>
+                  <h3 className="font-bold text-slate-900 text-base">ControlCFO™ 30-Day Sprint</h3>
                   <p className="text-xs text-slate-600 mt-1 mb-3">Your part-time senior CFO and risk command centre, designed to give you senior oversight without a full-time CFO structure.</p>
                   <button onClick={() => { setSelectedDeskModal(ADVISORY_DESKS[0]); }} className="text-xs font-bold text-indigo-600 hover:text-indigo-700 flex items-center gap-1 cursor-pointer">
                     See sprint details <ChevronRight className="w-3 h-3" />
@@ -1071,7 +1071,7 @@ export default function App() {
                       {Object.values(diagnosticScores).reduce((a, b) => a + b, 0)} / 25
                     </strong>
                     <span className="block text-[11px] text-slate-500 mt-0.5">
-                      {Object.values(diagnosticScores).reduce((a, b) => a + b, 0) > 16 ? "âš ï¸ High Risk: Immediate cleanup recommended." : "Healthy profile with minor optimization needed."}
+                      {Object.values(diagnosticScores).reduce((a, b) => a + b, 0) > 16 ? "⚠️ High Risk: Immediate cleanup recommended." : "Healthy profile with minor optimization needed."}
                     </span>
                   </div>
                   <button
@@ -1270,7 +1270,7 @@ export default function App() {
 
               <form onSubmit={handleScanCibil} className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Annual Business Turnover (â‚¹ in Crores)</label>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Annual Business Turnover (₹ in Crores)</label>
                   <input 
                     type="number" 
                     step="0.5"
@@ -1278,11 +1278,11 @@ export default function App() {
                     onChange={e => setCibilForm({...cibilForm, turnover: e.target.value})}
                     className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 font-bold focus:outline-none focus:border-emerald-600"
                   />
-                  <span className="text-[11px] text-slate-500 mt-1 block">e.g. 15 for â‚¹15 Crores annual sales</span>
+                  <span className="text-[11px] text-slate-500 mt-1 block">e.g. 15 for ₹15 Crores annual sales</span>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Total Monthly Loan EMIs (â‚¹ in Lakhs)</label>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Total Monthly Loan EMIs (₹ in Lakhs)</label>
                   <input 
                     type="number" 
                     step="0.5"
@@ -1290,11 +1290,11 @@ export default function App() {
                     onChange={e => setCibilForm({...cibilForm, monthlyEmi: e.target.value})}
                     className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 font-bold focus:outline-none focus:border-emerald-600"
                   />
-                  <span className="text-[11px] text-slate-500 mt-1 block">e.g. 4.5 for â‚¹4.5 Lakhs monthly EMI outflow</span>
+                  <span className="text-[11px] text-slate-500 mt-1 block">e.g. 4.5 for ₹4.5 Lakhs monthly EMI outflow</span>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Existing Bank Cash Credit / OD Limit (â‚¹ in Crores)</label>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Existing Bank Cash Credit / OD Limit (₹ in Crores)</label>
                   <input 
                     type="number" 
                     step="0.1"
@@ -1302,11 +1302,11 @@ export default function App() {
                     onChange={e => setCibilForm({...cibilForm, ccLimit: e.target.value})}
                     className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 font-bold focus:outline-none focus:border-emerald-600"
                   />
-                  <span className="text-[11px] text-slate-500 mt-1 block">e.g. 2.5 for â‚¹2.5 Crores sanctioned limit</span>
+                  <span className="text-[11px] text-slate-500 mt-1 block">e.g. 2.5 for ₹2.5 Crores sanctioned limit</span>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Overdue Receivables Stuck &gt; 90 Days (â‚¹ in Lakhs)</label>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Overdue Receivables Stuck &gt; 90 Days (₹ in Lakhs)</label>
                   <input 
                     type="number" 
                     step="5"
@@ -1314,7 +1314,7 @@ export default function App() {
                     onChange={e => setCibilForm({...cibilForm, overdueDebtors: e.target.value})}
                     className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 font-bold focus:outline-none focus:border-emerald-600"
                   />
-                  <span className="text-[11px] text-slate-500 mt-1 block">e.g. 45 for â‚¹45 Lakhs payments delayed over 90 days</span>
+                  <span className="text-[11px] text-slate-500 mt-1 block">e.g. 45 for ₹45 Lakhs payments delayed over 90 days</span>
                 </div>
 
                 <div>
@@ -1443,11 +1443,11 @@ export default function App() {
                       className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 font-medium focus:outline-none focus:border-indigo-600"
                     >
                       <option value="" disabled>Select a revenue range</option>
-                      <option>&lt; â‚¹1 Cr (Early Stage)</option>
-                      <option>â‚¹1 Cr - â‚¹5 Cr</option>
-                      <option>â‚¹5 Cr - â‚¹25 Cr (MSME Growth)</option>
-                      <option>â‚¹25 Cr - â‚¹100 Cr (Mid-Corporate)</option>
-                      <option>â‚¹100 Cr+ (Enterprise)</option>
+                      <option>&lt; ₹1 Cr (Early Stage)</option>
+                      <option>₹1 Cr - ₹5 Cr</option>
+                      <option>₹5 Cr - ₹25 Cr (MSME Growth)</option>
+                      <option>₹25 Cr - ₹100 Cr (Mid-Corporate)</option>
+                      <option>₹100 Cr+ (Enterprise)</option>
                     </select>
                   </div>
                 </div>
@@ -1727,7 +1727,7 @@ export default function App() {
                       <span className="px-2.5 py-0.5 rounded bg-blue-50 border border-blue-200 text-[10px] font-bold text-blue-700 uppercase">
                         {srv.badge}
                       </span>
-                      <span className="text-[11px] font-bold text-slate-500">â±ï¸ {srv.timeframe}</span>
+                      <span className="text-[11px] font-bold text-slate-500">⏱️ {srv.timeframe}</span>
                     </div>
 
                     <div>
@@ -2056,7 +2056,7 @@ export default function App() {
               <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900">Tailored Solutions for Your Sector</h2>
               {/* REPHRASED LINE WITH AUTHENTIC LOCALIZED FEEL */}
               <p className="text-slate-700 font-medium text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
-                Rooted on-ground across â€” serving factory promoters, exporters, and enterprises in Noida Phase 2 & Sector 63, Greater Noida Ecotech & Surajpur industrial hubs,  Udyog Vihar & Manesar, and manufacturing corridors across North India.
+                Rooted on-ground across — serving factory promoters, exporters, and enterprises in Noida Phase 2 & Sector 63, Greater Noida Ecotech & Surajpur industrial hubs,  Udyog Vihar & Manesar, and manufacturing corridors across North India.
               </p>
             </div>
 
@@ -2254,10 +2254,10 @@ export default function App() {
                         onChange={e => setLeadForm({...leadForm, turnover: e.target.value})}
                         className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none focus:border-blue-600"
                       >
-                        <option>&lt; â‚¹5 Cr</option>
-                        <option>â‚¹5 Cr - â‚¹25 Cr</option>
-                        <option>â‚¹25 Cr - â‚¹100 Cr</option>
-                        <option>â‚¹100 Cr+</option>
+                        <option>&lt; ₹5 Cr</option>
+                        <option>₹5 Cr - ₹25 Cr</option>
+                        <option>₹25 Cr - ₹100 Cr</option>
+                        <option>₹100 Cr+</option>
                       </select>
                     </div>
                   </div>
@@ -2269,7 +2269,7 @@ export default function App() {
                       onChange={e => setLeadForm({...leadForm, primaryConcern: e.target.value})}
                       className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none focus:border-blue-600"
                     >
-                      <option>1. ControlCFOâ„¢ 30-Day Readiness Sprint</option>
+                      <option>1. ControlCFO™ 30-Day Readiness Sprint</option>
                       <option>2. Board-in-a-Box Governance OS</option>
                       <option>3. Contract-to-Cash Risk Desk</option>
                       <option>4. TradeShield LC/BG Desk</option>
@@ -2364,7 +2364,7 @@ export default function App() {
                   onClick={() => { setSelectedDeskModal(ADVISORY_DESKS[0]); window.scrollTo({ top: 0, behavior: 'smooth' }); }} 
                   className="hover:text-white transition-colors cursor-pointer text-left"
                 >
-                  ControlCFOâ„¢ Sprint
+                  ControlCFO™ Sprint
                 </button>
               </li>
               <li>
@@ -2464,10 +2464,10 @@ export default function App() {
         </div>
 
         <div className="max-w-7xl mx-auto pt-8 border-t border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4 text-slate-500">
-          <p>Â© {new Date().getFullYear()} Navigalex Advisory & Governance Intelligence. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Navigalex Advisory & Governance Intelligence. All rights reserved.</p>
           <p className="text-[11px] flex items-center gap-1.5">
             <MapPin className="w-3.5 h-3.5 text-blue-500" />
-            <span>â€¢ â€¢ â€¢ </span>
+            <span>• • • </span>
           </p>
         </div>
       </footer>
