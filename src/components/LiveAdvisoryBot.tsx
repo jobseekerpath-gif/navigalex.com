@@ -174,12 +174,12 @@ export default function LiveAdvisoryBot({ onOpenAssessment, onNavigateTab }: Liv
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 font-['Inter']">
+    <div className="fixed bottom-3 right-3 sm:bottom-6 sm:right-6 z-50 font-['Inter']">
       {/* Floating Trigger Button (when closed) */}
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="flex items-center gap-3 px-5 py-3.5 bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-500 hover:to-indigo-600 text-white rounded-full shadow-2xl hover:shadow-blue-500/30 transition-all transform hover:-translate-y-0.5 cursor-pointer border border-white/20 group"
+          className="flex items-center gap-2.5 sm:gap-3 px-4 sm:px-5 py-3 sm:py-3.5 bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-500 hover:to-indigo-600 text-white rounded-full shadow-2xl hover:shadow-blue-500/30 transition-all transform hover:-translate-y-0.5 cursor-pointer border border-white/20 group"
           aria-label="Open Live Advisory Bot"
         >
           <div className="relative">
@@ -197,10 +197,10 @@ export default function LiveAdvisoryBot({ onOpenAssessment, onNavigateTab }: Liv
 
       {/* Expanded Chat Drawer */}
       {isOpen && (
-        <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 w-[92vw] sm:w-[400px] h-[550px] max-h-[85vh] flex flex-col overflow-hidden animate-fadeIn">
+        <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 w-[calc(100vw-24px)] max-w-[400px] sm:w-[400px] h-[min(550px,calc(100vh-112px))] max-h-[82vh] flex flex-col overflow-hidden animate-fadeIn">
           {/* Header */}
-          <div className="bg-slate-900 text-white px-4 py-3.5 flex items-center justify-between border-b border-slate-800 shrink-0">
-            <div className="flex items-center gap-2.5">
+          <div className="bg-slate-900 text-white px-3 sm:px-4 py-3 flex items-center justify-between border-b border-slate-800 shrink-0">
+            <div className="flex items-center gap-2 sm:gap-2.5">
               <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center">
                 <Shield className="w-4 h-4 text-white" />
               </div>

@@ -763,7 +763,17 @@ Respond with ONLY a JSON object (no markdown fences, no extra commentary) in exa
     } });
   });
 
-  app.use(express.static('dist'));
+  app.use(express.static('dist', {
+    setHeaders: (res, filePath) => {
+      if (filePath.includes('/assets/') || filePath.includes('\\assets\\')) {
+        res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+      } else if (filePath.endsWith('/favicon.svg') || filePath.endsWith('\\favicon.svg')) {
+        res.setHeader('Cache-Control', 'public, max-age=86400');
+      } else if (filePath.endsWith('/index.html') || filePath.endsWith('\\index.html')) {
+        res.setHeader('Cache-Control', 'no-cache');
+      }
+    }
+  }));
 app.use((req, res, next) => {
     if (req.method !== 'GET' && req.method !== 'HEAD') { return next(); }
     res.sendFile(path.resolve('dist/index.html'));
