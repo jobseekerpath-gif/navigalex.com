@@ -17,41 +17,7 @@
   </head>
   <body class="bg-white text-slate-900 antialiased selection:bg-blue-600 selection:text-white font-light font-['Inter']">
     <div id="root"></div>
-    <script>
-      (() => {
-        const replacements = [
-          ['â‚¹', '₹'], ['â€“', '–'], ['â€”', '—'], ['â„¢', '™'],
-          ['â€œ', '“'], ['â€', '”'], ['â€˜', '‘'], ['â€™', '’'],
-          ['â€¦', '…'], ['â†’', '→'], ['Ã—', '×'], ['Â', '']
-        ];
-        const repair = (value) => {
-          let fixed = value || '';
-          for (const [bad, good] of replacements) fixed = fixed.split(bad).join(good);
-          return fixed;
-        };
-        const repairNode = (node) => {
-          if (node.nodeType === Node.TEXT_NODE) {
-            const fixed = repair(node.nodeValue);
-            if (fixed !== node.nodeValue) node.nodeValue = fixed;
-          } else if (node.nodeType === Node.ELEMENT_NODE) {
-            for (const attr of node.attributes) {
-              const fixed = repair(attr.value);
-              if (fixed !== attr.value) attr.value = fixed;
-            }
-            for (const child of node.childNodes) repairNode(child);
-          }
-        };
-        const root = document.getElementById('root');
-        if (!root) return;
-        new MutationObserver((mutations) => {
-          for (const mutation of mutations) {
-            if (mutation.type === 'characterData') repairNode(mutation.target);
-            for (const node of mutation.addedNodes) repairNode(node);
-          }
-        }).observe(root, { childList: true, subtree: true, characterData: true });
-        repairNode(root);
-      })();
-    </script>
+
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
