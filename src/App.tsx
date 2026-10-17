@@ -1420,38 +1420,78 @@ export default function App() {
           </div>
 
           <div>
-            <h4 className="font-bold uppercase tracking-wider text-white mb-4">Advisory Desks</h4>
+            <h4 className="font-bold uppercase tracking-wider text-white mb-4">Our 9 Services</h4>
             <ul className="space-y-2.5 text-slate-400">
               <li>
-                <button 
-                  onClick={() => { setSelectedDeskModal(ADVISORY_DESKS[0]); window.scrollTo({ top: 0, behavior: 'smooth' }); }} 
+                <button
+                  onClick={() => { setActiveTab('services'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
                   className="hover:text-white transition-colors cursor-pointer text-left"
                 >
-                  ControlCFO™ Sprint
+                  1. LenderReady Credit Readiness & Debt Structuring Office
                 </button>
               </li>
               <li>
-                <button 
-                  onClick={() => { setSelectedDeskModal(ADVISORY_DESKS[2]); window.scrollTo({ top: 0, behavior: 'smooth' }); }} 
+                <button
+                  onClick={() => { setActiveTab('services'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
                   className="hover:text-white transition-colors cursor-pointer text-left"
                 >
-                  Contract-to-Cash Desk
+                  2. ControlCFO 90-Day Readiness Sprint
                 </button>
               </li>
               <li>
-                <button 
-                  onClick={() => { setSelectedDeskModal(ADVISORY_DESKS[5]); window.scrollTo({ top: 0, behavior: 'smooth' }); }} 
+                <button
+                  onClick={() => { setActiveTab('services'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
                   className="hover:text-white transition-colors cursor-pointer text-left"
                 >
-                  LenderReady Credit Desk
+                  3. Contract-to-Cash Risk Desk
                 </button>
               </li>
               <li>
-                <button 
-                  onClick={() => { setSelectedDeskModal(ADVISORY_DESKS[3]); window.scrollTo({ top: 0, behavior: 'smooth' }); }} 
+                <button
+                  onClick={() => { setActiveTab('services'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
                   className="hover:text-white transition-colors cursor-pointer text-left"
                 >
-                  TradeShield LC/BG
+                  4. AI-Assisted Internal Audit Factory
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => { setActiveTab('services'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                  className="hover:text-white transition-colors cursor-pointer text-left"
+                >
+                  5. Board-in-a-Box Governance OS
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => { setActiveTab('services'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                  className="hover:text-white transition-colors cursor-pointer text-left"
+                >
+                  6. RegTech Journey Lab
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => { setActiveTab('services'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                  className="hover:text-white transition-colors cursor-pointer text-left"
+                >
+                  7. FraudSignal Investigation Cell
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => { setActiveTab('services'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                  className="hover:text-white transition-colors cursor-pointer text-left"
+                >
+                  8. TradeShield LC/BG Desk
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => { setActiveTab('services'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                  className="hover:text-white transition-colors cursor-pointer text-left"
+                >
+                  9. Family Wealth Governance Office
                 </button>
               </li>
             </ul>
