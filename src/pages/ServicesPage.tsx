@@ -1,117 +1,38 @@
 import React, { useMemo, useState } from 'react';
-import { CheckCircle2, ChevronRight } from 'lucide-react';
+import { CheckCircle2, ChevronRight, ShieldCheck, Compass, ChartNoAxesCombined, Laptop, Search } from 'lucide-react';
 
-export const ADVISORY_DESKS = [
-  { id:'lenderready', title:'1. LenderReady Credit Readiness & Debt Structuring Office', badge:'Core Advisory Desk', tagline:'Bank Credit Readiness & Debt Structuring', summary:'Prepares lender-ready financial files, reconciliations and debt-service models from the records supplied.', problem:'Financial statements, GST data, bank turnover and borrowing data may not reconcile cleanly.', timeframe:'14–21 Days', price:'₹75,000–₹3 Lakh + lawful success fee', deliverables:['Borrower Information Memorandum and CMA Data Pack','Dynamic DSCR & Monthly Cash-Flow Coverage Model','Loan covenant and obligation tracker','Debt restructuring / OTS proposal where applicable','Support for agreed lender meetings'] },
-  { id:'controlcfo-sprint', title:'2. ControlCFO 90-Day Readiness Sprint', badge:'Initial Launch Priority', tagline:'Finance, Risk & Governance Command Centre', summary:'A defined finance and risk oversight sprint with working papers, decision points and an action register.', problem:'Cash conversion, collections, borrowing capacity or management controls may need structured attention.', timeframe:'30 Days Fixed Sprint', price:'₹1.5–4 Lakh fixed', deliverables:['13-Week Dynamic Cash-Flow Runway Model','Top Customer & Vendor Contract Risk Review','Master Risk & Control Register','Bank & Lender Data Room Pack','90-Day Prioritized Action Plan'] },
-  { id:'contract-to-cash', title:'3. Contract-to-Cash Risk Desk', badge:'Initial Launch Priority', tagline:'Contract & Receivables Risk', summary:'Reviews customer terms and creates a documented process for contract risk and overdue receivables.', problem:'Payment, liability, termination, IP and dispute provisions can shift commercial risk toward the supplier.', timeframe:'14-Day Setup + Monthly Retainer', price:'₹75,000–₹3 Lakh setup + ₹25,000–₹1 Lakh/month', deliverables:['Clause-by-clause Contract Risk Scorecard','Document-specific redline suggestions','Debtor realization tracking','Contract renewal and milestone tracking','Customer MSA framework for professional review'] },
-  { id:'internal-audit', title:'4. AI-Assisted Internal Audit Factory', badge:'Ongoing Controls', tagline:'Continuous Risk & Internal Financial Control Auditing', summary:'Risk-based internal control testing across agreed transactions and processes.', problem:'Billing errors, inventory leakage and unauthorized expenditure can remain hidden between statutory audits.', timeframe:'Quarterly Audit Cycles', price:'₹2–10 Lakh per cycle', deliverables:['Risk-Based Internal Audit Charter & Test Plan','Transaction testing across agreed populations','IFC deficiency and red-flag scorecard','Management remediation tracker','Quarterly board / audit committee report'] },
-  { id:'board-box', title:'5. Board-in-a-Box Governance OS', badge:'Turnkey System', tagline:'Board Governance & Director Risk Controls', summary:'A structured governance system for board cadence, authority records and evidence.', problem:'Missing minutes, unclear authority and governance gaps can create financing and compliance problems.', timeframe:'4-Week Setup + Monthly Retainer', price:'₹2–6 Lakh setup + ₹50,000–₹1.5 Lakh/month', deliverables:['Annual Board & Committee Calendar','Board agenda, resolutions and minutes packs','Delegation of Authority matrix','Conflict and related-party register','Controlled evidence index'] },
-  { id:'regtech', title:'6. RegTech Journey Lab', badge:'Institutional RegTech', tagline:'Compliance Architecture for NBFCs, Fintechs & Tech Vendors', summary:'Converts applicable compliance requirements into documented controls and workflows.', problem:'Onboarding, data protection, outsourcing and privacy gaps can create audit and partner issues.', timeframe:'6–12 Weeks Project', price:'₹5–25 Lakh per project', deliverables:['Regulatory Controls Matrix & Gap Analysis','KYC / AML onboarding architecture','DPDP privacy compliance pack','Vendor outsourcing risk assessment','Pre-audit remediation plan'] },
-  { id:'fraudsignal', title:'7. FraudSignal Investigation Cell', badge:'Forensic & Whistleblower', tagline:'Forensic Accounting & Internal Leakage Detection', summary:'Discreet forensic reviews of transaction patterns, supporting records and control gaps.', problem:'Unexplained margins, inventory mismatches or suspected leakage require structured fact-finding.', timeframe:'2–4 Weeks per Investigation', price:'₹3–15 Lakh per investigation', deliverables:['Forensic transaction analytics','Whistleblower fact-finding brief','Electronic evidence preservation pack','Asset tracing and discrepancy reconciliation','Board / counsel-ready investigation report'] },
-  { id:'tradeshield', title:'8. TradeShield LC/BG Desk', badge:'Export & Tender Desk', tagline:'LC and Bank Guarantee Document Review', summary:'Transaction-specific documentary trade-finance review before documents are presented.', problem:'Document wording and documentary mismatches can delay payment or create disputes.', timeframe:'24–48 Hours per Transaction / Retainer', price:'₹50,000–₹2 Lakh per transaction/retainer', deliverables:['Pre-issuance LC clause audit','Export document discrepancy checklist','Bank Guarantee wording review','Trade-compliance issue log','Coordination support within agreed mandate'] },
-  { id:'family-wealth', title:'9. Family Wealth Governance Office', badge:'Promoter & Family Office', tagline:'Family Governance & Succession Coordination', summary:'Governance and coordination for family businesses, holding entities and succession planning.', problem:'Ownership, authority and succession decisions can remain fragmented across family and operating entities.', timeframe:'8–12 Weeks Setup + Quarterly Retainer', price:'₹2–10 Lakh setup + ₹75,000–₹3 Lakh/month', deliverables:['Consolidated family balance sheet and asset map','Family constitution and decision charter','Succession and inter-generational roadmap','Family investment policy statement','Quarterly Family Council governance pack'] }
+type Service = { id:string; pillar:'risk'|'strategy'|'finance'|'it'; pillarLabel:string; title:string; badge:string; tagline:string; summary:string; problem:string; timeframe:string; price:string; deliverables:string[] };
+
+export const ADVISORY_DESKS: Service[] = [
+{id:'risk-assurance',pillar:'risk',pillarLabel:'Risk Management & Assurance',title:'Risk & Controls Assessment',badge:'Risk & Assurance',tagline:'Identify exposure. Strengthen controls.',summary:'Structured review of business risks, internal controls, operational dependencies and management oversight.',problem:'Risks may remain undocumented, ownership unclear and control gaps unnoticed until an incident.',timeframe:'2–4 weeks',price:'Scope-based proposal',deliverables:['Business risk register with likelihood and impact ratings','Control-gap assessment and ownership matrix','Risk indicators and escalation thresholds','Prioritised mitigation roadmap','Management-ready findings report']},
+{id:'internal-controls',pillar:'risk',pillarLabel:'Risk Management & Assurance',title:'Internal Controls & Process Assurance',badge:'Risk & Assurance',tagline:'Make key processes measurable and auditable.',summary:'Independent, risk-based testing of selected business processes and transaction controls.',problem:'Approval gaps, inconsistent processes, duplicate payments and weak evidence trails can cause losses.',timeframe:'3–6 weeks',price:'Scope-based proposal',deliverables:['Process walkthroughs and control map','Sample-based testing of agreed transactions','Exceptions and root-cause analysis','Corrective-action tracker with owners and due dates','Follow-up review of agreed actions']},
+{id:'strategy-roadmap',pillar:'strategy',pillarLabel:'Strategy',title:'Business Strategy & Growth Roadmap',badge:'Strategy',tagline:'Turn business goals into a practical plan.',summary:'Market, customer, positioning and growth-option analysis translated into measurable priorities.',problem:'Growth initiatives compete for time and capital without clear assumptions, owners or success measures.',timeframe:'3–5 weeks',price:'Scope-based proposal',deliverables:['Current-state and market opportunity assessment','Growth options and strategic trade-off matrix','Prioritised 12-month roadmap','Objectives, KPIs and ownership framework','Executive decision brief']},
+{id:'operating-model',pillar:'strategy',pillarLabel:'Strategy',title:'Operating Model & Performance Improvement',badge:'Strategy',tagline:'Align teams, processes and performance.',summary:'Review how work moves across teams and recommend improvements to accountability and execution.',problem:'Unclear ownership, duplicated work and weak performance measures slow execution.',timeframe:'3–6 weeks',price:'Scope-based proposal',deliverables:['Operating-model and responsibility map','Process bottleneck analysis','Decision-rights and accountability matrix','KPI dashboard specification','90-day implementation plan']},
+{id:'financial-modelling',pillar:'finance',pillarLabel:'Finance & Business Performance',title:'Financial Modelling & Forecasting',badge:'Finance',tagline:'Make decisions with transparent assumptions.',summary:'Driver-based models for budgeting, scenario planning, cash-flow visibility and investment decisions.',problem:'Static spreadsheets or unclear assumptions can hide cash pressure and downside risk.',timeframe:'1–3 weeks',price:'Scope-based proposal',deliverables:['Integrated revenue, cost and cash-flow forecast','Base, upside and downside scenarios','Assumptions and sensitivity analysis','Break-even and working-capital analysis','Model guide and management summary']},
+{id:'bookkeeping-reporting',pillar:'finance',pillarLabel:'Finance & Business Performance',title:'Bookkeeping & Management Reporting',badge:'Finance',tagline:'Reliable records. Clear monthly reporting.',summary:'Bookkeeping support, account reconciliations and management reporting under an agreed scope.',problem:'Late reconciliations and inconsistent reports make margins, collections and cash position difficult to understand.',timeframe:'Monthly service',price:'Scope-based proposal',deliverables:['Transaction categorisation and ledger upkeep','Bank and selected account reconciliations','Monthly profit-and-loss and cash summary','Receivables, payables and expense ageing','Month-end close checklist and exception log']},
+{id:'technology-roadmap',pillar:'it',pillarLabel:'IT & Digital Enablement',title:'IT Strategy & Digital Roadmap',badge:'IT & Digital',tagline:'Choose technology that serves business goals.',summary:'Assessment of systems, workflows, data needs and technology priorities for growing organisations.',problem:'Disconnected tools, manual work and unclear priorities increase cost and slow teams down.',timeframe:'2–4 weeks',price:'Scope-based proposal',deliverables:['Current systems and workflow inventory','Business requirements and gap assessment','Build-versus-buy options and vendor comparison criteria','Integration and data-flow roadmap','Phased implementation plan with cost assumptions']},
+{id:'data-automation',pillar:'it',pillarLabel:'IT & Digital Enablement',title:'Workflow Automation, Data & Reporting',badge:'IT & Digital',tagline:'Reduce repetitive work and improve visibility.',summary:'Identify automation opportunities and design practical reporting workflows, dashboards and system integrations.',problem:'Manual entry, spreadsheet hand-offs and inconsistent data delay decisions and create avoidable errors.',timeframe:'2–6 weeks',price:'Scope-based proposal',deliverables:['Automation opportunity and impact assessment','Workflow and integration specifications','Data quality and access-control recommendations','Dashboard requirements and KPI definitions','Pilot plan with acceptance criteria']}
 ];
 
-const PERSONAS = [
-  { key:'all', label:'All' }, { key:'growing', label:'Growing Business' }, { key:'exporter', label:'Exporter/Importer' }, { key:'nbfc', label:'NBFC & Fintech' }, { key:'family', label:'Family Office' }
+const PILLARS = [{key:'all',label:'All services'},{key:'risk',label:'Risk Management & Assurance'},{key:'strategy',label:'Strategy'},{key:'finance',label:'Finance'},{key:'it',label:'IT & Digital'}];
+const PILLAR_META = [
+{key:'risk',title:'Risk Management & Assurance',description:'Risk registers, internal controls, process assurance and mitigation planning.',Icon:ShieldCheck},
+{key:'strategy',title:'Strategy',description:'Growth roadmaps, market choices, operating models and performance priorities.',Icon:Compass},
+{key:'finance',title:'Finance & Business Performance',description:'Financial models, forecasting, bookkeeping and management reporting.',Icon:ChartNoAxesCombined},
+{key:'it',title:'IT & Digital Enablement',description:'IT roadmaps, workflow automation, data visibility and system integration planning.',Icon:Laptop}
 ];
-const PERSONA_IDS: Record<string,string[]> = {
-  all: ADVISORY_DESKS.map(s => s.id), growing: ['controlcfo-sprint','lenderready','contract-to-cash','board-box','internal-audit','fraudsignal'], exporter: ['tradeshield','contract-to-cash'], nbfc: ['regtech','board-box'], family: ['family-wealth']
-};
-
-const DIAGNOSTIC_OFFERS: Record<string, { price:string; duration:string; label:string; description:string }> = {
-  'contract-to-cash': {
-    price:'₹15,000 fixed', duration:'3–5 working days', label:'Contract Risk Diagnostic',
-    description:'Review a defined set of customer contracts and receivables evidence, identify material commercial risks and produce a short priority action brief.'
-  },
-  'board-box': {
-    price:'₹20,000 fixed', duration:'5–7 working days', label:'Governance Readiness Diagnostic',
-    description:'Review the supplied governance documents and board records, identify priority gaps and produce a practical remediation roadmap.'
-  },
-  regtech: {
-    price:'₹25,000 fixed', duration:'5–7 working days', label:'RegTech Gap Diagnostic',
-    description:'Map the supplied workflow against the agreed compliance scope, identify control gaps and produce a prioritized remediation brief.'
-  },
-  fraudsignal: {
-    price:'₹25,000 fixed', duration:'3–5 working days', label:'FraudSignal Scoping Diagnostic',
-    description:'Review the agreed initial evidence set, identify red-flag patterns and define the evidence and investigation scope before a full forensic engagement.'
-  }
-};
-
 export interface ServicesPageProps { persona:string; onSelectPersona:(nextPersona:string)=>void; onSelectDesk:(desk:any)=>void; onInquiry:(deskTitle:string)=>void; onNavigateFamilyOffice:()=>void; }
 
-export default function ServicesPage({ persona, onSelectPersona, onSelectDesk, onInquiry, onNavigateFamilyOffice }: ServicesPageProps) {
-  const [query, setQuery] = useState('');
-  const visible = useMemo(() => {
-    const ids = PERSONA_IDS[persona] || PERSONA_IDS.all;
-    const base = ADVISORY_DESKS.filter(s => ids.includes(s.id));
-    const q = query.trim().toLowerCase();
-    return q ? base.filter(s => `${s.title} ${s.tagline} ${s.summary} ${s.problem}`.toLowerCase().includes(q)) : base;
-  }, [persona, query]);
-
-  return (
-    <section className="py-14 sm:py-20 px-4 sm:px-6 max-w-7xl mx-auto space-y-10">
-      <div className="text-center max-w-4xl mx-auto space-y-3">
-        <span className="text-xs font-bold text-blue-600 uppercase tracking-widest">PRODUCT ARCHITECTURE & DELIVERABLES</span>
-        <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900">Our 9 Services</h2>
-        <p className="text-slate-600">Nine defined advisory desks with clear deliverables, delivery timelines and indicative fees.</p>
-      </div>
-
-      <div className="rounded-2xl border border-blue-100 bg-blue-50/70 p-5 sm:p-7">
-        <div className="text-center max-w-4xl mx-auto">
-          <span className="text-xs font-bold text-blue-700 uppercase tracking-widest">START SMALL. PROVE THE NEED. SCALE THE ENGAGEMENT.</span>
-          <h3 className="mt-2 text-xl sm:text-2xl font-extrabold text-slate-900">Free assessment → Paid diagnostic → Defined project → Recurring advisory</h3>
-          <p className="mt-2 text-sm text-slate-600">You do not need to commit to a ₹5–25 lakh engagement before the problem, evidence and scope are understood. Start with a low-risk diagnostic where available, then move into the substantive engagement if the findings justify it.</p>
-          <div className="mt-5 grid grid-cols-1 sm:grid-cols-4 gap-3 text-left">
-            {[
-              ['1','Free assessment','Identify the business problem and whether a specialist desk is relevant.'],
-              ['2','Paid diagnostic','Review a defined evidence set and produce a concise findings/action brief.'],
-              ['3','Defined project','Convert confirmed findings into a scoped implementation, investigation or remediation project.'],
-              ['4','Recurring advisory','Continue with a monthly or quarterly operating rhythm where ongoing oversight is required.']
-            ].map(([n,title,copy]) => <div key={n} className="rounded-xl bg-white border border-blue-100 p-4"><span className="inline-flex w-7 h-7 items-center justify-center rounded-full bg-blue-600 text-white text-xs font-bold">{n}</span><h4 className="mt-2 text-sm font-bold text-slate-900">{title}</h4><p className="mt-1 text-xs leading-relaxed text-slate-600">{copy}</p></div>)}
-          </div>
-        </div>
-      </div>
-
-      <div className="rounded-2xl bg-slate-950 text-white p-6 sm:p-8">
-        <div className="text-center max-w-2xl mx-auto space-y-2"><span className="text-xs font-bold text-blue-400 uppercase tracking-widest">HOW WE DELIVER</span><h3 className="text-xl sm:text-2xl font-bold">Evidence → AI-assisted analysis → Professional review → Decision pack</h3><p className="text-xs text-slate-300">Scope and professional review are confirmed before each engagement.</p></div>
-      </div>
-
-      <div className="flex flex-col lg:flex-row gap-3">
-        <div role="tablist" aria-label="Filter services" className="flex-1 flex gap-2 overflow-x-auto rounded-2xl border border-slate-200 bg-white p-2 shadow-sm">
-          {PERSONAS.map(p => <button key={p.key} type="button" role="tab" aria-selected={persona === p.key} onClick={() => onSelectPersona(p.key)} className={`shrink-0 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold ${persona === p.key ? 'bg-blue-600 text-white' : 'text-slate-700 hover:bg-slate-100'}`}>{p.label}</button>)}
-        </div>
-        <input value={query} onChange={e => setQuery(e.target.value)} placeholder="Search services" aria-label="Search services" className="lg:w-64 rounded-xl border border-slate-300 px-4 py-3 text-sm text-slate-900 bg-white" />
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {visible.map(srv => {
-          const diagnostic = DIAGNOSTIC_OFFERS[srv.id];
-          return <article key={srv.id} className="navigalex-card p-6 rounded-2xl flex flex-col justify-between gap-6 border-t-4 border-blue-600">
-            <div className="space-y-4">
-              <div className="flex items-center justify-between gap-2"><span className="px-2 py-1 rounded bg-blue-50 border border-blue-200 text-[10px] font-bold text-blue-700 uppercase">{srv.badge}</span><span className="text-[10px] font-bold text-slate-500">{srv.timeframe}</span></div>
-              <div><h3 className="text-lg font-bold text-slate-900 leading-tight">{srv.title}</h3><p className="text-xs font-semibold text-blue-600 mt-1">{srv.tagline}</p></div>
-              <p className="text-xs text-slate-600 leading-relaxed">{srv.summary}</p>
-              <div className="p-3 bg-rose-50 border border-rose-200 rounded-xl"><span className="text-[10px] font-bold text-rose-800 uppercase tracking-wider">Problem addressed</span><p className="text-xs text-slate-800 mt-1">{srv.problem}</p></div>
-              <ul className="space-y-2">{srv.deliverables.slice(0,3).map((d,i)=><li key={i} className="flex gap-2 text-xs text-slate-700"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5"/><span>{d}</span></li>)}<li className="text-[11px] text-blue-600 font-semibold pl-5">+ {Math.max(0,srv.deliverables.length-3)} more deliverables</li></ul>
-            </div>
-            <div className="border-t border-slate-100 pt-4 space-y-3">
-              {diagnostic && <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-3">
-                <div className="flex items-center justify-between gap-2"><span className="text-[10px] font-bold uppercase tracking-wider text-emerald-800">Low-risk first transaction</span><span className="text-sm font-extrabold text-emerald-900">{diagnostic.price}</span></div>
-                <p className="mt-1 text-xs font-bold text-slate-900">{diagnostic.label} · {diagnostic.duration}</p>
-                <p className="mt-1 text-xs leading-relaxed text-slate-600">{diagnostic.description}</p>
-                <button type="button" onClick={() => onInquiry(`${diagnostic.label} — ${srv.title}`)} className="mt-3 w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold">Start Paid Diagnostic</button>
-              </div>}
-              <div className="flex items-start justify-between gap-3"><span className="text-xs text-slate-500">Substantive engagement</span><span className="text-sm font-bold text-slate-900 text-right">{srv.price}</span></div>
-              <div className="grid grid-cols-2 gap-2"><button type="button" onClick={() => onSelectDesk(srv)} className="py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold">See Full Scope</button><button type="button" onClick={() => onInquiry(srv.title)} className="py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold">Inquire Desk</button></div>
-              {diagnostic && <button type="button" onClick={() => onInquiry(`Free assessment — ${srv.title}`)} className="w-full inline-flex items-center justify-center gap-1 text-xs font-bold text-blue-700 hover:text-blue-900">Start with Free Assessment <ChevronRight className="w-3 h-3"/></button>}
-              {srv.id === 'family-wealth' && <button type="button" onClick={onNavigateFamilyOffice} className="w-full inline-flex items-center justify-center gap-1 text-xs font-bold text-blue-700">Dedicated Family Office <ChevronRight className="w-3 h-3"/></button>}
-            </div>
-          </article>;
-        })}
-      </div>
-      {visible.length === 0 && <div className="text-center py-12 text-sm text-slate-500">No matching service found.</div>}
-    </section>
-  );
+export default function ServicesPage({persona,onSelectPersona,onSelectDesk,onInquiry}:ServicesPageProps) {
+const [query,setQuery]=useState('');
+const activePillar=PILLARS.some(p=>p.key===persona)?persona:'all';
+const visible=useMemo(()=>{const q=query.trim().toLowerCase();return ADVISORY_DESKS.filter(s=>(activePillar==='all'||s.pillar===activePillar)&&(!q||`${s.title} ${s.pillarLabel} ${s.tagline} ${s.summary} ${s.problem} ${s.deliverables.join(' ')}`.toLowerCase().includes(q)));},[activePillar,query]);
+return <section className="py-14 sm:py-20 px-4 sm:px-6 max-w-7xl mx-auto space-y-10">
+<div className="text-center max-w-4xl mx-auto space-y-3"><span className="text-xs font-bold text-blue-600 uppercase tracking-widest">BUSINESS ADVISORY SERVICES</span><h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900">Four pillars. Clear deliverables.</h2><p className="text-slate-600">Practical support across risk, strategy, finance and technology—with defined scope, measurable outputs and clear next steps.</p></div>
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">{PILLAR_META.map(({key,title,description,Icon})=><button key={key} type="button" onClick={()=>onSelectPersona(key)} className={`text-left rounded-2xl border p-5 transition hover:-translate-y-0.5 hover:shadow-md ${activePillar===key?'border-blue-500 bg-blue-50 ring-1 ring-blue-200':'border-slate-200 bg-white'}`}><span className="inline-flex rounded-xl bg-slate-100 p-3 text-slate-800"><Icon className="w-5 h-5"/></span><h3 className="mt-4 text-base font-bold text-slate-900">{title}</h3><p className="mt-2 text-sm leading-relaxed text-slate-600">{description}</p><span className="mt-4 inline-flex items-center gap-1 text-xs font-bold text-blue-700">Explore services <ChevronRight className="w-3.5 h-3.5"/></span></button>)}</div>
+<div className="rounded-2xl bg-slate-950 text-white p-6 sm:p-8"><div className="text-center max-w-3xl mx-auto space-y-2"><span className="text-xs font-bold text-blue-300 uppercase tracking-widest">HOW WE WORK</span><h3 className="text-xl sm:text-2xl font-bold">Understand → Assess → Recommend → Implement</h3><p className="text-sm text-slate-300">Each engagement starts with an agreed scope and ends with practical outputs, clear ownership and next steps. Regulated or specialist work is referred to appropriately qualified providers where required.</p></div></div>
+<div className="flex flex-col lg:flex-row gap-3"><div role="tablist" aria-label="Filter services by pillar" className="flex-1 flex gap-2 overflow-x-auto rounded-2xl border border-slate-200 bg-white p-2 shadow-sm">{PILLARS.map(p=><button key={p.key} type="button" role="tab" aria-selected={activePillar===p.key} onClick={()=>onSelectPersona(p.key)} className={`shrink-0 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold ${activePillar===p.key?'bg-blue-600 text-white':'text-slate-700 hover:bg-slate-100'}`}>{p.label}</button>)}</div><label className="lg:w-72 flex items-center gap-2 rounded-xl border border-slate-300 px-3 bg-white"><Search className="w-4 h-4 text-slate-400"/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search services or deliverables" aria-label="Search services or deliverables" className="w-full py-3 text-sm text-slate-900 outline-none"/></label></div>
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">{visible.map(srv=><article key={srv.id} className="navigalex-card p-6 rounded-2xl flex flex-col justify-between gap-6 border-t-4 border-blue-600"><div className="space-y-4"><div className="flex items-center justify-between gap-2"><span className="px-2 py-1 rounded bg-blue-50 border border-blue-200 text-[10px] font-bold text-blue-700 uppercase">{srv.badge}</span><span className="text-[10px] font-bold text-slate-500">{srv.timeframe}</span></div><div><h3 className="text-lg font-bold text-slate-900 leading-tight">{srv.title}</h3><p className="text-xs font-semibold text-blue-600 mt-1">{srv.pillarLabel}</p><p className="text-sm font-semibold text-slate-700 mt-2">{srv.tagline}</p></div><p className="text-sm text-slate-600 leading-relaxed">{srv.summary}</p><div className="p-3 bg-slate-50 border border-slate-200 rounded-xl"><span className="text-[10px] font-bold text-slate-700 uppercase tracking-wider">Business need</span><p className="text-sm text-slate-700 mt-1">{srv.problem}</p></div><ul className="space-y-2">{srv.deliverables.map((d,i)=><li key={i} className="flex gap-2 text-sm text-slate-700"><CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5"/><span>{d}</span></li>)}</ul></div><div className="border-t border-slate-100 pt-4 space-y-3"><div className="flex items-start justify-between gap-3"><span className="text-xs text-slate-500">Engagement fee</span><span className="text-sm font-bold text-slate-900 text-right">{srv.price}</span></div><div className="grid grid-cols-2 gap-2"><button type="button" onClick={()=>onSelectDesk(srv)} className="py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-sm font-bold">View scope</button><button type="button" onClick={()=>onInquiry(srv.title)} className="py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-bold">Enquire</button></div></div></article>)}</div>
+{visible.length===0&&<div className="text-center py-12 text-sm text-slate-500">No matching service found. Try a broader search.</div>}
+</section>;
 }
