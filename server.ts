@@ -356,8 +356,8 @@ async function startServer() {
     if (!safeName || !safeEmail || !safePhone) {
       return res.status(400).json({ error: 'Name, email, and phone are mandatory.' });
     }
-    if (safeName.length < 2 || !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(safeEmail) ||
-        !/^[+()\\d .-]{7,32}$/.test(safePhone)) {
+    if (safeName.length < 2 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(safeEmail) ||
+        !/^[+()\d .-]{7,32}$/.test(safePhone)) {
       return res.status(400).json({ error: 'Enter a valid name, email address, and phone number.' });
     }
 
