@@ -931,9 +931,7 @@ Respond with ONLY a JSON object (no markdown fences, no extra commentary) in exa
     res.json({ success: true, service: 'navigalex-api', timestamp: new Date().toISOString(), integrations: { inquiryEmailConfigured: Boolean(process.env.RESEND_API_KEY && process.env.RESEND_FROM_EMAIL && process.env.INQUIRY_TO_EMAIL), aiProviderConfigured: Boolean(process.env.ANTHROPIC_API_KEY || process.env.GEMINI_API_KEY || process.env.GOOGLE_CLOUD_PROJECT), adminConfigured: Boolean(process.env.ADMIN_PASSWORD) }, persistence: { directoryConfigured: Boolean(process.env.NAVIGALEX_DATA_DIR), directory: process.env.NAVIGALEX_DATA_DIR ? 'configured' : 'default-local-path' } });
   });
 
-  app.get('/api/health', (_req, res) => {
-    res.json({ success: true, service: 'navigalex-api', timestamp: new Date().toISOString(), integrations: { inquiryEmailConfigured: Boolean(process.env.RESEND_API_KEY && process.env.RESEND_FROM_EMAIL && process.env.INQUIRY_TO_EMAIL), aiProviderConfigured: Boolean(process.env.ANTHROPIC_API_KEY || process.env.GEMINI_API_KEY || process.env.GOOGLE_CLOUD_PROJECT), adminConfigured: Boolean(process.env.ADMIN_PASSWORD) }, persistence: { directoryConfigured: Boolean(process.env.NAVIGALEX_DATA_DIR), directory: process.env.NAVIGALEX_DATA_DIR ? 'configured' : 'default-local-path' } });
-  });
+
 
   app.use(express.static('dist', {
     setHeaders: (res, filePath) => {
