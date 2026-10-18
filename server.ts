@@ -8,8 +8,38 @@ async function startServer() {
   const PORT = Number(process.env.PORT) || 8080;
 
   // Enable trust proxy for accurate real visitor IP tracking behind Google Cloud Run / Load Balancers
-  app.set('trust proxy', true);
+  app.set('trust proxy', 1);
   app.use(express.json({ limit: '8mb' }));
+
+  // Small in-process API rate limiter. On multi-instance deployments, move this
+  // to a shared store (for example Redis) so limits apply across replicas.
+  const rateLimitBuckets = new Map<string, { count: number; resetAt: number }>();
+  const rateLimit = (keyPrefix: string, maxRequests: number, windowMs: number) =>
+    (req: express.Request, res: express.Response, next: express.NextFunction) => {
+      const now = Date.now();
+      const key = `${keyPrefix}:${getClientIp(req)}`;
+      let bucket = rateLimitBuckets.get(key);
+      if (!bucket || bucket.resetAt <= now) {
+        bucket = { count: 0, resetAt: now + windowMs };
+        rateLimitBuckets.set(key, bucket);
+      }
+      bucket.count += 1;
+      if (bucket.count > maxRequests) {
+        res.setHeader('Retry-After', String(Math.max(1, Math.ceil((bucket.resetAt - now) / 1000))));
+        return res.status(429).json({ error: 'Too many requests. Please wait and try again.' });
+      }
+      // Keep the limiter bounded during long-running processes.
+      if (rateLimitBuckets.size > 5000) {
+        for (const [bucketKey, value] of rateLimitBuckets) {
+          if (value.resetAt <= now) rateLimitBuckets.delete(bucketKey);
+        }
+      }
+      next();
+    };
+
+  const inquiryRateLimit = rateLimit('inquiry', 8, 15 * 60 * 1000);
+  const loginRateLimit = rateLimit('admin-login', 8, 15 * 60 * 1000);
+  const botRateLimit = rateLimit('bot', 30, 60 * 1000);
 
   // In-Memory Secure Admin Store
   const adminTokens = new Set<string>();
@@ -263,25 +293,42 @@ async function startServer() {
   });
 
   // Public: Submit Client Inquiry
-  app.post('/api/inquiries/submit', (req, res) => {
+  app.post('/api/inquiries/submit', inquiryRateLimit, (req, res) => {
     const { name, company, designation, email, phone, businessType, turnover, primaryConcern, contactMethod, visitorId } = req.body;
     const clientIp = getClientIp(req);
     
-    if (!name || !email || !phone) {
+    const cleanText = (value: unknown, maxLength: number): string =>
+      typeof value === 'string' ? value.trim().slice(0, maxLength) : '';
+    const safeName = cleanText(name, 120);
+    const safeCompany = cleanText(company, 160);
+    const safeDesignation = cleanText(designation, 120);
+    const safeEmail = cleanText(email, 254).toLowerCase();
+    const safePhone = cleanText(phone, 32);
+    const safeBusinessType = cleanText(businessType, 120);
+    const safeTurnover = cleanText(turnover, 120);
+    const safePrimaryConcern = cleanText(primaryConcern, 2000);
+    const safeContactMethod = cleanText(contactMethod, 40);
+    const safeVisitorId = cleanText(visitorId, 120);
+
+    if (!safeName || !safeEmail || !safePhone) {
       return res.status(400).json({ error: 'Name, email, and phone are mandatory.' });
+    }
+    if (safeName.length < 2 || !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(safeEmail) ||
+        !/^[+()\\d .-]{7,32}$/.test(safePhone)) {
+      return res.status(400).json({ error: 'Enter a valid name, email address, and phone number.' });
     }
 
     const newInquiry: Inquiry = {
       id: `INQ-${Math.floor(1000 + Math.random() * 9000)}`,
-      name,
-      company: company || 'Confidential Enterprise',
-      designation: designation || 'Promoter / Director',
-      email,
-      phone,
-      businessType: businessType || 'General Enterprise',
-      turnover: turnover || '₹5 Cr - ₹25 Cr',
-      primaryConcern: primaryConcern || 'Contract & Receivable Cash Flow Risk',
-      contactMethod: contactMethod || 'Phone',
+      name: safeName,
+      company: safeCompany || 'Confidential Enterprise',
+      designation: safeDesignation || 'Promoter / Director',
+      email: safeEmail,
+      phone: safePhone,
+      businessType: safeBusinessType || 'General Enterprise',
+      turnover: safeTurnover || 'Not specified',
+      primaryConcern: safePrimaryConcern || 'General advisory inquiry',
+      contactMethod: safeContactMethod || 'Phone',
       status: 'New',
       submittedAt: new Date().toISOString(),
       ip: clientIp
@@ -293,7 +340,7 @@ async function startServer() {
     // Log real activity
     recordVisitorActivity(
       req, 
-      visitorId || '', 
+      safeVisitorId, 
       'INQUIRY_SUBMIT', 
       '/contact', 
       `Submitted assessment inquiry: ${name} (${company}) [${turnover || 'Turnover not specified'}]`
@@ -307,7 +354,7 @@ async function startServer() {
   });
 
   // Admin Auth: Login
-  app.post('/api/admin/login', (req, res) => {
+  app.post('/api/admin/login', loginRateLimit, (req, res) => {
     if (!ADMIN_CREDENTIALS.username || !ADMIN_CREDENTIALS.password) {
       return res.status(503).json({ error: 'Admin authentication is not configured.' });
     }
@@ -601,7 +648,7 @@ Respond with ONLY a JSON object (no markdown fences, no extra commentary) in exa
   }
 
   // Bot Chat Endpoint - provider-only, evidence-grounded responses
-  app.post('/api/bot/chat', async (req, res) => {
+  app.post('/api/bot/chat', botRateLimit, async (req, res) => {
     const { message, history, visitorId } = req.body;
     if (!message || typeof message !== 'string') return res.status(400).json({ error: 'Message is required' });
     recordVisitorActivity(req, visitorId || '', 'BOT_CHAT', '/live-bot', 'Customer asked the advisory bot a question.');
