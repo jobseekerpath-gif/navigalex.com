@@ -362,7 +362,7 @@ async function startServer() {
     }
 
     const newInquiry: Inquiry = {
-      id: `INQ-${Math.floor(1000 + Math.random() * 9000)}`,
+      id: `INQ-${crypto.randomUUID()}`,
       name: safeName,
       company: safeCompany || 'Confidential Enterprise',
       designation: safeDesignation || 'Promoter / Director',
@@ -454,8 +454,11 @@ async function startServer() {
     if (!ADMIN_CREDENTIALS.username || !ADMIN_CREDENTIALS.password) {
       return res.status(503).json({ error: 'Admin authentication is not configured.' });
     }
-    const { email, username, password, visitorId } = req.body;
-    const identifier = (username || email || '').trim().toLowerCase();
+    const body = req.body && typeof req.body === 'object' ? req.body : {};
+    const { email, username, password, visitorId } = body;
+    const suppliedIdentifier = typeof username === 'string' ? username : (typeof email === 'string' ? email : '');
+    const identifier = suppliedIdentifier.trim().toLowerCase();
+    if (typeof password !== 'string' || password.length > 512) return res.status(400).json({ error: 'Invalid admin username or password.' });
     const clientIp = getClientIp(req);
 
     const isValidUser = identifier === ADMIN_CREDENTIALS.username.toLowerCase() || identifier === ADMIN_CREDENTIALS.email.toLowerCase();
@@ -621,6 +624,7 @@ async function startServer() {
     if (idx === -1) return res.status(404).json({ error: 'Case study not found.' });
 
     const removed = caseStudies.splice(idx, 1)[0];
+    persistState();
     recordAuditLog(ADMIN_CREDENTIALS.email, 'CASE_STUDY_DELETED', `Deleted case study ${id} (${removed.title})`, clientIp, 'WARNING');
 
     res.json({ success: true, message: `Case study ${id} deleted.` });
