@@ -1,5 +1,4 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
-const LiveAdvisoryBot = lazy(() => import('./components/LiveAdvisoryBot'));
 const GenieWorkspace = lazy(() => import('./components/GenieWorkspace'));
 const AdminPanel = lazy(() => import('./components/AdminPanel'));
 const LiveAssessmentsPage = lazy(() => import('./pages/LiveAssessmentsPage'));
@@ -532,12 +531,7 @@ export default function App() {
           setActiveTab('home');
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }} />
-        <Suspense fallback={null}>
-          <LiveAdvisoryBot 
-            onOpenAssessment={openAssessmentForm} 
-            onNavigateTab={(tab) => { setActiveTab(tab); window.scrollTo({ top: 0, behavior: 'smooth' }); }} 
-          />
-        </Suspense>
+        {/* Financial Genie is the single advisory entry point. */}
       </>
       </Suspense>
     );
@@ -1619,13 +1613,7 @@ export default function App() {
         </button>
       )}
 
-      {/* Live AI Advisory Bot */}
-      <Suspense fallback={null}>
-        <LiveAdvisoryBot 
-          onOpenAssessment={openAssessmentForm} 
-          onNavigateTab={(tab) => { setActiveTab(tab); window.scrollTo({ top: 0, behavior: 'smooth' }); }} 
-        />
-      </Suspense>
+      {/* Financial Genie is the single advisory entry point; duplicate floating bot removed. */}
     </div>
   );
 }
