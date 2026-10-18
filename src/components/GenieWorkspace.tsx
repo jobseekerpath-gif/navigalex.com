@@ -47,18 +47,18 @@ const starters = [
 ];
 
 const offerings = [
-  { name: 'LenderReady — credit readiness & debt structuring', prompt: 'Explain the LenderReady service in plain language and help me decide whether credit readiness or debt structuring fits my situation.' },
-  { name: 'ControlCFO — cash flow, finance & controls', prompt: 'Explain the ControlCFO service and help me identify whether cash flow, finance oversight, risk controls or a 90-day action plan could help.' },
-  { name: 'Contract-to-Cash — contracts & collections', prompt: 'Explain the Contract-to-Cash service and help me with risky contract terms, delayed invoices or payment follow-up.' },
-  { name: 'Internal Audit Factory — controls & leakage', prompt: 'Explain the internal audit service and help me assess unexplained costs, billing errors, inventory leakage or weak controls.' },
-  { name: 'Board-in-a-Box — governance & board records', prompt: 'Explain the governance service and help me identify gaps in board processes, approvals, director responsibilities or records.' },
-  { name: 'RegTech Journey Lab — compliance systems', prompt: 'Explain the compliance service and help me map potential onboarding, privacy, outsourcing or regulatory control gaps.' },
-  { name: 'FraudSignal — discrepancies & investigations', prompt: 'Explain the financial investigation service and help me plan a careful evidence-based review of suspected discrepancies.' },
-  { name: 'TradeShield — letters of credit & guarantees', prompt: 'Explain the trade finance service and help me understand a letter of credit, bank guarantee or export document issue.' },
-  { name: 'Family Wealth Governance — succession & family business', prompt: 'Explain the family wealth governance service and help me identify issues involving succession, ownership or family business decisions.' },
-  { name: 'Business strategy, operations & growth', prompt: 'Help me assess a business growth, operations or process improvement challenge and identify practical options.' },
-  { name: 'Financial planning, forecasting & reporting', prompt: 'Help me work out what financial records are needed for forecasting, budgeting, reporting or scenario planning.' },
-  { name: 'IT, data & workflow automation', prompt: 'Help me identify whether technology, workflow automation, integrations or reporting improvements could solve my business problem.' }
+  { name: 'LenderReady', prompt: 'Explain LenderReady: deliverables, typical inputs, published price and timeframe, then help me choose credit readiness or debt restructuring.' },
+  { name: 'ControlCFO', prompt: 'Explain ControlCFO deliverables, published price and timeframe, and whether it fits my business.' },
+  { name: 'Contract-to-Cash', prompt: 'Explain Contract-to-Cash deliverables, published pricing and how it helps with delayed payments and contract risks.' },
+  { name: 'Internal Audit Factory', prompt: 'Explain Internal Audit Factory deliverables, published price and what information is needed to begin.' },
+  { name: 'Board-in-a-Box', prompt: 'Explain Board-in-a-Box deliverables, published price and which governance gaps it addresses.' },
+  { name: 'RegTech Journey Lab', prompt: 'Explain RegTech Journey Lab deliverables, published price, timeframe and scope limits.' },
+  { name: 'FraudSignal', prompt: 'Explain FraudSignal deliverables, published price and the records needed for a discrepancy investigation.' },
+  { name: 'TradeShield', prompt: 'Explain TradeShield deliverables, published price and turnaround for letters of credit and bank guarantees.' },
+  { name: 'Family Wealth Governance', prompt: 'Explain Family Wealth Governance deliverables and clarify what pricing information is published.' },
+  { name: 'Business strategy & operations', prompt: 'Explain Navigalex business strategy, operations and growth support, and what information is needed for a scoped proposal.' },
+  { name: 'Financial planning & forecasting', prompt: 'Explain Navigalex financial planning, forecasting and reporting support, and what information is needed for a scoped proposal.' },
+  { name: 'IT & workflow automation', prompt: 'Explain Navigalex IT, data and workflow automation support, and what information is needed for a scoped proposal.' }
 ];
 
 const serviceMap = [
