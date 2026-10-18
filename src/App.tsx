@@ -376,6 +376,8 @@ export default function App() {
     consent: false
   });
   const [leadSubmitted, setLeadSubmitted] = useState(false);
+  const [leadSubmitting, setLeadSubmitting] = useState(false);
+  const [leadSubmitError, setLeadSubmitError] = useState('');
 
   // Modals for full transparency
   const [selectedDeskModal, setSelectedDeskModal] = useState<any>(null);
@@ -471,23 +473,29 @@ export default function App() {
 
   const handleLeadSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLeadSubmitError('');
     if (!leadForm.consent) {
-      alert('Please accept the privacy and data consent notice.');
+      setLeadSubmitError('Please accept the privacy and data consent notice before submitting.');
       return;
     }
+    setLeadSubmitting(true);
     try {
-      await fetch('/api/inquiries/submit', {
+      const response = await fetch('/api/inquiries/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...leadForm,
-          visitorId
-        })
+        body: JSON.stringify({ ...leadForm, visitorId })
       });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || 'Your inquiry could not be submitted. Please try again.');
+      }
+      setLeadSubmitted(true);
     } catch (err) {
       console.error('Error posting inquiry:', err);
+      setLeadSubmitError(err instanceof Error ? err.message : 'Your inquiry could not be submitted. Please try again.');
+    } finally {
+      setLeadSubmitting(false);
     }
-    setLeadSubmitted(true);
   };
 
   const navigateToFamilyOffice = () => {
@@ -497,6 +505,20 @@ export default function App() {
   };
 
 
+
+  const selectPersona = (nextPersona: string) => {
+    const safePersona = PERSONA_OPTIONS.some((option) => option.key === nextPersona) ? nextPersona : 'all';
+    setPersona(safePersona);
+    const params = new URLSearchParams(window.location.search);
+    if (safePersona === 'all') params.delete('persona');
+    else params.set('persona', safePersona);
+    const query = params.toString();
+    window.history.pushState(null, '', '/services' + (query ? '?' + query : ''));
+    setActiveTab('services');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const formatServiceTitle = (title: string) => title.replace(/^\d+\.\s*/, '');
 
   if (activeTab === 'admin') {
     return (
@@ -1248,6 +1270,11 @@ export default function App() {
                 </div>
               ) : (
                 <form onSubmit={handleLeadSubmit} className="space-y-6">
+                  {leadSubmitError && (
+                    <div role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
+                      {leadSubmitError}
+                    </div>
+                  )}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Your Full Name *</label>
@@ -1380,9 +1407,10 @@ export default function App() {
 
                   <button
                     type="submit"
-                    className="w-full py-4 text-sm font-bold text-white bg-blue-600 hover:bg-blue-500 rounded-xl shadow-lg transition-all cursor-pointer"
+                    disabled={leadSubmitting}
+                    className="w-full py-4 text-sm font-bold text-white bg-blue-600 hover:bg-blue-500 disabled:opacity-60 disabled:cursor-not-allowed rounded-xl shadow-lg transition-all cursor-pointer"
                   >
-                    Submit Confidential Assessment Request
+                    {leadSubmitting ? 'Submitting securely…' : 'Submit Confidential Assessment Request'}
                   </button>
                 </form>
               )}

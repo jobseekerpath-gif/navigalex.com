@@ -11,7 +11,9 @@
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit",
-    "start": "tsx server.ts"
+    "start": "tsx server.ts",
+    "test:static": "node scripts/smoke-check.cjs",
+    "ci": "npm run test:static && npm run lint && npm run build"
   },
   "dependencies": {
     "@google/genai": "^2.24.0",
