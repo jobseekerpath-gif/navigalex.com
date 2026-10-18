@@ -293,7 +293,7 @@ async function startServer() {
   });
 
   // Public: Submit Client Inquiry
-  app.post('/api/inquiries/submit', inquiryRateLimit, (req, res) => {
+  app.post('/api/inquiries/submit', inquiryRateLimit, async (req, res) => {
     const { name, company, designation, email, phone, businessType, turnover, primaryConcern, contactMethod, visitorId } = req.body;
     const clientIp = getClientIp(req);
     
@@ -334,8 +334,60 @@ async function startServer() {
       ip: clientIp
     };
 
+    const resendApiKey = process.env.RESEND_API_KEY;
+    const inquiryRecipient = process.env.INQUIRY_TO_EMAIL;
+    const resendFrom = process.env.RESEND_FROM_EMAIL;
+
+    // Do not claim an inquiry was received unless a durable delivery path is configured.
+    if (!resendApiKey || !inquiryRecipient || !resendFrom) {
+      return res.status(503).json({
+        error: 'The inquiry service is temporarily unavailable. Please use the published contact details or try again later.'
+      });
+    }
+
+    const emailText = [
+      'New Navigalex website inquiry',
+      '',
+      `Reference: ${newInquiry.id}`,
+      `Name: ${newInquiry.name}`,
+      `Company: ${newInquiry.company}`,
+      `Designation: ${newInquiry.designation}`,
+      `Email: ${newInquiry.email}`,
+      `Phone: ${newInquiry.phone}`,
+      `Business type: ${newInquiry.businessType}`,
+      `Turnover: ${newInquiry.turnover}`,
+      `Primary concern: ${newInquiry.primaryConcern}`,
+      `Preferred contact: ${newInquiry.contactMethod}`,
+      `Submitted at: ${newInquiry.submittedAt}`
+    ].join('\\n');
+
+    try {
+      const delivery = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${resendApiKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          from: resendFrom,
+          to: [inquiryRecipient],
+          reply_to: newInquiry.email,
+          subject: `Navigalex inquiry ${newInquiry.id} — ${newInquiry.company}`,
+          text: emailText
+        }),
+        signal: AbortSignal.timeout(10000)
+      });
+      if (!delivery.ok) {
+        console.error('Inquiry email provider returned an error:', delivery.status);
+        return res.status(502).json({ error: 'We could not deliver your inquiry right now. Please try again later.' });
+      }
+    } catch (error) {
+      console.error('Inquiry email delivery failed:', error);
+      return res.status(502).json({ error: 'We could not deliver your inquiry right now. Please try again later.' });
+    }
+
     inquiries.unshift(newInquiry);
-    recordAuditLog('Public Client', 'INQUIRY_RECEIVED', `Confidential inquiry received from ${name} (${company}). Ref: ${newInquiry.id}`, clientIp);
+    recordAuditLog('Public Client', 'INQUIRY_RECEIVED', `Inquiry email delivered for ${newInquiry.id}`, clientIp);
     
     // Log real activity
     recordVisitorActivity(
@@ -349,7 +401,7 @@ async function startServer() {
     res.json({
       success: true,
       inquiryId: newInquiry.id,
-      message: 'Assessment inquiry received and queued for senior practice director review.'
+      message: 'Your inquiry has been delivered to the Navigalex team.'
     });
   });
 
