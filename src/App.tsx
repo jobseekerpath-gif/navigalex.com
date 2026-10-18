@@ -506,6 +506,20 @@ export default function App() {
 
 
 
+  const selectPersona = (nextPersona: string) => {
+    const safePersona = PERSONA_OPTIONS.some((option) => option.key === nextPersona) ? nextPersona : 'all';
+    setPersona(safePersona);
+    const params = new URLSearchParams(window.location.search);
+    if (safePersona === 'all') params.delete('persona');
+    else params.set('persona', safePersona);
+    const query = params.toString();
+    window.history.pushState(null, '', '/services' + (query ? '?' + query : ''));
+    setActiveTab('services');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const formatServiceTitle = (title: string) => title.replace(/^\d+\.\s*/, '');
+
   if (activeTab === 'admin') {
     return (
       <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-white text-slate-600 text-sm">Loading Navigalex Admin…</div>}>
