@@ -60,6 +60,7 @@ const COMMERCIAL_PATHS: Record<string, { tool: string; serviceId: string; person
 };
 
 const DIAGNOSTIC_PRICE = "{{DIAGNOSTIC_PRICE}}";
+const isResolvedPlaceholder = (value: string) => Boolean(value.trim() && !/\{\{[^}]+\}\}/.test(value));
 
 function CommercialPath({
   path,
