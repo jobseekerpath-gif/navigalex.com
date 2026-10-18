@@ -531,12 +531,7 @@ export default function App() {
           setActiveTab('home');
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }} />
-        <Suspense fallback={null}>
-          <LiveAdvisoryBot 
-            onOpenAssessment={openAssessmentForm} 
-            onNavigateTab={(tab) => { setActiveTab(tab); window.scrollTo({ top: 0, behavior: 'smooth' }); }} 
-          />
-        </Suspense>
+        {/* Financial Genie is the single advisory entry point. */}
       </>
       </Suspense>
     );
