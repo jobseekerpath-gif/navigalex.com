@@ -542,7 +542,7 @@ export default function App() {
       {/* Spaceship.com Kinetic Top Scroll Progress Bar */}
       <div className="fixed top-0 left-0 right-0 h-1 z-[100] bg-slate-100/60 pointer-events-none">
         <div 
-          className="h-full bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-400 transition-all duration-75 shadow-[0_0_12px_rgba(59,130,246,0.8)]"
+          className="h-full bg-gradient-to-r from-emerald-700 via-teal-600 to-lime-400 transition-all duration-75 shadow-[0_0_8px_rgba(16,185,129,0.45)]"
           style={{ width: `${scrollProgress}%` }}
         />
       </div>
@@ -586,8 +586,7 @@ export default function App() {
             {[
               ['home', 'Home'],
               ['services', 'Services'],
-              ['why-pick-us', 'Why Pick These Products'],
-              ['about', 'About'],
+                            ['about', 'About'],
               ['contact', 'Contact']
             ].map(([tab, label]) => (
               <button
@@ -626,8 +625,7 @@ export default function App() {
               {[
                 ['home', 'Home'],
                 ['services', 'Our 9 Services'],
-                ['why-pick-us', 'Why Pick These Products'],
-                ['about', 'About'],
+                                ['about', 'About'],
                 ['contact', 'Contact']
               ].map(([tab, label]) => (
                 <button
