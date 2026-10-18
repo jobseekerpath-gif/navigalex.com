@@ -585,11 +585,8 @@ export default function App() {
           <nav className="hidden lg:flex min-w-0 overflow-hidden items-center justify-start gap-0.5 xl:gap-1 font-semibold" aria-label="Primary navigation">
             {[
               ['home', 'Home'],
-              ['live-tools', 'Tools'],
               ['services', 'Services'],
               ['why-pick-us', 'Why Pick These Products'],
-              ['industries', 'Industries'],
-              ['how-it-works', 'How It Works'],
               ['about', 'About'],
               ['contact', 'Contact']
             ].map(([tab, label]) => (
@@ -628,11 +625,8 @@ export default function App() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {[
                 ['home', 'Home'],
-                ['live-tools', 'Live AI Scanners'],
                 ['services', 'Our 9 Services'],
                 ['why-pick-us', 'Why Pick These Products'],
-                ['industries', 'Industries'],
-                ['how-it-works', 'How It Works'],
                 ['about', 'About'],
                 ['contact', 'Contact']
               ].map(([tab, label]) => (
