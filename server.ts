@@ -901,9 +901,7 @@ Respond with ONLY a JSON object (no markdown fences, no extra commentary) in exa
       return res.status(400).json({ error: 'Enter actual numeric figures for turnover, EMI, CC/OD limit, overdue receivables and annual operating profit.' });
     }
     recordVisitorActivity(req, visitorId || '', 'SCAN_DSCR', '/live-tools', 'Calculated banking metrics from user-supplied financial figures.');
-    // Indicative operating-profit proxy only. A formal DSCR needs verified cash flow available for
-    // debt service and all scheduled principal and interest obligations.
-    // Indicative operating-profit proxy only. Formal DSCR needs verified CFADS and all scheduled principal and interest.
+    // Indicative operating-profit proxy only. Formal DSCR requires verified cash flow available for debt service and all scheduled principal and interest.
     const annualEmiCr = (emi * 12) / 100;
     const dscr = annualEmiCr > 0 ? operatingProfit / annualEmiCr : null;
     const ccShare = t > 0 ? (cc / t) * 100 : 0;
