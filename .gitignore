@@ -7,5 +7,11 @@ coverage/
 .env*
 !.env.example
 
+# Persistent customer and telemetry data must never be committed.
+data/
+*.sqlite
+*.sqlite3
+*.db
+
 vertex-key.json
 navigalex-ai-credentials.json
