@@ -114,67 +114,68 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
 
   const reset = () => { setMessages([]); setInput(''); setError(''); };
 
-  return <section className="relative mx-auto w-full max-w-6xl px-3 pb-12 pt-5 sm:px-6 sm:pt-10">
-    <div className="overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-[0_24px_80px_-35px_rgba(15,23,42,.28)]">
-      <div className="bg-slate-950 px-5 py-5 text-white sm:px-8 sm:py-7">
-        <div className="flex items-center gap-3">
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-blue-500/20 ring-1 ring-blue-300/30"><Sparkles className="h-6 w-6 text-blue-200"/></div>
-          <div className="min-w-0 flex-1"><p className="text-xs font-semibold uppercase tracking-[.18em] text-blue-200">Navigalex</p><h1 className="mt-1 text-xl font-bold tracking-tight sm:text-3xl">Financial Genie</h1></div>
-          {messages.length > 0 && <button onClick={reset} className="inline-flex items-center gap-1.5 rounded-lg border border-white/20 px-3 py-2 text-xs font-semibold text-white hover:bg-white/10" type="button"><RotateCcw className="h-3.5 w-3.5"/>Start over</button>}
+  return <section className="relative mx-auto w-full max-w-4xl px-3 pb-6 pt-3 sm:px-5 sm:pt-5">
+    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <header className="bg-slate-900 px-4 py-4 text-white sm:px-6 sm:py-5">
+        <div className="flex items-center gap-2.5">
+          <div className="flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-md bg-teal-700/30 ring-1 ring-teal-300/30"><Sparkles className="h-3.5 w-3.5 text-teal-200"/></div>
+          <div className="min-w-0 flex-1"><p className="text-[9px] font-semibold uppercase tracking-[.16em] text-teal-200">Navigalex</p><h1 className="text-lg font-bold tracking-tight sm:text-xl">Financial Genie</h1></div>
+          {messages.length > 0 && <button onClick={reset} className="inline-flex items-center gap-1 rounded-lg border border-white/20 px-2.5 py-1.5 text-xs font-semibold text-white hover:bg-white/10" type="button"><RotateCcw className="h-3 w-3"/>Reset</button>}
         </div>
-        <p className="mt-4 max-w-3xl text-sm leading-relaxed text-slate-300 sm:text-base">Your business decision workspace. Explain the challenge in your own words, choose a guided path, and build toward a clear action plan with less back-and-forth.</p>
+        <p className="mt-2 max-w-2xl text-xs leading-relaxed text-slate-300 sm:text-sm">Describe a business challenge. Get focused questions, practical options and a clear next step.</p>
+      </header>
+
+      <div className="min-w-0">
+        <div className="flex min-h-[180px] flex-col gap-3 p-3 sm:p-5">
+          {messages.length === 0 ? <>
+            <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 sm:p-4">
+              <div className="mb-1.5 flex items-center gap-2 text-sm font-bold text-slate-900"><MessageCircle className="h-4 w-4 text-teal-700"/> Start with your business question</div>
+              <p className="text-xs leading-relaxed text-slate-600 sm:text-sm">Type your situation below or manually choose a suggested topic. Nothing starts until you select a suggestion or send your own message.</p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {starters.slice(0,4).map(({icon: Icon,title,prompt})=><button key={title} type="button" onClick={()=>send(prompt)} disabled={busy} className="inline-flex max-w-full items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-2 text-left text-xs font-semibold text-slate-700 transition hover:border-teal-300 hover:bg-teal-50 disabled:opacity-50"><Icon className="h-3.5 w-3.5 shrink-0 text-teal-700"/><span>{title}</span></button>)}
+            </div>
+          </> : messages.map(m=><div key={m.id} className={m.role==='user'?'ml-auto max-w-[94%] rounded-2xl rounded-tr-md bg-teal-800 px-3.5 py-3 text-sm leading-relaxed text-white sm:max-w-[85%]':'max-w-full rounded-2xl rounded-tl-md border border-slate-200 bg-slate-50 px-3.5 py-3 text-sm leading-relaxed text-slate-800 sm:max-w-[94%]'}><div className="mb-1 text-[10px] font-bold uppercase tracking-wider opacity-70">{m.role==='user'?'You':'Financial Genie'}</div><div className="whitespace-pre-wrap"><GuideResponse text={m.text} /></div>{m.role==='guide'&&<div className="mt-3 border-t border-slate-200 pt-3"><p className="mb-2 text-xs font-bold text-slate-600">Choose a next question (optional)</p><div className="flex flex-wrap gap-2">{suggestServices([...messages].reverse().find(x=>x.role==='user')?.text || '').map(s=><button key={s.name} type="button" disabled={busy} onClick={()=>send('Help me explore: '+s.name+'. Ask me one focused question at a time before suggesting a solution.')} className="rounded-full border border-teal-200 bg-white px-3 py-2 text-xs font-semibold text-teal-900 hover:bg-teal-50 disabled:opacity-50">{s.name} <ChevronRight className="inline h-3 w-3"/></button>)}<button type="button" onClick={()=>onOpenAssessment(messages.filter(x=>x.role==='user').map(x=>x.text).join(' ').slice(0,180))} className="rounded-full bg-slate-800 px-3 py-2 text-xs font-semibold text-white hover:bg-slate-700">Request an adviser</button></div></div>}</div>)}
+          {busy&&<div className="flex items-center gap-2 text-xs text-slate-500"><span className="h-2 w-2 animate-pulse rounded-full bg-teal-700"/><span>Reviewing your situation…</span></div>}
+          {error&&<div role="alert" className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">{error} <button type="button" className="ml-1 font-bold underline" onClick={()=>send(messages.filter(m=>m.role==='user').slice(-1)[0]?.text)}>Try again</button></div>}
+          <div ref={endRef}/>
+        </div>
+        <form onSubmit={e=>{e.preventDefault();void send();}} className="border-t border-slate-200 bg-white p-3 sm:p-4">
+          <label htmlFor="genie-input" className="sr-only">Describe your problem or goal</label>
+          <div className="flex items-end gap-2 rounded-xl border border-slate-300 bg-slate-50 p-2 focus-within:border-teal-600 focus-within:ring-2 focus-within:ring-teal-100">
+            <textarea id="genie-input" value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();void send();}}} rows={2} maxLength={4000} placeholder="Describe the business problem you want to solve…" className="max-h-32 min-h-[46px] flex-1 resize-y bg-transparent px-2 py-1.5 text-base text-slate-900 outline-none placeholder:text-slate-400" />
+            <button type="submit" disabled={!input.trim()||busy} aria-label="Send message" className="mb-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-teal-800 text-white transition hover:bg-teal-900 disabled:cursor-not-allowed disabled:opacity-40"><ArrowUp className="h-4 w-4"/></button>
+          </div>
+          <p className="mt-1.5 px-1 text-[10px] text-slate-500">Avoid entering passwords or full bank account details.</p>
+        </form>
       </div>
 
-      <div className="grid gap-0 lg:grid-cols-[minmax(0,1fr)_290px]">
-        <div className="min-w-0 border-b border-slate-200 lg:border-b-0 lg:border-r">
-          <div className="flex min-h-[280px] flex-col gap-4 p-4 sm:p-7">
-            {messages.length === 0 ? <>
-              <div className="max-w-2xl rounded-2xl rounded-tl-md border border-slate-200 bg-slate-50 p-4 sm:p-5">
-                <div className="mb-2 flex items-center gap-2 text-sm font-bold text-slate-900"><MessageCircle className="h-4 w-4 text-blue-700"/> Your business, understood</div>
-                <p className="text-sm leading-relaxed text-slate-600">Start with a business goal or problem. Financial Genie will help identify the relevant area, ask focused follow-up questions, and guide you toward the next useful action.</p>
-              </div>
-              <div className="mt-2 grid gap-2 sm:grid-cols-2">
-                {starters.slice(0,4).map(({icon: Icon,title,prompt})=><button key={title} type="button" onClick={()=>send(prompt)} className="group flex items-start gap-3 rounded-xl border border-slate-200 p-3 text-left transition hover:border-blue-300 hover:bg-blue-50/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"><span className="rounded-lg bg-slate-100 p-2 text-slate-700 group-hover:bg-white"><Icon className="h-4 w-4"/></span><span className="flex-1 text-sm font-semibold leading-snug text-slate-800">{title}<span className="mt-1 block text-xs font-normal text-slate-500">Help me figure this out <ChevronRight className="inline h-3 w-3"/></span></span></button>)}
-              </div>
-            </> : messages.map(m=><div key={m.id} className={m.role==='user'?'ml-auto max-w-[92%] rounded-2xl rounded-tr-md bg-blue-700 px-4 py-3 text-sm leading-relaxed text-white sm:max-w-[85%]':'max-w-[96%] rounded-2xl rounded-tl-md border border-slate-200 bg-slate-50 px-4 py-4 text-sm leading-relaxed text-slate-800 sm:max-w-[90%]'}><div className="mb-1.5 text-[10px] font-bold uppercase tracking-wider opacity-70">{m.role==='user'?'You':'Financial Genie'}</div><div className="whitespace-pre-wrap"><GuideResponse text={m.text} /></div>{m.role==='guide'&&<div className="mt-4 border-t border-slate-200 pt-3"><p className="mb-2 text-xs font-bold text-slate-600">Suggested next steps</p><div className="flex flex-wrap gap-2">{suggestServices([...messages].reverse().find(x=>x.role==='user')?.text || '').map(s=><button key={s.name} type="button" onClick={()=>s.tab==='live-tools'?onNavigateTab('live-tools'):s.tab==='family-office'?onNavigateTab('family-office'):onNavigateTab('services')} className="rounded-full border border-blue-200 bg-white px-3 py-2 text-xs font-semibold text-blue-800 hover:bg-blue-50">{s.name} <ChevronRight className="inline h-3 w-3"/></button>)}<button type="button" onClick={()=>onOpenAssessment(messages.filter(x=>x.role==='user').map(x=>x.text).join(' ').slice(0,180))} className="rounded-full bg-slate-900 px-3 py-2 text-xs font-semibold text-white hover:bg-slate-700">Request an adviser</button></div></div>}</div>)}
-            {busy&&<div className="flex items-center gap-2 text-sm text-slate-500"><span className="h-2 w-2 animate-pulse rounded-full bg-blue-600"/><span>Reviewing your situation…</span></div>}
-            {error&&<div role="alert" className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">{error} <button type="button" className="ml-1 font-bold underline" onClick={()=>send(messages.filter(m=>m.role==='user').slice(-1)[0]?.text)}>Try again</button></div>}
-            <div ref={endRef}/>
-          </div>
-          <form onSubmit={e=>{e.preventDefault();void send();}} className="border-t border-slate-200 bg-white p-3 sm:p-5">
-            <label htmlFor="genie-input" className="sr-only">Describe your problem or goal</label>
-            <div className="flex items-end gap-2 rounded-2xl border border-slate-300 bg-slate-50 p-2 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-100">
-              <textarea id="genie-input" value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();void send();}}} rows={2} maxLength={4000} placeholder="Tell Financial Genie what you need to solve…" className="max-h-36 min-h-[52px] flex-1 resize-y bg-transparent px-2 py-2 text-base text-slate-900 outline-none placeholder:text-slate-400" />
-              <button type="submit" disabled={!input.trim()||busy} aria-label="Send message" className="mb-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-700 text-white transition hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-40"><ArrowUp className="h-5 w-5"/></button>
+      <div className="border-t border-slate-200 bg-slate-50/70 p-3 sm:p-4">
+        <p className="mb-2 text-xs font-semibold text-slate-600">Optional guided tools and questions — open only when needed</p>
+        <div className="grid gap-2 sm:grid-cols-2">
+          <details className="rounded-xl border border-slate-200 bg-white p-3">
+            <summary className="cursor-pointer list-none text-sm font-bold text-slate-800"><FileSearch className="mr-2 inline h-4 w-4 text-teal-700"/> Tools & Assessments <ChevronRight className="ml-1 inline h-3.5 w-3.5"/></summary>
+            <p className="mt-2 text-xs leading-relaxed text-slate-600">Open a structured scanner only when you choose it.</p>
+            <div className="mt-2 space-y-2">
+              <button type="button" onClick={()=>onNavigateTab('live-tools')} className="w-full rounded-lg border border-slate-200 p-2.5 text-left text-xs font-semibold text-slate-800 hover:border-teal-300 hover:bg-teal-50">Contract Risk Scanner <span className="mt-1 block font-normal text-slate-500">Review clauses and potential risk areas</span></button>
+              <button type="button" onClick={()=>onNavigateTab('live-tools')} className="w-full rounded-lg border border-slate-200 p-2.5 text-left text-xs font-semibold text-slate-800 hover:border-teal-300 hover:bg-teal-50">Bank DSCR Scanner <span className="mt-1 block font-normal text-slate-500">Check debt-service coverage</span></button>
+              <button type="button" onClick={()=>onNavigateTab('live-tools')} className="w-full rounded-lg bg-teal-800 p-2.5 text-left text-xs font-semibold text-white hover:bg-teal-900">View all live tools →</button>
             </div>
-            <p className="mt-2 px-1 text-[11px] text-slate-500">Do not enter passwords, full bank account details or other highly sensitive information.</p>
-          </form>
-        </div>
-
-        <aside className="bg-slate-50/70 p-4 sm:p-5">
-          <div className="mb-3 flex items-center gap-2"><FileSearch className="h-4 w-4 text-blue-700"/><h2 className="text-sm font-bold text-slate-900">Tools & Assessments</h2></div>
-          <p className="mb-3 text-xs leading-relaxed text-slate-600">Open a focused business tool from this workspace whenever you need a structured check.</p>
-          <div className="mb-5 space-y-2">
-            <button type="button" onClick={()=>onNavigateTab('live-tools')} className="flex w-full items-start gap-2.5 rounded-xl border border-blue-200 bg-white p-3 text-left transition hover:border-blue-400 hover:bg-blue-50">
-              <FileSearch className="mt-0.5 h-4 w-4 shrink-0 text-blue-700"/>
-              <span className="text-xs font-semibold leading-relaxed text-slate-800">Contract Risk Scanner <span className="mt-1 block text-[11px] font-normal text-slate-500">Review contract clauses and potential risk areas</span></span>
-              <ChevronRight className="mt-0.5 h-3.5 w-3.5 shrink-0 text-blue-700"/>
-            </button>
-            <button type="button" onClick={()=>onNavigateTab('live-tools')} className="flex w-full items-start gap-2.5 rounded-xl border border-blue-200 bg-white p-3 text-left transition hover:border-blue-400 hover:bg-blue-50">
-              <ChartNoAxesCombined className="mt-0.5 h-4 w-4 shrink-0 text-blue-700"/>
-              <span className="text-xs font-semibold leading-relaxed text-slate-800">Bank DSCR Scanner <span className="mt-1 block text-[11px] font-normal text-slate-500">Check debt-service coverage and repayment readiness</span></span>
-              <ChevronRight className="mt-0.5 h-3.5 w-3.5 shrink-0 text-blue-700"/>
-            </button>
-            <button type="button" onClick={()=>onNavigateTab('live-tools')} className="w-full rounded-lg bg-blue-700 px-3 py-2.5 text-xs font-bold text-white transition hover:bg-blue-800">View all live tools <ChevronRight className="ml-1 inline h-3 w-3"/></button>
-          </div>
-          <div className="mb-3 flex items-center gap-2"><BriefcaseBusiness className="h-4 w-4 text-blue-700"/><h2 className="text-sm font-bold text-slate-900">Choose a guided path</h2></div>
-          <p className="mb-4 text-xs leading-relaxed text-slate-600">Pick a business situation or service. Genie will use your choice to guide the conversation.</p>
-          <div className="space-y-2">{starters.map(({icon: Icon,title,prompt})=><button key={title} type="button" onClick={()=>send(prompt)} disabled={busy} className="flex w-full items-start gap-2.5 rounded-xl border border-slate-200 bg-white p-3 text-left transition hover:border-blue-300 hover:bg-blue-50 disabled:opacity-50"><Icon className="mt-0.5 h-4 w-4 shrink-0 text-blue-700"/><span className="text-xs font-semibold leading-relaxed text-slate-700">{title}</span></button>)}</div>
-          <div className="mt-4 rounded-xl border border-slate-200 bg-white p-3"><p className="text-xs font-bold text-slate-800">Explore services with Genie</p><p className="mt-1.5 text-xs leading-relaxed text-slate-600">Choose a service to start a focused assessment without navigating away.</p><div className="mt-3 max-h-72 space-y-1.5 overflow-y-auto pr-1">{offerings.map(item=><button key={item.name} type="button" onClick={()=>send(item.prompt)} disabled={busy} className="flex w-full items-center justify-between gap-2 rounded-lg border border-slate-100 px-2.5 py-2 text-left text-[11px] font-semibold leading-relaxed text-slate-700 hover:border-blue-200 hover:bg-blue-50 disabled:opacity-50">{item.name}<ChevronRight className="h-3 w-3 shrink-0 text-blue-700"/></button>)}</div><button type="button" onClick={()=>onNavigateTab('services')} className="mt-3 inline-flex items-center gap-1 text-xs font-bold text-blue-700 hover:text-blue-900">See full service scope <ChevronRight className="h-3 w-3"/></button></div>
-          <div className="mt-4 rounded-xl border border-slate-200 bg-white p-3">
-            <div className="mb-1 flex items-center gap-2"><Landmark className="h-4 w-4 text-blue-700"/><h2 className="text-sm font-bold text-slate-900">Tailored Solutions for Your Sector</h2></div>
-            <p className="mb-3 text-xs leading-relaxed text-slate-600">Choose your industry to get sector-specific questions, risk areas and practical next steps directly in Financial Genie.</p>
-            <div className="max-h-80 space-y-1.5 overflow-y-auto pr-1">
+          </details>
+          <details className="rounded-xl border border-slate-200 bg-white p-3">
+            <summary className="cursor-pointer list-none text-sm font-bold text-slate-800"><BriefcaseBusiness className="mr-2 inline h-4 w-4 text-teal-700"/> Guided business questions <ChevronRight className="ml-1 inline h-3.5 w-3.5"/></summary>
+            <div className="mt-2 flex flex-wrap gap-2">{starters.map(({icon: Icon,title,prompt})=><button key={title} type="button" onClick={()=>send(prompt)} disabled={busy} className="rounded-full border border-slate-200 px-3 py-2 text-left text-xs font-medium text-slate-700 hover:border-teal-300 hover:bg-teal-50 disabled:opacity-50"><Icon className="mr-1.5 inline h-3.5 w-3.5 text-teal-700"/>{title}</button>)}</div>
+          </details>
+          <details className="rounded-xl border border-slate-200 bg-white p-3">
+            <summary className="cursor-pointer list-none text-sm font-bold text-slate-800"><Landmark className="mr-2 inline h-4 w-4 text-teal-700"/> Explore services <ChevronRight className="ml-1 inline h-3.5 w-3.5"/></summary>
+            <p className="mt-2 text-xs text-slate-600">Choose a service to ask Genie about it; it will not start until clicked.</p>
+            <div className="mt-2 space-y-1.5">{offerings.map(item=><button key={item.name} type="button" onClick={()=>send(item.prompt)} disabled={busy} className="flex w-full items-center justify-between gap-2 rounded-lg border border-slate-100 px-2.5 py-2 text-left text-xs font-medium text-slate-700 hover:border-teal-200 hover:bg-teal-50 disabled:opacity-50">{item.name}<ChevronRight className="h-3 w-3 shrink-0 text-teal-700"/></button>)}</div>
+            <button type="button" onClick={()=>onNavigateTab('services')} className="mt-3 text-xs font-bold text-teal-800 hover:text-teal-950">See full service scope →</button>
+          </details>
+          <details className="rounded-xl border border-slate-200 bg-white p-3">
+            <summary className="cursor-pointer list-none text-sm font-bold text-slate-800"><Users className="mr-2 inline h-4 w-4 text-teal-700"/> Solutions by industry <ChevronRight className="ml-1 inline h-3.5 w-3.5"/></summary>
+            <p className="mt-2 text-xs text-slate-600">Choose your sector to ask a question tailored to that business context.</p>
+            <div className="mt-2 space-y-1.5">
               {[
                 {title:'Exporters & International Trade',prompt:'I run an export or international trade business. Help me assess letter of credit discrepancies, shipping document compliance, and foreign buyer payment security. Ask focused questions before recommending next steps.'},
                 {title:'Distributors & Wholesale Trading',prompt:'I run a distribution or wholesale business. Help me assess channel credit limits, dealer agreement safeguards, working capital, and inventory velocity. Ask focused questions before recommending next steps.'},
@@ -185,11 +186,11 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                 {title:'Manufacturing & Engineering',prompt:'I run a manufacturing or engineering business. Help me assess raw-material price risk clauses, plant capex decisions, and internal control or audit priorities. Ask focused questions before recommending next steps.'},
                 {title:'Healthcare & Clinics',prompt:'I manage a healthcare business or clinic. Help me assess equipment lease agreements, medical vendor contracts, and patient-data confidentiality controls. Flag issues needing qualified legal or privacy review.'},
                 {title:'IT & Professional Services',prompt:'I run an IT or professional services business. Help me assess master services agreements, client IP assignment, offshore delivery risks, and milestone billing. Ask focused questions before recommending next steps.'}
-              ].map(sector=><button key={sector.title} type="button" onClick={()=>send(sector.prompt)} disabled={busy} className="flex w-full items-center justify-between gap-2 rounded-lg border border-slate-100 px-2.5 py-2 text-left text-[11px] font-semibold leading-relaxed text-slate-700 hover:border-blue-200 hover:bg-blue-50 disabled:opacity-50">{sector.title}<ChevronRight className="h-3 w-3 shrink-0 text-blue-700"/></button>)}
+              ].map(sector=><button key={sector.title} type="button" onClick={()=>send(sector.prompt)} disabled={busy} className="flex w-full items-center justify-between gap-2 rounded-lg border border-slate-100 px-2.5 py-2 text-left text-xs font-medium text-slate-700 hover:border-teal-200 hover:bg-teal-50 disabled:opacity-50">{sector.title}<ChevronRight className="h-3 w-3 shrink-0 text-teal-700"/></button>)}
             </div>
-          </div>
-          <p className="mt-4 text-[10px] leading-relaxed text-slate-500">Guidance is based on the information you provide. Financial, legal, tax and regulated decisions may require review by an appropriately qualified professional.</p>
-        </aside>
+          </details>
+        </div>
+        <p className="mt-3 text-[10px] leading-relaxed text-slate-500">Guidance is based on the information you provide. Financial, legal, tax and regulated decisions may require review by an appropriately qualified professional.</p>
       </div>
     </div>
   </section>;
