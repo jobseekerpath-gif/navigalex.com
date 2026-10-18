@@ -42,7 +42,7 @@ async function startServer() {
   const botRateLimit = rateLimit('bot', 30, 60 * 1000);
 
   // In-Memory Secure Admin Store
-  const adminTokens = new Set<string>();
+  const adminTokens = new Map<string, number>();
   const ADMIN_CREDENTIALS = {
     username: process.env.ADMIN_USERNAME || 'admin',
     email: process.env.ADMIN_EMAIL || 'admin@navigalex.com',
@@ -124,15 +124,10 @@ async function startServer() {
 
   // Helper: Extract real client IP accurately
   function getClientIp(req: express.Request): string {
-    const forwarded = req.headers['x-forwarded-for'];
-    if (typeof forwarded === 'string') {
-      return forwarded.split(',')[0].trim().replace(/^::ffff:/, '');
-    }
-    if (Array.isArray(forwarded) && forwarded.length > 0) {
-      return forwarded[0].trim().replace(/^::ffff:/, '');
-    }
-    const sock = req.socket.remoteAddress || req.ip || '127.0.0.1';
-    return sock.replace(/^::ffff:/, '');
+    // Express resolves the forwarded address using the configured trusted proxy.
+    // Do not trust a raw X-Forwarded-For header supplied by the caller.
+    const clientIp = req.ip || req.socket.remoteAddress || '127.0.0.1';
+    return clientIp.replace(/^::ffff:/, '');
   }
 
   // Helper: Parse client User Agent
@@ -247,7 +242,9 @@ async function startServer() {
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
     
-    if (!token || !adminTokens.has(token)) {
+    const tokenExpiresAt = token ? adminTokens.get(token) : undefined;
+    if (!token || !tokenExpiresAt || tokenExpiresAt <= Date.now()) {
+      if (token) adminTokens.delete(token);
       const clientIp = getClientIp(req);
       recordAuditLog('Unknown', 'AUTH_FAILED', `Unauthorized attempt to access ${req.method} ${req.path}`, clientIp, 'WARNING');
       return res.status(401).json({ error: 'Unauthorized: Invalid or expired admin credentials.' });
@@ -419,7 +416,7 @@ async function startServer() {
 
     if (isValidUser && isValidPass) {
       const token = `nvx-token-${Date.now()}-${crypto.randomUUID()}`;
-      adminTokens.add(token);
+      adminTokens.set(token, Date.now() + 8 * 60 * 60 * 1000);
       recordAuditLog(identifier, 'AUTH_LOGIN', `Admin session established successfully. Token issued.`, clientIp, 'INFO');
       recordVisitorActivity(req, visitorId || '', 'ADMIN_ACCESS', '/admin', `Admin user logged in successfully (${identifier})`);
 
@@ -445,7 +442,8 @@ async function startServer() {
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
     
-    if (token && adminTokens.has(token)) {
+    const tokenExpiresAt = token ? adminTokens.get(token) : undefined;
+    if (token && tokenExpiresAt && tokenExpiresAt > Date.now()) {
       return res.json({
         authenticated: true,
         admin: {
@@ -456,6 +454,7 @@ async function startServer() {
         }
       });
     }
+    if (token) adminTokens.delete(token);
     return res.status(401).json({ authenticated: false });
   });
 
