@@ -11,9 +11,10 @@ if (start < 0 || end < 0 || end <= start) {
 }
 
 const replacement = `  // Bot Chat Endpoint - real AI provider routing
-  app.post('/api/bot/chat', async (req, res) => {
-    const { message, history, visitorId } = req.body;
-    if (!message || typeof message !== 'string') return res.status(400).json({ error: 'Message is required' });
+  app.post('/api/bot/chat', botRateLimit, async (req, res) => {
+    const { message, history, visitorId } = req.body || {};
+    if (typeof message !== 'string' || !message.trim()) return res.status(400).json({ error: 'Message is required' });
+    if (message.length > 4000) return res.status(413).json({ error: 'Please keep each message under 4,000 characters.' });
 
     recordVisitorActivity(
       req,
