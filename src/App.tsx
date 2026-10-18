@@ -1,5 +1,6 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 const LiveAdvisoryBot = lazy(() => import('./components/LiveAdvisoryBot'));
+const GenieWorkspace = lazy(() => import('./components/GenieWorkspace'));
 const AdminPanel = lazy(() => import('./components/AdminPanel'));
 const LiveAssessmentsPage = lazy(() => import('./pages/LiveAssessmentsPage'));
 const ServicesPage = lazy(() => import('./pages/ServicesPage'));
@@ -564,7 +565,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-8 flex items-center justify-center text-[10px] sm:text-[11px] font-medium tracking-wide">
           <span className="inline-flex max-w-full items-center justify-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" aria-hidden="true" />
-            <><strong className="font-bold">Navigalex Advisory:</strong> We help Indian business owners assess financial, legal, governance and banking risks using AI-assisted analysis and professional review.</>
+            <><strong className="font-bold">Navigalex Advisory:</strong> We help Indian business owners assess financial, contract, governance and banking risks with guided analysis and professional review.</>
           </span>
         </div>
       </div>
@@ -590,8 +591,8 @@ export default function App() {
           <nav className="hidden lg:flex min-w-0 overflow-hidden items-center justify-start gap-0.5 xl:gap-1 font-semibold" aria-label="Primary navigation">
             {[
               ['home', 'Home'],
-              ['live-tools', 'Live AI Scanners'],
-              ['services', 'Our 9 Services'],
+              ['live-tools', 'Tools'],
+              ['services', 'Services'],
               ['why-pick-us', 'Why Pick These Products'],
               ['industries', 'Industries'],
               ['how-it-works', 'How It Works'],
@@ -665,180 +666,12 @@ export default function App() {
       {/* Main Content */}
       <main className="flex-1">
         {activeTab === 'home' && (
-          <div className="space-y-12 sm:space-y-24 pb-16 sm:pb-24">
-            {/* Hero Section in Simple Layman Language */}
-            <section className="relative pt-8 sm:pt-20 pb-12 sm:pb-20 px-4 sm:px-6 max-w-7xl mx-auto overflow-hidden navigalex-light-gradient rounded-b-3xl border-b border-slate-200">
-              <div className="max-w-4xl space-y-5 sm:space-y-6">
-                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-xs font-semibold text-blue-700 shadow-sm">
-                  <Sparkles className="w-3.5 h-3.5 text-blue-600" />
-                  <span>Business & Legal Advisory, Built for Complex Decisions</span>
-                </div>
-
-                <h1 className="text-[30px] sm:text-3xl font-bold tracking-tight leading-[1.15] bg-gradient-to-r from-slate-900 via-blue-950 to-indigo-900 bg-clip-text text-transparent">
-                  Navigate Business Decisions With <span className="bg-gradient-to-r from-blue-700 via-indigo-700 to-blue-800 bg-clip-text text-transparent font-extrabold">Absolute Clarity.</span>
-                </h1>
-
-                <p className="text-[15px] sm:text-xl text-slate-700 max-w-3xl leading-7 sm:leading-relaxed font-normal">
-                  Navigalex helps lenders, founders and boards turn financial, risk and governance signals into clear decisions — before small issues become expensive problems.
-                </p>
-
-                <div className="pt-3 sm:pt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
-                  <button
-                    onClick={() => openAssessmentForm()}
-                    className="flex items-center gap-2 px-7 py-3.5 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-500 rounded-xl shadow-lg shadow-blue-600/25 transition-all cursor-pointer"
-                  >
-                    <span>Request a Confidential Assessment</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={() => { setActiveTab('live-tools'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                    className="flex items-center gap-2 px-7 py-3.5 text-sm font-semibold text-slate-700 bg-white hover:bg-slate-50 border border-slate-300 rounded-xl shadow-sm transition-all cursor-pointer"
-                  >
-                    <span>Try Free Live Assessments</span>
-                  </button>
-                </div>
-
-                <div className="pt-4 flex items-center gap-3 text-xs text-slate-500">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <span>Senior professional judgment. Smart AI scanning. Clear proof for every action.</span>
-                </div>
-              </div>
-
-              {/* Three Live Commercial Highlights */}
-              <div className="mt-12 p-6 bg-white/95 backdrop-blur-md rounded-2xl border border-slate-200 shadow-2xl max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100 hover:border-blue-300 transition-colors">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-bold text-blue-700 uppercase tracking-wider">LIVE 1</span>
-                    <FileText className="w-4 h-4 text-blue-600" />
-                  </div>
-                  <h3 className="font-bold text-slate-900 text-base">Contract Risk Scanner</h3>
-                  <p className="text-xs text-slate-600 mt-1 mb-3">Upload any client/vendor agreement or paste text. Catch unlimited liability and payment default traps.</p>
-                  <button onClick={() => { setActiveTab('live-tools'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="text-xs font-bold text-blue-600 hover:text-blue-700 flex items-center gap-1 cursor-pointer">
-                    Try free assessment <ChevronRight className="w-3 h-3" />
-                  </button>
-                </div>
-
-                <div className="p-4 bg-emerald-50/60 rounded-xl border border-emerald-100 hover:border-emerald-300 transition-colors">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-bold text-emerald-700 uppercase tracking-wider">LIVE 2</span>
-                    <BarChart3 className="w-4 h-4 text-emerald-600" />
-                  </div>
-                  <h3 className="font-bold text-slate-900 text-base">Bank Loan Readiness Check</h3>
-                  <p className="text-xs text-slate-600 mt-1 mb-3">Calculate your Debt Service Coverage (DSCR) and see exactly what triggers loan rejection from banks.</p>
-                  <button onClick={() => { setActiveTab('live-tools'); window.scrollTo({ top: 600, behavior: 'smooth' }); }} className="text-xs font-bold text-emerald-700 hover:text-emerald-800 flex items-center gap-1 cursor-pointer">
-                    Calculate DSCR <ChevronRight className="w-3 h-3" />
-                  </button>
-                </div>
-
-                <div className="p-4 bg-indigo-50/60 rounded-xl border border-indigo-100 hover:border-indigo-300 transition-colors">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-bold text-indigo-700 uppercase tracking-wider">Flagship Product</span>
-                    <Briefcase className="w-4 h-4 text-indigo-600" />
-                  </div>
-                  <h3 className="font-bold text-slate-900 text-base">ControlCFO™ 30-Day Sprint</h3>
-                  <p className="text-xs text-slate-600 mt-1 mb-3">Your part-time senior CFO and risk command centre, designed to give you senior oversight without a full-time CFO structure.</p>
-                  <button onClick={() => { setSelectedDeskModal(ADVISORY_DESKS[0]); }} className="text-xs font-bold text-indigo-600 hover:text-indigo-700 flex items-center gap-1 cursor-pointer">
-                    See sprint details <ChevronRight className="w-3 h-3" />
-                  </button>
-                </div>
-              </div>
-            </section>
-
-            {/* Core Problem Section in Simple Layman Language */}
-            <section className="max-w-7xl mx-auto px-6 space-y-12">
-              <div className="text-center max-w-3xl mx-auto space-y-3">
-                <span className="text-xs font-bold text-blue-600 uppercase tracking-widest">THE REAL PROBLEM IN EVERY BUSINESS</span>
-                <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900">
-                  Turn financial and business signals into clear decisions
-                </h2>
-                <p className="text-base text-slate-600 leading-relaxed">
-                  As an Indian business owner, you pay your CA for tax filings and your lawyer for disputes. But neither of them connects your cash flow with your contract risks or bank limits. That is where money leaks.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {[
-                  { role: "Your Accountant", whatTheyDo: "Files GST & Income Tax", blindspot: "Does not check if bad customer contract terms are trapping your working capital." },
-                  { role: "Your Lawyer", whatTheyDo: "Fights court cases & drafts notices", blindspot: "Does not understand your monthly bank cash credit and debtor payment reality." },
-                  { role: "Your Bank Manager", whatTheyDo: "Looks at collateral & past balance sheet", blindspot: "Does not warn you before rejecting your limit renewal due to DSCR dip." },
-                  { role: "Your ERP / Software", whatTheyDo: "Generates bills and reports", blindspot: "Shows raw numbers, but cannot warn you of impending cash death traps." }
-                ].map((item, idx) => (
-                  <div key={idx} className="navigalex-card p-6 rounded-2xl space-y-3 border-l-4 border-blue-600">
-                    <span className="text-xs font-bold uppercase tracking-wider text-slate-400">{item.role}</span>
-                    <h3 className="text-base font-bold text-slate-900">{item.whatTheyDo}</h3>
-                    <p className="text-xs text-rose-600 font-medium"><strong>The Blindspot:</strong> {item.blindspot}</p>
-                  </div>
-                ))}
-              </div>
-
-              {/* The Navigalex Solution in Layman Terms */}
-              <div className="navigalex-card p-4 sm:p-10 rounded-2xl bg-gradient-to-r from-blue-900 via-slate-900 to-indigo-950 text-white text-center space-y-4 shadow-xl">
-                <span className="text-xs font-bold uppercase tracking-widest text-blue-300">HOW NAVIGALEX SOLVES THIS</span>
-                <h3 className="text-2xl sm:text-3xl font-bold text-white">One Unified Decision System For Your Money & Risk</h3>
-                <p className="text-sm text-slate-200 max-w-2xl mx-auto leading-relaxed">
-                  We connect each finding to the evidence supplied, an action owner, and a practical next step. Clear decisions and clear accountability.
-                </p>
-                <div className="pt-2">
-                  <button onClick={() => { setActiveTab('live-tools'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="px-6 py-3 bg-blue-500 hover:bg-blue-400 text-white text-xs font-bold rounded-xl transition-all shadow-md cursor-pointer">
-                    Explore Live Diagnostic Assessments
-                  </button>
-                </div>
-              </div>
-            </section>
-
-            {/* Quick 5-Point Interactive Self-Check */}
-            <section className="max-w-7xl mx-auto px-6 space-y-12">
-              <div className="text-center max-w-2xl mx-auto space-y-3">
-                <span className="text-xs font-bold text-blue-600 uppercase tracking-widest">3-MINUTE BUSINESS RISK CHECK</span>
-                <h2 className="text-3xl font-extrabold text-slate-900">How safe is your business right now?</h2>
-                <p className="text-sm text-slate-600">Move the sliders to check your risk exposure in plain words.</p>
-              </div>
-
-              <div className="navigalex-card p-8 rounded-2xl max-w-3xl mx-auto space-y-8 shadow-lg">
-                {[
-                  { key: 'cash', label: '1. Customer Payment Delay (Receivables)', desc: 'How long does it take clients to clear bills? (1 = under 30 days, 5 = stuck over 90 days).' },
-                  { key: 'contract', label: '2. Customer & Vendor Contracts', desc: 'Do you sign customer contracts without lawyer review or with unlimited penalties? (1 = fully capped, 5 = unlimited liability).' },
-                  { key: 'funding', label: '3. Bank Loan & CC Limits', desc: 'Is your bank borrowing frequently close to its available limit with limited coverage? (1 = strong cushion, 5 = high pressure).' },
-                  { key: 'fraud', label: '4. Internal Billing & Inventory Checks', desc: 'Can employees or partners release money or dispatch inventory without dual approvals? (1 = strict controls, 5 = blind trust).' },
-                  { key: 'governance', label: '5. Board Minutes & Director Protection', desc: 'Are company resolutions and director meeting records properly drafted and signed? (1 = well documented, 5 = records are missing or unclear).' }
-                ].map((dim) => (
-                  <div key={dim.key} className="space-y-2">
-                    <div className="flex justify-between items-center text-sm">
-                      <span className="font-bold text-slate-900">{dim.label}</span>
-                      <span className="text-xs font-bold text-blue-600">
-                        {diagnosticScores[dim.key as keyof typeof diagnosticScores] === 0 ? 'Not answered' : `Risk: ${diagnosticScores[dim.key as keyof typeof diagnosticScores]} / 5`}
-                      </span>
-                    </div>
-                    <p className="text-xs text-slate-500">{dim.desc}</p>
-                    <input 
-                      type="range" 
-                      min="1" 
-                      max="5" 
-                      value={diagnosticScores[dim.key as keyof typeof diagnosticScores]}
-                      onChange={(e) => setDiagnosticScores({...diagnosticScores, [dim.key]: parseInt(e.target.value)})}
-                      className="w-full accent-blue-600 bg-slate-200 rounded-lg cursor-pointer"
-                    />
-                  </div>
-                ))}
-
-                <div className="pt-6 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
-                  <div className="text-xs text-slate-600">
-                    Your Total Risk Score: <strong className="text-blue-600 text-base">
-                      {Object.values(diagnosticScores).reduce((a, b) => a + b, 0)} / 25
-                    </strong>
-                    <span className="block text-[11px] text-slate-500 mt-0.5">
-                      {Object.values(diagnosticScores).reduce((a, b) => a + b, 0) > 16 ? "⚠️ High Risk: Immediate cleanup recommended." : "Healthy profile with minor optimization needed."}
-                    </span>
-                  </div>
-                  <button
-                    disabled={Object.values(diagnosticScores).some((score) => score === 0)}
-                    onClick={() => openAssessmentForm('Complete 5-Part Risk Assessment')} className="px-6 py-3 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed text-xs font-semibold text-white rounded-xl transition-all shadow-md cursor-pointer">
-                    Request Full Confidential Audit
-                  </button>
-                </div>
-              </div>
-            </section>
-          </div>
+          <Suspense fallback={<div className="min-h-[70vh] flex items-center justify-center text-sm text-slate-500">Opening your advisory workspace…</div>}>
+            <GenieWorkspace
+              onOpenAssessment={openAssessmentForm}
+              onNavigateTab={(tab) => { setActiveTab(tab); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+            />
+          </Suspense>
         )}
 
         {/* LIVE AI ASSESSMENTS TAB — lazy route/page chunk */}
