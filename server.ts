@@ -892,6 +892,10 @@ Respond with ONLY a JSON object (no markdown fences, no extra commentary) in exa
   // Financial & CIBIL Health Scanner API: Real Activity Hook
   app.post('/api/cibil-scan', financeRateLimit, (req, res) => {
     const { turnover, monthlyEmi, ccLimit, overdueDebtors, annualOperatingProfit, visitorId } = req.body || {};
+    const rawInputs = [turnover, monthlyEmi, ccLimit, overdueDebtors, annualOperatingProfit];
+    if (rawInputs.some((value) => value === undefined || value === null || (typeof value === 'string' && !value.trim()))) {
+      return res.status(400).json({ error: 'Enter all five financial figures. Use 0 where the amount is genuinely zero.' });
+    }
     const t = Number(turnover);
     const emi = Number(monthlyEmi);
     const cc = Number(ccLimit);
@@ -905,7 +909,8 @@ Respond with ONLY a JSON object (no markdown fences, no extra commentary) in exa
     const annualEmiCr = (emi * 12) / 100;
     const dscr = annualEmiCr > 0 ? operatingProfit / annualEmiCr : null;
     const ccShare = t > 0 ? (cc / t) * 100 : 0;
-    const overdueShare = t > 0 ? debtors / t : 0;
+    // Turnover is in crores while overdue receivables are in lakhs; convert before comparing.
+    const overdueShare = t > 0 ? (debtors / 100) / t : 0;
     const observations: string[] = [];
     if (annualEmiCr === 0) observations.push('No EMI burden was entered, so DSCR is not meaningful for this input set.');
     else observations.push('DSCR is calculated from the annual operating-profit and annualized EMI figures you entered.');
