@@ -1,0 +1,37 @@
+name: Navigalex CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main, fix/commercial-readiness]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install locked dependencies
+        run: npm ci
+      - name: Static integration checks
+        run: npm run test:static
+      - name: Type check
+        run: npm run lint
+      - name: Production build
+        run: npm run build
+      - name: Verify generated server preserves safeguards
+        run: |
+          grep -q "app.post('/api/bot/chat', botRateLimit" server.ts
+          grep -q "app.get('/api/health'" server.ts
+          test -d dist
