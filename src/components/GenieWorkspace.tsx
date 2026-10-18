@@ -4,6 +4,37 @@ import { ArrowUp, Sparkles, Wallet, TrendingDown, Landmark, FileSearch, ShieldCh
 type Message = { id: string; role: 'user' | 'guide'; text: string; };
 type Props = { onOpenAssessment: (concern?: string) => void; onNavigateTab: (tab: string) => void };
 
+/** Render common Markdown from AI responses as readable UI instead of showing raw ## and ** markers. */
+function GuideResponse({ text }: { text: string }) {
+  const lines = text.replace(/\r/g, '').split('\n');
+  const renderInline = (value: string) => value.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g).map((part, i) => {
+    if (part.startsWith('**') && part.endsWith('**')) return <strong key={i}>{part.slice(2, -2)}</strong>;
+    if (part.startsWith('*') && part.endsWith('*')) return <em key={i}>{part.slice(1, -1)}</em>;
+    return part;
+  });
+  const blocks: React.ReactNode[] = [];
+  let list: string[] = [];
+  const flushList = () => {
+    if (list.length) {
+      blocks.push(<ul key={`list-${blocks.length}`} className="my-2 list-disc space-y-1 pl-5">{list.map((item, i) => <li key={i}>{renderInline(item)}</li>)}</ul>);
+      list = [];
+    }
+  };
+  lines.forEach((raw, i) => {
+    const line = raw.trim();
+    if (!line) { flushList(); return; }
+    const heading = line.match(/^#{1,3}\s+(.+)$/);
+    const bullet = line.match(/^(?:[-*•]|\d+[.)])\s+(.+)$/);
+    if (bullet) { list.push(bullet[1]); return; }
+    flushList();
+    if (heading) blocks.push(<h3 key={i} className="mb-1 mt-3 font-bold text-slate-900">{renderInline(heading[1])}</h3>);
+    else blocks.push(<p key={i} className="my-1">{renderInline(line)}</p>);
+  });
+  flushList();
+  return <div className="space-y-1">{blocks}</div>;
+}
+
+
 const starters = [
   { icon: Wallet, title: 'Sales are coming in, but cash is short', prompt: 'My business makes sales but I never have enough cash to pay expenses on time. Help me find the likely causes and what to do first.' },
   { icon: TrendingDown, title: 'Costs are eating my profits', prompt: 'My costs are rising and profits are falling. Help me identify what to check and which solutions could fit.' },
@@ -105,7 +136,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
               <div className="mt-2 grid gap-2 sm:grid-cols-2">
                 {starters.slice(0,4).map(({icon: Icon,title,prompt})=><button key={title} type="button" onClick={()=>send(prompt)} className="group flex items-start gap-3 rounded-xl border border-slate-200 p-3 text-left transition hover:border-blue-300 hover:bg-blue-50/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"><span className="rounded-lg bg-slate-100 p-2 text-slate-700 group-hover:bg-white"><Icon className="h-4 w-4"/></span><span className="flex-1 text-sm font-semibold leading-snug text-slate-800">{title}<span className="mt-1 block text-xs font-normal text-slate-500">Help me figure this out <ChevronRight className="inline h-3 w-3"/></span></span></button>)}
               </div>
-            </> : messages.map(m=><div key={m.id} className={m.role==='user'?'ml-auto max-w-[92%] rounded-2xl rounded-tr-md bg-blue-700 px-4 py-3 text-sm leading-relaxed text-white sm:max-w-[85%]':'max-w-[96%] rounded-2xl rounded-tl-md border border-slate-200 bg-slate-50 px-4 py-4 text-sm leading-relaxed text-slate-800 sm:max-w-[90%]'}><div className="mb-1.5 text-[10px] font-bold uppercase tracking-wider opacity-70">{m.role==='user'?'You':'Navigalex guide'}</div><div className="whitespace-pre-wrap">{m.text}</div>{m.role==='guide'&&<div className="mt-4 border-t border-slate-200 pt-3"><p className="mb-2 text-xs font-bold text-slate-600">Possible next routes</p><div className="flex flex-wrap gap-2">{suggestServices(messages.filter(x=>x.role==='user').map(x=>x.text).join(' ')).map(s=><button key={s.name} type="button" onClick={()=>s.tab==='live-tools'?onNavigateTab('live-tools'):s.tab==='family-office'?onNavigateTab('family-office'):onNavigateTab('services')} className="rounded-full border border-blue-200 bg-white px-3 py-2 text-xs font-semibold text-blue-800 hover:bg-blue-50">{s.name} <ChevronRight className="inline h-3 w-3"/></button>)}<button type="button" onClick={()=>onOpenAssessment(messages.filter(x=>x.role==='user').map(x=>x.text).join(' ').slice(0,180))} className="rounded-full bg-slate-900 px-3 py-2 text-xs font-semibold text-white hover:bg-slate-700">Talk to an adviser</button></div></div>}</div>)}
+            </> : messages.map(m=><div key={m.id} className={m.role==='user'?'ml-auto max-w-[92%] rounded-2xl rounded-tr-md bg-blue-700 px-4 py-3 text-sm leading-relaxed text-white sm:max-w-[85%]':'max-w-[96%] rounded-2xl rounded-tl-md border border-slate-200 bg-slate-50 px-4 py-4 text-sm leading-relaxed text-slate-800 sm:max-w-[90%]'}><div className="mb-1.5 text-[10px] font-bold uppercase tracking-wider opacity-70">{m.role==='user'?'You':'Navigalex guide'}</div><div className="whitespace-pre-wrap"><GuideResponse text={m.text} /></div>{m.role==='guide'&&<div className="mt-4 border-t border-slate-200 pt-3"><p className="mb-2 text-xs font-bold text-slate-600">Possible next routes</p><div className="flex flex-wrap gap-2">{suggestServices([...messages].reverse().find(x=>x.role==='user')?.text || '').map(s=><button key={s.name} type="button" onClick={()=>s.tab==='live-tools'?onNavigateTab('live-tools'):s.tab==='family-office'?onNavigateTab('family-office'):onNavigateTab('services')} className="rounded-full border border-blue-200 bg-white px-3 py-2 text-xs font-semibold text-blue-800 hover:bg-blue-50">{s.name} <ChevronRight className="inline h-3 w-3"/></button>)}<button type="button" onClick={()=>onOpenAssessment(messages.filter(x=>x.role==='user').map(x=>x.text).join(' ').slice(0,180))} className="rounded-full bg-slate-900 px-3 py-2 text-xs font-semibold text-white hover:bg-slate-700">Talk to an adviser</button></div></div>}</div>)}
             {busy&&<div className="flex items-center gap-2 text-sm text-slate-500"><span className="h-2 w-2 animate-pulse rounded-full bg-blue-600"/><span>Reviewing your situation…</span></div>}
             {error&&<div role="alert" className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">{error} <button type="button" className="ml-1 font-bold underline" onClick={()=>send(messages.filter(m=>m.role==='user').slice(-1)[0]?.text)}>Try again</button></div>}
             <div ref={endRef}/>
