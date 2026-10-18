@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ArrowUp, Sparkles, Wallet, TrendingDown, Landmark, FileSearch, ShieldCheck, Scale, Workflow, Users, ChevronRight, RotateCcw, MessageCircle, BriefcaseBusiness, ChartNoAxesCombined } from 'lucide-react';
+import { ArrowUp, Sparkles, Wallet, TrendingDown, Landmark, FileSearch, ShieldCheck, Workflow, Users, ChevronRight, RotateCcw, MessageCircle, BriefcaseBusiness, ChartNoAxesCombined } from 'lucide-react';
 
 type Message = { id: string; role: 'user' | 'guide'; text: string; };
 type Props = { onOpenAssessment: (concern?: string) => void; onNavigateTab: (tab: string) => void };
@@ -13,6 +13,21 @@ const starters = [
   { icon: Workflow, title: 'My business is hard to manage', prompt: 'My business processes are messy and people rely on spreadsheets and manual work. Help me prioritise improvements.' },
   { icon: Users, title: 'Governance, compliance or family business', prompt: 'I need help with governance, compliance, succession or responsibilities in a family business. Help me identify the right starting point.' },
   { icon: ChartNoAxesCombined, title: 'I need forecasts or better reports', prompt: 'I want to understand my business numbers, forecast cash flow and make better financial decisions. What information should I start with?' }
+];
+
+const offerings = [
+  { name: 'LenderReady — credit readiness & debt structuring', prompt: 'Explain the LenderReady service in plain language and help me decide whether credit readiness or debt structuring fits my situation.' },
+  { name: 'ControlCFO — cash flow, finance & controls', prompt: 'Explain the ControlCFO service and help me identify whether cash flow, finance oversight, risk controls or a 90-day action plan could help.' },
+  { name: 'Contract-to-Cash — contracts & collections', prompt: 'Explain the Contract-to-Cash service and help me with risky contract terms, delayed invoices or payment follow-up.' },
+  { name: 'Internal Audit Factory — controls & leakage', prompt: 'Explain the internal audit service and help me assess unexplained costs, billing errors, inventory leakage or weak controls.' },
+  { name: 'Board-in-a-Box — governance & board records', prompt: 'Explain the governance service and help me identify gaps in board processes, approvals, director responsibilities or records.' },
+  { name: 'RegTech Journey Lab — compliance systems', prompt: 'Explain the compliance service and help me map potential onboarding, privacy, outsourcing or regulatory control gaps.' },
+  { name: 'FraudSignal — discrepancies & investigations', prompt: 'Explain the financial investigation service and help me plan a careful evidence-based review of suspected discrepancies.' },
+  { name: 'TradeShield — letters of credit & guarantees', prompt: 'Explain the trade finance service and help me understand a letter of credit, bank guarantee or export document issue.' },
+  { name: 'Family Wealth Governance — succession & family business', prompt: 'Explain the family wealth governance service and help me identify issues involving succession, ownership or family business decisions.' },
+  { name: 'Business strategy, operations & growth', prompt: 'Help me assess a business growth, operations or process improvement challenge and identify practical options.' },
+  { name: 'Financial planning, forecasting & reporting', prompt: 'Help me work out what financial records are needed for forecasting, budgeting, reporting or scenario planning.' },
+  { name: 'IT, data & workflow automation', prompt: 'Help me identify whether technology, workflow automation, integrations or reporting improvements could solve my business problem.' }
 ];
 
 const serviceMap = [
@@ -109,7 +124,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
           <div className="mb-3 flex items-center gap-2"><BriefcaseBusiness className="h-4 w-4 text-blue-700"/><h2 className="text-sm font-bold text-slate-900">Not sure what you need?</h2></div>
           <p className="mb-4 text-xs leading-relaxed text-slate-600">Choose the closest situation. These are starting points, not diagnoses.</p>
           <div className="space-y-2">{starters.map(({icon: Icon,title,prompt})=><button key={title} type="button" onClick={()=>send(prompt)} disabled={busy} className="flex w-full items-start gap-2.5 rounded-xl border border-slate-200 bg-white p-3 text-left transition hover:border-blue-300 hover:bg-blue-50 disabled:opacity-50"><Icon className="mt-0.5 h-4 w-4 shrink-0 text-blue-700"/><span className="text-xs font-semibold leading-relaxed text-slate-700">{title}</span></button>)}</div>
-          <div className="mt-4 rounded-xl border border-slate-200 bg-white p-3"><p className="text-xs font-bold text-slate-800">Services available through this window</p><p className="mt-1.5 text-xs leading-relaxed text-slate-600">Finance, credit readiness, cash flow, contracts, collections, audit and controls, governance, compliance, trade finance, family wealth, strategy, operations, forecasting and digital systems.</p><button type="button" onClick={()=>onNavigateTab('services')} className="mt-3 inline-flex items-center gap-1 text-xs font-bold text-blue-700 hover:text-blue-900">Browse service details <ChevronRight className="h-3 w-3"/></button></div>
+          <div className="mt-4 rounded-xl border border-slate-200 bg-white p-3"><p className="text-xs font-bold text-slate-800">Explore any service in this window</p><p className="mt-1.5 text-xs leading-relaxed text-slate-600">Select an area to describe your situation and get guided to relevant options.</p><div className="mt-3 max-h-72 space-y-1.5 overflow-y-auto pr-1">{offerings.map(item=><button key={item.name} type="button" onClick={()=>send(item.prompt)} disabled={busy} className="flex w-full items-center justify-between gap-2 rounded-lg border border-slate-100 px-2.5 py-2 text-left text-[11px] font-semibold leading-relaxed text-slate-700 hover:border-blue-200 hover:bg-blue-50 disabled:opacity-50">{item.name}<ChevronRight className="h-3 w-3 shrink-0 text-blue-700"/></button>)}</div><button type="button" onClick={()=>onNavigateTab('services')} className="mt-3 inline-flex items-center gap-1 text-xs font-bold text-blue-700 hover:text-blue-900">See full service scope <ChevronRight className="h-3 w-3"/></button></div>
           <p className="mt-4 text-[10px] leading-relaxed text-slate-500">Guidance is based on the information you provide. Financial, legal, tax and regulated decisions may require review by an appropriately qualified professional.</p>
         </aside>
       </div>
