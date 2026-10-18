@@ -118,8 +118,8 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
     <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
       <header className="bg-slate-900 px-4 py-4 text-white sm:px-6 sm:py-5">
         <div className="flex items-center gap-2.5">
-          <div className="flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-md bg-teal-700/30 ring-1 ring-teal-300/30"><Sparkles className="h-3.5 w-3.5 text-teal-200"/></div>
-          <div className="min-w-0 flex-1"><p className="text-[9px] font-semibold uppercase tracking-[.16em] text-teal-200">Navigalex</p><h1 className="text-lg font-bold tracking-tight sm:text-xl">Financial Genie</h1></div>
+          <div className="flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-md bg-violet-500/15"><Sparkles className="h-2.5 w-2.5 text-violet-200"/></div>
+          <div className="min-w-0 flex-1"><p className="text-[9px] font-semibold uppercase tracking-[.16em] text-violet-200">Navigalex</p><h1 className="text-lg font-bold tracking-tight sm:text-xl">Financial Genie</h1></div>
           {messages.length > 0 && <button onClick={reset} className="inline-flex items-center gap-1 rounded-lg border border-white/20 px-2.5 py-1.5 text-xs font-semibold text-white hover:bg-white/10" type="button"><RotateCcw className="h-3 w-3"/>Reset</button>}
         </div>
         <p className="mt-2 max-w-2xl text-xs leading-relaxed text-slate-300 sm:text-sm">Describe a business challenge. Get focused questions, practical options and a clear next step.</p>
