@@ -220,6 +220,7 @@ async function startServer() {
       });
     }
 
+    persistState();
     return activity;
   }
 
@@ -337,7 +338,7 @@ async function startServer() {
 
   // Public: Submit Client Inquiry
   app.post('/api/inquiries/submit', inquiryRateLimit, async (req, res) => {
-    const { name, company, designation, email, phone, businessType, turnover, primaryConcern, contactMethod, visitorId } = req.body;
+    const { name, company, designation, email, phone, businessType, turnover, primaryConcern, contactMethod, visitorId } = req.body || {};
     const clientIp = getClientIp(req);
     
     const cleanText = (value: unknown, maxLength: number): string =>
@@ -895,7 +896,7 @@ Respond with ONLY a JSON object (no markdown fences, no extra commentary) in exa
 
   // Financial & CIBIL Health Scanner API: Real Activity Hook
   app.post('/api/cibil-scan', financeRateLimit, (req, res) => {
-    const { turnover, monthlyEmi, ccLimit, overdueDebtors, annualOperatingProfit, visitorId } = req.body;
+    const { turnover, monthlyEmi, ccLimit, overdueDebtors, annualOperatingProfit, visitorId } = req.body || {};
     const t = Number(turnover);
     const emi = Number(monthlyEmi);
     const cc = Number(ccLimit);
