@@ -903,6 +903,7 @@ Respond with ONLY a JSON object (no markdown fences, no extra commentary) in exa
     recordVisitorActivity(req, visitorId || '', 'SCAN_DSCR', '/live-tools', 'Calculated banking metrics from user-supplied financial figures.');
     // Indicative operating-profit proxy only. A formal DSCR needs verified cash flow available for
     // debt service and all scheduled principal and interest obligations.
+    // Indicative operating-profit proxy only. Formal DSCR needs verified CFADS and all scheduled principal and interest.
     const annualEmiCr = (emi * 12) / 100;
     const dscr = annualEmiCr > 0 ? operatingProfit / annualEmiCr : null;
     const ccShare = t > 0 ? (cc / t) * 100 : 0;
@@ -928,6 +929,10 @@ Respond with ONLY a JSON object (no markdown fences, no extra commentary) in exa
     res.json({ success: true, service: 'navigalex-api', timestamp: new Date().toISOString(), integrations: { inquiryEmailConfigured: Boolean(process.env.RESEND_API_KEY && process.env.RESEND_FROM_EMAIL && process.env.INQUIRY_TO_EMAIL), aiProviderConfigured: Boolean(process.env.ANTHROPIC_API_KEY || process.env.GEMINI_API_KEY || process.env.GOOGLE_CLOUD_PROJECT), adminConfigured: Boolean(process.env.ADMIN_PASSWORD) }, persistence: { directoryConfigured: Boolean(process.env.NAVIGALEX_DATA_DIR), directory: process.env.NAVIGALEX_DATA_DIR ? 'configured' : 'default-local-path' } });
   });
 
+  app.get('/api/health', (_req, res) => {
+    res.json({ success: true, service: 'navigalex-api', timestamp: new Date().toISOString(), integrations: { inquiryEmailConfigured: Boolean(process.env.RESEND_API_KEY && process.env.RESEND_FROM_EMAIL && process.env.INQUIRY_TO_EMAIL), aiProviderConfigured: Boolean(process.env.ANTHROPIC_API_KEY || process.env.GEMINI_API_KEY || process.env.GOOGLE_CLOUD_PROJECT), adminConfigured: Boolean(process.env.ADMIN_PASSWORD) }, persistence: { directoryConfigured: Boolean(process.env.NAVIGALEX_DATA_DIR), directory: process.env.NAVIGALEX_DATA_DIR ? 'configured' : 'default-local-path' } });
+  });
+
   app.use(express.static('dist', {
     setHeaders: (res, filePath) => {
       if (filePath.includes('/assets/') || filePath.includes('\\assets\\')) {
@@ -939,6 +944,8 @@ Respond with ONLY a JSON object (no markdown fences, no extra commentary) in exa
       }
     }
   }));
+app.use('/api', (_req, res) => res.status(404).json({ error: 'API endpoint not found.' }));
+
 app.use('/api', (_req, res) => res.status(404).json({ error: 'API endpoint not found.' }));
 
 app.use((req, res, next) => {
