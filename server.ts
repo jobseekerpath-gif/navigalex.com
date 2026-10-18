@@ -1,5 +1,6 @@
 import express from 'express';
 import path from 'node:path';
+import fs from 'node:fs';
 import crypto from 'node:crypto';
 import { GoogleGenAI } from '@google/genai';
 
@@ -40,6 +41,10 @@ async function startServer() {
   const inquiryRateLimit = rateLimit('inquiry', 8, 15 * 60 * 1000);
   const loginRateLimit = rateLimit('admin-login', 8, 15 * 60 * 1000);
   const botRateLimit = rateLimit('bot', 30, 60 * 1000);
+  const assessmentRateLimit = rateLimit('assessment', 6, 15 * 60 * 1000);
+  const documentRateLimit = rateLimit('document', 6, 15 * 60 * 1000);
+  const financeRateLimit = rateLimit('finance', 30, 60 * 1000);
+  const telemetryRateLimit = rateLimit('telemetry', 60, 60 * 1000);
 
   // In-Memory Secure Admin Store
   const adminTokens = new Map<string, number>();
@@ -214,13 +219,49 @@ async function startServer() {
     return activity;
   }
 
-  // Production telemetry starts empty and records only live visitor activity.
-
-  let inquiries: Inquiry[] = [];
-
-  let caseStudies: CaseStudy[] = [];
-
-  let auditLogs: AuditLog[] = [];
+  // JSON persistence is suitable only for a single process with a durable mounted volume.
+  // Use a shared database before enabling multiple replicas.
+  const dataDir = path.resolve(process.env.NAVIGALEX_DATA_DIR || './data');
+  const dataFile = path.join(dataDir, 'store.json');
+  interface PersistedState {
+    inquiries?: Inquiry[];
+    caseStudies?: CaseStudy[];
+    auditLogs?: AuditLog[];
+    visitorSessions?: VisitorSession[];
+    visitorActivities?: VisitorActivity[];
+  }
+  let initialState: PersistedState = {};
+  try {
+    const loaded: unknown = JSON.parse(fs.readFileSync(dataFile, 'utf8'));
+    if (loaded && typeof loaded === 'object') initialState = loaded as PersistedState;
+  } catch (error: any) {
+    if (error?.code !== 'ENOENT') console.error('Persistent store read failed:', error?.message || error);
+  }
+  let inquiries: Inquiry[] = Array.isArray(initialState.inquiries) ? initialState.inquiries : [];
+  let caseStudies: CaseStudy[] = Array.isArray(initialState.caseStudies) ? initialState.caseStudies : [];
+  let auditLogs: AuditLog[] = Array.isArray(initialState.auditLogs) ? initialState.auditLogs : [];
+  if (Array.isArray(initialState.visitorSessions)) {
+    for (const session of initialState.visitorSessions) {
+      if (session && typeof session.visitorId === 'string') visitorSessions.set(session.visitorId, session);
+    }
+  }
+  if (Array.isArray(initialState.visitorActivities)) visitorActivities.push(...initialState.visitorActivities.slice(0, 500));
+  const persistState = () => {
+    try {
+      fs.mkdirSync(dataDir, { recursive: true, mode: 0o700 });
+      const tmp = dataFile + '.tmp';
+      const state: PersistedState = {
+        inquiries, caseStudies, auditLogs: auditLogs.slice(0, 200),
+        visitorSessions: Array.from(visitorSessions.values()).slice(0, 5000),
+        visitorActivities: visitorActivities.slice(0, 500)
+      };
+      fs.writeFileSync(tmp, JSON.stringify(state), { encoding: 'utf8', mode: 0o600 });
+      fs.renameSync(tmp, dataFile);
+    } catch (error) {
+      console.error('CRITICAL: Navigalex persistent store write failed:', error);
+    }
+  };
+  persistState();
 
   // Helper to record an audit log
   const recordAuditLog = (actor: string, eventType: AuditLog['eventType'], description: string, ip: string, severity: AuditLog['severity'] = 'INFO') => {
@@ -235,6 +276,7 @@ async function startServer() {
     };
     auditLogs.unshift(newLog);
     if (auditLogs.length > 200) auditLogs.pop(); // keep last 200 logs
+    persistState();
   };
 
   // Auth Middleware
@@ -253,7 +295,7 @@ async function startServer() {
   };
 
   // Public Telemetry: Real User Activity Tracking Endpoint
-  app.post('/api/track/activity', (req, res) => {
+  app.post('/api/track/activity', telemetryRateLimit, (req, res) => {
     const { visitorId, path } = req.body;
     const cleanPath = typeof path === 'string' && path.startsWith('/') ? path.slice(0, 200) : '/';
     const act = recordVisitorActivity(
@@ -384,6 +426,7 @@ async function startServer() {
     }
 
     inquiries.unshift(newInquiry);
+    persistState();
     recordAuditLog('Public Client', 'INQUIRY_RECEIVED', `Inquiry email delivered for ${newInquiry.id}`, clientIp);
     
     // Log real activity
@@ -478,9 +521,13 @@ async function startServer() {
       return res.status(404).json({ error: 'Inquiry not found.' });
     }
 
+    const allowedStatuses = ['New', 'Under Review', 'NDA Executed', 'Diagnostic Delivered', 'Closed'];
+    if (status !== undefined && !allowedStatuses.includes(status)) return res.status(400).json({ error: 'Invalid inquiry status.' });
+    if (notes !== undefined && (typeof notes !== 'string' || notes.length > 4000)) return res.status(400).json({ error: 'Notes must be text under 4,000 characters.' });
     const prevStatus = inquiry.status;
     if (status) inquiry.status = status;
-    if (notes !== undefined) inquiry.notes = notes;
+    if (notes !== undefined) inquiry.notes = notes.trim();
+    persistState();
 
     recordAuditLog(
       ADMIN_CREDENTIALS.email, 
@@ -500,6 +547,7 @@ async function startServer() {
     if (idx === -1) return res.status(404).json({ error: 'Inquiry not found' });
 
     const removed = inquiries.splice(idx, 1)[0];
+    persistState();
     recordAuditLog(ADMIN_CREDENTIALS.email, 'STATUS_CHANGE', `Archived/deleted inquiry ${id} (${removed.company})`, clientIp, 'WARNING');
 
     res.json({ success: true, message: `Inquiry ${id} archived.` });
@@ -538,6 +586,7 @@ async function startServer() {
     };
 
     caseStudies.unshift(newCaseStudy);
+    persistState();
     recordAuditLog(ADMIN_CREDENTIALS.email, 'CASE_STUDY_CREATED', `Created new case study: "${title}" (ID: ${newCaseStudy.id})`, clientIp);
 
     res.json({ success: true, caseStudy: newCaseStudy });
@@ -550,7 +599,11 @@ async function startServer() {
     const cs = caseStudies.find(c => c.id === id);
     if (!cs) return res.status(404).json({ error: 'Case study not found.' });
 
-    Object.assign(cs, req.body);
+    const updates = req.body && typeof req.body === 'object' ? req.body : {};
+    const allowedFields = ['title', 'clientSector', 'region', 'dealSize', 'riskIdentified', 'advisoryProvided', 'concreteRoi', 'status'];
+    for (const field of allowedFields) if (Object.prototype.hasOwnProperty.call(updates, field)) (cs as any)[field] = String(updates[field]).slice(0, 4000);
+    if (!['Published', 'Under Review', 'Draft'].includes(cs.status)) return res.status(400).json({ error: 'Invalid case study status.' });
+    persistState();
     recordAuditLog(ADMIN_CREDENTIALS.email, 'CASE_STUDY_UPDATED', `Updated case study: ${cs.title} (ID: ${id})`, clientIp);
 
     res.json({ success: true, caseStudy: cs });
@@ -700,8 +753,9 @@ Respond with ONLY a JSON object (no markdown fences, no extra commentary) in exa
 
   // Bot Chat Endpoint - provider-only, evidence-grounded responses
   app.post('/api/bot/chat', botRateLimit, async (req, res) => {
-    const { message, history, visitorId } = req.body;
-    if (!message || typeof message !== 'string') return res.status(400).json({ error: 'Message is required' });
+    const { message, history, visitorId } = req.body || {};
+    if (typeof message !== 'string' || !message.trim()) return res.status(400).json({ error: 'Message is required' });
+    if (message.length > 4000) return res.status(413).json({ error: 'Please keep each message under 4,000 characters.' });
     recordVisitorActivity(req, visitorId || '', 'BOT_CHAT', '/live-bot', 'Customer asked the advisory bot a question.');
     const recentHistory = Array.isArray(history) ? history.slice(-8) : [];
     const conversation = recentHistory
@@ -726,9 +780,10 @@ Respond with ONLY a JSON object (no markdown fences, no extra commentary) in exa
     return res.status(503).json({ success: false, error: 'The advisory assistant is unavailable because no configured AI provider returned a response.', providers: failures.map((item) => item.split(':')[0]) });
   });
   // Diagnostics API Routes: Real Activity Hook
-  app.post('/api/assessments/run', async (req, res) => {
-    const { industry, revenue, serviceType, financialSummary, visitorId } = req.body;
+  app.post('/api/assessments/run', assessmentRateLimit, async (req, res) => {
+    const { industry, revenue, serviceType, financialSummary, visitorId } = req.body || {};
     const summary = typeof financialSummary === 'string' ? financialSummary.trim() : '';
+    if (summary.length > 20000) return res.status(413).json({ error: 'Assessment text is too large. Submit up to 20,000 characters.' });
     if (!industry || !revenue || summary.length < 40) {
       return res.status(400).json({ error: 'Enter the actual financial and operating facts you want assessed (at least 40 characters). No report is generated from preset assumptions.' });
     }
@@ -765,10 +820,11 @@ Respond with ONLY a JSON object (no markdown fences, no extra commentary) in exa
     return res.status(502).json({ error: 'The business assessment could not be generated from the supplied information.', detail: lastError });
   });
 
-  app.post('/api/documents/analyze', async (req, res) => {
-    const { documentText, fileName, visitorId } = req.body;
-    const text = (documentText || "").trim();
-    const effectiveFileName = fileName || 'Pasted Agreement Text';
+  app.post('/api/documents/analyze', documentRateLimit, async (req, res) => {
+    const { documentText, fileName, visitorId } = req.body || {};
+    const text = typeof documentText === 'string' ? documentText.trim() : '';
+    const effectiveFileName = typeof fileName === 'string' ? fileName.trim().slice(0, 180) : 'Pasted Agreement Text';
+    if (text.length > 100000) return res.status(413).json({ error: 'Document text is too large. Submit up to 100,000 characters.' });
 
     // Log real activity
     recordVisitorActivity(
@@ -830,17 +886,19 @@ Respond with ONLY a JSON object (no markdown fences, no extra commentary) in exa
   });
 
   // Financial & CIBIL Health Scanner API: Real Activity Hook
-  app.post('/api/cibil-scan', (req, res) => {
+  app.post('/api/cibil-scan', financeRateLimit, (req, res) => {
     const { turnover, monthlyEmi, ccLimit, overdueDebtors, annualOperatingProfit, visitorId } = req.body;
     const t = Number(turnover);
     const emi = Number(monthlyEmi);
     const cc = Number(ccLimit);
     const debtors = Number(overdueDebtors);
     const operatingProfit = Number(annualOperatingProfit);
-    if (![t, emi, cc, debtors, operatingProfit].every(Number.isFinite) || t <= 0 || emi < 0 || cc < 0 || debtors < 0 || operatingProfit < 0) {
+    if (![t, emi, cc, debtors, operatingProfit].every(Number.isFinite) || t <= 0 || emi < 0 || cc < 0 || debtors < 0 || operatingProfit < 0 || t > 1e9 || emi > 1e7 || cc > 1e9 || debtors > 1e9 || operatingProfit > 1e9) {
       return res.status(400).json({ error: 'Enter actual numeric figures for turnover, EMI, CC/OD limit, overdue receivables and annual operating profit.' });
     }
     recordVisitorActivity(req, visitorId || '', 'SCAN_DSCR', '/live-tools', 'Calculated banking metrics from user-supplied financial figures.');
+    // Indicative operating-profit proxy only. A formal DSCR needs verified cash flow available for
+    // debt service and all scheduled principal and interest obligations.
     const annualEmiCr = (emi * 12) / 100;
     const dscr = annualEmiCr > 0 ? operatingProfit / annualEmiCr : null;
     const ccShare = t > 0 ? (cc / t) * 100 : 0;
@@ -852,13 +910,18 @@ Respond with ONLY a JSON object (no markdown fences, no extra commentary) in exa
     if (overdueShare > 0) observations.push('Overdue receivables entered are ' + overdueShare.toFixed(2) + '% of annual turnover.');
     if (ccShare > 0) observations.push('The current CC/OD limit entered is ' + ccShare.toFixed(2) + '% of annual turnover.');
     res.json({ success: true, report: {
-      calculatedDscr: dscr === null ? 'Not meaningful with zero EMI' : dscr.toFixed(2) + 'x',
+      calculatedDscr: dscr === null ? 'Not meaningful with zero EMI' : dscr.toFixed(2) + 'x (operating-profit proxy)',
+      calculationDisclaimer: 'Indicative screening only. A formal DSCR requires verified cash flow available for debt service and all scheduled principal and interest obligations; have figures reviewed by a qualified finance professional.',
       annualOperatingProfit: operatingProfit.toFixed(2) + ' Cr',
       annualEmi: annualEmiCr.toFixed(2) + ' Cr',
       ccLimitShareOfTurnover: ccShare.toFixed(2) + '%',
       overdueReceivablesShareOfTurnover: overdueShare.toFixed(2) + '%',
       observations
     } });
+  });
+
+  app.get('/api/health', (_req, res) => {
+    res.json({ success: true, service: 'navigalex-api', timestamp: new Date().toISOString(), integrations: { inquiryEmailConfigured: Boolean(process.env.RESEND_API_KEY && process.env.RESEND_FROM_EMAIL && process.env.INQUIRY_TO_EMAIL), aiProviderConfigured: Boolean(process.env.ANTHROPIC_API_KEY || process.env.GEMINI_API_KEY || process.env.GOOGLE_CLOUD_PROJECT), adminConfigured: Boolean(process.env.ADMIN_PASSWORD) }, persistence: { directoryConfigured: Boolean(process.env.NAVIGALEX_DATA_DIR), directory: process.env.NAVIGALEX_DATA_DIR ? 'configured' : 'default-local-path' } });
   });
 
   app.use(express.static('dist', {
@@ -872,6 +935,8 @@ Respond with ONLY a JSON object (no markdown fences, no extra commentary) in exa
       }
     }
   }));
+app.use('/api', (_req, res) => res.status(404).json({ error: 'API endpoint not found.' }));
+
 app.use((req, res, next) => {
     if (req.method !== 'GET' && req.method !== 'HEAD') { return next(); }
     res.sendFile(path.resolve('dist/index.html'));
