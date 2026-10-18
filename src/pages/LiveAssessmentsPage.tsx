@@ -142,6 +142,7 @@ export default function LiveAssessmentsPage({ visitorId, onOpenAssessment }: Liv
   const [isDownloadingContractReport, setIsDownloadingContractReport] = useState(false);
   const [docResult, setDocResult] = useState<any>(null);
   const [docInputError, setDocInputError] = useState('');
+  const [isExtractingDocument, setIsExtractingDocument] = useState(false);
 
   // Section 43B(h) payment-timing screening state
   const [paymentCheck, setPaymentCheck] = useState({
@@ -225,15 +226,22 @@ export default function LiveAssessmentsPage({ visitorId, onOpenAssessment }: Liv
     e.preventDefault();
     setDocInputError('');
     let sourceText = docText.trim();
+    if (docFile && docFile.size > 2 * 1024 * 1024) {
+      setDocInputError('Please choose a text file smaller than 2 MB.');
+      return;
+    }
     if (!sourceText && docFile) {
       const isTextFile = /(^text\/)|(csv)|(json)/i.test(docFile.type) || /\.(txt|csv|json)$/i.test(docFile.name);
       if (!isTextFile) {
         setDocInputError('This version does not extract PDF, DOCX or image contents. Paste the actual contract text in Option B so the assessment is based on the document itself.');
         return;
       }
+      setIsExtractingDocument(true);
       try { sourceText = (await docFile.text()).trim(); } catch {
         setDocInputError('The selected text file could not be read. Paste the contract text directly.');
         return;
+      } finally {
+        setIsExtractingDocument(false);
       }
     }
     if (sourceText.length < 80) {
@@ -257,6 +265,7 @@ export default function LiveAssessmentsPage({ visitorId, onOpenAssessment }: Liv
         return;
       }
       setDocResult(data.analysis);
+      setDocInputError('');
     } catch (err) {
       console.error(err);
       setDocInputError('The contract assessment could not be completed. Please try again.');
@@ -321,6 +330,7 @@ export default function LiveAssessmentsPage({ visitorId, onOpenAssessment }: Liv
         return;
       }
       setCibilResult(data.report);
+      setCibilInputError('');
     } catch (err) {
       console.error(err);
       setCibilInputError('The banking assessment could not be completed.');
@@ -467,10 +477,10 @@ export default function LiveAssessmentsPage({ visitorId, onOpenAssessment }: Liv
                   disabled={isAnalyzingDoc || (!docText.trim() && !docFile)}
                   className="w-full flex items-center justify-center gap-3 py-4 text-sm font-bold text-white bg-blue-600 hover:bg-blue-500 rounded-xl shadow-lg transition-all disabled:opacity-50 cursor-pointer"
                 >
-                  {isAnalyzingDoc ? (
+                  {isExtractingDocument ? (
                     <>
                       <Activity className="w-4 h-4 animate-spin" />
-                      <span>Scanning clauses for commercial liability...</span>
+                      <span>Reading selected file...</span>
                     </>
                   ) : (
                     <>
@@ -700,7 +710,7 @@ export default function LiveAssessmentsPage({ visitorId, onOpenAssessment }: Liv
                     </div>
                   </div>
 
-                  <p className="text-[11px] text-slate-500">This calculation uses only the figures you entered. It is not a lender approval or credit decision.</p>
+                  <p className="text-[11px] text-amber-800 bg-amber-50 border border-amber-200 rounded-lg p-3">{cibilResult.calculationDisclaimer || 'Indicative screening only. This is not a lender approval or credit decision. Have the figures reviewed by a qualified finance professional.'}</p>
                   <CommercialPath path={COMMERCIAL_PATHS.lenderready} onOpenAssessment={onOpenAssessment} />
                 </div>
               )}
