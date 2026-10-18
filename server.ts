@@ -45,6 +45,10 @@ async function startServer() {
   const documentRateLimit = rateLimit('document', 6, 15 * 60 * 1000);
   const financeRateLimit = rateLimit('finance', 30, 60 * 1000);
   const telemetryRateLimit = rateLimit('telemetry', 60, 60 * 1000);
+  const assessmentRateLimit = rateLimit('assessment', 6, 15 * 60 * 1000);
+  const documentRateLimit = rateLimit('document', 6, 15 * 60 * 1000);
+  const financeRateLimit = rateLimit('finance', 30, 60 * 1000);
+  const telemetryRateLimit = rateLimit('telemetry', 60, 60 * 1000);
 
   // In-Memory Secure Admin Store
   const adminTokens = new Map<string, number>();
