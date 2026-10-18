@@ -152,6 +152,21 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
         </div>
 
         <aside className="bg-slate-50/70 p-4 sm:p-5">
+          <div className="mb-3 flex items-center gap-2"><FileSearch className="h-4 w-4 text-blue-700"/><h2 className="text-sm font-bold text-slate-900">Tools & Assessments</h2></div>
+          <p className="mb-3 text-xs leading-relaxed text-slate-600">Open a focused business tool from this workspace whenever you need a structured check.</p>
+          <div className="mb-5 space-y-2">
+            <button type="button" onClick={()=>onNavigateTab('live-tools')} className="flex w-full items-start gap-2.5 rounded-xl border border-blue-200 bg-white p-3 text-left transition hover:border-blue-400 hover:bg-blue-50">
+              <FileSearch className="mt-0.5 h-4 w-4 shrink-0 text-blue-700"/>
+              <span className="text-xs font-semibold leading-relaxed text-slate-800">Contract Risk Scanner <span className="mt-1 block text-[11px] font-normal text-slate-500">Review contract clauses and potential risk areas</span></span>
+              <ChevronRight className="mt-0.5 h-3.5 w-3.5 shrink-0 text-blue-700"/>
+            </button>
+            <button type="button" onClick={()=>onNavigateTab('live-tools')} className="flex w-full items-start gap-2.5 rounded-xl border border-blue-200 bg-white p-3 text-left transition hover:border-blue-400 hover:bg-blue-50">
+              <ChartNoAxesCombined className="mt-0.5 h-4 w-4 shrink-0 text-blue-700"/>
+              <span className="text-xs font-semibold leading-relaxed text-slate-800">Bank DSCR Scanner <span className="mt-1 block text-[11px] font-normal text-slate-500">Check debt-service coverage and repayment readiness</span></span>
+              <ChevronRight className="mt-0.5 h-3.5 w-3.5 shrink-0 text-blue-700"/>
+            </button>
+            <button type="button" onClick={()=>onNavigateTab('live-tools')} className="w-full rounded-lg bg-blue-700 px-3 py-2.5 text-xs font-bold text-white transition hover:bg-blue-800">View all live tools <ChevronRight className="ml-1 inline h-3 w-3"/></button>
+          </div>
           <div className="mb-3 flex items-center gap-2"><BriefcaseBusiness className="h-4 w-4 text-blue-700"/><h2 className="text-sm font-bold text-slate-900">Choose a guided path</h2></div>
           <p className="mb-4 text-xs leading-relaxed text-slate-600">Pick a business situation or service. Genie will use your choice to guide the conversation.</p>
           <div className="space-y-2">{starters.map(({icon: Icon,title,prompt})=><button key={title} type="button" onClick={()=>send(prompt)} disabled={busy} className="flex w-full items-start gap-2.5 rounded-xl border border-slate-200 bg-white p-3 text-left transition hover:border-blue-300 hover:bg-blue-50 disabled:opacity-50"><Icon className="mt-0.5 h-4 w-4 shrink-0 text-blue-700"/><span className="text-xs font-semibold leading-relaxed text-slate-700">{title}</span></button>)}</div>
