@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import {
-  ArrowUpRight, CheckCircle2, ChartNoAxesCombined, ChevronRight, ClipboardCheck,
+  ArrowUpRight, CheckCircle2, ChevronRight, ClipboardCheck,
   Clock3, FileText, Landmark, Search, ShieldCheck, Users, Wallet, Workflow
 } from 'lucide-react';
 
