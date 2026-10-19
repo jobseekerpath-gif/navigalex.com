@@ -377,7 +377,7 @@ export default function LiveAssessmentsPage({ visitorId, onOpenAssessment }: Liv
 
               {/* WHY PICK THIS PRODUCT GUIDE */}
               <div className="p-4 bg-blue-50/70 border border-blue-200 rounded-xl space-y-2">
-                <span className="text-xs font-bold text-blue-900 uppercase">ðŸ’¡ What this assessment provides</span>
+                <span className="text-xs font-bold text-blue-900 uppercase">💡 What this assessment provides</span>
                 <p className="text-xs text-slate-700 leading-relaxed">
                   <strong>Best fit:</strong> Teams reviewing customer, vendor or service agreements where commercial exposure matters.<br />
                   <strong>What it checks:</strong> Liability, indemnity, payment, termination, IP, jurisdiction and dispute terms actually present in the supplied text.<br />
@@ -527,7 +527,7 @@ export default function LiveAssessmentsPage({ visitorId, onOpenAssessment }: Liv
 
               {/* WHY PICK THIS PRODUCT GUIDE */}
               <div className="p-4 bg-emerald-50/70 border border-emerald-200 rounded-xl space-y-2">
-                <span className="text-xs font-bold text-emerald-900 uppercase">ðŸ’¡ Why pick this product?</span>
+                <span className="text-xs font-bold text-emerald-900 uppercase">💡 Why pick this product?</span>
                 <p className="text-xs text-slate-700 leading-relaxed">
                   <strong>Best fit:</strong> Businesses preparing or reviewing a bank borrowing package using their own financial figures.<br />
                   <strong>What it checks:</strong> DSCR and the relationship between operating profit, debt service, borrowing and overdue receivables based on your inputs.<br />
@@ -674,7 +674,7 @@ export default function LiveAssessmentsPage({ visitorId, onOpenAssessment }: Liv
 
               {/* WHY PICK THIS PRODUCT GUIDE */}
               <div className="p-4 bg-indigo-50/70 border border-indigo-200 rounded-xl space-y-2">
-                <span className="text-xs font-bold text-indigo-900 uppercase">ðŸ’¡ Why pick this product?</span>
+                <span className="text-xs font-bold text-indigo-900 uppercase">💡 Why pick this product?</span>
                 <p className="text-xs text-slate-700 leading-relaxed">
                   <strong>Best fit:</strong> Management teams willing to provide actual operating and financial facts for a business-specific review.<br />
                   <strong>What it checks:</strong> Cash conversion, controls, collections, debt and operating issues supported by the facts you provide.<br />
