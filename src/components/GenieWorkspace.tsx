@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import {
   ArrowRight, CheckCircle2, ChartNoAxesCombined, ChevronLeft, ChevronRight,
   FileSearch, Landmark, MessageCircle, RotateCcw, ShieldCheck, Sparkles,
-  Users, Wallet, Workflow
+  Send, Users, Wallet, Workflow
 } from 'lucide-react';
 
 type Props = {
@@ -22,6 +22,13 @@ type Service = {
   concern: string;
   toolLabel?: string;
   Icon: typeof ShieldCheck;
+};
+
+type ChatMessage = {
+  id: string;
+  role: 'assistant' | 'user';
+  text: string;
+  suggestedServiceId?: string;
 };
 
 const SERVICES: Service[] = [
@@ -142,10 +149,52 @@ const ROUTE_COPY: Record<RouteChoice, string> = {
   repeat: 'Start by locating the repeat point in the process, then give the right person a measurable action to close it.'
 };
 
+const CHAT_PROMPTS = [
+  'Cash flow is tight',
+  'Customers are paying late',
+  'I am worried about business risks',
+  'I need funding or a loan',
+  'A process feels unsafe',
+  'Growth decisions are unclear'
+];
+
+function matchServiceFromMessage(message: string): Service | null {
+  const value = message.toLowerCase();
+
+  if (/(invoice|overdue|late payment|customer payment|contract|collections?)/.test(value)) {
+    return SERVICES.find((service) => service.id === 'contract-collections') ?? null;
+  }
+  if (/(fraud|approval|procurement|inventory|process|control|unsafe)/.test(value)) {
+    return SERVICES.find((service) => service.id === 'controls-fraud') ?? null;
+  }
+  if (/(loan|lender|funding|finance|borrow|dscr|facility|capex)/.test(value)) {
+    return SERVICES.find((service) => service.id === 'funding-readiness') ?? null;
+  }
+  if (/(risk|compliance|incident|assurance|reputation)/.test(value)) {
+    return SERVICES.find((service) => service.id === 'risk-assurance') ?? null;
+  }
+  if (/(growth|team|owner|ownership|governance|decision|accountability)/.test(value)) {
+    return SERVICES.find((service) => service.id === 'growth-governance') ?? null;
+  }
+  if (/(cash|cost|margin|profit|working capital|money|financial)/.test(value)) {
+    return SERVICES.find((service) => service.id === 'financial-clarity') ?? null;
+  }
+
+  return null;
+}
+
 export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Props) {
   const [screen, setScreen] = useState<'start' | 'context' | 'result'>('start');
   const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
   const [route, setRoute] = useState<RouteChoice | null>(null);
+  const [chatInput, setChatInput] = useState('');
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
+    {
+      id: 'welcome',
+      role: 'assistant',
+      text: 'Hi, I am Financial Genie. Tell me what is happening in your business, or choose a quick option below. I will suggest the clearest starting service.'
+    }
+  ]);
 
   const selectedService = useMemo(
     () => SERVICES.find((service) => service.id === selectedServiceId) ?? null,
@@ -157,6 +206,32 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
     setSelectedServiceId(serviceId);
     setRoute(null);
     setScreen('context');
+  };
+
+  const sendChatMessage = (rawMessage: string) => {
+    const text = rawMessage.trim();
+    if (!text) return;
+
+    const match = matchServiceFromMessage(text);
+    const reply: ChatMessage = match
+      ? {
+          id: 'assistant-' + Date.now(),
+          role: 'assistant',
+          text: 'Based on that, ' + match.title + ' looks like the best starting point. I can show the scope, deliverables and the next step.',
+          suggestedServiceId: match.id
+        }
+      : {
+          id: 'assistant-' + Date.now(),
+          role: 'assistant',
+          text: 'I can help with cash flow, delayed payments, business risks, process controls, funding and growth decisions. Choose a quick option below, or describe the problem in a few more words.'
+        };
+
+    setChatMessages((messages) => [
+      ...messages,
+      { id: 'user-' + Date.now(), role: 'user', text },
+      reply
+    ]);
+    setChatInput('');
   };
 
   const reset = () => {
@@ -238,6 +313,56 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                 <h2 className="text-2xl font-extrabold tracking-tight text-slate-950 sm:text-3xl">What would you like to fix first?</h2>
                 <p className="text-sm leading-relaxed text-slate-600 sm:text-base">Pick the statement closest to your situation. You can change it at any time.</p>
               </div>
+
+              <section aria-label="Financial Genie chat" className="overflow-hidden rounded-2xl border border-blue-200 bg-slate-50 shadow-sm">
+                <div className="flex items-center gap-3 bg-[#0d1c48] px-4 py-3 text-white">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/15"><MessageCircle className="h-5 w-5" /></span>
+                  <div>
+                    <p className="text-sm font-extrabold">Chat with Financial Genie</p>
+                    <p className="text-xs text-blue-100"><span className="mr-1 inline-block h-2 w-2 rounded-full bg-emerald-300" />Ready to help you choose</p>
+                  </div>
+                </div>
+
+                <div className="max-h-72 space-y-3 overflow-y-auto bg-white p-4 sm:p-5" aria-live="polite">
+                  {chatMessages.map((message) => (
+                    <div key={message.id} className={message.role === 'user' ? 'ml-auto max-w-[88%] rounded-2xl rounded-br-md bg-[#1f4fff] px-4 py-3 text-sm leading-relaxed text-white sm:max-w-[75%]' : 'max-w-[88%] rounded-2xl rounded-bl-md bg-slate-100 px-4 py-3 text-sm leading-relaxed text-slate-800 sm:max-w-[75%]'}>
+                      {message.text}
+                      {message.suggestedServiceId && (
+                        <button
+                          type="button"
+                          onClick={() => chooseService(message.suggestedServiceId!)}
+                          className="mt-3 inline-flex min-h-10 items-center gap-1.5 rounded-xl bg-[#1f4fff] px-3 py-2 text-xs font-extrabold text-white hover:bg-[#183bc4]"
+                        >
+                          Show my recommended service <ArrowRight className="h-3.5 w-3.5" />
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+
+                <div className="border-t border-slate-200 bg-slate-50 p-3 sm:p-4">
+                  <div className="mb-3 flex flex-wrap gap-2">
+                    {CHAT_PROMPTS.map((prompt) => (
+                      <button key={prompt} type="button" onClick={() => sendChatMessage(prompt)} className="min-h-9 rounded-full border border-blue-200 bg-white px-3 py-1.5 text-xs font-bold text-[#1f4fff] hover:bg-blue-50">
+                        {prompt}
+                      </button>
+                    ))}
+                  </div>
+                  <form onSubmit={(event) => { event.preventDefault(); sendChatMessage(chatInput); }} className="flex gap-2">
+                    <label className="sr-only" htmlFor="financial-genie-message">Describe your business problem</label>
+                    <input
+                      id="financial-genie-message"
+                      value={chatInput}
+                      onChange={(event) => setChatInput(event.target.value)}
+                      placeholder="For example: customers are paying us late"
+                      className="min-h-11 min-w-0 flex-1 rounded-xl border border-slate-300 bg-white px-3 text-sm text-slate-950 outline-none placeholder:text-slate-400 focus:border-[#1f4fff] focus:ring-2 focus:ring-blue-100"
+                    />
+                    <button type="submit" className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-xl bg-[#1f4fff] px-3 text-sm font-extrabold text-white hover:bg-[#183bc4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1f4fff]">
+                      <Send className="h-4 w-4" /><span className="hidden sm:inline">Send</span>
+                    </button>
+                  </form>
+                </div>
+              </section>
 
               <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
                 {SERVICES.map((service) => {
