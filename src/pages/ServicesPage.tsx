@@ -11,6 +11,7 @@ type Service = {
   pillarLabel: string;
   title: string;
   badge: string;
+  shortLabel: string;
   tagline: string;
   summary: string;
   idealFor: string;
