@@ -624,7 +624,7 @@ export default function App() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {[
                 ['home', 'Home'],
-                ['services', 'Our 9 Services'],
+                ['services', 'Services'],
                                 ['about', 'About'],
                 ['contact', 'Contact']
               ].map(([tab, label]) => (
