@@ -85,7 +85,7 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
     try { return window.sessionStorage.getItem('nvx_admin_token'); } catch { return null; }
   });
   const [adminUser, setAdminUser] = useState<any>(null);
-  const [loginUsername, setLoginUsername] = useState('admin');
+  const [loginUsername, setLoginUsername] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
   const [loginError, setLoginError] = useState('');
   const [isLoggingIn, setIsLoggingIn] = useState(false);
@@ -346,7 +346,7 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
         title: '',
         clientSector: 'Manufacturing & Engineering',
         region: 'Noida Sector 63, ',
-        dealSize: 'â‚¹25 Cr Annual Turnover',
+        dealSize: '₹25 Cr Annual Turnover',
         riskIdentified: '',
         advisoryProvided: '',
         concreteRoi: '',
@@ -415,39 +415,14 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
             </div>
             <div>
               <span className="text-2xl font-black tracking-tight text-slate-900 block">NAVIGALEX</span>
-              <span className="text-[11px] font-extrabold text-blue-600 tracking-widest uppercase block mt-0.5">Admin & Real-Time Intelligence Console</span>
+              <span className="text-[11px] font-extrabold text-blue-600 tracking-widest uppercase block mt-0.5">Admin Console</span>
             </div>
             <p className="text-xs text-slate-600 leading-relaxed">
-              Authorized access for Practice Directors, Forensic Auditors, and Legal Leads.
+              Restricted administrative access. Use the credentials configured for this deployment.
             </p>
           </div>
 
-          {/* Explicit Credentials Display Box */}
-          <div className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50/70 border border-blue-200 rounded-2xl text-xs space-y-2.5 shadow-xs">
-            <div className="flex items-center justify-between">
-              <span className="text-[11px] font-extrabold uppercase tracking-wider text-blue-900 flex items-center gap-1.5">
-                <Key className="w-3.5 h-3.5 text-blue-600" /> Authorized Admin Credentials:
-              </span>
-              <span className="px-2 py-0.5 bg-blue-600 text-white text-[10px] font-bold rounded-full">
-                Active
-              </span>
-            </div>
-
-            <div className="grid grid-cols-2 gap-2 text-[11px] bg-white p-2.5 rounded-xl border border-blue-100 font-mono">
-              <div>
-                <span className="text-slate-400 block text-[9px] uppercase font-bold">User Name</span>
-                <strong className="text-blue-700 select-all font-bold">admin</strong>
-              </div>
-              <div>
-                <span className="text-slate-400 block text-[9px] uppercase font-bold">Password</span>
-                <strong className="text-slate-900 font-bold">Configured in Railway environment variables</strong>
-              </div>
-            </div>
-
-            <p className="text-[10px] text-slate-500">
-              Credentials are pre-filled below for instant 1-click evaluation.
-            </p>
-          </div>
+          <p className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-xs leading-relaxed text-slate-600">Administrator login details are supplied by the site owner and are never displayed here.</p>
 
           {loginError && (
             <div className="p-3.5 bg-rose-50 border border-rose-200 rounded-xl text-xs text-rose-700 flex items-center gap-2">
@@ -502,7 +477,7 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
               onClick={onBackToSite}
               className="text-xs text-slate-500 hover:text-blue-600 font-medium transition-colors cursor-pointer"
             >
-              â† Return to Public Website
+              ← Return to Public Website
             </button>
           </div>
         </div>
@@ -994,7 +969,7 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
                     title: '',
                     clientSector: 'Manufacturing & Engineering',
                     region: 'Noida Sector 63, ',
-                    dealSize: 'â‚¹25 Cr Annual Turnover',
+                    dealSize: '₹25 Cr Annual Turnover',
                     riskIdentified: '',
                     advisoryProvided: '',
                     concreteRoi: '',
@@ -1083,8 +1058,8 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
           <div className="space-y-6">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
               <div>
-                <h3 className="text-base font-bold text-slate-900">Real-Time Backend Audit Trail</h3>
-                <p className="text-xs text-slate-500">Cryptographically verifiable log of logins, status transitions, and client submissions.</p>
+                <h3 className="text-base font-bold text-slate-900">Recent Admin Activity</h3>
+                <p className="text-xs text-slate-500">Operational log of recent sign-ins, inquiry changes, and case-study actions. Up to 200 recent events are retained in the configured data store; this log is not tamper-proof evidence.</p>
               </div>
 
               <div className="flex items-center gap-3">
@@ -1169,7 +1144,7 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
                   </span>
                 </div>
                 <h3 className="text-xl font-bold text-slate-900 mt-1">{selectedInquiry.name}</h3>
-                <span className="text-xs text-slate-600">{selectedInquiry.designation} â€¢ {selectedInquiry.company}</span>
+                <span className="text-xs text-slate-600">{selectedInquiry.designation} • {selectedInquiry.company}</span>
               </div>
               <button
                 onClick={() => setSelectedInquiry(null)}
@@ -1269,7 +1244,7 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
                   required
                   value={caseStudyForm.title}
                   onChange={e => setCaseStudyForm({...caseStudyForm, title: e.target.value})}
-                  placeholder="e.g. Noida Automotive Component Manufacturer: â‚¹1.8 Cr Receivables Recovery"
+                  placeholder="e.g. Noida Automotive Component Manufacturer: ₹1.8 Cr Receivables Recovery"
                   className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-blue-600 focus:bg-white"
                 />
               </div>
@@ -1310,7 +1285,7 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
                   type="text"
                   value={caseStudyForm.dealSize}
                   onChange={e => setCaseStudyForm({...caseStudyForm, dealSize: e.target.value})}
-                  placeholder="e.g. â‚¹42 Cr Annual Turnover"
+                  placeholder="e.g. ₹42 Cr Annual Turnover"
                   className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs text-slate-900 focus:outline-none focus:border-blue-600"
                 />
               </div>
