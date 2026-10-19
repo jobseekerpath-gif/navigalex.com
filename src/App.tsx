@@ -164,7 +164,7 @@ export default function App() {
     };
   }, [showPrivacyModal, showGuardrailsModal]);
 
-  // Seamless "Request Assessment" trigger that always scrolls & focuses
+  // Opens the inquiry form with the selected problem prefilled.
   const openAssessmentForm = (concern?: string) => {
     if (concern) {
       setLeadForm(prev => ({
@@ -172,7 +172,6 @@ export default function App() {
         primaryConcern: concern
       }));
     }
-    setSelectedDeskModal(null);
     setShowPrivacyModal(false);
     setShowGuardrailsModal(false);
     setActiveTab('contact');
