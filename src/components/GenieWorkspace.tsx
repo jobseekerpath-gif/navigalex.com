@@ -17,18 +17,28 @@ function GuideResponse({ text, onChoice }: { text: string; onChoice: (choice: st
   let interactiveChoices = false;
   const flushList = () => {
     if (list.length) {
-      blocks.push(<ul key={`list-${blocks.length}`} className="my-2 list-disc space-y-1 pl-5">{list.map((item, i) => <li key={i}>{renderInline(item)}</li>)}</ul>);
+      blocks.push(<ul key={\`list-\${blocks.length}\`} className="my-2 list-disc space-y-1 pl-5">{list.map((item, i) => <li key={i}>{renderInline(item)}</li>)}</ul>);
       list = [];
     }
   };
   lines.forEach((raw, i) => {
     const line = raw.trim();
+    const normalized = line.replace(/\*\*/g, '').replace(/^#{1,3}\s*/, '').replace(/:$/, '').trim();
     if (!line) { flushList(); return; }
-    if (/^would you like help with:?$/i.test(line.replace(/\*\*/g, ''))) { flushList(); interactiveChoices = true; blocks.push(<p key={i} className="mt-3 font-semibold text-slate-800">Choose a follow-up:</p>); return; }
-    if (interactiveChoices && /^(?:[-*•]|\d+[.)])\s+(.+)$/.test(line)) { const choice = line.replace(/^(?:[-*•]|\d+[.)])\s+/, ''); blocks.push(<button key={i} type="button" onClick={() => onChoice(choice)} className="my-1 block w-full rounded-lg border border-indigo-200 bg-white px-3 py-2 text-left text-sm text-indigo-900 hover:bg-indigo-50">{choice}<span className="float-right ml-2">›</span></button>); return; }
+    if (/^would you like help with$/i.test(normalized) || /^choose (?:a )?follow-up$/i.test(normalized) || /^what would you like to do next$/i.test(normalized)) {
+      flushList();
+      interactiveChoices = true;
+      blocks.push(<p key={i} className="mt-3 font-semibold text-slate-800">Choose a follow-up (tap an option):</p>);
+      return;
+    }
+    const bullet = line.match(/^(?:[-*•▪]|\d+[.)])\s+(.+)$/);
+    if (interactiveChoices && bullet) {
+      const choice = bullet[1].replace(/\*\*/g, '').trim();
+      blocks.push(<button key={i} type="button" onClick={() => onChoice(choice)} className="my-1 flex w-full items-center justify-between gap-3 rounded-lg border border-indigo-200 bg-white px-3 py-2.5 text-left text-sm font-medium text-indigo-950 shadow-sm transition hover:border-indigo-400 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-300"><span>{renderInline(choice)}</span><span aria-hidden="true" className="shrink-0 text-lg">›</span></button>);
+      return;
+    }
     if (interactiveChoices) interactiveChoices = false;
     const heading = line.match(/^#{1,3}\s+(.+)$/);
-    const bullet = line.match(/^(?:[-*•]|\d+[.)])\s+(.+)$/);
     if (bullet) { list.push(bullet[1]); return; }
     flushList();
     if (heading) blocks.push(<h3 key={i} className="mb-1 mt-3 font-bold text-slate-900">{renderInline(heading[1])}</h3>);
