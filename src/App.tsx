@@ -232,23 +232,6 @@ export const ADVISORY_DESKS = [
   }
 ]
 
-const PERSONA_OPTIONS = [
-  { key: "all", label: "All" },
-  { key: "growing", label: "Growing Business" },
-  { key: "exporter", label: "Exporter/Importer" },
-  { key: "nbfc", label: "NBFC & Fintech" },
-  { key: "family", label: "Family Office" }
-];
-
-const readPersonaParam = () => {
-  if (typeof window === "undefined") return "all";
-  const value = new URLSearchParams(window.location.search).get("persona");
-  return PERSONA_OPTIONS.some((option) => option.key === value) ? value || "all" : "all";
-};
-
-
-
-
 export default function App() {
   // Check if URL is /admin or ?admin=true
   const getInitialTab = () => {
@@ -273,28 +256,26 @@ export default function App() {
   const [activeTab, setActiveTab] = useState(getInitialTab);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
-  const [persona, setPersona] = useState(readPersonaParam);
 
 
-  // Persistent Real Visitor ID
+  // Keep analytics optional so blocked browser storage never prevents the app from loading.
   const [visitorId] = useState(() => {
-    if (typeof window !== 'undefined') {
-      let vid = localStorage.getItem('navigalex_visitor_id');
-      if (!vid) {
-        vid = 'v_' + Math.random().toString(36).substring(2, 9) + Date.now().toString(36);
-        localStorage.setItem('navigalex_visitor_id', vid);
-      }
-      return vid;
+    if (typeof window === 'undefined') return 'v_client';
+    try {
+      const storedId = window.localStorage.getItem('navigalex_visitor_id');
+      if (storedId) return storedId;
+    } catch {
+      // Private browsing and storage policies may block localStorage.
     }
-    return 'v_client';
+    const generatedId = 'v_' + Math.random().toString(36).substring(2, 9) + Date.now().toString(36);
+    try { window.localStorage.setItem('navigalex_visitor_id', generatedId); } catch { /* analytics remain optional */ }
+    return generatedId;
   });
 
   // Sync with browser back/forward and URL navigation
   useEffect(() => {
     const handleLocationChange = () => {
       const p = window.location.pathname.toLowerCase();
-      const urlPersona = new URLSearchParams(window.location.search).get('persona');
-      setPersona(PERSONA_OPTIONS.some((option) => option.key === urlPersona) ? urlPersona || 'all' : 'all');
       if (p === '/43b-h-check' || p.startsWith('/43b-h-check')) {
         setActiveTab('43b-h-check');
       } else if (p === '/family-office' || p.startsWith('/family-office')) {
@@ -343,11 +324,12 @@ export default function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Section 43B(h) payment-timing screening state
+  // MSME supplier payment-timing screening state
   const [paymentCheck, setPaymentCheck] = useState({
-    msmeStatus: 'yes',
+    msmeStatus: 'unknown',
+    writtenAgreement: 'unknown',
     acceptanceDate: '',
-    agreedDays: '45',
+    agreedDays: '',
     paidDate: '',
     amount: ''
   });
@@ -369,10 +351,9 @@ export default function App() {
     designation: '',
     email: '',
     phone: '',
-    businessType: 'MSME / Manufacturing',
-    turnover: '₹5 Cr - ₹25 Cr',
-    primaryConcern: 'Contract & Receivable Cash Flow Risk',
-    contactMethod: 'Phone',
+    turnover: '',
+    primaryConcern: '',
+    contactMethod: 'Email',
     consent: false
   });
   const [leadSubmitted, setLeadSubmitted] = useState(false);
@@ -426,47 +407,72 @@ export default function App() {
 
   const runPaymentTimingCheck = (e: React.FormEvent) => {
     e.preventDefault();
-    const { msmeStatus, acceptanceDate, agreedDays, paidDate, amount } = paymentCheck;
-    if (!acceptanceDate) {
-      setPaymentCheckResult({ type: 'input', message: 'Enter the acceptance or deemed-acceptance date.' });
+    const { msmeStatus, writtenAgreement, acceptanceDate, agreedDays, paidDate, amount } = paymentCheck;
+    const parseDateOnly = (value: string): Date | null => {
+      const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
+      if (!match) return null;
+      const date = new Date(Date.UTC(Number(match[1]), Number(match[2]) - 1, Number(match[3])));
+      return date.toISOString().slice(0, 10) === value ? date : null;
+    };
+    const formatDate = (date: Date) => date.toLocaleDateString('en-IN', { timeZone: 'UTC' });
+
+    const accepted = parseDateOnly(acceptanceDate);
+    if (!accepted) {
+      setPaymentCheckResult({ type: 'input', message: 'Enter a valid acceptance or deemed-acceptance date.' });
       return;
     }
 
-    const accepted = new Date(acceptanceDate + 'T00:00:00');
-    if (Number.isNaN(accepted.getTime())) {
-      setPaymentCheckResult({ type: 'input', message: 'Enter a valid acceptance date.' });
-      return;
+    let allowedDays = 45;
+    let timingRuleLabel = '45-day outer limit (written terms not confirmed)';
+    if (writtenAgreement === 'no') {
+      allowedDays = 15;
+      timingRuleLabel = '15-day limit when there is no written payment agreement';
+    } else if (writtenAgreement === 'yes') {
+      if (!/^[0-9]+$/.test(agreedDays) || Number(agreedDays) > 3650) {
+        setPaymentCheckResult({ type: 'input', message: 'Enter a whole-number written payment term from 0 to 3,650 days.' });
+        return;
+      }
+      allowedDays = Math.min(Number(agreedDays), 45);
+      timingRuleLabel = Number(agreedDays) > 45 ? '45-day maximum applied to the entered written term' : 'written payment term';
     }
 
-    const agreed = Math.max(0, Number.parseInt(agreedDays || '45', 10) || 0);
+    const timingThreshold = new Date(accepted);
+    timingThreshold.setUTCDate(timingThreshold.getUTCDate() + allowedDays);
     const statutoryMax = new Date(accepted);
-    statutoryMax.setDate(statutoryMax.getDate() + 45);
+    statutoryMax.setUTCDate(statutoryMax.getUTCDate() + 45);
 
-    const agreedDue = new Date(accepted);
-    agreedDue.setDate(agreedDue.getDate() + Math.min(agreed, 45));
-
-    const today = new Date();
-    const paid = paidDate ? new Date(paidDate + 'T00:00:00') : today;
-    if (Number.isNaN(paid.getTime())) {
+    const now = new Date();
+    const today = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
+    const payment = paidDate ? parseDateOnly(paidDate) : today;
+    if (!payment) {
       setPaymentCheckResult({ type: 'input', message: 'Enter a valid payment date or leave it blank if unpaid.' });
       return;
     }
 
-    const daysToPayment = Math.max(0, Math.floor((paid.getTime() - accepted.getTime()) / 86400000));
-    const beyond45 = paid.getTime() > statutoryMax.getTime();
-    const beyondAgreed = paid.getTime() > agreedDue.getTime();
-    const potentialIssue = msmeStatus === 'yes' && (beyond45 || beyondAgreed);
+    const daysToPayment = Math.round((payment.getTime() - accepted.getTime()) / 86400000);
+    const beyondThreshold = payment.getTime() > timingThreshold.getTime();
+    const type = msmeStatus === 'yes' ? (beyondThreshold ? 'flag' : 'clear') : 'uncertain';
+
+    let note = 'This is an informational screen based on the dates and answers entered. Confirm supplier eligibility, contract terms and the applicable tax-year treatment with a qualified professional before relying on it.';
+    if (writtenAgreement === 'unknown') {
+      note += ' Because written terms are not confirmed, a payment before the 45-day outer limit may still be late if no written agreement exists.';
+    } else if (writtenAgreement === 'yes' && Number(agreedDays) > 45) {
+      note += ' The entered written term exceeds 45 days; this screen applies the 45-day maximum.';
+    }
+    if (msmeStatus !== 'yes') {
+      note += ' Supplier eligibility is not confirmed, so this screen cannot indicate whether the MSME timing rule applies.';
+    }
 
     setPaymentCheckResult({
-      type: potentialIssue ? 'flag' : 'clear',
-      daysToPayment,
-      statutoryMax: statutoryMax.toLocaleDateString('en-IN'),
-      agreedDue: agreedDue.toLocaleDateString('en-IN'),
+      type,
+      daysToPayment: Math.max(0, daysToPayment),
+      timingThreshold: formatDate(timingThreshold),
+      statutoryMax: formatDate(statutoryMax),
+      timingRuleLabel,
+      show45DayOuterLimit: writtenAgreement !== 'no',
       amount: amount || '',
-      potentialIssue,
-      note: msmeStatus === 'yes'
-        ? 'Based on the dates you entered, the payment appears to be beyond the Section 15 timing screen used for this check.'
-        : 'The Section 15 timing screen is intended for a supplier that qualifies as a micro or small enterprise. Your answer indicates that status is not confirmed.'
+      potentialIssue: type === 'flag',
+      note
     });
   };
 
@@ -505,18 +511,6 @@ export default function App() {
   };
 
 
-
-  const selectPersona = (nextPersona: string) => {
-    const safePersona = PERSONA_OPTIONS.some((option) => option.key === nextPersona) ? nextPersona : 'all';
-    setPersona(safePersona);
-    const params = new URLSearchParams(window.location.search);
-    if (safePersona === 'all') params.delete('persona');
-    else params.set('persona', safePersona);
-    const query = params.toString();
-    window.history.pushState(null, '', '/services' + (query ? '?' + query : ''));
-    setActiveTab('services');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
 
   const formatServiceTitle = (title: string) => title.replace(/^\d+\.\s*/, '');
 
@@ -559,7 +553,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-8 flex items-center justify-center text-[10px] sm:text-[11px] font-medium tracking-wide">
           <span className="inline-flex max-w-full items-center justify-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" aria-hidden="true" />
-            <><strong className="font-bold">Navigalex Advisory:</strong> We help Indian business owners assess financial, contract, governance and banking risks with guided analysis and professional review.</>
+            <><strong className="font-bold">Navigalex Advisory:</strong> We help Indian businesses make sense of cash-flow, contract and process-control concerns through scoped reviews and clear next steps.</>
           </span>
         </div>
       </div>
@@ -602,17 +596,18 @@ export default function App() {
 
           <div className="flex items-center justify-end gap-2 shrink-0 w-full">
             <button
-              onClick={() => openAssessmentForm()}
-              className="hidden sm:inline-flex items-center justify-center w-full px-3 py-2.5 text-[14px] font-bold text-black bg-blue-600 hover:bg-blue-500 rounded-xl shadow-sm shadow-blue-600/20 transition-all cursor-pointer whitespace-nowrap"
+              onClick={() => { openAssessmentForm(); setMobileMenuOpen(false); }}
+              className="inline-flex min-h-11 items-center justify-center px-2.5 sm:px-3 py-2.5 text-xs sm:text-sm font-bold text-white bg-blue-700 hover:bg-blue-800 rounded-xl shadow-sm shadow-blue-600/20 transition-colors cursor-pointer whitespace-nowrap"
             >
-              Request Assessment
+              <span className="sm:hidden">Enquire</span><span className="hidden sm:inline">Request a proposal</span>
             </button>
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label="Toggle mobile menu"
               aria-expanded={mobileMenuOpen}
-              className="lg:hidden inline-flex h-9 w-9 items-center justify-center rounded-xl bg-slate-50 border border-slate-200 text-slate-700 hover:bg-slate-100"
+              aria-controls="mobile-primary-navigation"
+              className="lg:hidden inline-flex h-11 w-11 items-center justify-center rounded-xl bg-slate-50 border border-slate-200 text-slate-700 hover:bg-slate-100"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -620,7 +615,7 @@ export default function App() {
         </div>
 
         {mobileMenuOpen && (
-          <div className="lg:hidden border-t border-slate-200 bg-white px-4 sm:px-6 py-4 shadow-xl">
+          <div id="mobile-primary-navigation" className="lg:hidden border-t border-slate-200 bg-white px-4 sm:px-6 py-4 shadow-xl">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {[
                 ['home', 'Home'],
@@ -632,7 +627,7 @@ export default function App() {
                   key={tab}
                   type="button"
                   onClick={() => { setActiveTab(tab); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                  className={`text-left px-3 py-2.5 rounded-xl text-[14px] font-semibold text-black transition-colors ${activeTab === tab ? 'text-black bg-slate-100' : 'text-black hover:bg-slate-100'}`}
+                  className={`min-h-11 text-left px-3 py-2.5 rounded-xl text-[14px] font-semibold text-black transition-colors ${activeTab === tab ? 'text-black bg-slate-100' : 'text-black hover:bg-slate-100'}`}
                 >
                   {label}
                 </button>
@@ -641,9 +636,9 @@ export default function App() {
             <div className="mt-3 pt-3 border-t border-slate-200">
               <button
                 onClick={() => { openAssessmentForm(); setMobileMenuOpen(false); }}
-                className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-black font-bold text-[14px] shadow-sm"
+                className="min-h-11 w-full rounded-xl bg-blue-700 px-4 py-3 text-white font-bold text-sm shadow-sm hover:bg-blue-800"
               >
-                Request a Confidential Assessment
+                Request a proposal
               </button>
             </div>
           </div>
@@ -757,13 +752,7 @@ export default function App() {
         {/* SERVICES — lazy route/page chunk */}
         {activeTab === 'services' && (
           <Suspense fallback={<div className="py-20 px-6 max-w-7xl mx-auto text-center text-sm text-slate-500">Loading services…</div>}>
-            <ServicesPage
-              persona={persona}
-              onSelectPersona={selectPersona}
-              onSelectDesk={setSelectedDeskModal}
-              onInquiry={openAssessmentForm}
-              onNavigateFamilyOffice={navigateToFamilyOffice}
-            />
+            <ServicesPage onInquiry={openAssessmentForm} />
           </Suspense>
         )}
 
@@ -781,10 +770,10 @@ export default function App() {
             </button>
 
             <div className="space-y-3">
-              <span className="text-xs font-bold text-blue-600 uppercase tracking-widest">SECTION 43B(h) PAYMENT TIMING CHECK</span>
-              <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900">Check payment timing under Section 43B(h)</h2>
+              <span className="text-xs font-bold text-blue-600 uppercase tracking-widest">MSME PAYMENT TIMING SCREEN</span>
+              <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900">Check a supplier payment timeline</h2>
               <p className="text-slate-600 max-w-3xl">
-                Enter the transaction dates and supplier status. This screen checks payment timing against the Section 15 framework used for this assessment. It is a screening aid, not a legal or tax conclusion.
+                Enter the acceptance date, supplier eligibility and whether payment terms were agreed in writing. This is an informational screen, not a legal or tax conclusion.
               </p>
             </div>
 
@@ -797,8 +786,22 @@ export default function App() {
                     onChange={(e) => setPaymentCheck({ ...paymentCheck, msmeStatus: e.target.value })}
                     className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900"
                   >
-                    <option value="yes">Micro/small enterprise status confirmed</option>
-                    <option value="no">Not confirmed</option>
+                    <option value="unknown">Not sure</option>
+                    <option value="yes">Micro/small supplier status confirmed</option>
+                    <option value="no">Not confirmed / may not qualify</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Written payment agreement?</label>
+                  <select
+                    value={paymentCheck.writtenAgreement}
+                    onChange={(e) => setPaymentCheck({ ...paymentCheck, writtenAgreement: e.target.value })}
+                    className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900"
+                  >
+                    <option value="unknown">Not sure</option>
+                    <option value="yes">Yes, there is a written term</option>
+                    <option value="no">No written agreement</option>
                   </select>
                 </div>
 
@@ -813,21 +816,24 @@ export default function App() {
                   />
                 </div>
 
-                <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Written payment term (days)</label>
-                  <input
-                    type="number"
-                    min="0"
-                    max="45"
-                    value={paymentCheck.agreedDays}
-                    onChange={(e) => setPaymentCheck({ ...paymentCheck, agreedDays: e.target.value })}
-                    className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900"
-                  />
-                  <span className="text-[11px] text-slate-500 mt-1 block">Enter the agreed payment term from your contract. The screen also applies the statutory 45-day outer limit used in this check.</span>
-                </div>
+                {paymentCheck.writtenAgreement === 'yes' && (
+                  <div>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Written payment term (days)</label>
+                    <input
+                      type="number"
+                      min="0"
+                      max="3650"
+                      required
+                      value={paymentCheck.agreedDays}
+                      onChange={(e) => setPaymentCheck({ ...paymentCheck, agreedDays: e.target.value })}
+                      className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900"
+                    />
+                    <span className="text-[11px] text-slate-500 mt-1 block">Enter the term shown in the agreement. If it is longer, the screen applies a 45-day maximum.</span>
+                  </div>
+                )}
 
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Payment date</label>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Actual or expected payment date</label>
                   <input
                     type="date"
                     value={paymentCheck.paidDate}
@@ -865,22 +871,22 @@ export default function App() {
                 ) : (
                   <div className="space-y-3">
                     <h3 className="text-lg font-bold text-slate-900">
-                      {paymentCheckResult.type === 'flag' ? 'Potential payment-timing issue' : 'No timing issue indicated by these entries'}
+                      {paymentCheckResult.type === 'flag' ? 'Potential payment-timing issue' : paymentCheckResult.type === 'uncertain' ? 'Confirm eligibility before relying on this result' : 'No timing issue indicated by these entries'}
                     </h3>
                     <ul className="space-y-2 text-sm text-slate-700">
                       <li>• Days from acceptance to payment check: {paymentCheckResult.daysToPayment}</li>
-                      <li>• 45-day statutory timing screen date: {paymentCheckResult.statutoryMax}</li>
-                      <li>• Written-term timing screen date: {paymentCheckResult.agreedDue}</li>
+                      <li>• {paymentCheckResult.timingRuleLabel}: {paymentCheckResult.timingThreshold}</li>
+                      {paymentCheckResult.show45DayOuterLimit && <li>• 45-day outer limit for written terms: {paymentCheckResult.statutoryMax}</li>}
                       {paymentCheckResult.amount && <li>• Amount entered: ₹{paymentCheckResult.amount}</li>}
                     </ul>
                     <p className="text-xs text-slate-600">{paymentCheckResult.note}</p>
                     {paymentCheckResult.type === 'flag' && (
                       <button
                         type="button"
-                        onClick={() => openAssessmentForm('Contract-to-Cash - Section 43B(h) Payment Review')}
+                        onClick={() => openAssessmentForm('Contract & Collections Review — MSME payment timing question')}
                         className="inline-flex px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold"
                       >
-                        Request Contract-to-Cash Review
+                        Request a contract and collections review
                       </button>
                     )}
                   </div>
@@ -1057,7 +1063,7 @@ export default function App() {
                 </div>
                 <div>
                   <h4 className="text-xs font-bold uppercase tracking-wider text-blue-600 mb-1">Data Privacy Mandate</h4>
-                  <p className="text-xs text-slate-600">Sensitive information is handled according to the published privacy terms and the controls of the engagement. Do not submit information you are not authorised to share.</p>
+                  <p className="text-xs text-slate-600">Share only information you are authorised to provide. Do not send sensitive records until the scope and handling terms are agreed.</p>
                 </div>
               </div>
             </div>
@@ -1067,10 +1073,11 @@ export default function App() {
         {/* CONTACT & ASSESSMENT TAB */}
         {activeTab === 'contact' && (
           <div className="py-20 px-6 max-w-3xl mx-auto space-y-12">
+            <button type="button" onClick={() => { setActiveTab('services'); window.history.pushState(null, '', '/services'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="inline-flex min-h-11 items-center gap-2 text-sm font-bold text-blue-700 hover:text-blue-900">← Back to services</button>
             <div className="text-center space-y-3">
-              <span className="text-xs font-bold text-blue-600 uppercase tracking-widest">CONFIDENTIAL CONSULTATION</span>
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900">Request a Confidential Assessment</h2>
-              <p className="text-slate-600">Speak directly with a senior finance or legal advisory lead. Tell us what changed in your business or market; inquiries are handled confidentially.</p>
+              <span className="text-xs font-bold text-blue-600 uppercase tracking-widest">BUSINESS INQUIRY</span>
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900">Request a proposal</h2>
+              <p className="text-slate-600">Tell us what you are working through. We will follow up to discuss fit, information needed, scope, timing and fees. Please do not send confidential records before engagement terms are agreed.</p>
             </div>
 
             <div className="navigalex-card p-8 sm:p-10 rounded-2xl shadow-xl">
@@ -1079,9 +1086,9 @@ export default function App() {
                   <div className="w-16 h-16 bg-blue-50 border border-blue-200 rounded-full flex items-center justify-center mx-auto text-blue-600">
                     <CheckCircle2 className="w-8 h-8" />
                   </div>
-                  <h3 className="text-2xl font-bold text-slate-900">Inquiry Received Successfully</h3>
+                  <h3 className="text-2xl font-bold text-slate-900">Thanks, we received your inquiry</h3>
                   <p className="text-sm text-slate-600 max-w-md mx-auto">
-                    Thank you, {leadForm.name || 'there'}. Your request has been recorded. Our team will contact you using the method you selected.
+                    Thanks, {leadForm.name || 'there'}. Your inquiry has been received. We will use your selected contact method to follow up.
                   </p>
                   <button onClick={() => setLeadSubmitted(false)} className="px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-xs font-semibold text-white rounded-xl cursor-pointer">
                     Submit Another Inquiry
@@ -1096,8 +1103,10 @@ export default function App() {
                   )}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Your Full Name *</label>
+                      <label htmlFor="lead-name" className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Your name *</label>
                       <input 
+                        id="lead-name"
+                        autoComplete="name"
                         type="text" 
                         required
                         value={leadForm.name}
@@ -1107,10 +1116,11 @@ export default function App() {
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Company / Enterprise Name *</label>
+                      <label htmlFor="lead-company" className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Company (optional)</label>
                       <input 
-                        type="text" 
-                        required
+                        id="lead-company"
+                        autoComplete="organization"
+                        type="text"
                         value={leadForm.company}
                         onChange={e => setLeadForm({...leadForm, company: e.target.value})}
                         placeholder="Apex Engineering Pvt Ltd" 
@@ -1121,10 +1131,11 @@ export default function App() {
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Your Designation *</label>
+                      <label htmlFor="lead-designation" className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Role (optional)</label>
                       <input 
-                        type="text" 
-                        required
+                        id="lead-designation"
+                        autoComplete="organization-title"
+                        type="text"
                         value={leadForm.designation}
                         onChange={e => setLeadForm({...leadForm, designation: e.target.value})}
                         placeholder="Managing Director / Promoter / CFO" 
@@ -1132,8 +1143,10 @@ export default function App() {
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Work Email *</label>
+                      <label htmlFor="lead-email" className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Email *</label>
                       <input 
+                        id="lead-email"
+                        autoComplete="email"
                         type="email" 
                         required
                         value={leadForm.email}
@@ -1146,10 +1159,12 @@ export default function App() {
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Phone / WhatsApp Number *</label>
+                      <label htmlFor="lead-phone" className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Phone / WhatsApp {leadForm.contactMethod === 'Phone' || leadForm.contactMethod === 'WhatsApp' ? '*' : '(optional)'}</label>
                       <input 
+                        id="lead-phone"
                         type="tel" 
-                        required
+                        autoComplete="tel"
+                        required={leadForm.contactMethod === 'Phone' || leadForm.contactMethod === 'WhatsApp'}
                         value={leadForm.phone}
                         onChange={e => setLeadForm({...leadForm, phone: e.target.value})}
                         placeholder="+91 98765 43210" 
@@ -1157,12 +1172,14 @@ export default function App() {
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Annual Turnover</label>
-                      <select 
+                      <label htmlFor="lead-turnover" className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Annual turnover (optional)</label>
+                      <select
+                        id="lead-turnover" 
                         value={leadForm.turnover}
                         onChange={e => setLeadForm({...leadForm, turnover: e.target.value})}
                         className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none focus:border-blue-600"
                       >
+                        <option value="">Prefer not to say</option>
                         <option>&lt; ₹5 Cr</option>
                         <option>₹5 Cr - ₹25 Cr</option>
                         <option>₹25 Cr - ₹100 Cr</option>
@@ -1172,32 +1189,23 @@ export default function App() {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Primary Business Challenge / Advisory Desk</label>
-                    <select 
+                    <label htmlFor="primary-concern" className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">What would you like help with? (optional)</label>
+                    <textarea
+                      id="primary-concern"
+                      rows={3}
+                      maxLength={2000}
                       value={leadForm.primaryConcern}
                       onChange={e => setLeadForm({...leadForm, primaryConcern: e.target.value})}
+                      placeholder="Describe the issue in a sentence, or leave blank if you are not sure yet."
                       className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none focus:border-blue-600"
-                    >
-                      <option>1. ControlCFO™ 30-Day Readiness Sprint</option>
-                      <option>2. Board-in-a-Box Governance OS</option>
-                      <option>3. Contract-to-Cash Risk Desk</option>
-                      <option>4. TradeShield LC/BG Desk</option>
-                      <option>5. FraudSignal Investigation Cell</option>
-                      <option>6. LenderReady Credit & Recovery Office</option>
-                      <option>7. RegTech Journey Lab</option>
-                      <option>8. Family Wealth Governance Office</option>
-                      <option>9. AI-Assisted Internal Audit Factory</option>
-                      <option>Contract & Receivable Cash Flow Risk</option>
-                      <option>Bank Loan CC/OD Renewal & Data Room</option>
-                      <option>Direct Consultation with Practice Lead</option>
-                    </select>
+                    />
                   </div>
 
                   <div>
                     <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Preferred Contact Method</label>
-                    <div className="flex gap-6 pt-1">
-                      {['Phone', 'WhatsApp', 'Email', 'Confidential Video Call'].map(m => (
-                        <label key={m} className="flex items-center gap-2 text-xs text-slate-700 cursor-pointer">
+                    <div className="flex flex-wrap gap-x-5 gap-y-2 pt-1">
+                      {['Phone', 'WhatsApp', 'Email', 'Video call'].map(m => (
+                        <label key={m} className="flex min-h-11 items-center gap-2 text-xs text-slate-700 cursor-pointer">
                           <input 
                             type="radio" 
                             name="contactMethod"
@@ -1220,8 +1228,9 @@ export default function App() {
                         className="accent-blue-600 mt-0.5 shrink-0"
                         required
                       />
-                      <span>I consent to Navigalex contacting me confidentially to review my assessment request under standard DPDP privacy safeguards.</span>
+                      <span>I consent to Navigalex contacting me about this inquiry.</span>
                     </label>
+                    <button type="button" onClick={() => setShowPrivacyModal(true)} className="mt-2 text-xs font-semibold text-blue-700 underline underline-offset-2">View privacy notice</button>
                   </div>
 
                   <button
@@ -1229,7 +1238,7 @@ export default function App() {
                     disabled={leadSubmitting}
                     className="w-full py-4 text-sm font-bold text-white bg-blue-600 hover:bg-blue-500 disabled:opacity-60 disabled:cursor-not-allowed rounded-xl shadow-lg transition-all cursor-pointer"
                   >
-                    {leadSubmitting ? 'Submitting securely…' : 'Submit Confidential Assessment Request'}
+                    {leadSubmitting ? 'Sending…' : 'Request a proposal'}
                   </button>
                 </form>
               )}
@@ -1246,7 +1255,7 @@ export default function App() {
             <h3 className="text-xl font-bold text-white">Professional & Regulatory Boundaries</h3>
           </div>
           <p className="text-xs text-slate-400 leading-relaxed max-w-4xl">
-            <strong>Clear legal clarity:</strong> Navigalex provides business, financial, governance, and risk advisory services. Navigalex does <em>not</em> provide unregistered securities tips, court appearance/litigation without enrolled advocates, statutory audit certificates, or formal court-appointed insolvency administration. Where statutory certifications are mandatory, we work in coordination with registered Investment Advisers (RIAs), practicing advocates, registered Insolvency Professionals, and statutory auditors. Data is handled according to applicable privacy requirements and the published privacy terms.
+            Navigalex's starter reviews cover business finance, contract and collections, and process controls as described in each scope. They do not include legal opinions or representation, statutory audit or assurance, tax opinions or attestations, debt recovery, loan approval, investment recommendations or regulatory certification. Share only information you are authorised to provide. See the privacy notice for current data handling.
           </p>
         </div>
       </section>
@@ -1339,9 +1348,9 @@ export default function App() {
 
       {/* MODAL 1: DETAILED DESK SCOPE & DELIVERY MODAL */}
       {selectedDeskModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto animate-fadeIn" role="presentation">
-          <div className="relative bg-white rounded-2xl max-w-2xl w-full p-6 sm:p-8 space-y-6 shadow-2xl border border-slate-200 my-8" role="dialog" aria-modal="true">
-            <div className="flex items-start justify-between border-b border-slate-200 pb-4">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-start justify-center p-2 sm:p-4 overflow-y-auto overscroll-contain animate-fadeIn" role="presentation">
+          <div className="relative bg-white rounded-2xl max-w-3xl w-full max-h-[calc(100dvh-1rem)] overflow-y-auto overscroll-contain p-4 sm:p-6 space-y-5 shadow-2xl border border-slate-200 my-0" role="dialog" aria-modal="true">
+            <div className="sticky top-0 z-10 flex items-start justify-between gap-4 border-b border-slate-200 pb-4 bg-white">
               <div>
                 <div className="inline-block px-2.5 py-0.5 rounded bg-blue-50 border border-blue-200 text-[10px] font-bold text-blue-700 uppercase mb-1">
                   {selectedDeskModal.badge}
@@ -1414,43 +1423,41 @@ export default function App() {
         </div>
       )}
 
-      {/* MODAL 2: DATA PRIVACY POLICY (DPDP COMPLIANCE) */}
+      {/* MODAL 2: PRIVACY INFORMATION */}
       {showPrivacyModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto animate-fadeIn">
-          <div className="bg-white rounded-2xl max-w-2xl w-full p-6 sm:p-8 space-y-6 shadow-2xl border border-slate-200 my-8">
-            <div className="flex items-start justify-between border-b border-slate-200 pb-4">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-start justify-center p-2 sm:p-4 overflow-y-auto overscroll-contain animate-fadeIn">
+          <div className="bg-white rounded-2xl max-w-3xl w-full max-h-[calc(100dvh-1rem)] overflow-y-auto overscroll-contain p-4 sm:p-6 space-y-5 shadow-2xl border border-slate-200 my-0">
+            <div className="sticky top-0 z-10 flex items-start justify-between gap-4 border-b border-slate-200 pb-4 bg-white">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
                   <Lock className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-slate-900">Commercial Data Privacy Policy</h3>
-                  <p className="text-xs text-slate-500">Digital Personal Data Protection Act (DPDP) & Confidentiality Standards</p>
+                  <h3 className="text-xl font-bold text-slate-900">Privacy information</h3>
+                  <p className="text-xs text-slate-500">What this site collects and how it is used</p>
                 </div>
               </div>
 
             </div>
 
             <div className="space-y-4 text-xs text-slate-700 leading-relaxed">
-              <div className="p-3.5 bg-blue-50/70 border border-blue-200 rounded-xl">
-                <strong className="text-blue-900 block font-bold mb-1">Data Handling</strong>
-                <span>Use the site only to submit information you are authorised to share. Document handling and retention are governed by the service arrangement and applicable privacy requirements.</span>
+              <div className="rounded-xl border border-blue-200 bg-blue-50/70 p-3.5">
+                <strong className="mb-1 block font-bold text-blue-900">Before you share information</strong>
+                <span>Share only information you are authorised to provide. Do not enter passwords, bank login details or confidential documents in chat. For a document review, agree the scope and handling terms first.</span>
               </div>
-
               <div>
-                <h4 className="font-bold text-slate-900 uppercase tracking-wider mb-1">1. Information Collection & Usage</h4>
-                <p>Information submitted through the site is used to process the requested assessment or inquiry, operate the service, and maintain required records. Refer to the published privacy terms for applicable disclosures.</p>
+                <h4 className="mb-1 font-bold uppercase tracking-wider text-slate-900">Information collected</h4>
+                <p>When you send an inquiry, the site collects your name and email, any company, role or phone details you provide, your contact preference, the issue you describe, and the time you accept the contact notice. The site also records an IP address, a browser identifier and basic visit activity for administration and security.</p>
               </div>
-
               <div>
-                <h4 className="font-bold text-slate-900 uppercase tracking-wider mb-1">2. Non-Disclosure & Legal Protection</h4>
-                <p>Sensitive commercial information should be shared only after the parties have agreed the engagement terms and any required confidentiality arrangements.</p>
+                <h4 className="mb-1 font-bold uppercase tracking-wider text-slate-900">How information is processed</h4>
+                <p>Inquiry details are sent to the email address configured by the business through its email delivery provider and stored in the site's server records for follow-up. Text or documents entered into AI-assisted chat and assessment tools are sent to the AI provider configured for the site to generate a response.</p>
               </div>
-
               <div>
-                <h4 className="font-bold text-slate-900 uppercase tracking-wider mb-1">3. Data Retention & Secure Shredding</h4>
-                <p>Retention periods depend on the applicable engagement terms, legal requirements and operational records policy.</p>
+                <h4 className="mb-1 font-bold uppercase tracking-wider text-slate-900">Retention and requests</h4>
+                <p>No fixed automatic deletion period is set. An administrator can delete inquiry records; visit and security logs remain in the site's operational records until they are removed. To ask about your information, use the contact form.</p>
               </div>
+              <p className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-amber-900">For a privacy question or request, use the contact form and include the email address connected to your inquiry.</p>
             </div>
 
             <div className="flex justify-end pt-4 border-t border-slate-200">
@@ -1462,40 +1469,33 @@ export default function App() {
 
       {/* MODAL 3: REGULATORY GUARDRAILS & BOUNDARIES */}
       {showGuardrailsModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto animate-fadeIn">
-          <div className="bg-white rounded-2xl max-w-2xl w-full p-6 sm:p-8 space-y-6 shadow-2xl border border-slate-200 my-8">
-            <div className="flex items-start justify-between border-b border-slate-200 pb-4">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-start justify-center p-2 sm:p-4 overflow-y-auto overscroll-contain animate-fadeIn">
+          <div className="bg-white rounded-2xl max-w-3xl w-full max-h-[calc(100dvh-1rem)] overflow-y-auto overscroll-contain p-4 sm:p-6 space-y-5 shadow-2xl border border-slate-200 my-0">
+            <div className="sticky top-0 z-10 flex items-start justify-between gap-4 border-b border-slate-200 pb-4 bg-white">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
                   <Scale className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-slate-900">Professional & Regulatory Boundaries</h3>
-                  <p className="text-xs text-slate-500">Statutory Compliance Framework & Qualified Professional Coordination</p>
+                  <h3 className="text-xl font-bold text-slate-900">Professional scope and boundaries</h3>
+                  <p className="text-xs text-slate-500">What the starter reviews cover and exclude</p>
                 </div>
               </div>
 
             </div>
 
-            <div className="space-y-4 text-xs text-slate-700 leading-relaxed">
-              <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-amber-900">
-                <strong>Statutory Notice:</strong> Navigalex provides management advisory, risk intelligence, and financial oversight. To protect clients and maintain clear professional boundaries, our operations follow defined engagement limits.
+            <div className="space-y-4 text-xs leading-relaxed text-slate-700">
+              <div className="rounded-xl border border-blue-200 bg-blue-50 p-3 text-blue-950">
+                Navigalex's starter reviews provide business, finance and process observations within a written scope agreed with the client.
               </div>
-
               <div className="space-y-2">
-                <div className="p-3 bg-slate-50 border border-slate-200 rounded-lg">
-                  <strong className="text-slate-900 block font-bold">1. Legal Representation:</strong>
-                  <span>Navigalex does not practice before courts or tribunals without duly enrolled Advocates. Formal court filings and litigation representation are executed in coordination with designated Advocates of the Bar Council.</span>
+                <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                  <strong className="mb-1 block font-bold text-slate-900">Outside the starter scope</strong>
+                  <span>Legal opinions or representation, statutory audits or assurance opinions, tax opinions or attestations, debt recovery, loan approval, investment recommendations and regulatory certification are not included.</span>
                 </div>
-
-                <div className="p-3 bg-slate-50 border border-slate-200 rounded-lg">
-                  <strong className="text-slate-900 block font-bold">2. Statutory Audit & Tax Attestation:</strong>
-                  <span>Navigalex does not issue statutory audit reports or tax audit certificates under the Companies Act or Income Tax Act. These remain the sole purview of independent Chartered Accountant firms.</span>
-                </div>
-
-                <div className="p-3 bg-slate-50 border border-slate-200 rounded-lg">
-                  <strong className="text-slate-900 block font-bold">3. Insolvency & Securities Advice:</strong>
-                  <span>Navigalex does not act as court-appointed Insolvency Resolution Professionals (IRPs) or registered Investment Advisers (RIAs). Where needed, we coordinate directly with licensed IPs and SEBI-registered RIAs.</span>
+                <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                  <strong className="mb-1 block font-bold text-slate-900">How to use findings</strong>
+                  <span>Reviews depend on the accuracy and completeness of the information provided. They do not guarantee an outcome or that every issue will be found. Obtain advice from an appropriately qualified professional where your situation requires it.</span>
                 </div>
               </div>
             </div>
