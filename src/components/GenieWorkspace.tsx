@@ -130,7 +130,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
               <button type="button" onClick={()=>onNavigateTab('services')} className="inline-flex min-h-11 items-center rounded-full border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-800 hover:bg-slate-50">Browse offers <ChevronRight className="ml-1 h-3 w-3"/></button>
               <button type="button" onClick={()=>onOpenAssessment('Proposal request from Financial Genie')} className="inline-flex min-h-11 items-center rounded-full bg-slate-800 px-3 py-2 text-xs font-semibold text-white hover:bg-slate-700">Request a proposal</button>
             </div>
-          </div></div>)}
+          </div>}</div>)}
           {busy&&<div className="flex items-center gap-2 text-xs text-slate-500"><span className="h-2 w-2 animate-pulse rounded-full bg-teal-700"/><span>Reviewing your situation…</span></div>}
           {error&&<div role="alert" className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">{error} <button type="button" className="ml-1 inline-flex min-h-11 items-center font-bold underline" onClick={()=>send(messages.filter(m=>m.role==='user').slice(-1)[0]?.text, true)}>Try again</button></div>}
           <div ref={endRef}/>
