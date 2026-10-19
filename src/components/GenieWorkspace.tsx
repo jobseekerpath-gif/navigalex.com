@@ -165,6 +165,11 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
     setScreen('start');
   };
 
+  const openAllServices = () => {
+    window.history.pushState(null, '', '/services');
+    onNavigateTab('services');
+  };
+
   const openScope = () => {
     if (!selectedService) return;
     window.history.pushState(null, '', '/services?service=' + selectedService.id);
@@ -266,7 +271,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                   </div>
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  <button type="button" onClick={() => onNavigateTab('services')} className="min-h-11 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-bold text-slate-800 hover:bg-slate-100">Browse all services</button>
+                  <button type="button" onClick={openAllServices} className="min-h-11 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-bold text-slate-800 hover:bg-slate-100">Browse all services</button>
                   <button type="button" onClick={() => onOpenAssessment('Help me choose the right Navigalex service')} className="min-h-11 rounded-xl bg-[#1f4fff] px-4 py-2.5 text-sm font-bold text-white hover:bg-[#183bc4]">Help me choose</button>
                 </div>
               </div>
