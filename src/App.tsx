@@ -325,7 +325,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-8 flex items-center justify-center text-[10px] sm:text-[11px] font-medium tracking-wide">
           <span className="inline-flex max-w-full items-center justify-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" aria-hidden="true" />
-            <><strong className="font-bold">Navigalex Advisory:</strong> We help Indian businesses make sense of cash-flow, contract and process-control concerns through scoped reviews and clear next steps.</>
+            <><strong className="font-bold">Navigalex Advisory:</strong> We help Indian businesses make sense of cash flow, payments, risks, controls and growth decisions through defined advisory services and clear next steps.</>
           </span>
         </div>
       </div>
@@ -443,7 +443,7 @@ export default function App() {
             <div className="space-y-3 text-center">
               <span className="text-xs font-bold uppercase tracking-widest text-blue-700">A CLEAR PLACE TO START</span>
               <h2 className="text-3xl font-extrabold text-slate-950 sm:text-4xl">Choose the business problem first</h2>
-              <p className="mx-auto max-w-2xl text-sm leading-relaxed text-slate-600">Navigalex currently offers three scoped starting reviews. Each shows its expected outcomes, client inputs, timing, and boundaries before you request a proposal.</p>
+              <p className="mx-auto max-w-2xl text-sm leading-relaxed text-slate-600">Navigalex offers six productised starting services. Each shows its expected outcomes, client inputs, timing and boundaries before you request a proposal.</p>
             </div>
             <div className="flex justify-center">
               <button type="button" onClick={() => { setActiveTab('services'); window.history.pushState(null, '', '/services'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-blue-700 px-5 py-3 text-sm font-bold text-white hover:bg-blue-800">Explore the scoped reviews <ArrowRight className="h-4 w-4" /></button>
@@ -894,12 +894,12 @@ export default function App() {
               <span className="text-sm font-bold text-white">NAVIGALEX</span>
             </div>
             <p className="text-slate-400 leading-relaxed">
-              Navigalex Advisory: We protect Indian business owners from hidden financial, legal, and bank-loan risks. Real senior advisors powered by smart AI.
+              Practical finance, risk, contract, control and growth advisory for Indian businesses. Start with a defined service and clear next step.
             </p>
           </div>
 
           <div>
-            <h4 className="font-bold uppercase tracking-wider text-white mb-4">Practical Business Support</h4>
+            <h4 className="font-bold uppercase tracking-wider text-white mb-4">Advisory Services</h4>
             <ul className="space-y-3 text-slate-400">
               <li><button onClick={() => { setActiveTab('services'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="text-left hover:text-white">Financial Clarity Check <span className="block text-slate-500">Cash flow, costs and credit readiness</span></button></li>
               <li><button onClick={() => { setActiveTab('services'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="text-left hover:text-white">Contract & Collections Review <span className="block text-slate-500">Payment delays and key contract risks</span></button></li>
