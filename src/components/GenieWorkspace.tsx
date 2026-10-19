@@ -17,7 +17,7 @@ function GuideResponse({ text, onChoice }: { text: string; onChoice: (choice: st
   let interactiveChoices = false;
   const flushList = () => {
     if (list.length) {
-      blocks.push(<ul key={\`list-\${blocks.length}\`} className="my-2 list-disc space-y-1 pl-5">{list.map((item, i) => <li key={i}>{renderInline(item)}</li>)}</ul>);
+      blocks.push(<ul key={`list-${blocks.length}`} className="my-2 list-disc space-y-1 pl-5">{list.map((item, i) => <li key={i}>{renderInline(item)}</li>)}</ul>);
       list = [];
     }
   };
