@@ -834,8 +834,8 @@ Respond with ONLY a JSON object (no markdown fences, no extra commentary) in exa
     const riskScore = String(analysis.riskScore || '');
     const riskLevel = String(analysis.riskLevel || '');
     const summary = String(analysis.summary || '').trim();
-    const clauses = Array.isArray(analysis.clauses) ? analysis.clauses.filter((item: unknown) => typeof item === 'string' && item.trim()).slice(0, 6) : [];
-    const recommendations = Array.isArray(analysis.recommendations) ? analysis.recommendations.filter((item: unknown) => typeof item === 'string' && item.trim()).slice(0, 6) : [];
+    const clauses: string[] = Array.isArray(analysis.clauses) ? analysis.clauses.filter((item: unknown): item is string => typeof item === 'string' && item.trim().length > 0).slice(0, 6) : [];
+    const recommendations: string[] = Array.isArray(analysis.recommendations) ? analysis.recommendations.filter((item: unknown): item is string => typeof item === 'string' && item.trim().length > 0).slice(0, 6) : [];
     const requestedGeneratedAt = new Date(body.generatedAt || Date.now());
     const generatedAt = Number.isNaN(requestedGeneratedAt.getTime()) ? new Date() : requestedGeneratedAt;
 
