@@ -1,20 +1,31 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# Navigalex
 
-# Run and deploy your AI Studio app
+Navigalex is a React and Express advisory site for Indian businesses. Visitors can browse scoped finance, contract and controls reviews, use guided assessment tools, and send an inquiry. The app does not take payment online; engagements are scoped and quoted before work starts.
 
-This contains everything you need to run your app locally.
+## Local setup
 
-View your app in AI Studio: https://ai.studio/apps/904529dd-a386-4895-baf6-13c1faeb9ae5
+**Requirements:** Node.js 22 and npm.
 
-## Run Locally
+1. Install the locked dependencies with `npm ci`.
+2. Copy `.env.example` to `.env` and add the values needed for local use.
+3. Start the app with `npm run dev`.
+4. Open the local URL shown in the terminal.
 
-**Prerequisites:**  Node.js
+At least one AI provider key is required for AI-assisted features. The inquiry form also requires `RESEND_API_KEY`, a verified `RESEND_FROM_EMAIL`, and `INQUIRY_TO_EMAIL`; without all three, submissions return an error instead of appearing successful. Configure a strong `ADMIN_PASSWORD` before using the admin area.
 
+## Production deployment
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+The included Railway configuration runs `npm run build` and then `npm start`. Set environment variables in the hosting provider's secret store; do not commit real keys or passwords.
+
+Required launch settings:
+
+- At least one supported AI provider, such as `GEMINI_API_KEY`, `ANTHROPIC_API_KEY`, or Vertex AI configuration.
+- `RESEND_API_KEY`, a verified `RESEND_FROM_EMAIL`, and `INQUIRY_TO_EMAIL` so the team receives contact requests.
+- A unique `ADMIN_PASSWORD`; set `ADMIN_USERNAME` and `ADMIN_EMAIL` as desired.
+- `NAVIGALEX_DATA_DIR` pointing to a durable mounted volume.
+
+The JSON store supports one running server process on durable storage. Do not add replicas until the app is moved to a shared database and rate limiting is shared across instances. Check `/api/health` after deployment to confirm that required integrations are configured.
+
+## Business launch checklist
+
+The three starter reviews display scope, inputs, timing and boundaries, while the fee is confirmed after a scoping call. Before paid campaigns, confirm delivery capacity and actual prices, verify the sender and reply workflow, and publish only approved credentials or client evidence. Add an online payment or booking provider only after its account, pricing and refund terms are configured.
