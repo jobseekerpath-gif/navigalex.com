@@ -30,7 +30,7 @@ jobs:
         run: npm run lint
       - name: Production build
         run: npm run build
-      - name: Verify generated server preserves safeguards
+      - name: Verify server source preserves safeguards
         run: |
           grep -q "app.post('/api/bot/chat', botRateLimit" server.ts
           grep -q "app.get('/api/health'" server.ts
