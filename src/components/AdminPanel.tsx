@@ -81,7 +81,9 @@ interface AdminPanelProps {
 
 export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
   // Authentication state; administrator credentials are supplied through secure server configuration.
-  const [token, setToken] = useState<string | null>(() => sessionStorage.getItem('nvx_admin_token'));
+  const [token, setToken] = useState<string | null>(() => {
+    try { return window.sessionStorage.getItem('nvx_admin_token'); } catch { return null; }
+  });
   const [adminUser, setAdminUser] = useState<any>(null);
   const [loginUsername, setLoginUsername] = useState('admin');
   const [loginPassword, setLoginPassword] = useState('');
@@ -213,7 +215,7 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
       const data = await res.json();
 
       if (data.success && data.token) {
-        sessionStorage.setItem('nvx_admin_token', data.token);
+        try { window.sessionStorage.setItem('nvx_admin_token', data.token); } catch { /* keep the session in memory if storage is blocked */ }
         setToken(data.token);
         setAdminUser(data.admin);
         fetchDashboardData(data.token);
@@ -228,7 +230,7 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
   };
 
   const handleLogout = () => {
-    sessionStorage.removeItem('nvx_admin_token');
+    try { window.sessionStorage.removeItem('nvx_admin_token'); } catch { /* token state is cleared in memory */ }
     setToken(null);
     setAdminUser(null);
   };
