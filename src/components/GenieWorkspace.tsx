@@ -17,7 +17,7 @@ function GuideResponse({ text, onChoice }: { text: string; onChoice: (choice: st
   let interactiveChoices = false;
   const flushList = () => {
     if (list.length) {
-      blocks.push(<ul key={\`list-\${blocks.length}\`} className="my-2 list-disc space-y-1 pl-5">{list.map((item, i) => <li key={i}>{renderInline(item)}</li>)}</ul>);
+      blocks.push(<ul key={`list-${blocks.length}`} className="my-2 list-disc space-y-1 pl-5">{list.map((item, i) => <li key={i}>{renderInline(item)}</li>)}</ul>);
       list = [];
     }
   };
@@ -34,7 +34,7 @@ function GuideResponse({ text, onChoice }: { text: string; onChoice: (choice: st
     const bullet = line.match(/^(?:[-*•▪]|\d+[.)])\s+(.+)$/);
     if (interactiveChoices && bullet) {
       const choice = bullet[1].replace(/\*\*/g, '').trim();
-      blocks.push(<button key={i} type="button" onClick={() => onChoice(choice)} className="my-1 flex w-full items-center justify-between gap-3 rounded-lg border border-indigo-200 bg-white px-3 py-2.5 text-left text-sm font-medium text-indigo-950 shadow-sm transition hover:border-indigo-400 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-300"><span>{renderInline(choice)}</span><span aria-hidden="true" className="shrink-0 text-lg">›</span></button>);
+      blocks.push(<button key={i} type="button" onClick={() => onChoice(choice)} className="my-1 flex min-h-11 w-full items-center justify-between gap-3 rounded-lg border border-indigo-200 bg-white px-3 py-2.5 text-left text-sm font-medium text-indigo-950 shadow-sm transition hover:border-indigo-400 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-300"><span>{renderInline(choice)}</span><span aria-hidden="true" className="shrink-0 text-lg">›</span></button>);
       return;
     }
     if (interactiveChoices) interactiveChoices = false;
@@ -50,47 +50,11 @@ function GuideResponse({ text, onChoice }: { text: string; onChoice: (choice: st
 
 
 const starters = [
-  { icon: Wallet, title: 'Sales are coming in, but cash is short', prompt: 'My business makes sales but I never have enough cash to pay expenses on time. Help me find the likely causes and what to do first.' },
-  { icon: TrendingDown, title: 'Costs are eating my profits', prompt: 'My costs are rising and profits are falling. Help me identify what to check and which solutions could fit.' },
-  { icon: Landmark, title: 'I need funding or a loan', prompt: 'I need funding but do not know which option is suitable or why a lender might reject me. Help me assess my next steps.' },
-  { icon: FileSearch, title: 'Payments are stuck or contracts worry me', prompt: 'Customers are delaying payments and I am worried about contract terms. Help me understand the risks and options.' },
-  { icon: ShieldCheck, title: 'I suspect errors, leakage or fraud', prompt: 'I suspect unexplained financial discrepancies or weak controls. Help me plan a careful, evidence-based review.' },
-  { icon: Workflow, title: 'My business is hard to manage', prompt: 'My business processes are messy and people rely on spreadsheets and manual work. Help me prioritise improvements.' },
-  { icon: Users, title: 'Governance, compliance or family business', prompt: 'I need help with governance, compliance, succession or responsibilities in a family business. Help me identify the right starting point.' },
-  { icon: ChartNoAxesCombined, title: 'I need forecasts or better reports', prompt: 'I want to understand my business numbers, forecast cash flow and make better financial decisions. What information should I start with?' }
+  { icon: Wallet, title: 'Cash is tight or the numbers are unclear', prompt: 'Cash is tight and I am unsure what is driving it. Help me identify where to start.' },
+  { icon: FileSearch, title: 'Customer payments are late or contract terms worry me', prompt: 'Customer payments are late and contract terms worry me. Help me choose a practical first step.' },
+  { icon: ShieldCheck, title: 'One process feels risky or hard to manage', prompt: 'One business process feels risky or hard to manage. Help me identify what to review first.' },
+  { icon: MessageCircle, title: 'I am not sure which issue matters most', prompt: 'I am not sure which business issue to solve first. Ask me one focused question at a time.' }
 ];
-
-const offerings = [
-  { name: 'LenderReady', prompt: 'Explain LenderReady: deliverables, typical inputs, published price and timeframe, then help me choose credit readiness or debt restructuring.' },
-  { name: 'ControlCFO', prompt: 'Explain ControlCFO deliverables, published price and timeframe, and whether it fits my business.' },
-  { name: 'Contract-to-Cash', prompt: 'Explain Contract-to-Cash deliverables, published pricing and how it helps with delayed payments and contract risks.' },
-  { name: 'Internal Audit Factory', prompt: 'Explain Internal Audit Factory deliverables, published price and what information is needed to begin.' },
-  { name: 'Board-in-a-Box', prompt: 'Explain Board-in-a-Box deliverables, published price and which governance gaps it addresses.' },
-  { name: 'RegTech Journey Lab', prompt: 'Explain RegTech Journey Lab deliverables, published price, timeframe and scope limits.' },
-  { name: 'FraudSignal', prompt: 'Explain FraudSignal deliverables, published price and the records needed for a discrepancy investigation.' },
-  { name: 'TradeShield', prompt: 'Explain TradeShield deliverables, published price and turnaround for letters of credit and bank guarantees.' },
-  { name: 'Family Wealth Governance', prompt: 'Explain Family Wealth Governance deliverables and clarify what pricing information is published.' },
-  { name: 'Business strategy & operations', prompt: 'Explain Navigalex business strategy, operations and growth support, and what information is needed for a scoped proposal.' },
-  { name: 'Financial planning & forecasting', prompt: 'Explain Navigalex financial planning, forecasting and reporting support, and what information is needed for a scoped proposal.' },
-  { name: 'IT & workflow automation', prompt: 'Explain Navigalex IT, data and workflow automation support, and what information is needed for a scoped proposal.' }
-];
-
-const serviceMap = [
-  { name: 'Credit readiness & debt structuring', words: ['loan','lender','funding','credit','dscr','bank','borrowing','cibil'], tab: 'live-tools' },
-  { name: 'Cash flow & finance leadership', words: ['cash flow','cashflow','working capital','collections','cost','profit','cfo','forecast','reporting'], tab: 'live-tools' },
-  { name: 'Contracts & overdue payments', words: ['contract','clause','invoice','overdue','payment','receivable','unpaid','agreement'], tab: 'live-tools' },
-  { name: 'Internal audit & financial controls', words: ['audit','fraud','leakage','discrepancy','unauthorised','unauthorized','control'], tab: 'live-tools' },
-  { name: 'Board governance & compliance', words: ['board','governance','director','compliance','regulatory','privacy','dpdp','nbfc','fintech'], tab: 'services' },
-  { name: 'Trade finance & export documents', words: ['export','import','trade','letter of credit','lc','bank guarantee','bg'], tab: 'services' },
-  { name: 'Family wealth & succession planning', words: ['family','succession','inheritance','wealth','trust','will'], tab: 'family-office' },
-  { name: 'Strategy, operations & digital systems', words: ['strategy','growth','expand','operations','process','automation','technology','it','spreadsheet'], tab: 'services' }
-];
-
-function suggestServices(text: string) {
-  const q = text.toLowerCase();
-  const matched = serviceMap.filter(s => s.words.some(w => q.includes(w)));
-  return (matched.length ? matched : serviceMap.slice(0, 3)).slice(0, 3);
-}
 
 export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Props) {
   const [input, setInput] = useState('');
@@ -101,43 +65,36 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
 
   useEffect(() => { endRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' }); }, [messages, busy]);
 
-  const send = async (value?: string) => {
+  const send = async (value?: string, retry = false) => {
     const prompt = (value ?? input).trim();
     if (!prompt || busy) return;
     const userMessage: Message = { id: `u-${Date.now()}`, role: 'user', text: prompt };
-    const history = messages.slice(-8).map(m => ({ role: m.role === 'user' ? 'user' : 'model', text: m.text }));
-    setMessages(prev => [...prev, userMessage]);
+    const historyMessages = retry ? messages.slice(0, -2) : messages;
+    const history = historyMessages.slice(-8).map(m => ({ role: m.role === 'user' ? 'user' : 'model', text: m.text }));
+    if (!retry) setMessages(prev => [...prev, userMessage]);
+    else setMessages(prev => prev.filter(m => !(m.role === 'guide' && m.text.startsWith('The live guide could not complete a reply.'))));
     setInput('');
     setError('');
     setBusy(true);
     try {
-      const q = prompt.toLowerCase();
-      const localAnswers: Array<{ match: RegExp; reply: string }> = [
-        { match: /lenderready|credit readiness|debt structuring|cma data/i, reply: '**LenderReady — Credit Readiness & Debt Structuring**\n\nHelps a business organise financial information for a lender’s review, assess repayment capacity, and prepare a clearer borrowing or restructuring proposal.\n\n**What it can include**\n- Review of audited financial statements, provisional P&L, GST returns, bank turnover and existing borrowing data.\n- Borrower Information Memorandum and CMA data preparation.\n- DSCR and monthly cash-flow models.\n- Covenant tracking and, where relevant, an OTS or restructuring proposal.\n\n**Typical inputs:** two years of audited statements, provisional P&L, 12 months of bank statements and GST returns.\n\n**Published timeframe:** 14–21 days. **Published price:** ₹75,000–₹3 lakh. Any success fee must be explicitly agreed in writing. Confirm current scope and fees before engagement. Loan approval is not guaranteed.\n\nChoose a follow-up below for documents, DSCR or help comparing credit readiness with restructuring.' },
-        { match: /controlcfo|cash flow.*controls|90.day readiness/i, reply: '**ControlCFO — Finance, Cash Flow & Controls**\n\nA focused finance-readiness sprint that can include a 13-week cash-flow model, finance and risk oversight, review of up to five customer/vendor contract risks, a risk-control register, reconciled lender data room and a 90-day action plan.\n\n**Published price:** ₹1.5–4 lakh fixed. The catalogue describes a 30-day fixed sprint; confirm the exact duration and deliverables in writing.' },
-        { match: /contract.to.cash|collections|contract risk/i, reply: '**Contract-to-Cash Risk Desk**\n\nHelps review contract and payment risks using a clause risk scorecard, document-specific redline suggestions, overdue-debtor tracking, payment escalation options and renewal/milestone tracking.\n\n**Published price:** ₹75,000–₹3 lakh setup plus ₹25,000–₹1 lakh/month. Confirm the scope and fees before engagement.' },
-        { match: /internal audit factory/i, reply: '**AI-Assisted Internal Audit Factory**\n\nProvides risk-based transaction testing, an internal financial-control deficiency scorecard, a remediation tracker and quarterly audit reporting. **Published price:** ₹2–10 lakh per cycle. Scope depends on records and the agreed engagement.' },
-        { match: /board.in.a.box|governance os/i, reply: '**Board-in-a-Box Governance OS**\n\nCan include board/committee calendars, agendas, resolutions and minutes packs, delegated-authority matrices, conflicts/related-party registers and an evidence index. **Published price:** ₹2–6 lakh setup plus ₹50,000–₹1.5 lakh/month. Confirm the scope before engagement.' },
-        { match: /regtech|kyc|aml|compliance systems/i, reply: '**RegTech Journey Lab**\n\nProvides compliance gap analysis and a controls matrix for applicable onboarding, KYC/AML, data protection, outsourcing and vendor controls. **Published timeframe:** 6–12 weeks. **Published price:** ₹5–25 lakh per project. Applicability depends on your organisation and the rules that apply.' },
-        { match: /fraudsignal|financial investigation|discrepanc/i, reply: '**FraudSignal Investigation Cell**\n\nCan include forensic transaction analytics, duplicate-billing scans, evidence preservation, discrepancy reconciliation and an investigation report. **Published price:** ₹3–15 lakh per investigation. Findings depend on the records available.' },
-        { match: /tradeshield|letter[s ]of credit|bank guarantee|lc\/bg/i, reply: '**TradeShield — LC/BG Desk**\n\nReviews letters-of-credit clauses, export-document checklists, bank-guarantee wording and transaction-specific documentary discrepancies. **Published turnaround:** 24–48 hours per transaction. **Published price:** ₹50,000–₹2 lakh per transaction/retainer, subject to receiving complete documents.' },
-        { match: /family wealth governance|succession|family business governance/i, reply: '**Family Wealth Governance Office**\n\nCan include family/entity asset mapping, a family constitution and decision charter, succession roadmap, investment policy and governance pack. A published fixed price is not available; request a scoped proposal.' }
-      ];
-      const local = localAnswers.find(item => item.match.test(q));
-      if (local) {
-        setMessages(prev => [...prev, { id: `g-${Date.now()}`, role: 'guide', text: local.reply }]);
-      } else {
-        const response = await fetch('/api/bot/chat', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: prompt, history })
-        });
-        const data = await response.json().catch(() => ({}));
-        if (!response.ok || !data.reply) throw new Error(data.error || 'The guide could not respond just now. Please try again.');
-        setMessages(prev => [...prev, { id: `g-${Date.now()}`, role: 'guide', text: String(data.reply) }]);
-      }
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Could not connect. Please try again.');
+      let visitorId = '';
+      try { visitorId = window.localStorage.getItem('navigalex_visitor_id') || ''; } catch { /* tracking is optional */ }
+      const response = await fetch('/api/bot/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: prompt, history, visitorId })
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || !data.reply) throw new Error(data.error || 'The guide could not respond just now. Please try again.');
+      setMessages(prev => [...prev, { id: `g-${Date.now()}`, role: 'guide', text: String(data.reply) }]);
+    } catch (err) {
+      const reason = err instanceof Error ? err.message : 'Could not connect.';
+      setError(reason);
+      setMessages(prev => [...prev, {
+        id: `g-${Date.now()}`,
+        role: 'guide',
+        text: 'The live guide could not complete a reply. You can still start with one of these scoped reviews:\n\n- Financial Clarity Check: cash flow, costs, working capital and basic borrowing readiness.\n- Contract & Collections Review: up to three agreed customer contracts and an overdue-invoice list.\n- Controls & Compliance Snapshot: one business process and a short priority action plan.\n\nBrowse the offers or request a proposal. Please do not paste passwords, bank details or confidential documents into chat.'
+      }]);
     } finally {
       setBusy(false);
     }
@@ -151,7 +108,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
         <div className="flex items-center gap-2.5">
           <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-indigo-500/15"><Sparkles className="h-3 w-3 text-indigo-200"/></div>
           <div className="min-w-0 flex-1"><p className="text-[9px] font-semibold uppercase tracking-[.16em] text-indigo-200">Navigalex</p><h1 className="text-lg font-bold tracking-tight sm:text-xl">Financial Genie</h1></div>
-          {messages.length > 0 && <button onClick={reset} className="inline-flex items-center gap-1 rounded-lg border border-white/20 px-2.5 py-1.5 text-xs font-semibold text-white hover:bg-white/10" type="button"><RotateCcw className="h-3 w-3"/>Reset</button>}
+          {messages.length > 0 && <button onClick={reset} className="inline-flex min-h-11 items-center gap-1 rounded-lg border border-white/20 px-3 py-2 text-xs font-semibold text-white hover:bg-white/10" type="button"><RotateCcw className="h-3 w-3"/>Reset</button>}
         </div>
         <p className="mt-2 max-w-2xl text-xs leading-relaxed text-slate-300 sm:text-sm">Describe a business challenge. Get focused questions, practical options and a clear next step.</p>
       </header>
@@ -164,18 +121,25 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
               <p className="text-xs leading-relaxed text-slate-600 sm:text-sm">Type your situation below or manually choose a suggested topic. Nothing starts until you select a suggestion or send your own message.</p>
             </div>
             <div className="flex flex-wrap gap-2">
-              {starters.slice(0,4).map(({icon: Icon,title,prompt})=><button key={title} type="button" onClick={()=>send(prompt)} disabled={busy} className="inline-flex max-w-full items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-2 text-left text-xs font-semibold text-slate-700 transition hover:border-indigo-300 hover:bg-indigo-50 disabled:opacity-50"><Icon className="h-3.5 w-3.5 shrink-0 text-emerald-700"/><span>{title}</span></button>)}
+              {starters.slice(0,4).map(({icon: Icon,title,prompt})=><button key={title} type="button" onClick={()=>send(prompt)} disabled={busy} className="inline-flex min-h-11 max-w-full items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-2 text-left text-xs font-semibold text-slate-700 transition hover:border-indigo-300 hover:bg-indigo-50 disabled:opacity-50"><Icon className="h-3.5 w-3.5 shrink-0 text-emerald-700"/><span>{title}</span></button>)}
             </div>
-          </> : messages.map(m=><div key={m.id} className={m.role==='user'?'ml-auto max-w-[94%] rounded-2xl rounded-tr-md bg-indigo-700 px-3.5 py-3 text-sm leading-relaxed text-white sm:max-w-[85%]':'max-w-full rounded-2xl rounded-tl-md border border-slate-200 bg-slate-50 px-3.5 py-3 text-sm leading-relaxed text-slate-800 sm:max-w-[94%]'}><div className="mb-1 text-[10px] font-bold uppercase tracking-wider opacity-70">{m.role==='user'?'You':'Financial Genie'}</div><div className="whitespace-pre-wrap"><GuideResponse text={m.text} onChoice={(choice)=>send(choice)} /></div>{m.role==='guide'&&<div className="mt-3 border-t border-slate-200 pt-3"><p className="mb-2 text-xs font-bold text-slate-600">Explore a next step (tap to ask; nothing runs automatically)</p><div className="flex flex-wrap gap-2">{(() => { const userQuestion=[...messages].reverse().find(x=>x.role==='user')?.text || ''; const q=userQuestion.toLowerCase(); const choices=q.includes('lenderready')||q.includes('credit readiness')||q.includes('debt structuring') ? [{label:'Documents required',prompt:'List the documents needed for LenderReady and explain what each is used for.'},{label:'Explain pricing and timeline',prompt:'Explain LenderReady published pricing and timeframe, including what I should confirm before engagement.'},{label:'Help me choose the right path',prompt:'Ask me one question at a time to determine whether credit readiness or debt restructuring better fits my situation.'}] : q.includes('controlcfo') ? [{label:'What information do you need?',prompt:'What records and business information are needed to start ControlCFO?'},{label:'Explain pricing and deliverables',prompt:'Explain ControlCFO deliverables, listed pricing and what needs confirmation.'},{label:'Check if it fits my business',prompt:'Ask me one question at a time to assess whether ControlCFO fits my business.'}] : q.includes('contract-to-cash') ? [{label:'Review my payment problem',prompt:'Help me assess delayed customer payments and contract-to-cash risks. Ask one focused question at a time.'},{label:'Explain pricing',prompt:'Explain Contract-to-Cash published pricing and the components included.'},{label:'What documents are needed?',prompt:'List the documents needed for a Contract-to-Cash assessment.'}] : q.includes('tradeshield') ? [{label:'LC/BG document checklist',prompt:'Give me a practical checklist for reviewing an LC or bank guarantee.'},{label:'Explain pricing and turnaround',prompt:'Explain TradeShield published pricing and turnaround, including dependencies.'},{label:'Assess my trade issue',prompt:'Ask me one question at a time about my letter of credit, bank guarantee or export document issue.'}] : [{label:'What information do you need?',prompt:'What information do you need from me to give a tailored recommendation? Ask one question at a time.'},{label:'Explain costs and deliverables',prompt:'Summarize the relevant service deliverables and published pricing; clearly flag anything not listed.'},{label:'Help me choose a solution',prompt:'Ask me one focused question at a time and help me choose the most relevant Navigalex service.'}]; return choices.map(choice=><button key={choice.label} type="button" disabled={busy} onClick={()=>send(choice.prompt)} className="rounded-full border border-indigo-200 bg-white px-3 py-2 text-xs font-semibold text-indigo-900 hover:bg-emerald-50 disabled:opacity-50">{choice.label} <ChevronRight className="inline h-3 w-3"/></button>); })()}<button type="button" onClick={()=>onOpenAssessment(messages.filter(x=>x.role==='user').map(x=>x.text).join(' ').slice(0,180))} className="rounded-full bg-slate-800 px-3 py-2 text-xs font-semibold text-white hover:bg-slate-700">Request an adviser</button></div></div>}</div>)}
+          </> : messages.map(m=><div key={m.id} className={m.role==='user'?'ml-auto max-w-[94%] rounded-2xl rounded-tr-md bg-indigo-700 px-3.5 py-3 text-sm leading-relaxed text-white sm:max-w-[85%]':'max-w-full rounded-2xl rounded-tl-md border border-slate-200 bg-slate-50 px-3.5 py-3 text-sm leading-relaxed text-slate-800 sm:max-w-[94%]'}><div className="mb-1 text-[10px] font-bold uppercase tracking-wider opacity-70">{m.role==='user'?'You':'Financial Genie'}</div><div className="whitespace-pre-wrap"><GuideResponse text={m.text} onChoice={(choice)=>send(choice)} /></div>{m.role==='guide'&&<div className="mt-3 border-t border-slate-200 pt-3">
+            <p className="mb-2 text-xs font-bold text-slate-600">Choose a next step</p>
+            <div className="flex flex-wrap gap-2">
+              <button type="button" disabled={busy} onClick={()=>send('Help me choose among the three Navigalex starter reviews. Ask one focused question at a time.')} className="inline-flex min-h-11 items-center rounded-full border border-indigo-200 bg-white px-3 py-2 text-xs font-semibold text-indigo-900 hover:bg-indigo-50 disabled:opacity-50">Help me choose <ChevronRight className="ml-1 h-3 w-3"/></button>
+              <button type="button" onClick={()=>onNavigateTab('services')} className="inline-flex min-h-11 items-center rounded-full border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-800 hover:bg-slate-50">Browse offers <ChevronRight className="ml-1 h-3 w-3"/></button>
+              <button type="button" onClick={()=>onOpenAssessment('Proposal request from Financial Genie')} className="inline-flex min-h-11 items-center rounded-full bg-slate-800 px-3 py-2 text-xs font-semibold text-white hover:bg-slate-700">Request a proposal</button>
+            </div>
+          </div>}</div>)}
           {busy&&<div className="flex items-center gap-2 text-xs text-slate-500"><span className="h-2 w-2 animate-pulse rounded-full bg-teal-700"/><span>Reviewing your situation…</span></div>}
-          {error&&<div role="alert" className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">{error} <button type="button" className="ml-1 font-bold underline" onClick={()=>send(messages.filter(m=>m.role==='user').slice(-1)[0]?.text)}>Try again</button></div>}
+          {error&&<div role="alert" className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">{error} <button type="button" className="ml-1 inline-flex min-h-11 items-center font-bold underline" onClick={()=>send(messages.filter(m=>m.role==='user').slice(-1)[0]?.text, true)}>Try again</button></div>}
           <div ref={endRef}/>
         </div>
         <form onSubmit={e=>{e.preventDefault();void send();}} className="border-t border-slate-200 bg-white p-3 sm:p-4">
           <label htmlFor="genie-input" className="sr-only">Describe your problem or goal</label>
           <div className="flex items-end gap-2 rounded-xl border border-slate-300 bg-slate-50 p-2 focus-within:border-indigo-600 focus-within:ring-2 focus-within:ring-indigo-100">
             <textarea id="genie-input" value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();void send();}}} rows={2} maxLength={4000} placeholder="Describe the business problem you want to solve…" className="max-h-32 min-h-[46px] flex-1 resize-y bg-transparent px-2 py-1.5 text-base text-slate-900 outline-none placeholder:text-slate-400" />
-            <button type="submit" disabled={!input.trim()||busy} aria-label="Send message" className="mb-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-800 text-white transition hover:bg-indigo-800 disabled:cursor-not-allowed disabled:opacity-40"><ArrowUp className="h-4 w-4"/></button>
+            <button type="submit" disabled={!input.trim()||busy} aria-label="Send message" className="mb-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-emerald-800 text-white transition hover:bg-indigo-800 disabled:cursor-not-allowed disabled:opacity-40"><ArrowUp className="h-4 w-4"/></button>
           </div>
           <p className="mt-1.5 px-1 text-[10px] text-slate-500">Avoid entering passwords or full bank account details.</p>
         </form>

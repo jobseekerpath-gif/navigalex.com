@@ -7,12 +7,5 @@ export default defineConfig({
   base: '/',
   plugins: [react(), tailwindcss()],
   resolve: { alias: { '@': path.resolve(__dirname, '.') } },
-  build: {
-    rolldownOptions: {
-      output: {
-        codeSplitting: false
-      }
-    }
-  },
   server: { allowedHosts: ['navigalex.com', 'www.navigalex.com'] }
 });

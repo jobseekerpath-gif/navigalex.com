@@ -13,5 +13,8 @@ data/
 *.sqlite3
 *.db
 
+# Legacy generated server bundle can contain stale code or credentials.
+server.js
+
 vertex-key.json
 navigalex-ai-credentials.json

@@ -145,16 +145,6 @@ export default function LiveAssessmentsPage({ visitorId, onOpenAssessment }: Liv
   const [docInputError, setDocInputError] = useState('');
   const [isExtractingDocument, setIsExtractingDocument] = useState(false);
 
-  // Section 43B(h) payment-timing screening state
-  const [paymentCheck, setPaymentCheck] = useState({
-    msmeStatus: 'yes',
-    acceptanceDate: '',
-    agreedDays: '45',
-    paidDate: '',
-    amount: ''
-  });
-  const [paymentCheckResult, setPaymentCheckResult] = useState<any>(null);
-
   // Live CIBIL / Banking Health Calculator State
   const [cibilForm, setCibilForm] = useState({
     turnover: '',
@@ -176,52 +166,6 @@ export default function LiveAssessmentsPage({ visitorId, onOpenAssessment }: Liv
   const [isRunningDiagnostic, setIsRunningDiagnostic] = useState(false);
   const [diagnosticResult, setDiagnosticResult] = useState<any>(null);
 
-
-  const runPaymentTimingCheck = (e: React.FormEvent) => {
-    e.preventDefault();
-    const { msmeStatus, acceptanceDate, agreedDays, paidDate, amount } = paymentCheck;
-    if (!acceptanceDate) {
-      setPaymentCheckResult({ type: 'input', message: 'Enter the acceptance or deemed-acceptance date.' });
-      return;
-    }
-
-    const accepted = new Date(acceptanceDate + 'T00:00:00');
-    if (Number.isNaN(accepted.getTime())) {
-      setPaymentCheckResult({ type: 'input', message: 'Enter a valid acceptance date.' });
-      return;
-    }
-
-    const agreed = Math.max(0, Number.parseInt(agreedDays || '45', 10) || 0);
-    const statutoryMax = new Date(accepted);
-    statutoryMax.setDate(statutoryMax.getDate() + 45);
-
-    const agreedDue = new Date(accepted);
-    agreedDue.setDate(agreedDue.getDate() + Math.min(agreed, 45));
-
-    const today = new Date();
-    const paid = paidDate ? new Date(paidDate + 'T00:00:00') : today;
-    if (Number.isNaN(paid.getTime())) {
-      setPaymentCheckResult({ type: 'input', message: 'Enter a valid payment date or leave it blank if unpaid.' });
-      return;
-    }
-
-    const daysToPayment = Math.max(0, Math.floor((paid.getTime() - accepted.getTime()) / 86400000));
-    const beyond45 = paid.getTime() > statutoryMax.getTime();
-    const beyondAgreed = paid.getTime() > agreedDue.getTime();
-    const potentialIssue = msmeStatus === 'yes' && (beyond45 || beyondAgreed);
-
-    setPaymentCheckResult({
-      type: potentialIssue ? 'flag' : 'clear',
-      daysToPayment,
-      statutoryMax: statutoryMax.toLocaleDateString('en-IN'),
-      agreedDue: agreedDue.toLocaleDateString('en-IN'),
-      amount: amount || '',
-      potentialIssue,
-      note: msmeStatus === 'yes'
-        ? 'Based on the dates you entered, the payment appears to be beyond the Section 15 timing screen used for this check.'
-        : 'The Section 15 timing screen is intended for a supplier that qualifies as a micro or small enterprise. Your answer indicates that status is not confirmed.'
-    });
-  };
 
   const handleAnalyzeDocument = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -277,6 +221,7 @@ export default function LiveAssessmentsPage({ visitorId, onOpenAssessment }: Liv
   const handleDownloadContractReport = async () => {
     if (!docResult || isDownloadingContractReport) return;
     setIsDownloadingContractReport(true);
+    setDocInputError('');
     try {
       const response = await fetch('/api/report/pdf', {
         method: 'POST',
@@ -304,10 +249,10 @@ export default function LiveAssessmentsPage({ visitorId, onOpenAssessment }: Liv
       document.body.appendChild(linkEl);
       linkEl.click();
       linkEl.remove();
-      URL.revokeObjectURL(url);
+      window.setTimeout(() => URL.revokeObjectURL(url), 1000);
     } catch (err) {
       console.error('Contract report download failed:', err);
-      alert('Unable to generate the personalized PDF report. Please try again.');
+      setDocInputError('Unable to generate the personalized PDF report. Please try again.');
     } finally {
       setIsDownloadingContractReport(false);
     }
@@ -432,7 +377,7 @@ export default function LiveAssessmentsPage({ visitorId, onOpenAssessment }: Liv
 
               {/* WHY PICK THIS PRODUCT GUIDE */}
               <div className="p-4 bg-blue-50/70 border border-blue-200 rounded-xl space-y-2">
-                <span className="text-xs font-bold text-blue-900 uppercase">ðŸ’¡ What this assessment provides</span>
+                <span className="text-xs font-bold text-blue-900 uppercase">💡 What this assessment provides</span>
                 <p className="text-xs text-slate-700 leading-relaxed">
                   <strong>Best fit:</strong> Teams reviewing customer, vendor or service agreements where commercial exposure matters.<br />
                   <strong>What it checks:</strong> Liability, indemnity, payment, termination, IP, jurisdiction and dispute terms actually present in the supplied text.<br />
@@ -558,7 +503,7 @@ export default function LiveAssessmentsPage({ visitorId, onOpenAssessment }: Liv
                       href={getFreeToolHandoffUrl('contract-43b-h')}
                       className="flex-1 inline-flex items-center justify-center rounded-xl bg-blue-50 hover:bg-blue-100 border border-blue-200 px-4 py-3 text-xs font-bold text-blue-800 transition-colors text-center"
                     >
-                      Check payment timing under Section 43B(h)
+                      Check MSME payment timing
                     </a>
                   </div>
 
@@ -582,7 +527,7 @@ export default function LiveAssessmentsPage({ visitorId, onOpenAssessment }: Liv
 
               {/* WHY PICK THIS PRODUCT GUIDE */}
               <div className="p-4 bg-emerald-50/70 border border-emerald-200 rounded-xl space-y-2">
-                <span className="text-xs font-bold text-emerald-900 uppercase">ðŸ’¡ Why pick this product?</span>
+                <span className="text-xs font-bold text-emerald-900 uppercase">💡 Why pick this product?</span>
                 <p className="text-xs text-slate-700 leading-relaxed">
                   <strong>Best fit:</strong> Businesses preparing or reviewing a bank borrowing package using their own financial figures.<br />
                   <strong>What it checks:</strong> DSCR and the relationship between operating profit, debt service, borrowing and overdue receivables based on your inputs.<br />
@@ -729,7 +674,7 @@ export default function LiveAssessmentsPage({ visitorId, onOpenAssessment }: Liv
 
               {/* WHY PICK THIS PRODUCT GUIDE */}
               <div className="p-4 bg-indigo-50/70 border border-indigo-200 rounded-xl space-y-2">
-                <span className="text-xs font-bold text-indigo-900 uppercase">ðŸ’¡ Why pick this product?</span>
+                <span className="text-xs font-bold text-indigo-900 uppercase">💡 Why pick this product?</span>
                 <p className="text-xs text-slate-700 leading-relaxed">
                   <strong>Best fit:</strong> Management teams willing to provide actual operating and financial facts for a business-specific review.<br />
                   <strong>What it checks:</strong> Cash conversion, controls, collections, debt and operating issues supported by the facts you provide.<br />
