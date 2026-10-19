@@ -34,8 +34,8 @@
    .site-nav-header > div:first-child > button:first-child > span:first-child svg{width:15px!important;height:15px!important}
    .site-nav-header > div:first-child > button:first-child > span:last-child > span:first-child{font-size:18px!important}
    .site-nav-header > div:first-child > button:first-child > span:last-child > span:last-child{font-size:8px!important;letter-spacing:.12em!important;margin-top:1px!important}
-   .site-nav-header > div:first-child > div:last-child > button:first-child{font-size:10px!important;padding:6px 7px!important}
-   .site-nav-header > div:first-child > div:last-child > button:last-child{width:36px!important;height:36px!important}
+   .site-nav-header > div:first-child > div:last-child > button:first-child{font-size:12px!important;padding:8px 10px!important}
+   .site-nav-header > div:first-child > div:last-child > button:last-child{width:44px!important;height:44px!important}
 }
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 
