@@ -1267,80 +1267,11 @@ export default function App() {
           </div>
 
           <div>
-            <h4 className="font-bold uppercase tracking-wider text-white mb-4">Our 9 Services</h4>
-            <ul className="space-y-2.5 text-slate-400">
-              <li>
-                <button
-                  onClick={() => { setActiveTab('services'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                  className="hover:text-white transition-colors cursor-pointer text-left"
-                >
-                  1. LenderReady Credit Readiness & Debt Structuring Office
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => { setActiveTab('services'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                  className="hover:text-white transition-colors cursor-pointer text-left"
-                >
-                  2. ControlCFO 90-Day Readiness Sprint
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => { setActiveTab('services'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                  className="hover:text-white transition-colors cursor-pointer text-left"
-                >
-                  3. Contract-to-Cash Risk Desk
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => { setActiveTab('services'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                  className="hover:text-white transition-colors cursor-pointer text-left"
-                >
-                  4. AI-Assisted Internal Audit Factory
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => { setActiveTab('services'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                  className="hover:text-white transition-colors cursor-pointer text-left"
-                >
-                  5. Board-in-a-Box Governance OS
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => { setActiveTab('services'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                  className="hover:text-white transition-colors cursor-pointer text-left"
-                >
-                  6. RegTech Journey Lab
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => { setActiveTab('services'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                  className="hover:text-white transition-colors cursor-pointer text-left"
-                >
-                  7. FraudSignal Investigation Cell
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => { setActiveTab('services'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                  className="hover:text-white transition-colors cursor-pointer text-left"
-                >
-                  8. TradeShield LC/BG Desk
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => { setActiveTab('services'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                  className="hover:text-white transition-colors cursor-pointer text-left"
-                >
-                  9. Family Wealth Governance Office
-                </button>
-              </li>
+            <h4 className="font-bold uppercase tracking-wider text-white mb-4">Practical Business Support</h4>
+            <ul className="space-y-3 text-slate-400">
+              <li><button onClick={() => { setActiveTab('services'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="text-left hover:text-white">Financial Clarity Check <span className="block text-slate-500">Cash flow, costs and credit readiness</span></button></li>
+              <li><button onClick={() => { setActiveTab('services'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="text-left hover:text-white">Contract & Collections Review <span className="block text-slate-500">Payment delays and key contract risks</span></button></li>
+              <li><button onClick={() => { setActiveTab('services'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="text-left hover:text-white">Controls & Compliance Snapshot <span className="block text-slate-500">Priority process gaps and next steps</span></button></li>
             </ul>
           </div>
 
@@ -1363,23 +1294,7 @@ export default function App() {
                   Bank DSCR Scanner (Live)
                 </button>
               </li>
-              <li>
-                <button 
-                  onClick={() => { setActiveTab('why-pick-us'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} 
-                  className="hover:text-white transition-colors cursor-pointer text-left"
-                >
-                  Why Pick These Products
-                </button>
-              </li>
-              <li>
-                <button 
-                  onClick={() => { setActiveTab('industries'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} 
-                  className="hover:text-white transition-colors cursor-pointer text-left"
-                >
-                  Sector Playbooks
-                </button>
-              </li>
-            </ul>
+              </ul>
           </div>
 
           <div>
