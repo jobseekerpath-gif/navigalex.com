@@ -29,6 +29,7 @@ type ChatMessage = {
   role: 'assistant' | 'user';
   text: string;
   suggestedServiceId?: string;
+  suggestedPrompts?: string[];
 };
 
 const SERVICES: Service[] = [
@@ -218,7 +219,18 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
           id: 'assistant-' + Date.now(),
           role: 'assistant',
           text: 'Based on that, ' + match.title + ' looks like the best starting point. I can show the scope, deliverables and the next step.',
-          suggestedServiceId: match.id
+          suggestedServiceId: match.id,
+          suggestedPrompts: match.id === 'financial-clarity'
+            ? ['Build a 13-week cash-flow forecast', 'Find the biggest cash leak', 'Make a 30-day action plan']
+            : match.id === 'contract-collections'
+              ? ['Prioritise overdue invoices', 'Review customer payment terms', 'Create a collections tracker']
+              : match.id === 'risk-assurance'
+                ? ['Create a business risk register', 'Prioritise compliance gaps', 'Review vendor and cyber risks']
+                : match.id === 'controls-fraud'
+                  ? ['Review payment approvals', 'Find process control gaps', 'Build a fraud-prevention checklist']
+                  : match.id === 'funding-readiness'
+                    ? ['Check lender readiness', 'Estimate debt-service coverage', 'Prepare a lender document list']
+                    : ['Set 90-day priorities', 'Clarify team responsibilities', 'Build a simple performance dashboard']
         }
       : {
           id: 'assistant-' + Date.now(),
@@ -260,9 +272,9 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
   };
 
   return (
-    <section className="relative mx-auto w-full max-w-6xl px-3 pb-8 pt-4 sm:px-5 sm:pt-6">
-      <div className="overflow-hidden rounded-3xl border border-[#244bd7]/25 bg-white shadow-[0_22px_70px_rgba(30,64,175,0.14)]">
-        <header className="relative overflow-hidden bg-gradient-to-br from-[#0d1c48] via-[#1f4fff] to-[#27419d] px-5 py-6 text-white sm:px-8 sm:py-8">
+    <section className="relative mx-auto w-full max-w-3xl px-2 pb-6 pt-3 sm:px-4 sm:pt-4">
+      <div className="overflow-hidden rounded-2xl border border-[#244bd7]/25 bg-white shadow-[0_12px_36px_rgba(30,64,175,0.12)]">
+        <header className="relative overflow-hidden bg-gradient-to-br from-[#0d1c48] via-[#1f4fff] to-[#27419d] px-4 py-4 text-white sm:px-6 sm:py-5">
           <div className="absolute -right-16 -top-20 h-60 w-60 rounded-full bg-white/10 blur-2xl" aria-hidden="true" />
           <div className="absolute -bottom-24 left-1/3 h-48 w-48 rounded-full bg-cyan-200/15 blur-3xl" aria-hidden="true" />
           <div className="relative flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
@@ -288,7 +300,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
             )}
           </div>
 
-          <div className="relative mt-7 grid grid-cols-3 gap-2 text-center text-xs sm:max-w-xl">
+          <div className="relative mt-4 grid grid-cols-3 gap-1.5 text-center text-[10px] sm:max-w-xl sm:text-xs">
             {[
               ['1', 'Choose your need'],
               ['2', 'Set your goal'],
@@ -302,9 +314,9 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
           </div>
         </header>
 
-        <div className="p-4 sm:p-7">
+        <div className="p-3 sm:p-5">
           {screen === 'start' && (
-            <div className="space-y-5">
+            <div className="space-y-4">
               <div className="max-w-3xl space-y-2">
                 <span className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1.5 text-xs font-bold text-[#1f4fff]">
                   <Sparkles className="h-3.5 w-3.5" />
@@ -323,10 +335,17 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                   </div>
                 </div>
 
-                <div className="max-h-72 space-y-3 overflow-y-auto bg-white p-4 sm:p-5" aria-live="polite">
+                <div className="max-h-64 space-y-3 overflow-y-auto bg-white p-3 sm:p-4" aria-live="polite">
                   {chatMessages.map((message) => (
                     <div key={message.id} className={message.role === 'user' ? 'ml-auto max-w-[88%] rounded-2xl rounded-br-md bg-[#1f4fff] px-4 py-3 text-sm leading-relaxed text-white sm:max-w-[75%]' : 'max-w-[88%] rounded-2xl rounded-bl-md bg-slate-100 px-4 py-3 text-sm leading-relaxed text-slate-800 sm:max-w-[75%]'}>
                       {message.text}
+                      {message.suggestedPrompts && (
+                        <div className="mt-3 flex flex-wrap gap-2" aria-label="Suggested next questions">
+                          {message.suggestedPrompts.map((prompt) => (
+                            <button key={prompt} type="button" onClick={() => sendChatMessage(prompt)} className="min-h-10 rounded-xl border border-blue-200 bg-white px-3 py-2 text-left text-xs font-bold text-[#1f4fff] hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1f4fff]">{prompt} <ArrowRight className="ml-1 inline h-3 w-3" /></button>
+                          ))}
+                        </div>
+                      )}
                       {message.suggestedServiceId && (
                         <button
                           type="button"
@@ -364,7 +383,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                 </div>
               </section>
 
-              <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+              <div className="grid gap-2 sm:grid-cols-2">
                 {SERVICES.map((service) => {
                   const Icon = service.Icon;
                   return (
@@ -372,7 +391,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                       key={service.id}
                       type="button"
                       onClick={() => chooseService(service.id)}
-                      className="group min-h-48 rounded-2xl border border-slate-200 bg-white p-5 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-[#1f4fff] hover:shadow-lg hover:shadow-blue-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1f4fff]"
+                      className="group min-h-36 rounded-xl border border-slate-200 bg-white p-3.5 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-[#1f4fff] hover:shadow-lg hover:shadow-blue-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1f4fff]"
                     >
                       <span className="flex items-start justify-between gap-3">
                         <span className="rounded-xl bg-blue-50 p-2.5 text-[#1f4fff]"><Icon className="h-5 w-5" /></span>
