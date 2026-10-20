@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import {
   ArrowUpRight, CheckCircle2, ChevronRight, ClipboardCheck,
-  Clock3, FileText, Landmark, Search, ShieldCheck, Users, Wallet, Workflow
+  ChartNoAxesCombined, Clock3, FileText, Landmark, Search, ShieldCheck, Users, Wallet, Workflow
 } from 'lucide-react';
 
 type Pillar = 'finance' | 'risk' | 'governance';
@@ -194,6 +194,44 @@ export const ADVISORY_DESKS: Service[] = [
     exclusions: 'Not legal advice, company-secretarial work, a formal board evaluation or a regulatory certification.',
     Icon: Users
   }
+  {
+    id: 'strategy-sprint',
+    pillar: 'governance',
+    pillarLabel: 'Strategy & Growth',
+    title: 'Strategy & Market Growth Sprint',
+    badge: 'Growth decision',
+    shortLabel: 'Choosing a growth direction',
+    tagline: 'Compare practical growth options before committing time and money.',
+    summary: 'A focused strategy engagement for one business decision, using client-supplied data and clearly stated assumptions rather than unsupported market claims.',
+    idealFor: 'Owner-led SMEs evaluating a new market, product, channel, portfolio choice or turnaround priority.',
+    outcomes: ['A clearer decision question and success measures', 'A transparent comparison of up to three strategic options', 'A prioritised 90-day execution roadmap'],
+    deliverables: ['Decision brief and agreed scope', 'Options matrix with assumptions, risks and evidence gaps', '90-day action roadmap with owners and decision gates', 'One findings discussion'],
+    clientInputs: 'Business goals, current performance information, customer/market evidence available to you, and the decision deadline.',
+    timeframe: 'Typically 7–10 working days after complete inputs',
+    engagement: 'One decision, up to three options and one feedback round. Market research, transaction due diligence and implementation are separately scoped.',
+    price: 'Fixed quote after a short scoping call',
+    exclusions: 'No guarantee of growth; not investment, legal, tax or transaction advice. M&A due diligence requires a separate qualified scope.',
+    Icon: ChartNoAxesCombined
+  },
+  {
+    id: 'project-delivery',
+    pillar: 'governance',
+    pillarLabel: 'Project Management & Delivery',
+    title: 'Project Delivery & Recovery Review',
+    badge: 'Delivery reset',
+    shortLabel: 'A delayed or unclear project',
+    tagline: 'Make milestones, dependencies, ownership and recovery actions visible.',
+    summary: 'A bounded health review of one project to clarify delivery status and the most useful corrective actions.',
+    idealFor: 'Small teams with a delayed project, changing scope, unclear accountability or budget pressure.',
+    outcomes: ['A transparent view of milestone and delivery risks', 'A prioritised RAID and dependency list', 'A realistic recovery or next-phase plan'],
+    deliverables: ['Review of one project plan, milestone list and available budget/status data', 'RAID log covering risks, assumptions, issues and dependencies', 'Ownership and decision tracker', 'Recovery recommendations and one review call'],
+    clientInputs: 'Current project plan, milestone/status report, budget baseline if available, known issues and project owner availability.',
+    timeframe: 'Typically 5–7 working days after complete inputs',
+    engagement: 'One project health review. Ongoing PMO, project execution, specialist scheduling and change delivery are separately scoped based on capacity.',
+    price: 'Fixed quote after a short scoping call',
+    exclusions: 'No guarantee of delivery outcomes or independent assurance opinion. Large programme PMO and specialist delivery require confirmed capacity.',
+    Icon: Workflow
+  },
 ];
 
 const SERVICE_HANDOFFS: Record<string, string> = {
@@ -216,7 +254,9 @@ const SERVICE_HANDOFFS: Record<string, string> = {
   'compliance-calendar': 'controls-fraud',
   fraudsignal: 'controls-fraud',
   'internal-audit': 'controls-fraud',
-  'growth-governance': 'growth-governance'
+  'growth-governance': 'growth-governance',
+  'strategy-sprint': 'strategy-sprint',
+  'project-delivery': 'project-delivery'
 };
 
 const PROBLEM_SHORTCUTS = ADVISORY_DESKS.map(({ id, shortLabel, summary, Icon }) => ({
