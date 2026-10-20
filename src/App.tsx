@@ -356,7 +356,7 @@ export default function App() {
               ['contact', 'Contact']
             ].map(([tab, label]) => (
               <button
-                key={tab}
+                key={tab + '-' + label}
                 type="button"
                 onClick={() => { setActiveTab(tab); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
                 className={`px-1 xl:px-1.5 py-2 rounded-lg text-[14px] xl:text-[15px] leading-tight whitespace-nowrap text-black transition-colors hover:bg-slate-100 ${activeTab === tab ? 'text-black bg-slate-100' : 'text-black'}`}
@@ -391,7 +391,7 @@ export default function App() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {[
                 ['home', 'Home'],
-                ['services', 'Services'],
+                ['home', 'Services in Financial Genie'],
                                 ['about', 'About'],
                 ['contact', 'Contact']
               ].map(([tab, label]) => (
