@@ -41,8 +41,10 @@ assert(genie.includes("fetch('/api/bot/chat'") && genie.includes('chatBusy'), 'F
 assert(genie.includes('genie-services') && genie.includes('Browse all services in Genie'), 'Service discovery remains inside Financial Genie');
 assert(genie.includes('View full scope') && genie.includes('Request a scoped proposal'), 'Financial Genie has clear clickable next steps');
 assert(services.includes('Risk Management & Assurance Review') && services.includes('Controls & Fraud-Prevention Snapshot'), 'risk product deliverables are published');
-assert(server.includes('Risk Management & Assurance Review') && server.includes('Growth & Governance Sprint'), 'live advisory API uses the six starter offers');
+assert(server.includes('Risk Management & Assurance Review') && server.includes('Growth & Governance Sprint') && server.includes('Strategy & Market Growth Sprint') && server.includes('Project Delivery & Recovery Review'), 'live advisory API uses the eight scoped starter offers');
 assert(services.includes('Lender & Funding Readiness Check') && services.includes('Growth & Governance Sprint'), 'funding and governance products are published');
+assert(services.includes('Strategy & Market Growth Sprint') && services.includes('Project Delivery & Recovery Review'), 'strategy and project delivery offers are published');
+assert(genie.includes('I need a growth strategy') && genie.includes('My project is delayed or over budget'), 'Financial Genie offers clickable strategy and project discovery prompts');
 assert(env.includes('NAVIGALEX_DATA_DIR') && env.includes('RESEND_API_KEY') && env.includes('ADMIN_PASSWORD'), 'environment template documents production config');
 assert(ignore.includes('data/'), 'runtime data directory is excluded from Git');
 assert(railway.includes('healthcheckPath = "/api/health"'), 'Railway checks API health');
