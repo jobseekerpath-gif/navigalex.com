@@ -189,6 +189,8 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
   const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
   const [route, setRoute] = useState<RouteChoice | null>(null);
   const [chatInput, setChatInput] = useState('');
+  const [chatBusy, setChatBusy] = useState(false);
+  const [chatError, setChatError] = useState('');
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
     {
       id: 'welcome',
@@ -209,41 +211,50 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
     setScreen('context');
   };
 
-  const sendChatMessage = (rawMessage: string) => {
+  const sendChatMessage = async (rawMessage: string) => {
     const text = rawMessage.trim();
-    if (!text) return;
-
-    const match = matchServiceFromMessage(text);
-    const reply: ChatMessage = match
-      ? {
-          id: 'assistant-' + Date.now(),
-          role: 'assistant',
-          text: 'Based on that, ' + match.title + ' looks like the best starting point. I can show the scope, deliverables and the next step.',
-          suggestedServiceId: match.id,
-          suggestedPrompts: match.id === 'financial-clarity'
-            ? ['Build a 13-week cash-flow forecast', 'Find the biggest cash leak', 'Make a 30-day action plan']
-            : match.id === 'contract-collections'
-              ? ['Prioritise overdue invoices', 'Review customer payment terms', 'Create a collections tracker']
-              : match.id === 'risk-assurance'
-                ? ['Create a business risk register', 'Prioritise compliance gaps', 'Review vendor and cyber risks']
-                : match.id === 'controls-fraud'
-                  ? ['Review payment approvals', 'Find process control gaps', 'Build a fraud-prevention checklist']
-                  : match.id === 'funding-readiness'
-                    ? ['Check lender readiness', 'Estimate debt-service coverage', 'Prepare a lender document list']
-                    : ['Set 90-day priorities', 'Clarify team responsibilities', 'Build a simple performance dashboard']
-        }
-      : {
-          id: 'assistant-' + Date.now(),
-          role: 'assistant',
-          text: 'I can help with cash flow, delayed payments, business risks, process controls, funding and growth decisions. Choose a quick option below, or describe the problem in a few more words.'
-        };
-
-    setChatMessages((messages) => [
-      ...messages,
-      { id: 'user-' + Date.now(), role: 'user', text },
-      reply
-    ]);
+    if (!text || chatBusy) return;
     setChatInput('');
+    setChatError('');
+    setChatBusy(true);
+    const userMessage: ChatMessage = { id: 'user-' + Date.now(), role: 'user', text };
+    setChatMessages((messages) => [...messages, userMessage]);
+    try {
+      const response = await fetch('/api/bot/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text, history: chatMessages.slice(-8), visitorId: 'financial-genie' })
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok || payload.success !== true || typeof payload.reply !== 'string') {
+        throw new Error(payload.error || 'The advisory assistant is temporarily unavailable. Please use a service card or request a scoped proposal.');
+      }
+      const match = matchServiceFromMessage(text);
+      const prompts = match?.id === 'financial-clarity'
+        ? ['Build a 13-week cash-flow forecast', 'Find the biggest cash leak', 'Make a 30-day action plan']
+        : match?.id === 'contract-collections'
+          ? ['Prioritise overdue invoices', 'Review customer payment terms', 'Create a collections tracker']
+          : match?.id === 'risk-assurance'
+            ? ['Create a business risk register', 'Prioritise compliance gaps', 'Review vendor and cyber risks']
+            : match?.id === 'controls-fraud'
+              ? ['Review payment approvals', 'Find process control gaps', 'Build a fraud-prevention checklist']
+              : match?.id === 'funding-readiness'
+                ? ['Check lender readiness', 'Estimate debt-service coverage', 'Prepare a lender document list']
+                : match?.id === 'growth-governance'
+                  ? ['Set 90-day priorities', 'Clarify team responsibilities', 'Build a simple performance dashboard']
+                  : ['What information do you need from me?', 'Explain costs and deliverables', 'Help me choose a solution'];
+      setChatMessages((messages) => [...messages, {
+        id: 'assistant-' + Date.now(),
+        role: 'assistant',
+        text: payload.reply,
+        suggestedServiceId: match?.id,
+        suggestedPrompts: prompts
+      }]);
+    } catch (error) {
+      setChatError(error instanceof Error ? error.message : 'Could not reach the advisory assistant. Please try again.');
+    } finally {
+      setChatBusy(false);
+    }
   };
 
   const reset = () => {
@@ -272,7 +283,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
   };
 
   return (
-    <section className="relative mx-auto w-full max-w-3xl px-2 pb-6 pt-3 sm:px-4 sm:pt-4">
+    <section className="relative mx-auto w-full max-w-5xl px-2 pb-6 pt-3 sm:px-4 sm:pt-4">
       <div className="overflow-hidden rounded-2xl border border-[#244bd7]/25 bg-white shadow-[0_12px_36px_rgba(30,64,175,0.12)]">
         <header className="relative overflow-hidden bg-gradient-to-br from-[#0d1c48] via-[#1f4fff] to-[#27419d] px-4 py-4 text-white sm:px-6 sm:py-5">
           <div className="absolute -right-16 -top-20 h-60 w-60 rounded-full bg-white/10 blur-2xl" aria-hidden="true" />
@@ -342,7 +353,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                       {message.suggestedPrompts && (
                         <div className="mt-3 flex flex-wrap gap-2" aria-label="Suggested next questions">
                           {message.suggestedPrompts.map((prompt) => (
-                            <button key={prompt} type="button" onClick={() => sendChatMessage(prompt)} className="min-h-10 rounded-xl border border-blue-200 bg-white px-3 py-2 text-left text-xs font-bold text-[#1f4fff] hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1f4fff]">{prompt} <ArrowRight className="ml-1 inline h-3 w-3" /></button>
+                            <button key={prompt} type="button" onClick={() => sendChatMessage(prompt)} disabled={chatBusy} className="min-h-10 rounded-xl border border-blue-200 bg-white px-3 py-2 text-left text-xs font-bold text-[#1f4fff] hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1f4fff]">{prompt} <ArrowRight className="ml-1 inline h-3 w-3" /></button>
                           ))}
                         </div>
                       )}
@@ -359,10 +370,12 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                   ))}
                 </div>
 
+                {chatBusy && <p className="px-4 py-2 text-xs font-semibold text-slate-600" role="status">Financial Genie is preparing a response…</p>}
+                {chatError && <div className="mx-3 my-2 rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900" role="alert">{chatError} <button type="button" className="ml-2 font-bold underline" onClick={() => sendChatMessage(chatMessages.filter((m) => m.role === "user").slice(-1)[0]?.text || chatInput)}>Retry</button></div>}
                 <div className="border-t border-slate-200 bg-slate-50 p-3 sm:p-4">
                   <div className="mb-3 flex flex-wrap gap-2">
                     {CHAT_PROMPTS.map((prompt) => (
-                      <button key={prompt} type="button" onClick={() => sendChatMessage(prompt)} className="min-h-9 rounded-full border border-blue-200 bg-white px-3 py-1.5 text-xs font-bold text-[#1f4fff] hover:bg-blue-50">
+                      <button key={prompt} type="button" onClick={() => sendChatMessage(prompt)} disabled={chatBusy} className="min-h-9 rounded-full border border-blue-200 bg-white px-3 py-1.5 text-xs font-bold text-[#1f4fff] hover:bg-blue-50">
                         {prompt}
                       </button>
                     ))}
@@ -376,7 +389,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                       placeholder="For example: customers are paying us late"
                       className="min-h-11 min-w-0 flex-1 rounded-xl border border-slate-300 bg-white px-3 text-sm text-slate-950 outline-none placeholder:text-slate-400 focus:border-[#1f4fff] focus:ring-2 focus:ring-blue-100"
                     />
-                    <button type="submit" className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-xl bg-[#1f4fff] px-3 text-sm font-extrabold text-white hover:bg-[#183bc4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1f4fff]">
+                    <button type="submit" disabled={chatBusy || !chatInput.trim()} className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-xl bg-[#1f4fff] px-3 text-sm font-extrabold text-white hover:bg-[#183bc4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1f4fff]">
                       <Send className="h-4 w-4" /><span className="hidden sm:inline">Send</span>
                     </button>
                   </form>
@@ -411,11 +424,11 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                   <MessageCircle className="mt-0.5 h-5 w-5 shrink-0 text-[#1f4fff]" />
                   <div>
                     <p className="font-bold text-slate-900">Not sure what matters most?</p>
-                    <p className="mt-1 text-sm text-slate-600">Browse every service or ask us to help you choose a starting point.</p>
+                    <p className="mt-1 text-sm text-slate-600">Choose one of the six fixed-scope advisory reviews below, or ask Financial Genie to guide you.</p>
                   </div>
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  <button type="button" onClick={openAllServices} className="min-h-11 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-bold text-slate-800 hover:bg-slate-100">Browse all services</button>
+                  <button type="button" onClick={openAllServices} className="min-h-11 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-bold text-slate-800 hover:bg-slate-100">Browse all services in Genie</button>
                   <button type="button" onClick={() => onOpenAssessment('Help me choose the right Navigalex service')} className="min-h-11 rounded-xl bg-[#1f4fff] px-4 py-2.5 text-sm font-bold text-white hover:bg-[#183bc4]">Help me choose</button>
                 </div>
               </div>
