@@ -4,7 +4,7 @@ import {
   ChartNoAxesCombined, Clock3, FileText, Landmark, Search, ShieldCheck, Users, Wallet, Workflow
 } from 'lucide-react';
 
-type Pillar = 'finance' | 'risk' | 'governance';
+type Pillar = 'finance' | 'risk' | 'governance' | 'strategy' | 'project' | 'technology';
 type Service = {
   id: string;
   pillar: Pillar;
@@ -232,6 +232,64 @@ export const ADVISORY_DESKS: Service[] = [
     exclusions: 'No guarantee of delivery outcomes or independent assurance opinion. Large programme PMO and specialist delivery require confirmed capacity.',
     Icon: Workflow
   },
+
+  {
+    id: 'strategy-growth-sprint',
+    pillar: 'strategy',
+    pillarLabel: 'Strategy & Business Growth',
+    title: 'Strategy & Market Growth Sprint',
+    badge: 'Growth decisions',
+    shortLabel: 'Choose a growth direction',
+    tagline: 'Compare realistic growth options and decide what to test first.',
+    summary: 'A bounded strategy engagement for one decision about a market, product, channel or growth priority, using evidence and assumptions supplied or agreed with the client.',
+    idealFor: 'Owner-led businesses deciding where to focus limited time and investment.',
+    outcomes: ['A clearly framed decision and success measures', 'A comparison of up to three strategic options and their key assumptions', 'A prioritised 90-day roadmap with decision gates'],
+    deliverables: ['Decision brief and assumptions register', 'Options comparison with opportunities, risks and information gaps', '90-day action roadmap and one findings session'],
+    clientInputs: 'Business goals, current performance information where available, customer/market evidence already held, and access to the decision maker.',
+    timeframe: 'Typically 7–10 working days after complete inputs',
+    engagement: 'One defined strategic question, up to three options, one review round and a practical roadmap.',
+    price: 'Fixed quote after a short scoping call',
+    exclusions: 'Does not include independently commissioned market research, legal or tax advice, M&A due diligence, investment advice or guaranteed commercial outcomes.',
+    Icon: ChartNoAxesCombined
+  },
+  {
+    id: 'project-delivery-review',
+    pillar: 'project',
+    pillarLabel: 'Project Management & Delivery',
+    title: 'Project Delivery & Recovery Review',
+    badge: 'Delivery health',
+    shortLabel: 'Project is delayed or over budget',
+    tagline: 'Make project status, blockers and recovery decisions visible.',
+    summary: 'A focused review of one project’s plan, milestones, scope, budget assumptions, risks and dependencies, followed by a prioritised next-step plan.',
+    idealFor: 'Small teams or project sponsors facing missed milestones, unclear ownership or scope changes.',
+    outcomes: ['A concise view of schedule, scope, cost and delivery risks', 'A RAID log with owners and next actions', 'A practical recovery or next-phase plan'],
+    deliverables: ['Review of supplied project plan, status reports and budget assumptions', 'Milestone/dependency map and RAID register', 'Recovery actions, owners, dates and decision points', 'One review meeting'],
+    clientInputs: 'Current project plan, latest status report, milestone dates, budget assumptions, issue list and key stakeholder contacts.',
+    timeframe: 'Typically 5–10 working days after complete inputs',
+    engagement: 'One project with agreed evidence limits; this is a diagnostic review, not day-to-day project staffing.',
+    price: 'Fixed quote based on project size and complexity',
+    exclusions: 'Does not include project execution, engineering sign-off, independent statutory assurance or a guarantee that a project can be recovered.',
+    Icon: Workflow
+  },
+  {
+    id: 'digital-workflow-review',
+    pillar: 'technology',
+    pillarLabel: 'IT & Digital Operations',
+    title: 'Digital Workflow & Systems Review',
+    badge: 'Practical IT review',
+    shortLabel: 'Tools and processes do not work smoothly together',
+    tagline: 'Identify practical improvements to everyday digital workflows before investing in more software.',
+    summary: 'A non-invasive review of one business workflow and the tools used to run it, focused on handoffs, duplicated work, reporting gaps and low-risk automation opportunities.',
+    idealFor: 'Small businesses using spreadsheets, email and multiple SaaS tools to manage a recurring process.',
+    outcomes: ['A map of the current workflow and its friction points', 'Prioritised process and configuration improvements', 'A phased implementation brief with dependencies and risks'],
+    deliverables: ['One workflow discovery session', 'Current-state workflow map and issue list', 'Prioritised recommendations and a practical next-step brief'],
+    clientInputs: 'A description of the selected workflow, examples of relevant forms/reports, and access to the process owner. No passwords or production credentials are required.',
+    timeframe: 'Typically 5–7 working days after discovery',
+    engagement: 'Advisory review only, limited to one workflow and the information the client chooses to share.',
+    price: 'Fixed quote after a short scoping call',
+    exclusions: 'Not penetration testing, cybersecurity certification, ITGC assurance, software development, managed IT support, vendor certification or a guarantee of security. Implementation is separately scoped.',
+    Icon: Workflow
+  },
 ];
 
 const SERVICE_HANDOFFS: Record<string, string> = {
@@ -339,7 +397,7 @@ export default function ServicesPage({ onInquiry }: ServicesPageProps) {
           </div>
           {recommendedId && (
             <button type="button" onClick={showAllServices} className="self-start text-sm font-semibold text-[#1f4fff] underline underline-offset-2">
-              Show all eight services
+              Show all eleven services
             </button>
           )}
         </div>
@@ -411,7 +469,7 @@ export default function ServicesPage({ onInquiry }: ServicesPageProps) {
       </div>
 
       <p className="text-sm text-slate-600" aria-live="polite">
-        {recommendedId ? 'Showing the starting service closest to the selected business problem.' : 'Showing all six starting services.'}
+        {recommendedId ? 'Showing the starting service closest to the selected business problem.' : 'Showing all eleven starting services.'}
       </p>
 
       <div id="service-results" className="grid grid-cols-1 gap-6 lg:grid-cols-2">
