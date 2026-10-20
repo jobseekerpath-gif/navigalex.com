@@ -335,11 +335,11 @@ export default function ServicesPage({ onInquiry }: ServicesPageProps) {
         <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <h3 id="problem-shortcuts-heading" className="text-lg font-bold text-slate-950">What do you need help with?</h3>
-            <p className="text-sm text-slate-600">Choose one to see the closest productised starting service. You can change it or browse all six.</p>
+            <p className="text-sm text-slate-600">Choose one to see the closest productised starting service. You can change it or browse all eight.</p>
           </div>
           {recommendedId && (
             <button type="button" onClick={showAllServices} className="self-start text-sm font-semibold text-[#1f4fff] underline underline-offset-2">
-              Show all six services
+              Show all eight services
             </button>
           )}
         </div>
