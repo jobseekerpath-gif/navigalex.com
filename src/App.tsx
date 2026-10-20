@@ -351,7 +351,7 @@ export default function App() {
           <nav className="hidden lg:flex min-w-0 overflow-hidden items-center justify-start gap-0.5 xl:gap-1 font-semibold" aria-label="Primary navigation">
             {[
               ['home', 'Home'],
-              ['services', 'Services'],
+              ['home', 'Financial Genie'],
                             ['about', 'About'],
               ['contact', 'Contact']
             ].map(([tab, label]) => (
