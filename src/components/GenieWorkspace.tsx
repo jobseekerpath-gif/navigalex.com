@@ -124,6 +124,28 @@ const SERVICES: Service[] = [
     concern: 'Growth & Governance Sprint — ownership, decisions and execution discipline',
     Icon: Users
   }
+  ,{
+    id: 'strategy-sprint',
+    title: 'Strategy & Market Growth Sprint',
+    pillar: 'Strategy & growth',
+    shortLabel: 'I need to choose a growth direction or new market',
+    description: 'Structure one important growth decision with explicit assumptions, options, risks and a short execution roadmap.',
+    bestFor: 'Owner-led businesses evaluating a new market, product, channel or a turnaround priority.',
+    deliverables: ['A decision brief defining the business question and success measures', 'A comparison of up to three strategic options using client-supplied evidence', 'A 90-day action roadmap with assumptions and decision gates'],
+    concern: 'Strategy & Market Growth Sprint — prioritise growth options and a practical 90-day plan',
+    Icon: ChartNoAxesCombined
+  },
+  {
+    id: 'project-delivery',
+    title: 'Project Delivery & Recovery Review',
+    pillar: 'Project management',
+    shortLabel: 'A project is delayed, over budget or unclear',
+    description: 'Make delivery status, dependencies, risks and next decisions visible for one defined project.',
+    bestFor: 'Small teams managing a project with missed milestones, unclear ownership or changing scope.',
+    deliverables: ['A review of the current plan, milestones, budget assumptions and dependencies', 'A concise RAID log covering risks, assumptions, issues and dependencies', 'A recovery or next-phase plan with owners, dates and decision points'],
+    concern: 'Project Delivery & Recovery Review — assess project health and reset next actions',
+    Icon: Workflow
+  }
 ];
 
 const ROUTE_CHOICES: Array<{ id: RouteChoice; title: string; detail: string }> = [
@@ -156,7 +178,9 @@ const CHAT_PROMPTS = [
   'I am worried about business risks',
   'I need funding or a loan',
   'A process feels unsafe',
-  'Growth decisions are unclear'
+  'Growth decisions are unclear',
+  'I need a growth strategy',
+  'My project is delayed or over budget'
 ];
 
 function matchServiceFromMessage(message: string): Service | null {
@@ -174,6 +198,8 @@ function matchServiceFromMessage(message: string): Service | null {
   if (/(risk|compliance|incident|assurance|reputation)/.test(value)) {
     return SERVICES.find((service) => service.id === 'risk-assurance') ?? null;
   }
+  if (/(project|milestone|delivery|over budget|delayed|dependency|pmo|project management)/.test(value)) { return SERVICES.find((service) => service.id === 'project-delivery') ?? null; }
+  if (/(strategy|market entry|new market|turnaround|portfolio|competitive|growth plan)/.test(value)) { return SERVICES.find((service) => service.id === 'strategy-sprint') ?? null; }
   if (/(growth|team|owner|ownership|governance|decision|accountability)/.test(value)) {
     return SERVICES.find((service) => service.id === 'growth-governance') ?? null;
   }
@@ -242,7 +268,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                 ? ['Check lender readiness', 'Estimate debt-service coverage', 'Prepare a lender document list']
                 : match?.id === 'growth-governance'
                   ? ['Set 90-day priorities', 'Clarify team responsibilities', 'Build a simple performance dashboard']
-                  : ['What information do you need from me?', 'Explain costs and deliverables', 'Help me choose a solution'];
+                  : match?.id === 'strategy-sprint' ? ['Compare three growth options', 'Build a 90-day strategy roadmap', 'List assumptions to validate'] : match?.id === 'project-delivery' ? ['Review project milestones', 'Create a RAID log', 'Build a recovery plan'] : ['What information do you need from me?', 'Explain costs and deliverables', 'Help me choose a solution'];
       setChatMessages((messages) => [...messages, {
         id: 'assistant-' + Date.now(),
         role: 'assistant',
