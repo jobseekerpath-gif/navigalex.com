@@ -37,8 +37,11 @@ assert(page.includes('/api/assessments/run'), 'business assessment is wired to A
 assert(page.includes('/api/cibil-scan'), 'financial scanner is wired to API');
 assert(app.includes('/api/inquiries/submit') && app.includes('leadSubmitError'), 'contact form surfaces API failures');
 assert(genie.includes('Financial Genie') && genie.includes('Recommended starting point'), 'Financial Genie offers a guided service path');
+assert(genie.includes("fetch('/api/bot/chat'") && genie.includes('chatBusy'), 'Financial Genie uses the live advisory API and exposes loading state');
+assert(genie.includes('genie-services') && genie.includes('Browse all services in Genie'), 'Service discovery remains inside Financial Genie');
 assert(genie.includes('View full scope') && genie.includes('Request a scoped proposal'), 'Financial Genie has clear clickable next steps');
 assert(services.includes('Risk Management & Assurance Review') && services.includes('Controls & Fraud-Prevention Snapshot'), 'risk product deliverables are published');
+assert(server.includes('Risk Management & Assurance Review') && server.includes('Growth & Governance Sprint'), 'live advisory API uses the six starter offers');
 assert(services.includes('Lender & Funding Readiness Check') && services.includes('Growth & Governance Sprint'), 'funding and governance products are published');
 assert(env.includes('NAVIGALEX_DATA_DIR') && env.includes('RESEND_API_KEY') && env.includes('ADMIN_PASSWORD'), 'environment template documents production config');
 assert(ignore.includes('data/'), 'runtime data directory is excluded from Git');
