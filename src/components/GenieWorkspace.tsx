@@ -264,8 +264,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
   };
 
   const openAllServices = () => {
-    window.history.pushState(null, '', '/services');
-    onNavigateTab('services');
+    document.getElementById('genie-services')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   const openScope = () => {
