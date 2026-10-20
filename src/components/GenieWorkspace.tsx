@@ -124,7 +124,8 @@ const SERVICES: Service[] = [
     concern: 'Growth & Governance Sprint — ownership, decisions and execution discipline',
     Icon: Users
   }
-  ,{
+  },
+  {
     id: 'strategy-sprint',
     title: 'Strategy & Market Growth Sprint',
     pillar: 'Strategy & growth',
