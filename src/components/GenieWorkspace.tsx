@@ -123,7 +123,6 @@ const SERVICES: Service[] = [
     ],
     concern: 'Growth & Governance Sprint — ownership, decisions and execution discipline',
     Icon: Users
-  }
   },
   {
     id: 'strategy-sprint',
@@ -147,6 +146,18 @@ const SERVICES: Service[] = [
     concern: 'Project Delivery & Recovery Review — assess project health and reset next actions',
     Icon: Workflow
   }
+
+  {
+    id: 'digital-workflow-review',
+    title: 'Digital Workflow & Systems Review',
+    pillar: 'IT & digital operations',
+    shortLabel: 'My software and everyday processes do not work smoothly together',
+    description: 'Review one business workflow and its tools to identify duplicated work, handoff problems and practical improvements.',
+    bestFor: 'Small teams relying on spreadsheets, email and multiple SaaS tools for recurring work.',
+    deliverables: ['A current-state workflow map and friction-point list', 'Prioritised process and configuration improvements', 'A phased next-step brief with dependencies and risks'],
+    concern: 'Digital Workflow & Systems Review — improve one business workflow and its tools',
+    Icon: Workflow
+  },
 ];
 
 const ROUTE_CHOICES: Array<{ id: RouteChoice; title: string; detail: string }> = [
