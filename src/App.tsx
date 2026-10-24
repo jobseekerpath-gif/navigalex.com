@@ -316,11 +316,9 @@ export default function App() {
       <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-white text-slate-600 text-sm">Loading Navigalex Admin…</div>}>
       <> 
         <AdminPanel onBackToSite={() => {
-          if (typeof window !== 'undefined' && window.location.pathname.toLowerCase() === '/admin') {
-            window.history.pushState(null, '', '/');
-          }
+          window.history.pushState(null, '', '/');
           setActiveTab('home');
-          window.scrollTo({ top: 0, behavior: 'smooth' });
+          window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
         }} />
         {/* Financial Genie is the single advisory entry point. */}
       </>
