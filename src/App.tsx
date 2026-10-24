@@ -12,19 +12,25 @@ import {
   Upload, File, RefreshCw, AlertCircle, TrendingUp, Landmark, MapPin, MessageCircle
 } from 'lucide-react';
 
-export default function App() {
-  // Check if URL is /admin or ?admin=true
-  const getInitialTab = () => {
-    if (typeof window !== 'undefined') {
-      const p = window.location.pathname.toLowerCase();
-      if (p === '/admin' || p.startsWith('/admin') || window.location.search.includes('admin') || window.location.hash.includes('admin')) {
-        return 'admin';
-      }
-    }
-    return 'home';
-  };
+function resolveActiveTabFromLocation() {
+  if (typeof window === 'undefined') return 'home';
+  const pathname = window.location.pathname.toLowerCase();
+  const search = new URLSearchParams(window.location.search);
+  if (pathname === '/admin' || pathname.startsWith('/admin') || search.has('admin') || window.location.hash.includes('admin')) return 'admin';
+  if (pathname === '/services' || pathname.startsWith('/services') || search.has('persona')) return 'services';
+  if (pathname === '/family-office' || pathname.startsWith('/family-office')) return 'family-office';
+  if (pathname === '/43b-h-check' || pathname.startsWith('/43b-h-check')) return '43b-h-check';
+  if (pathname === '/live-tools' || pathname.startsWith('/live-tools')) return 'live-tools';
+  if (pathname === '/about' || pathname.startsWith('/about')) return 'about';
+  if (pathname === '/contact' || pathname.startsWith('/contact')) return 'contact';
+  if (pathname === '/industries' || pathname.startsWith('/industries')) return 'industries';
+  if (pathname === '/how-it-works' || pathname.startsWith('/how-it-works')) return 'how-it-works';
+  if (pathname === '/why-pick-us' || pathname.startsWith('/why-pick-us')) return 'why-pick-us';
+  return 'home';
+}
 
-  const [activeTab, setActiveTab] = useState(getInitialTab);
+export default function App() {
+  const [activeTab, setActiveTab] = useState(resolveActiveTabFromLocation);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
 
@@ -43,26 +49,12 @@ export default function App() {
     return generatedId;
   });
 
-  // Sync with browser back/forward and URL navigation
+  // Sync direct links and browser Back/Forward with the visible app page.
   useEffect(() => {
-    const handleLocationChange = () => {
-      const p = window.location.pathname.toLowerCase();
-      if (p === '/43b-h-check' || p.startsWith('/43b-h-check')) {
-        setActiveTab('43b-h-check');
-      } else if (p === '/family-office' || p.startsWith('/family-office')) {
-        setActiveTab('family-office');
-      } else if (p === '/services' || p.startsWith('/services') || new URLSearchParams(window.location.search).has('persona')) {
-        setActiveTab('services');
-      } else if (p === '/admin' || p.startsWith('/admin') || window.location.search.includes('admin') || window.location.hash.includes('admin')) {
-        setActiveTab('admin');
-      } else if (activeTab === 'admin' || activeTab === 'family-office' || activeTab === 'services') {
-        setActiveTab('home');
-      }
-    };
-
+    const handleLocationChange = () => setActiveTab(resolveActiveTabFromLocation());
     window.addEventListener('popstate', handleLocationChange);
     return () => window.removeEventListener('popstate', handleLocationChange);
-  }, [activeTab]);
+  }, []);
 
   // Always reset the document scroll position after the destination tab has rendered.
   useEffect(() => {
