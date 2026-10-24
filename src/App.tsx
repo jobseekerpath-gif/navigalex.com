@@ -880,42 +880,6 @@ export default function App() {
           </div>
 
           <div>
-            <h4 className="font-bold uppercase tracking-wider text-white mb-4">Navigalex Services</h4>
-            <ul className="space-y-3 text-slate-400">
-              <li><button onClick={() => { setActiveTab('services'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="text-left hover:text-white">Financial Clarity Check <span className="block text-slate-500">Cash flow, costs and credit readiness</span></button></li>
-              <li><button onClick={() => { setActiveTab('services'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="text-left hover:text-white">Contract & Collections Review <span className="block text-slate-500">Payment delays and key contract risks</span></button></li>
-              <li><button onClick={() => { setActiveTab('services'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="text-left hover:text-white">Risk Management & Risk Assurance <span className="block text-slate-500">Enterprise, operational, regulatory and third-party risks</span></button></li>
-              <li><button onClick={() => { setActiveTab('services'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="text-left hover:text-white">Controls & Compliance Snapshot <span className="block text-slate-500">Priority process gaps and next steps</span></button></li>
-              <li><button onClick={() => { setActiveTab('services'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="text-left hover:text-white">Finance & Funding Readiness <span className="block text-slate-500">Forecasting, financial modelling and lender preparation</span></button></li>
-              <li><button onClick={() => { setActiveTab('services'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="text-left hover:text-white">Strategy & Growth <span className="block text-slate-500">Market entry, transformation and performance improvement</span></button></li>
-              <li><button onClick={() => { setActiveTab('services'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="text-left hover:text-white">Project Management & Recovery <span className="block text-slate-500">Delivery, PMO, budgets, dependencies and turnaround</span></button></li>
-              <li><button onClick={() => { setActiveTab('services'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="text-left hover:text-white">IT & Digital Operations <span className="block text-slate-500">Systems workflows, IT controls, cybersecurity and vendor risks</span></button></li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="font-bold uppercase tracking-wider text-white mb-4">Live Assessments & Guides</h4>
-            <ul className="space-y-2.5 text-slate-400">
-              <li>
-                <button 
-                  onClick={() => { setActiveTab('live-tools'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} 
-                  className="hover:text-white transition-colors cursor-pointer text-left"
-                >
-                  Contract Risk Scanner (Live)
-                </button>
-              </li>
-              <li>
-                <button 
-                  onClick={() => { setActiveTab('live-tools'); window.scrollTo({ top: 600, behavior: 'smooth' }); }} 
-                  className="hover:text-white transition-colors cursor-pointer text-left"
-                >
-                  Bank DSCR Scanner (Live)
-                </button>
-              </li>
-              </ul>
-          </div>
-
-          <div>
             <h4 className="font-bold uppercase tracking-wider text-white mb-4">Legal & Privacy</h4>
             <ul className="space-y-2.5 text-slate-400">
               <li>
