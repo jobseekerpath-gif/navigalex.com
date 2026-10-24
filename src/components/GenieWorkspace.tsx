@@ -375,7 +375,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
 
               <div className="min-w-0">
               <section aria-label="Financial Genie chat" className="overflow-hidden rounded-2xl border border-blue-200 bg-slate-50 shadow-sm">
-                <div className="flex items-center gap-3 bg-[#0d1c48] px-4 py-3 text-white">
+                <div className="flex items-center gap-3 bg-gradient-to-r from-teal-800 via-cyan-800 to-indigo-800 px-4 py-3 text-white">
                   <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/15"><MessageCircle className="h-5 w-5" /></span>
                   <div>
                     <p className="text-sm font-extrabold">Chat with Financial Genie</p>
@@ -409,27 +409,33 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
 
                 {chatBusy && <p className="px-4 py-2 text-xs font-semibold text-slate-600" role="status">Financial Genie is preparing a response…</p>}
                 {chatError && <div className="mx-3 my-2 rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900" role="alert">{chatError} <button type="button" className="ml-2 font-bold underline" onClick={() => sendChatMessage(chatMessages.filter((m) => m.role === "user").slice(-1)[0]?.text || chatInput)}>Retry</button></div>}
-                <div className="border-t border-slate-200 bg-slate-50 p-3 sm:p-4">
+                <div className="border-t border-teal-100 bg-teal-50/70 p-3 sm:p-4">
                   <div className="mb-3 flex flex-wrap gap-2">
                     {CHAT_PROMPTS.map((prompt) => (
-                      <button key={prompt} type="button" onClick={() => sendChatMessage(prompt)} disabled={chatBusy} className="min-h-9 rounded-full border border-blue-200 bg-white px-3 py-1.5 text-xs font-bold text-[#1f4fff] hover:bg-blue-50">
+                      <button key={prompt} type="button" onClick={() => sendChatMessage(prompt)} disabled={chatBusy} className="min-h-9 rounded-full border border-teal-200 bg-white px-3 py-1.5 text-xs font-bold text-teal-800 hover:bg-teal-50">
                         {prompt}
                       </button>
                     ))}
                   </div>
                   <form onSubmit={(event) => { event.preventDefault(); sendChatMessage(chatInput); }} className="flex gap-2">
                     <label className="sr-only" htmlFor="financial-genie-message">Describe your business problem</label>
-                    <input
+                    <textarea
                       id="financial-genie-message"
+                      rows={4}
                       value={chatInput}
                       onChange={(event) => setChatInput(event.target.value)}
-                      placeholder="For example: customers are paying us late"
-                      className="min-h-11 min-w-0 flex-1 rounded-xl border border-slate-300 bg-white px-3 text-sm text-slate-950 outline-none placeholder:text-slate-400 focus:border-[#1f4fff] focus:ring-2 focus:ring-blue-100"
+                      placeholder="Describe your business problem in detail..."
+                      className="h-44 min-h-44 min-w-0 flex-1 resize-y rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm text-slate-950 outline-none placeholder:text-slate-400 focus:border-teal-500 focus:ring-2 focus:ring-teal-100"
                     />
-                    <button type="submit" disabled={chatBusy || !chatInput.trim()} className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-xl bg-[#1f4fff] px-3 text-sm font-extrabold text-white hover:bg-[#183bc4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1f4fff]">
+                    <button type="submit" disabled={chatBusy || !chatInput.trim()} className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-xl bg-teal-700 px-4 text-sm font-extrabold text-white hover:bg-teal-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500">
                       <Send className="h-4 w-4" /><span className="hidden sm:inline">Send</span>
                     </button>
                   </form>
+                  <div className="mt-3 flex justify-end">
+                    <button type="button" onClick={openAllServices} className="min-h-10 rounded-xl border border-teal-300 bg-white px-4 py-2 text-xs font-bold text-teal-800 hover:bg-teal-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500">
+                      Browse all services in Genie <ArrowRight className="ml-1 inline h-3.5 w-3.5" />
+                    </button>
+                  </div>
                 </div>
               </section>
               </div>
