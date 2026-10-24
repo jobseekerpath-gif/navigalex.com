@@ -64,6 +64,22 @@ export default function App() {
     return () => window.removeEventListener('popstate', handleLocationChange);
   }, [activeTab]);
 
+  // Always reset the document scroll position after the destination tab has rendered.
+  useEffect(() => {
+    const scrollToTop = () => {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    };
+    scrollToTop();
+    const firstFrame = window.requestAnimationFrame(scrollToTop);
+    const timer = window.setTimeout(scrollToTop, 120);
+    return () => {
+      window.cancelAnimationFrame(firstFrame);
+      window.clearTimeout(timer);
+    };
+  }, [activeTab]);
+
   // Real-time visitor activity telemetry on route/tab change
   useEffect(() => {
     if (activeTab === 'admin') return;
