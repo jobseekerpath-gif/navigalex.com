@@ -374,7 +374,19 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
   const reset = () => {
     setSelectedServiceId(null);
     setRoute(null);
+    setChatInput('');
+    setChatError('');
+    setChatBusy(false);
+    setChatMessages([{
+      id: 'welcome-' + Date.now(),
+      role: 'assistant',
+      text: 'Choose a business problem. Financial Genie will recommend the right service, deliverables and next steps.'
+    }]);
     setScreen('start');
+    window.setTimeout(() => {
+      const chat = document.getElementById('financial-genie-chat');
+      if (chat) chat.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 0);
   };
 
   const openAllServices = () => {
