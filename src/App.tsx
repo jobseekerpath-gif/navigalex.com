@@ -17,15 +17,6 @@ export default function App() {
   const getInitialTab = () => {
     if (typeof window !== 'undefined') {
       const p = window.location.pathname.toLowerCase();
-      if (p === '/43b-h-check' || p.startsWith('/43b-h-check')) {
-        return '43b-h-check';
-      }
-      if (p === '/family-office' || p.startsWith('/family-office')) {
-        return 'family-office';
-      }
-      if (p === '/services' || p.startsWith('/services') || new URLSearchParams(window.location.search).has('persona')) {
-        return 'services';
-      }
       if (p === '/admin' || p.startsWith('/admin') || window.location.search.includes('admin') || window.location.hash.includes('admin')) {
         return 'admin';
       }
