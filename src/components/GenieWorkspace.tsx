@@ -366,10 +366,6 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
           {screen === 'start' && (
             <div className="space-y-4">
               <div className="max-w-3xl space-y-2">
-                <span className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1.5 text-xs font-bold text-[#1f4fff]">
-                  <Sparkles className="h-3.5 w-3.5" />
-                  No jargon. No documents needed to begin.
-                </span>
                 <h2 className="text-2xl font-extrabold tracking-tight text-slate-950 sm:text-3xl">What would you like to fix first?</h2>
                 <p className="text-sm leading-relaxed text-slate-600 sm:text-base">Pick the statement closest to your situation. You can change it at any time.</p>
               </div>
