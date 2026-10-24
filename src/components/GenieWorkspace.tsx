@@ -259,6 +259,25 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
     setScreen('context');
   };
 
+  const handleServiceChoice = (title: string) => {
+    const normalized = title.toLowerCase();
+    const serviceId =
+      normalized.includes('financial clarity') ? 'financial-clarity' :
+      normalized.includes('contract') || normalized.includes('collections') ? 'contract-collections' :
+      normalized.includes('risk management') ? 'risk-assurance' :
+      normalized.includes('controls') || normalized.includes('compliance') ? 'controls-fraud' :
+      normalized.includes('funding') || normalized.includes('finance & funding') ? 'funding-readiness' :
+      normalized.includes('strategy') || normalized.includes('market growth') ? 'strategy-sprint' :
+      normalized.includes('project') || normalized.includes('recovery') ? 'project-delivery' :
+      normalized.includes('digital') || normalized.includes('systems') || normalized.includes('it &') ? 'digital-workflow-review' :
+      normalized.includes('growth') || normalized.includes('governance') ? 'growth-governance' : null;
+    if (serviceId) {
+      chooseService(serviceId);
+      return;
+    }
+    setChatError('Choose one of the advisory services or open a live assessment below.');
+  };
+
   const sendChatMessage = async (rawMessage: string) => {
     const text = rawMessage.trim();
     if (!text || chatBusy) return;
@@ -425,7 +444,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                       ['Project Management & Recovery','Delivery, PMO, budgets, dependencies and turnaround'],
                       ['IT & Digital Operations','Systems workflows, IT controls, cybersecurity and vendor risks']
                     ].map(([title, detail]) => (
-                      <button key={title} type="button" disabled={chatBusy} onClick={() => chooseChatOption(title + ': ' + detail)} className="flex min-h-24 items-center justify-between gap-2 rounded-xl border border-blue-100 bg-white p-3 text-left text-slate-950 shadow-sm transition hover:bg-blue-50 disabled:opacity-60">
+                      <button key={title} type="button" disabled={chatBusy} onClick={() => handleServiceChoice(title)} className="flex min-h-24 items-center justify-between gap-2 rounded-xl border border-blue-100 bg-white p-3 text-left text-slate-950 shadow-sm transition hover:bg-blue-50 disabled:opacity-60">
                         <span><span className="block text-sm font-extrabold">{title}</span><span className="mt-1 block text-xs leading-relaxed text-slate-600">{detail}</span></span>
                         <ChevronRight className="h-4 w-4 shrink-0 text-blue-700" />
                       </button>
@@ -436,7 +455,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                   <h3 className="mb-2 text-base font-bold">Live Assessments &amp; Guides</h3>
                   <div className="grid gap-2">
                     {['Contract Risk Scanner','Bank DSCR Scanner'].map((title) => (
-                      <button key={title} type="button" disabled={chatBusy} onClick={() => chooseChatOption('Help me use the ' + title)} className="flex items-center justify-between rounded-xl bg-cyan-50 p-4 text-left text-slate-950 hover:bg-cyan-100 disabled:opacity-60">
+                      <button key={title} type="button" disabled={chatBusy} onClick={() => { onNavigateTab('live-tools'); }} className="flex items-center justify-between rounded-xl bg-cyan-50 p-4 text-left text-slate-950 hover:bg-cyan-100 disabled:opacity-60">
                         <span className="text-sm font-bold">{title} <span className="ml-2 rounded-full bg-emerald-200 px-2 py-1 text-xs text-emerald-900">Live</span></span>
                         <ChevronRight className="h-4 w-4 text-teal-700" />
                       </button>
