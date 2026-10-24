@@ -411,7 +411,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                 
                 
                 <p className="max-w-2xl text-[10px] leading-snug text-blue-50 sm:text-xs">
-                  Choose a business problem to see a recommended service, deliverables and next steps.
+                  Choose a business problem. Financial Genie will recommend the right service, deliverables and next steps.
                 </p>
               </div>
             </div>
