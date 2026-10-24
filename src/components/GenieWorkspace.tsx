@@ -436,16 +436,16 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
   return (
     <section className="relative mx-auto w-full max-w-7xl px-2 pb-6 pt-3 sm:px-4 sm:pt-4">
       <div className="overflow-hidden rounded-2xl border border-[#244bd7]/25 bg-white shadow-[0_12px_36px_rgba(30,64,175,0.12)]">
-        <header className="relative overflow-hidden bg-gradient-to-br from-[#0d1c48] via-[#1f4fff] to-[#27419d] px-3 py-1 text-white sm:px-4 sm:py-1.5">
-          <div className="absolute -right-12 -top-14 h-36 w-36 rounded-full bg-white/10 blur-2xl" aria-hidden="true" />
-          <div className="absolute -bottom-14 left-1/3 h-28 w-28 rounded-full bg-cyan-200/15 blur-3xl" aria-hidden="true" />
+        <header className="relative overflow-hidden border-b border-slate-200 bg-white px-3 py-1 text-slate-900 sm:px-4 sm:py-1.5">
+          
+          
           <div className="relative flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between">
             <div className="flex max-w-3xl items-start gap-1.5">
-              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-white text-xs font-black tracking-tight text-[#1f4fff] shadow-lg shadow-slate-950/15" aria-hidden="true">N</span>
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-blue-700 text-xs font-black tracking-tight text-white shadow-sm" aria-hidden="true">N</span>
               <div>
                 
                 
-                <p className="max-w-2xl text-[10px] leading-snug text-blue-50 sm:text-xs">
+                <p className="max-w-2xl text-[10px] leading-snug text-slate-600 sm:text-xs">
                   Choose a business problem. Financial Genie will recommend the right service, deliverables and next steps.
                 </p>
               </div>
@@ -454,7 +454,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
               <button
                 type="button"
                 onClick={reset}
-                className="inline-flex min-h-8 shrink-0 items-center justify-center gap-1.5 self-start rounded-lg border border-white/30 bg-white/10 px-2.5 py-1.5 text-xs font-bold text-white transition hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                className="inline-flex min-h-8 shrink-0 items-center justify-center gap-1.5 self-start rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-bold text-slate-700 transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
               >
                 <RotateCcw className="h-4 w-4" />
                 Start over
@@ -468,8 +468,8 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
               ['2', 'Set your goal'],
               ['3', 'See your next step']
             ].map(([number, label], index) => (
-              <div key={number} className={index + 1 <= step ? 'rounded-md bg-white/20 px-1.5 py-0.5 font-bold text-white' : 'rounded-md border border-white/15 bg-slate-950/10 px-1.5 py-0.5 text-blue-100'}>
-                <span className="mr-1 inline-flex h-4 w-4 items-center justify-center rounded-full bg-white/20 text-[8px]">{number}</span>
+              <div key={number} className={index + 1 <= step ? 'rounded-md border border-blue-200 bg-blue-50 px-1.5 py-0.5 font-bold text-blue-800' : 'rounded-md border border-slate-200 bg-slate-50 px-1.5 py-0.5 text-slate-600'}>
+                <span className="mr-1 inline-flex h-4 w-4 items-center justify-center rounded-full bg-blue-100 text-[8px] text-blue-800">{number}</span>
                 {label}
               </div>
             ))}
