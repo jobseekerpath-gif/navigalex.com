@@ -390,39 +390,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
               </div>
               <p className="text-lg font-bold lg:col-span-2">I will suggest the clearest starting service.</p>
               <div className="grid items-start gap-5 lg:col-span-2 lg:grid-cols-[minmax(0,1.05fr)_minmax(360px,.95fr)]">
-              <section id="financial-genie-chat" aria-label="Financial Genie chat" className="order-2 rounded-xl bg-white p-3 text-slate-900 lg:order-1">
-                <h3 className="mb-2 text-base font-bold">Navigalex Services</h3>
-                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                  {[
-                    ['Financial Clarity Check','Cash flow, costs and credit readiness'],
-                    ['Contract & Collections Review','Payment delays and key contract risks'],
-                    ['Risk Management & Risk Assurance','Enterprise, operational, regulatory and third-party risks'],
-                    ['Controls & Compliance Snapshot','Priority process gaps and next steps'],
-                    ['Finance & Funding Readiness','Forecasting, financial modelling and lender preparation'],
-                    ['Strategy & Growth','Market entry, transformation and performance improvement'],
-                    ['Project Management & Recovery','Delivery, PMO, budgets, dependencies and turnaround'],
-                    ['IT & Digital Operations','Systems workflows, IT controls, cybersecurity and vendor risks']
-                  ].map(([title, detail]) => (
-                    <button key={title} type="button" disabled={chatBusy} onClick={() => chooseChatOption(title + ': ' + detail)} className="flex min-h-28 items-center justify-between gap-2 rounded-xl border border-blue-100 bg-white p-3 text-left text-slate-950 shadow-sm transition hover:bg-blue-50 disabled:opacity-60">
-                      <span><span className="block text-sm font-extrabold">{title}</span><span className="mt-1 block text-xs leading-relaxed text-slate-600">{detail}</span></span>
-                      <ChevronRight className="h-4 w-4 shrink-0 text-blue-700" />
-                    </button>
-                  ))}
-                </div>
-              </section>
-              <section aria-label="Live Assessments and Guides">
-                <h3 className="mb-2 text-base font-bold">Live Assessments &amp; Guides</h3>
-                <div className="grid gap-2 sm:grid-cols-2">
-                  {['Contract Risk Scanner','Bank DSCR Scanner'].map((title) => (
-                    <button key={title} type="button" disabled={chatBusy} onClick={() => chooseChatOption('Help me use the ' + title)} className="flex items-center justify-between rounded-xl bg-cyan-50 p-4 text-left text-slate-950 hover:bg-cyan-100 disabled:opacity-60">
-                      <span className="text-sm font-bold">{title} <span className="ml-2 rounded-full bg-emerald-200 px-2 py-1 text-xs text-emerald-900">Live</span></span>
-                      <ChevronRight className="h-4 w-4 text-teal-700" />
-                    </button>
-                  ))}
-                </div>
-              </section>
-              <section aria-label="Navigalex Services and Live Assessments" className="order-1 space-y-4 lg:order-2">
-              <section aria-label="Navigalex Services">
+              <section id="financial-genie-chat" aria-label="Financial Genie chat" className="order-2 min-w-0 rounded-xl bg-white p-3 text-slate-900 lg:order-1">
                 <div className="max-h-72 min-h-20 space-y-3 overflow-y-auto p-2" aria-live="polite">
                   {chatMessages.map((message) => (
                     <div key={message.id} className={message.role === 'user' ? 'ml-auto max-w-[85%] rounded-xl bg-blue-700 p-3 text-sm text-white' : 'max-w-[85%] rounded-xl bg-slate-100 p-3 text-sm text-slate-800'}>
@@ -435,7 +403,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                 {chatBusy && <p role="status" className="p-2 text-xs">Financial Genie is preparing a response…</p>}
                 {chatError && <p role="alert" className="p-2 text-xs text-red-700">{chatError}</p>}
                 <div className="my-3 flex flex-wrap gap-2">
-                  {CHAT_PROMPTS.slice(0, 8).map(prompt => <button key={prompt} type="button" disabled={chatBusy} onClick={() => sendChatMessage(prompt)} className="rounded-full border border-blue-200 bg-blue-50 px-3 py-2 text-xs font-semibold text-blue-900 hover:bg-blue-100">{prompt}</button>)}
+                  {CHAT_PROMPTS.slice(0, 8).map(prompt => <button key={prompt} type="button" disabled={chatBusy} onClick={() => chooseChatOption(prompt)} className="rounded-full border border-blue-200 bg-blue-50 px-3 py-2 text-xs font-semibold text-blue-900 hover:bg-blue-100">{prompt}</button>)}
                 </div>
                 <form onSubmit={e => {e.preventDefault(); sendChatMessage(chatInput);}} className="space-y-2">
                   <label htmlFor="financial-genie-message" className="sr-only">Describe your business problem</label>
@@ -443,8 +411,39 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                   <div className="flex justify-end"><button type="submit" disabled={chatBusy || !chatInput.trim()} className="inline-flex items-center gap-2 rounded-full bg-blue-700 px-5 py-2 text-sm font-bold text-white disabled:opacity-50"><Send className="h-4 w-4" /> Send</button></div>
                 </form>
               </section>
+              <section aria-label="Navigalex Services and Live Assessments" className="order-1 min-w-0 space-y-4 lg:order-2">
+                <section aria-label="Navigalex Services">
+                  <h3 className="mb-2 text-base font-bold">Navigalex Services</h3>
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    {[
+                      ['Financial Clarity Check','Cash flow, costs and credit readiness'],
+                      ['Contract & Collections Review','Payment delays and key contract risks'],
+                      ['Risk Management & Risk Assurance','Enterprise, operational, regulatory and third-party risks'],
+                      ['Controls & Compliance Snapshot','Priority process gaps and next steps'],
+                      ['Finance & Funding Readiness','Forecasting, financial modelling and lender preparation'],
+                      ['Strategy & Growth','Market entry, transformation and performance improvement'],
+                      ['Project Management & Recovery','Delivery, PMO, budgets, dependencies and turnaround'],
+                      ['IT & Digital Operations','Systems workflows, IT controls, cybersecurity and vendor risks']
+                    ].map(([title, detail]) => (
+                      <button key={title} type="button" disabled={chatBusy} onClick={() => chooseChatOption(title + ': ' + detail)} className="flex min-h-24 items-center justify-between gap-2 rounded-xl border border-blue-100 bg-white p-3 text-left text-slate-950 shadow-sm transition hover:bg-blue-50 disabled:opacity-60">
+                        <span><span className="block text-sm font-extrabold">{title}</span><span className="mt-1 block text-xs leading-relaxed text-slate-600">{detail}</span></span>
+                        <ChevronRight className="h-4 w-4 shrink-0 text-blue-700" />
+                      </button>
+                    ))}
+                  </div>
+                </section>
+                <section aria-label="Live Assessments and Guides">
+                  <h3 className="mb-2 text-base font-bold">Live Assessments &amp; Guides</h3>
+                  <div className="grid gap-2">
+                    {['Contract Risk Scanner','Bank DSCR Scanner'].map((title) => (
+                      <button key={title} type="button" disabled={chatBusy} onClick={() => chooseChatOption('Help me use the ' + title)} className="flex items-center justify-between rounded-xl bg-cyan-50 p-4 text-left text-slate-950 hover:bg-cyan-100 disabled:opacity-60">
+                        <span className="text-sm font-bold">{title} <span className="ml-2 rounded-full bg-emerald-200 px-2 py-1 text-xs text-emerald-900">Live</span></span>
+                        <ChevronRight className="h-4 w-4 text-teal-700" />
+                      </button>
+                    ))}
+                  </div>
+                </section>
               </section>
-              </div>
             </div>
           )}
 
