@@ -387,8 +387,9 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                   <h2 className="text-2xl font-extrabold">Financial Genie</h2>
                 </div>
               </div>
-              <p className="text-lg font-bold">I will suggest the clearest starting service.</p>
-              <section aria-label="Navigalex Services">
+              <p className="text-lg font-bold lg:col-span-2">I will suggest the clearest starting service.</p>
+              <div className="grid items-start gap-5 lg:col-span-2 lg:grid-cols-[minmax(0,1.05fr)_minmax(360px,.95fr)]">
+              <section id="financial-genie-chat" aria-label="Financial Genie chat" className="order-2 rounded-xl bg-white p-3 text-slate-900 lg:order-1">
                 <h3 className="mb-2 text-base font-bold">Navigalex Services</h3>
                 <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                   {[
@@ -419,7 +420,8 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                   ))}
                 </div>
               </section>
-              <section id="financial-genie-chat" aria-label="Financial Genie chat" className="rounded-xl bg-white p-3 text-slate-900">
+              <section aria-label="Navigalex Services and Live Assessments" className="order-1 space-y-4 lg:order-2">
+              <section aria-label="Navigalex Services">
                 <div className="max-h-72 min-h-20 space-y-3 overflow-y-auto p-2" aria-live="polite">
                   {chatMessages.map((message) => (
                     <div key={message.id} className={message.role === 'user' ? 'ml-auto max-w-[85%] rounded-xl bg-blue-700 p-3 text-sm text-white' : 'max-w-[85%] rounded-xl bg-slate-100 p-3 text-sm text-slate-800'}>
@@ -440,6 +442,8 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                   <div className="flex justify-end"><button type="submit" disabled={chatBusy || !chatInput.trim()} className="inline-flex items-center gap-2 rounded-full bg-blue-700 px-5 py-2 text-sm font-bold text-white disabled:opacity-50"><Send className="h-4 w-4" /> Send</button></div>
                 </form>
               </section>
+              </section>
+              </div>
             </div>
           )}
 
