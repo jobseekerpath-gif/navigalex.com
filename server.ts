@@ -796,7 +796,7 @@ Respond with ONLY a JSON object (no markdown fences, no extra commentary) in exa
     // Deterministic service guidance keeps common service-selection prompts useful even when no AI key is configured.
     const serviceAnswers: Array<{ match: RegExp; reply: string }> = [
       {
-        match: /contract|collections|receivables?|overdue invoice|late payment|customer payment/i,
+        match: /contract|collections|receivables?|overdue invoice|late payment|customer payment|customers? (?:are )?paying late|paying late/i,
         reply: '**Contract & Collections Review** covers up to three agreed customer contracts and a supplied overdue-invoice list, then provides payment-risk observations, a collections action tracker and a findings call. Timing is typically 5–7 working days after complete inputs; the fee depends on document count and complexity. It is not legal advice, debt recovery or a guarantee of payment.'
       },
       {
