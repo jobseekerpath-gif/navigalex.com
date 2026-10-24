@@ -181,16 +181,19 @@ async function startServer() {
     const ua = (req.headers['user-agent'] as string) || '';
     const { browser, os, device } = parseUserAgent(ua);
     const now = new Date().toISOString();
-    const effectiveVisitorId = visitorId || `V-${ip.replace(/[^0-9]/g, '').slice(-6) || 'anon'}`;
+    const suppliedVisitorId = typeof visitorId === 'string' ? visitorId.trim().slice(0, 120) : '';
+    const effectiveVisitorId = suppliedVisitorId || `V-${ip.replace(/[^0-9]/g, '').slice(-6) || 'anon'}`;
+    const safePath = typeof path === 'string' && path.startsWith('/') ? path.slice(0, 200) : '/';
+    const safeDetails = typeof details === 'string' ? details.slice(0, 500) : '';
 
     const activity: VisitorActivity = {
-      id: `ACT-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+      id: `ACT-${crypto.randomUUID()}`,
       visitorId: effectiveVisitorId,
       ip,
       timestamp: now,
       eventType,
-      path: path || '/',
-      details,
+      path: safePath,
+      details: safeDetails,
       browser,
       os,
       device
@@ -203,8 +206,8 @@ async function startServer() {
     if (existing) {
       existing.lastSeen = now;
       existing.ip = ip;
-      existing.currentPath = path || existing.currentPath;
-      existing.lastAction = details;
+      existing.currentPath = safePath || existing.currentPath;
+      existing.lastAction = safeDetails;
       existing.activitiesCount += 1;
       if (eventType === 'PAGE_VIEW') existing.pageViewsCount += 1;
     } else {
@@ -218,8 +221,8 @@ async function startServer() {
         lastSeen: now,
         pageViewsCount: eventType === 'PAGE_VIEW' ? 1 : 0,
         activitiesCount: 1,
-        currentPath: path || '/',
-        lastAction: details
+        currentPath: safePath,
+        lastAction: safeDetails
       });
     }
 
@@ -318,7 +321,8 @@ async function startServer() {
 
   // Public Telemetry: Real User Activity Tracking Endpoint
   app.post('/api/track/activity', telemetryRateLimit, (req, res) => {
-    const { visitorId, path } = req.body;
+    const body = req.body && typeof req.body === 'object' && !Array.isArray(req.body) ? req.body : {};
+    const { visitorId, path } = body;
     const cleanPath = typeof path === 'string' && path.startsWith('/') ? path.slice(0, 200) : '/';
     const act = recordVisitorActivity(
       req,
@@ -491,8 +495,24 @@ async function startServer() {
     const isValidPass = password === ADMIN_CREDENTIALS.password;
 
     if (isValidUser && isValidPass) {
-      const token = `nvx-token-${Date.now()}-${crypto.randomUUID()}`;
-      adminTokens.set(token, Date.now() + 8 * 60 * 60 * 1000);
+      const now = Date.now();
+      // Remove expired sessions and cap live tokens for long-running processes.
+      for (const [existingToken, expiresAt] of adminTokens) {
+        if (expiresAt <= now) adminTokens.delete(existingToken);
+      }
+      if (adminTokens.size >= 1000) {
+        let earliestToken: string | null = null;
+        let earliestExpiry = Number.POSITIVE_INFINITY;
+        for (const [existingToken, expiresAt] of adminTokens) {
+          if (expiresAt < earliestExpiry) {
+            earliestExpiry = expiresAt;
+            earliestToken = existingToken;
+          }
+        }
+        if (earliestToken !== null) adminTokens.delete(earliestToken);
+      }
+      const token = `nvx-token-${now}-${crypto.randomUUID()}`;
+      adminTokens.set(token, now + 8 * 60 * 60 * 1000);
       recordAuditLog(identifier, 'AUTH_LOGIN', `Admin session established successfully. Token issued.`, clientIp, 'INFO');
       recordVisitorActivity(req, visitorId || '', 'ADMIN_ACCESS', '/admin', `Admin user logged in successfully (${identifier})`);
 
