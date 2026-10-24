@@ -444,6 +444,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                   </div>
                 </section>
               </section>
+              </div>
             </div>
           )}
 
