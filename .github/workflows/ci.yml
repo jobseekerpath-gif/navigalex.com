@@ -32,6 +32,8 @@ jobs:
         run: npm run lint
       - name: Production build
         run: npm run build
+      - name: Runtime API smoke tests
+        run: node scripts/runtime-smoke.cjs
       - name: Verify server source preserves safeguards
         run: |
           grep -q "app.post('/api/bot/chat', botRateLimit" server.ts
