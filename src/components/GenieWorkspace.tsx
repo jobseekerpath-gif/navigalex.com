@@ -386,6 +386,8 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
     if (!selectedService) return;
     window.history.pushState(null, '', '/services?service=' + selectedService.id);
     onNavigateTab('services');
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
+    requestAnimationFrame(() => window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior }));
   };
 
   const requestProposal = () => {
