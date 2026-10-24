@@ -401,17 +401,17 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
   return (
     <section className="relative mx-auto w-full max-w-7xl px-2 pb-6 pt-3 sm:px-4 sm:pt-4">
       <div className="overflow-hidden rounded-2xl border border-[#244bd7]/25 bg-white shadow-[0_12px_36px_rgba(30,64,175,0.12)]">
-        <header className="relative overflow-hidden bg-gradient-to-br from-[#0d1c48] via-[#1f4fff] to-[#27419d] px-3 py-2 text-white sm:px-4 sm:py-2.5">
-          <div className="absolute -right-16 -top-20 h-60 w-60 rounded-full bg-white/10 blur-2xl" aria-hidden="true" />
-          <div className="absolute -bottom-24 left-1/3 h-48 w-48 rounded-full bg-cyan-200/15 blur-3xl" aria-hidden="true" />
-          <div className="relative flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-            <div className="flex max-w-3xl items-start gap-2">
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-white text-base font-black tracking-tight text-[#1f4fff] shadow-lg shadow-slate-950/15" aria-hidden="true">N</span>
+        <header className="relative overflow-hidden bg-gradient-to-br from-[#0d1c48] via-[#1f4fff] to-[#27419d] px-3 py-1 text-white sm:px-4 sm:py-1.5">
+          <div className="absolute -right-12 -top-14 h-36 w-36 rounded-full bg-white/10 blur-2xl" aria-hidden="true" />
+          <div className="absolute -bottom-14 left-1/3 h-28 w-28 rounded-full bg-cyan-200/15 blur-3xl" aria-hidden="true" />
+          <div className="relative flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between">
+            <div className="flex max-w-3xl items-start gap-1.5">
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-white text-xs font-black tracking-tight text-[#1f4fff] shadow-lg shadow-slate-950/15" aria-hidden="true">N</span>
               <div>
-                <p className="text-[8px] font-bold uppercase tracking-[0.18em] text-blue-100">Navigalex Advisory</p>
-                <h1 className="mt-0.5 text-lg font-extrabold tracking-tight sm:text-xl">Financial Genie</h1>
-                <p className="mt-1 max-w-2xl text-xs leading-snug text-blue-50 sm:text-sm">
-                  Choose the business problem first. Financial Genie will show the right starting service, what you receive and the next step.
+                
+                
+                <p className="max-w-2xl text-[10px] leading-snug text-blue-50 sm:text-xs">
+                  Choose a business problem to see a recommended service, deliverables and next steps.
                 </p>
               </div>
             </div>
@@ -419,7 +419,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
               <button
                 type="button"
                 onClick={reset}
-                className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 self-start rounded-xl border border-white/30 bg-white/10 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                className="inline-flex min-h-8 shrink-0 items-center justify-center gap-1.5 self-start rounded-lg border border-white/30 bg-white/10 px-2.5 py-1.5 text-xs font-bold text-white transition hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
               >
                 <RotateCcw className="h-4 w-4" />
                 Start over
@@ -427,14 +427,14 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
             )}
           </div>
 
-          <div className="relative mt-2 grid grid-cols-3 gap-1 text-center text-[9px] sm:max-w-xl sm:text-[10px]">
+          <div className="relative mt-1 grid grid-cols-3 gap-1 text-center text-[8px] sm:max-w-md sm:text-[9px]">
             {[
               ['1', 'Choose your need'],
               ['2', 'Set your goal'],
               ['3', 'See your next step']
             ].map(([number, label], index) => (
-              <div key={number} className={index + 1 <= step ? 'rounded-lg bg-white/20 px-2 py-1 font-bold text-white' : 'rounded-lg border border-white/15 bg-slate-950/10 px-2 py-1 text-blue-100'}>
-                <span className="mr-1.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-white/20 text-[10px]">{number}</span>
+              <div key={number} className={index + 1 <= step ? 'rounded-md bg-white/20 px-1.5 py-0.5 font-bold text-white' : 'rounded-md border border-white/15 bg-slate-950/10 px-1.5 py-0.5 text-blue-100'}>
+                <span className="mr-1 inline-flex h-4 w-4 items-center justify-center rounded-full bg-white/20 text-[8px]">{number}</span>
                 {label}
               </div>
             ))}
