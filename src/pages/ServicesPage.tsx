@@ -354,10 +354,8 @@ export default function ServicesPage({ onInquiry }: ServicesPageProps) {
     );
   }, [recommendedId, query]);
 
-  useEffect(() => {
-    if (!recommendedId) return;
-    document.getElementById('service-' + recommendedId)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, [recommendedId]);
+  // Do not auto-scroll to the selected service card here.
+  // App-level route navigation resets the page to the top, keeping the page header visible.
 
   const selectProblem = (serviceId: string) => {
     setQuery('');
