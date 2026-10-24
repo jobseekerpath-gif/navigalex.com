@@ -219,8 +219,9 @@ function matchServiceFromMessage(message: string): Service | null {
   if (/(risk|compliance|incident|assurance|reputation)/.test(value)) {
     return SERVICES.find((service) => service.id === 'risk-assurance') ?? null;
   }
-  if (/(project|milestone|delivery|over budget|delayed|dependency|pmo|project management)/.test(value)) { return SERVICES.find((service) => service.id === 'project-delivery') ?? null; }
-  if (/(strategy|market entry|new market|turnaround|portfolio|competitive|growth plan)/.test(value)) { return SERVICES.find((service) => service.id === 'strategy-sprint') ?? null; }
+  if (/(project|milestone|delivery|over budget|delayed|dependency|pmo|project management|turnaround)/.test(value)) { return SERVICES.find((service) => service.id === 'project-delivery') ?? null; }
+  if (/(strategy|market entry|new market|portfolio|competitive|growth plan|transformation)/.test(value)) { return SERVICES.find((service) => service.id === 'strategy-sprint') ?? null; }
+  if (/(it & digital|digital operations|cybersecurity|cyber security|vendor risk|systems workflow|digital workflow|software tools)/.test(value)) { return SERVICES.find((service) => service.id === 'digital-workflow-review') ?? null; }
   if (/(growth|team|owner|ownership|governance|decision|accountability)/.test(value)) {
     return SERVICES.find((service) => service.id === 'growth-governance') ?? null;
   }
