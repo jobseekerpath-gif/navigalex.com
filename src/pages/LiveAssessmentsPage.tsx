@@ -361,7 +361,7 @@ export default function LiveAssessmentsPage({ visitorId, onOpenAssessment }: Liv
             </div>
 
             {/* LIVE 1: Contract & Agreement Risk Analyzer */}
-            <section className="navigalex-card rounded-2xl p-4 sm:p-10 shadow-xl border-t-4 border-blue-600 space-y-8">
+            <section id="contract-risk-scanner" className="navigalex-card scroll-mt-24 rounded-2xl p-4 sm:p-10 shadow-xl border-t-4 border-blue-600 space-y-8">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-6">
                 <div>
                   <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold mb-2">
@@ -516,7 +516,7 @@ export default function LiveAssessmentsPage({ visitorId, onOpenAssessment }: Liv
             </section>
 
             {/* LIVE 2: Bank Loan Readiness Calculator */}
-            <section className="navigalex-card rounded-2xl p-8 sm:p-10 shadow-xl border-t-4 border-emerald-600 space-y-8">
+            <section id="bank-dscr-scanner" className="navigalex-card scroll-mt-24 rounded-2xl p-8 sm:p-10 shadow-xl border-t-4 border-emerald-600 space-y-8">
               <div className="border-b border-slate-200 pb-6">
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold mb-2">
                   <Landmark className="w-3.5 h-3.5" /> LIVE BANKING ENGINE
