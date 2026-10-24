@@ -330,7 +330,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
   };
 
   return (
-    <section className="relative mx-auto w-full max-w-5xl px-2 pb-6 pt-3 sm:px-4 sm:pt-4">
+    <section className="relative mx-auto w-full max-w-7xl px-2 pb-6 pt-3 sm:px-4 sm:pt-4">
       <div className="overflow-hidden rounded-2xl border border-[#244bd7]/25 bg-white shadow-[0_12px_36px_rgba(30,64,175,0.12)]">
         <header className="relative overflow-hidden bg-gradient-to-br from-[#0d1c48] via-[#1f4fff] to-[#27419d] px-3 py-2 text-white sm:px-4 sm:py-2.5">
           <div className="absolute -right-16 -top-20 h-60 w-60 rounded-full bg-white/10 blur-2xl" aria-hidden="true" />
@@ -374,7 +374,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
 
         <div className="p-3 sm:p-5">
           {screen === 'start' && (
-            <div className="space-y-5 rounded-2xl bg-gradient-to-br from-[#02044b] via-[#0715a5] to-[#000d63] p-4 text-white sm:p-6">
+            <div className="space-y-5 rounded-2xl bg-gradient-to-br from-[#02044b] via-[#0715a5] to-[#000d63] p-4 text-white shadow-[0_16px_44px_rgba(2,6,80,0.28)] sm:p-6">
               <div className="flex items-center gap-3">
                 <span className="rounded-xl bg-blue-600 p-3"><MessageCircle className="h-6 w-6" /></span>
                 <div>
@@ -385,7 +385,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
               <p className="text-lg font-bold">I will suggest the clearest starting service.</p>
               <section aria-label="Navigalex Services">
                 <h3 className="mb-2 text-base font-bold">Navigalex Services</h3>
-                <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                   {[
                     ['Financial Clarity Check','Cash flow, costs and credit readiness'],
                     ['Contract & Collections Review','Payment delays and key contract risks'],
@@ -396,7 +396,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                     ['Project Management & Recovery','Delivery, PMO, budgets, dependencies and turnaround'],
                     ['IT & Digital Operations','Systems workflows, IT controls, cybersecurity and vendor risks']
                   ].map(([title, detail]) => (
-                    <button key={title} type="button" disabled={chatBusy} onClick={() => sendChatMessage(title + ': ' + detail)} className="flex min-h-28 items-center justify-between gap-2 rounded-xl bg-white p-3 text-left text-slate-950 shadow-sm transition hover:bg-blue-50 disabled:opacity-60">
+                    <button key={title} type="button" disabled={chatBusy} onClick={() => sendChatMessage(title + ': ' + detail)} className="flex min-h-28 items-center justify-between gap-2 rounded-xl border border-blue-100 bg-white p-3 text-left text-slate-950 shadow-sm transition hover:bg-blue-50 disabled:opacity-60">
                       <span><span className="block text-sm font-extrabold">{title}</span><span className="mt-1 block text-xs leading-relaxed text-slate-600">{detail}</span></span>
                       <ChevronRight className="h-4 w-4 shrink-0 text-blue-700" />
                     </button>
