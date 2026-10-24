@@ -173,8 +173,9 @@ export default function App() {
     }
     setShowPrivacyModal(false);
     setShowGuardrailsModal(false);
+    window.history.pushState(null, '', '/contact');
     setActiveTab('contact');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
   };
 
   const runPaymentTimingCheck = (e: React.FormEvent) => {
@@ -282,6 +283,31 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const navigateToTab = (tab: string) => {
+    const paths: Record<string, string> = {
+      home: '/',
+      services: '/services',
+      'live-tools': '/live-tools',
+      about: '/about',
+      contact: '/contact',
+      industries: '/industries',
+      'how-it-works': '/how-it-works',
+      'why-pick-us': '/why-pick-us',
+      'family-office': '/family-office',
+      '43b-h-check': '/43b-h-check',
+      admin: '/admin'
+    };
+    const nextPath = paths[tab];
+    const currentUrl = window.location.pathname + window.location.search;
+    const keepServiceDeepLink = tab === 'services' && window.location.pathname.toLowerCase().startsWith('/services');
+    if (nextPath && !keepServiceDeepLink && currentUrl !== nextPath) {
+      window.history.pushState(null, '', nextPath);
+    }
+    setActiveTab(tab);
+    setMobileMenuOpen(false);
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+  };
+
 
 
 
@@ -347,7 +373,7 @@ export default function App() {
               <button
                 key={tab + '-' + label}
                 type="button"
-                onClick={() => { if (tab === 'home') window.history.pushState(null, '', '/'); setActiveTab(tab); window.scrollTo({ top: 0, left: 0, behavior: 'smooth' }); }}
+                onClick={() => navigateToTab(tab)}
                 className={`px-1 xl:px-1.5 py-2 rounded-lg text-[14px] xl:text-[15px] leading-tight whitespace-nowrap text-black transition-colors hover:bg-slate-100 ${activeTab === tab ? 'text-black bg-slate-100' : 'text-black'}`}
               >
                 {label}
@@ -387,7 +413,7 @@ export default function App() {
                 <button
                   key={tab}
                   type="button"
-                  onClick={() => { if (tab === 'home') window.history.pushState(null, '', '/'); setActiveTab(tab); setMobileMenuOpen(false); window.scrollTo({ top: 0, left: 0, behavior: 'smooth' }); }}
+                  onClick={() => navigateToTab(tab)}
                   className={`min-h-11 text-left px-3 py-2.5 rounded-xl text-[14px] font-semibold text-black transition-colors ${activeTab === tab ? 'text-black bg-slate-100' : 'text-black hover:bg-slate-100'}`}
                 >
                   {label}
@@ -429,7 +455,7 @@ export default function App() {
           <Suspense fallback={<div className="min-h-[70vh] flex items-center justify-center text-sm text-slate-500">Opening your advisory workspace…</div>}>
             <GenieWorkspace
               onOpenAssessment={openAssessmentForm}
-              onNavigateTab={(tab) => { setActiveTab(tab); window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior }); window.setTimeout(() => window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior }), 80); }}
+              onNavigateTab={navigateToTab}
             />
           </Suspense>
         )}
