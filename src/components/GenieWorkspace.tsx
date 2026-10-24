@@ -259,14 +259,27 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
     setScreen('context');
   };
 
+  const openAssessmentTool = (targetId: string) => {
+    onNavigateTab('live-tools');
+    const scrollToTool = (attempt = 0) => {
+      const target = document.getElementById(targetId);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return;
+      }
+      if (attempt < 15) window.setTimeout(() => scrollToTool(attempt + 1), 100);
+    };
+    window.setTimeout(() => scrollToTool(), 50);
+  };
+
   const handleServiceChoice = (title: string) => {
     const normalized = title.toLowerCase();
     if (normalized.includes('contract risk scanner')) {
-      onNavigateTab('live-tools');
+      openAssessmentTool('contract-risk-scanner');
       return;
     }
     if (normalized.includes('bank dscr scanner') || normalized.includes('dscr scanner')) {
-      onNavigateTab('live-tools');
+      openAssessmentTool('bank-dscr-scanner');
       return;
     }
     const serviceId =
@@ -539,7 +552,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                   <h3 className="mb-2 text-base font-bold">Live Assessments &amp; Guides</h3>
                   <div className="grid gap-2">
                     {['Contract Risk Scanner','Bank DSCR Scanner'].map((title) => (
-                      <button key={title} type="button" disabled={chatBusy} onClick={() => { onNavigateTab('live-tools'); }} className="flex min-h-10 items-center justify-between rounded-lg bg-cyan-50 px-2.5 py-2 text-left text-slate-950 hover:bg-cyan-100 disabled:opacity-60">
+                      <button key={title} type="button" disabled={chatBusy} onClick={() => openAssessmentTool(title === 'Contract Risk Scanner' ? 'contract-risk-scanner' : 'bank-dscr-scanner')} className="flex min-h-10 items-center justify-between rounded-lg bg-cyan-50 px-2.5 py-2 text-left text-slate-950 hover:bg-cyan-100 disabled:opacity-60">
                         <span className="text-xs font-bold">{title} <span className="ml-1 rounded-full bg-emerald-200 px-1.5 py-0.5 text-[10px] text-emerald-900">Live</span></span>
                         <ChevronRight className="h-4 w-4 text-teal-700" />
                       </button>
@@ -636,7 +649,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                     Request a scoped proposal <ArrowRight className="h-4 w-4" />
                   </button>
                   {selectedService.toolLabel && (
-                    <button type="button" onClick={() => onNavigateTab('live-tools')} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-bold text-slate-800 hover:bg-slate-100">
+                    <button type="button" onClick={() => openAssessmentTool('bank-dscr-scanner')} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-bold text-slate-800 hover:bg-slate-100">
                       <ChartNoAxesCombined className="h-4 w-4" /> {selectedService.toolLabel}
                     </button>
                   )}
