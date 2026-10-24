@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import {
   ArrowRight, CheckCircle2, ChartNoAxesCombined, ChevronLeft, ChevronRight,
   FileSearch, Landmark, MessageCircle, RotateCcw, ShieldCheck, Sparkles,
@@ -247,6 +247,8 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
     }
   ]);
 
+  const chatRequestVersion = useRef(0);
+
   const selectedService = useMemo(
     () => SERVICES.find((service) => service.id === selectedServiceId) ?? null,
     [selectedServiceId]
@@ -265,6 +267,8 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
       const target = document.getElementById(targetId);
       if (target) {
         target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Re-apply after the tab-change scroll reset so the target section wins.
+        if (attempt < 3) window.setTimeout(() => scrollToTool(attempt + 1), 180);
         return;
       }
       if (attempt < 15) window.setTimeout(() => scrollToTool(attempt + 1), 100);
@@ -336,6 +340,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
   const sendChatMessage = async (rawMessage: string) => {
     const text = rawMessage.trim();
     if (!text || chatBusy) return;
+    const requestVersion = ++chatRequestVersion.current;
     setChatInput('');
     setChatError('');
     setChatBusy(true);
@@ -348,6 +353,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
         body: JSON.stringify({ message: text, history: chatMessages.slice(-8), visitorId: 'financial-genie' })
       });
       const payload = await response.json().catch(() => ({}));
+      if (requestVersion !== chatRequestVersion.current) return;
       if (!response.ok || payload.success !== true || typeof payload.reply !== 'string') {
         throw new Error(payload.error || 'Financial Genie could not respond just now. Please retry or describe your business problem.');
       }
@@ -373,9 +379,10 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
         suggestedPrompts: prompts
       }]);
     } catch (error) {
+      if (requestVersion !== chatRequestVersion.current) return;
       setChatError(error instanceof Error ? error.message : 'Could not reach the advisory assistant. Please try again.');
     } finally {
-      setChatBusy(false);
+      if (requestVersion === chatRequestVersion.current) setChatBusy(false);
     }
   };
 
@@ -385,6 +392,8 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
   };
 
   const reset = () => {
+    // Ignore late replies from any chat request that was active before this reset.
+    chatRequestVersion.current += 1;
     setSelectedServiceId(null);
     setRoute(null);
     setChatInput('');
