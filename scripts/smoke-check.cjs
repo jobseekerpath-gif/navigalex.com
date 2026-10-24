@@ -42,7 +42,7 @@ assert(genie.includes('Navigalex Services and Live Assessments') && genie.includ
 assert(genie.includes('onClick={() => handleServiceChoice(title)}') && genie.includes('Your likely deliverables') && genie.includes('View solution and next steps'), 'Selecting a service starts a tailored recommendation with deliverables and a solution action');
 assert(genie.includes('Change the business problem') && genie.includes("setChatMessages([{") && genie.includes("setChatInput('')"), 'Changing the business problem clears the previous conversation and selected service');
 assert(genie.includes('chatRequestVersion.current += 1') && genie.includes('requestVersion !== chatRequestVersion.current'), 'reset ignores late chat replies from an old conversation');
-assert(app.includes("if (tab === 'home') window.history.pushState(null, '', '/')"), 'home navigation clears stale service URL state');
+assert(app.includes('function resolveActiveTabFromLocation()') && app.includes("if (pathname === '/services' || pathname.startsWith('/services')") && app.includes('onNavigateTab={navigateToTab}'), 'direct route reloads and browser history map to the correct tab');
 assert(!app.includes('Navigalex Services</h4>') && !app.includes('Live Assessments & Guides</h4>'), 'service and assessment directories are removed from the footer');
 assert(genie.includes('View full scope') && genie.includes('Request a scoped proposal'), 'Financial Genie has clear clickable next steps');
 assert(services.includes('Risk Management & Assurance Review') && services.includes('Controls & Fraud-Prevention Snapshot'), 'risk product deliverables are published');
@@ -52,6 +52,7 @@ assert(server.includes("dynamicAiAvailable: false") && server.includes("provider
 assert(genie.includes('const match = selectedService ?? matchServiceFromMessage(text)'), 'chat follow-ups remain aligned with the selected service');
 assert(server.includes('((debtors / 100) / t) * 100'), 'overdue receivables share is calculated as a percentage, with units converted');
 assert(services.includes("'digital-workflow-review': 'digital-workflow-review'") && services.includes("'strategy-growth-sprint': 'strategy-sprint'") && services.includes("'project-delivery-review': 'project-delivery'"), 'service aliases and deep links resolve to canonical cards');
+assert(!services.includes('scrollIntoView'), 'selected service page no longer overrides scroll-to-top navigation');
 assert(!services.includes("id: 'strategy-growth-sprint'") && !services.includes("id: 'project-delivery-review'"), 'duplicate strategy and project service cards are not displayed');
 assert(genie.includes("openAssessmentTool('contract-risk-scanner')") && genie.includes("openAssessmentTool('bank-dscr-scanner')") && page.includes('id="contract-risk-scanner"') && page.includes('id="bank-dscr-scanner"'), 'scanner choices navigate to their individual tool sections');
 assert(services.includes('Lender & Funding Readiness Check') && services.includes('Growth & Governance Sprint'), 'funding and governance products are published');
