@@ -334,7 +334,7 @@ export default function App() {
             type="button"
             aria-label="Go to Navigalex home"
             className="flex items-center gap-2.5 min-w-0 group w-full"
-            onClick={() => { setActiveTab('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+            onClick={() => { window.history.pushState(null, '', '/'); setActiveTab('home'); window.scrollTo({ top: 0, left: 0, behavior: 'smooth' }); }}
           >
             <span className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center shadow-sm shadow-blue-600/20 shrink-0">
               <Shield className="w-5 h-5 text-white" />
@@ -355,7 +355,7 @@ export default function App() {
               <button
                 key={tab + '-' + label}
                 type="button"
-                onClick={() => { setActiveTab(tab); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                onClick={() => { if (tab === 'home') window.history.pushState(null, '', '/'); setActiveTab(tab); window.scrollTo({ top: 0, left: 0, behavior: 'smooth' }); }}
                 className={`px-1 xl:px-1.5 py-2 rounded-lg text-[14px] xl:text-[15px] leading-tight whitespace-nowrap text-black transition-colors hover:bg-slate-100 ${activeTab === tab ? 'text-black bg-slate-100' : 'text-black'}`}
               >
                 {label}
@@ -395,7 +395,7 @@ export default function App() {
                 <button
                   key={tab}
                   type="button"
-                  onClick={() => { setActiveTab(tab); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                  onClick={() => { if (tab === 'home') window.history.pushState(null, '', '/'); setActiveTab(tab); setMobileMenuOpen(false); window.scrollTo({ top: 0, left: 0, behavior: 'smooth' }); }}
                   className={`min-h-11 text-left px-3 py-2.5 rounded-xl text-[14px] font-semibold text-black transition-colors ${activeTab === tab ? 'text-black bg-slate-100' : 'text-black hover:bg-slate-100'}`}
                 >
                   {label}
