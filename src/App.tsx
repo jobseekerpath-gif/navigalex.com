@@ -320,16 +320,6 @@ export default function App() {
         <div className="absolute top-1/2 left-1/3 w-80 h-80 bg-cyan-400/5 rounded-full blur-[100px] animate-spaceship-glow"></div>
       </div>
 
-      {/* Clean brand strip */}
-      <div className="bg-slate-950 text-white/90 border-b border-slate-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-8 flex items-center justify-center text-[10px] sm:text-[11px] font-medium tracking-wide">
-          <span className="inline-flex max-w-full items-center justify-center gap-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" aria-hidden="true" />
-            <><strong className="font-bold">Navigalex Advisory:</strong> We help Indian businesses make sense of cash flow, payments, risks, controls and growth decisions through defined advisory services and clear next steps.</>
-          </span>
-        </div>
-      </div>
-
       {/* Sticky Header */}
       <header className="site-nav-header sticky top-0 z-50 bg-white/95 backdrop-blur-xl border-b border-slate-200 shadow-[0_1px_12px_rgba(15,23,42,0.05)]">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 h-[58px] lg:h-[76px] grid grid-cols-[minmax(0,1fr)_auto] lg:grid-cols-[250px_minmax(0,1fr)_170px] items-center gap-2 lg:gap-3">
