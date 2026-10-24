@@ -452,8 +452,12 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                 </div>
               </div>
               <p className="text-lg font-bold lg:col-span-2">I will suggest the clearest starting service.</p>
-              <div className="grid items-start gap-5 lg:col-span-2 lg:grid-cols-[minmax(0,1.05fr)_minmax(360px,.95fr)]">
+              <div className="grid items-start gap-5 lg:col-span-2 lg:grid-cols-[minmax(0,3fr)_minmax(280px,1.35fr)]">
               <section id="financial-genie-chat" aria-label="Financial Genie chat" className="order-2 min-w-0 rounded-xl bg-white p-3 text-slate-900 lg:order-1">
+                <div className="mb-2 flex items-center justify-between gap-2 border-b border-slate-100 pb-2">
+                  <span className="text-xs font-bold text-slate-700">Your business conversation</span>
+                  <button type="button" onClick={reset} className="inline-flex min-h-8 items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-2.5 py-1.5 text-xs font-bold text-blue-800 hover:bg-blue-100"><RotateCcw className="h-3.5 w-3.5" /> Change the business problem</button>
+                </div>
                 <div className="max-h-72 min-h-20 space-y-3 overflow-y-auto p-2" aria-live="polite">
                   {chatMessages.map((message) => (
                     <div key={message.id} className={message.role === 'user' ? 'ml-auto max-w-[85%] whitespace-pre-line rounded-xl bg-blue-700 p-3 text-sm text-white' : 'max-w-[95%] whitespace-pre-line rounded-xl bg-slate-100 p-3 text-sm leading-relaxed text-slate-800'}>
@@ -467,6 +471,9 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                 {chatError && <p role="alert" className="p-2 text-xs text-red-700">{chatError}</p>}
                 <div className="my-3 flex flex-wrap gap-2">
                   {CHAT_PROMPTS.slice(0, 8).map(prompt => <button key={prompt} type="button" disabled={chatBusy} onClick={() => chooseChatOption(prompt)} className="rounded-full border border-blue-200 bg-blue-50 px-3 py-2 text-xs font-semibold text-blue-900 hover:bg-blue-100">{prompt}</button>)}
+                </div>
+                <div className="mb-2 flex justify-start">
+                  <button type="button" onClick={reset} className="inline-flex min-h-8 items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-2.5 py-1.5 text-xs font-bold text-blue-800 hover:bg-blue-100"><RotateCcw className="h-3.5 w-3.5" /> Change the business problem</button>
                 </div>
                 <form onSubmit={e => {e.preventDefault(); sendChatMessage(chatInput);}} className="space-y-2">
                   <label htmlFor="financial-genie-message" className="sr-only">Describe your business problem</label>
