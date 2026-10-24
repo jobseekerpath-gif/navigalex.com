@@ -145,8 +145,7 @@ const SERVICES: Service[] = [
     deliverables: ['A review of the current plan, milestones, budget assumptions and dependencies', 'A concise RAID log covering risks, assumptions, issues and dependencies', 'A recovery or next-phase plan with owners, dates and decision points'],
     concern: 'Project Delivery & Recovery Review — assess project health and reset next actions',
     Icon: Workflow
-  }
-
+  },
   {
     id: 'digital-workflow-review',
     title: 'Digital Workflow & Systems Review',
