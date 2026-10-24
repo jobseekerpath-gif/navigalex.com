@@ -29,10 +29,15 @@ async function startServer() {
         res.setHeader('Retry-After', String(Math.max(1, Math.ceil((bucket.resetAt - now) / 1000))));
         return res.status(429).json({ error: 'Too many requests. Please wait and try again.' });
       }
-      // Keep the limiter bounded during long-running processes.
+      // Keep the limiter bounded even if many distinct client IPs appear in one window.
       if (rateLimitBuckets.size > 5000) {
         for (const [bucketKey, value] of rateLimitBuckets) {
           if (value.resetAt <= now) rateLimitBuckets.delete(bucketKey);
+        }
+        while (rateLimitBuckets.size > 5000) {
+          const oldestKey = rateLimitBuckets.keys().next().value;
+          if (typeof oldestKey !== 'string') break;
+          rateLimitBuckets.delete(oldestKey);
         }
       }
       next();
@@ -45,6 +50,7 @@ async function startServer() {
   const documentRateLimit = rateLimit('document', 6, 15 * 60 * 1000);
   const financeRateLimit = rateLimit('finance', 30, 60 * 1000);
   const telemetryRateLimit = rateLimit('telemetry', 60, 60 * 1000);
+  const adminAccessRateLimit = rateLimit('admin-access', 120, 60 * 1000);
   // In-Memory Secure Admin Store
   const adminTokens = new Map<string, number>();
   const ADMIN_CREDENTIALS = {
@@ -217,6 +223,20 @@ async function startServer() {
       });
     }
 
+    // Keep the in-memory visitor store bounded, not just its persisted snapshot.
+    if (visitorSessions.size > 5000) {
+      let oldestVisitorId: string | null = null;
+      let oldestSeenAt = Number.POSITIVE_INFINITY;
+      for (const [sessionId, session] of visitorSessions) {
+        const seenAt = Date.parse(session.lastSeen) || 0;
+        if (seenAt < oldestSeenAt) {
+          oldestSeenAt = seenAt;
+          oldestVisitorId = sessionId;
+        }
+      }
+      if (oldestVisitorId !== null) visitorSessions.delete(oldestVisitorId);
+    }
+
     persistState();
     return activity;
   }
@@ -268,7 +288,7 @@ async function startServer() {
   // Helper to record an audit log
   const recordAuditLog = (actor: string, eventType: AuditLog['eventType'], description: string, ip: string, severity: AuditLog['severity'] = 'INFO') => {
     const newLog: AuditLog = {
-      id: `LOG-${Date.now().toString().slice(-4)}`,
+      id: `LOG-${crypto.randomUUID()}`,
       timestamp: new Date().toISOString(),
       actor,
       eventType,
@@ -311,7 +331,7 @@ async function startServer() {
   });
 
   // Admin: Get Real Visitors List
-  app.get('/api/admin/visitors', authenticateAdmin, (req, res) => {
+  app.get('/api/admin/visitors', adminAccessRateLimit, authenticateAdmin, (req, res) => {
     const sessions = Array.from(visitorSessions.values());
     const fifteenMinsAgo = Date.now() - 15 * 60 * 1000;
     const activeNow = sessions.filter(s => new Date(s.lastSeen).getTime() > fifteenMinsAgo).length;
@@ -325,7 +345,7 @@ async function startServer() {
   });
 
   // Admin: Get Real Activity Logs
-  app.get('/api/admin/visitor-activities', authenticateAdmin, (req, res) => {
+  app.get('/api/admin/visitor-activities', adminAccessRateLimit, authenticateAdmin, (req, res) => {
     res.json({
       success: true,
       activities: visitorActivities,
@@ -494,7 +514,7 @@ async function startServer() {
   });
 
   // Admin Auth: Verify Token
-  app.get('/api/admin/verify', (req, res) => {
+  app.get('/api/admin/verify', adminAccessRateLimit, (req, res) => {
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
     
@@ -515,7 +535,7 @@ async function startServer() {
   });
 
   // Admin Inquiries: GET
-  app.get('/api/admin/inquiries', authenticateAdmin, (req, res) => {
+  app.get('/api/admin/inquiries', adminAccessRateLimit, authenticateAdmin, (req, res) => {
     res.json({
       success: true,
       inquiries,
@@ -524,7 +544,7 @@ async function startServer() {
   });
 
   // Admin Inquiries: PATCH Status / Notes
-  app.patch('/api/admin/inquiries/:id', authenticateAdmin, (req, res) => {
+  app.patch('/api/admin/inquiries/:id', adminAccessRateLimit, authenticateAdmin, (req, res) => {
     const { id } = req.params;
     const { status, notes } = req.body;
     const clientIp = getClientIp(req);
@@ -553,7 +573,7 @@ async function startServer() {
   });
 
   // Admin Inquiries: DELETE
-  app.delete('/api/admin/inquiries/:id', authenticateAdmin, (req, res) => {
+  app.delete('/api/admin/inquiries/:id', adminAccessRateLimit, authenticateAdmin, (req, res) => {
     const { id } = req.params;
     const clientIp = getClientIp(req);
     const idx = inquiries.findIndex(i => i.id === id);
@@ -567,7 +587,7 @@ async function startServer() {
   });
 
   // Admin Case Studies: GET
-  app.get('/api/admin/case-studies', authenticateAdmin, (req, res) => {
+  app.get('/api/admin/case-studies', adminAccessRateLimit, authenticateAdmin, (req, res) => {
     res.json({
       success: true,
       caseStudies,
@@ -576,7 +596,7 @@ async function startServer() {
   });
 
   // Admin Case Studies: POST
-  app.post('/api/admin/case-studies', authenticateAdmin, (req, res) => {
+  app.post('/api/admin/case-studies', adminAccessRateLimit, authenticateAdmin, (req, res) => {
     const { title, clientSector, region, dealSize, riskIdentified, advisoryProvided, concreteRoi, status } = req.body;
     const clientIp = getClientIp(req);
     
@@ -606,7 +626,7 @@ async function startServer() {
   });
 
   // Admin Case Studies: PATCH
-  app.patch('/api/admin/case-studies/:id', authenticateAdmin, (req, res) => {
+  app.patch('/api/admin/case-studies/:id', adminAccessRateLimit, authenticateAdmin, (req, res) => {
     const { id } = req.params;
     const clientIp = getClientIp(req);
     const cs = caseStudies.find(c => c.id === id);
@@ -623,7 +643,7 @@ async function startServer() {
   });
 
   // Admin Case Studies: DELETE
-  app.delete('/api/admin/case-studies/:id', authenticateAdmin, (req, res) => {
+  app.delete('/api/admin/case-studies/:id', adminAccessRateLimit, authenticateAdmin, (req, res) => {
     const { id } = req.params;
     const clientIp = getClientIp(req);
     const idx = caseStudies.findIndex(c => c.id === id);
@@ -637,7 +657,7 @@ async function startServer() {
   });
 
   // Admin Audit Logs: GET
-  app.get('/api/admin/audit-logs', authenticateAdmin, (req, res) => {
+  app.get('/api/admin/audit-logs', adminAccessRateLimit, authenticateAdmin, (req, res) => {
     res.json({
       success: true,
       auditLogs,
