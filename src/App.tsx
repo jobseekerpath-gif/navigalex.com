@@ -458,7 +458,7 @@ export default function App() {
             <div className="space-y-3 text-center">
               <span className="text-xs font-bold uppercase tracking-widest text-blue-700">A CLEAR PLACE TO START</span>
               <h2 className="text-3xl font-extrabold text-slate-950 sm:text-4xl">Choose the business problem first</h2>
-              <p className="mx-auto max-w-2xl text-sm leading-relaxed text-slate-600">Navigalex offers six productised starting services. Each shows its expected outcomes, client inputs, timing and boundaries before you request a proposal.</p>
+              <p className="mx-auto max-w-2xl text-sm leading-relaxed text-slate-600">Navigalex offers nine distinct productised starting reviews. Each shows expected outcomes, client inputs, timing and boundaries before you request a proposal.</p>
             </div>
             <div className="flex justify-center">
               <button type="button" onClick={() => { setActiveTab('services'); window.history.pushState(null, '', '/services'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-blue-700 px-5 py-3 text-sm font-bold text-white hover:bg-blue-800">Explore the scoped reviews <ArrowRight className="h-4 w-4" /></button>
