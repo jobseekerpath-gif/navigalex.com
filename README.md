@@ -28,4 +28,4 @@ The JSON store supports one running server process on durable storage. Do not ad
 
 ## Business launch checklist
 
-The three starter reviews display scope, inputs, timing and boundaries, while the fee is confirmed after a scoping call. Before paid campaigns, confirm delivery capacity and actual prices, verify the sender and reply workflow, and publish only approved credentials or client evidence. Add an online payment or booking provider only after its account, pricing and refund terms are configured.
+The nine distinct starter reviews display scope, inputs, timing and boundaries, while the fee is confirmed after a scoping call. Before paid campaigns, confirm delivery capacity and actual prices, verify the sender and reply workflow, and publish only approved credentials or client evidence. Add an online payment or booking provider only after its account, pricing and refund terms are configured.
