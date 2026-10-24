@@ -40,7 +40,7 @@ assert(genie.includes('Financial Genie') && genie.includes('Recommended starting
 assert(genie.includes("fetch('/api/bot/chat'") && genie.includes('chatBusy'), 'Financial Genie uses the live advisory API and exposes loading state');
 assert(genie.includes('Navigalex Services and Live Assessments') && genie.includes('lg:grid-cols-[minmax(0,3fr)_minmax(280px,1.35fr)]'), 'Financial Genie gives the chat roughly three-quarters of desktop width and keeps services in a right panel');
 assert(genie.includes('onClick={() => handleServiceChoice(title)}') && genie.includes('Your likely deliverables') && genie.includes('View solution and next steps'), 'Selecting a service starts a tailored recommendation with deliverables and a solution action');
-assert(genie.includes('Change the business problem'), 'Financial Genie allows changing the selected problem from chat');
+assert(genie.includes('Change the business problem') && genie.includes("setChatMessages([{") && genie.includes("setChatInput('')"), 'Changing the business problem clears the previous conversation and selected service');
 assert(!app.includes('Navigalex Services</h4>') && !app.includes('Live Assessments & Guides</h4>'), 'service and assessment directories are removed from the footer');
 assert(genie.includes('View full scope') && genie.includes('Request a scoped proposal'), 'Financial Genie has clear clickable next steps');
 assert(services.includes('Risk Management & Assurance Review') && services.includes('Controls & Fraud-Prevention Snapshot'), 'risk product deliverables are published');
