@@ -909,7 +909,7 @@ export default function App() {
             <h3 className="text-xl font-bold text-white">Professional & Regulatory Boundaries</h3>
           </div>
           <p className="text-xs text-slate-400 leading-relaxed max-w-4xl">
-            Navigalex's starter reviews cover business finance, contract and collections, and process controls as described in each scope. They do not include legal opinions or representation, statutory audit or assurance, tax opinions or attestations, debt recovery, loan approval, investment recommendations or regulatory certification. Share only information you are authorised to provide. See the privacy notice for current data handling.
+            Navigalex's starter reviews cover business finance, contracts and collections, risk, controls, growth, project delivery and digital workflows as described in each scope. They do not include legal opinions or representation, statutory audit or assurance, tax opinions or attestations, debt recovery, loan approval, investment recommendations or regulatory certification. Share only information you are authorised to provide. See the privacy notice for current data handling.
           </p>
         </div>
       </section>
@@ -935,7 +935,7 @@ export default function App() {
       <footer className="bg-[#0b1329] text-slate-300 py-16 px-6 border-t border-slate-800 text-xs">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
           <div className="space-y-4">
-            <div className="flex items-center gap-3 cursor-pointer" onClick={() => { setActiveTab('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
+            <div className="flex items-center gap-3 cursor-pointer" onClick={() => { window.history.pushState(null, '', '/'); setActiveTab('home'); window.scrollTo({ top: 0, left: 0, behavior: 'smooth' }); }}>
               <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center">
                 <Shield className="w-4 h-4 text-white" />
               </div>
