@@ -373,8 +373,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                 <p className="text-sm leading-relaxed text-slate-600 sm:text-base">Pick the statement closest to your situation. You can change it at any time.</p>
               </div>
 
-              <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.95fr)] lg:gap-5">
-                <div className="min-w-0">
+              <div className="min-w-0">
               <section aria-label="Financial Genie chat" className="overflow-hidden rounded-2xl border border-blue-200 bg-slate-50 shadow-sm">
                 <div className="flex items-center gap-3 bg-[#0d1c48] px-4 py-3 text-white">
                   <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/15"><MessageCircle className="h-5 w-5" /></span>
@@ -432,12 +431,13 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                     </button>
                   </form>
                 </div>
-              </section>
-                </div>
-                <aside aria-label="Choose an advisory service" className="min-w-0">
-                  <h3 className="mb-2 text-sm font-extrabold text-slate-900">Choose a service</h3>
-                  <div className="max-h-[42rem] space-y-2 overflow-y-auto pr-1">
-              <div className="grid grid-cols-1 gap-2">
+
+                <div className="border-t border-blue-100 bg-slate-50 p-3 sm:p-4">
+                  <div className="mb-3">
+                    <h3 className="text-sm font-extrabold text-slate-900">Choose a business need</h3>
+                    <p className="mt-1 text-xs text-slate-600">Select any option to see the recommended starting service.</p>
+                  </div>
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                 {SERVICES.map((service) => {
                   const Icon = service.Icon;
                   return (
@@ -451,16 +451,19 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                         <span className="rounded-xl bg-blue-50 p-2.5 text-[#1f4fff]"><Icon className="h-5 w-5" /></span>
                         <ChevronRight className="h-5 w-5 text-slate-300 transition group-hover:translate-x-0.5 group-hover:text-[#1f4fff]" />
                       </span>
-                      <span className="mt-3 block text-[11px] font-bold uppercase tracking-wide text-[#1f4fff]">{service.pillar}</span>
+                      <span className="mt-2 block text-[11px] font-bold uppercase tracking-wide text-[#1f4fff]">{service.pillar}</span>
                       <span className="mt-1 block text-base font-extrabold leading-snug text-slate-950">{service.shortLabel}</span>
                       <span className="mt-2 block text-sm leading-relaxed text-slate-600">{service.description}</span>
-                      <span className="mt-3 inline-flex items-center gap-1 text-xs font-bold text-[#1f4fff]">Choose this path <ArrowRight className="h-3.5 w-3.5" /></span>
+                      <span className="mt-2 inline-flex items-center gap-1 text-xs font-bold text-[#1f4fff]">Choose this path <ArrowRight className="h-3.5 w-3.5" /></span>
                     </button>
                   );
                 })}
               </div>
-                  </div>
-                </aside>
+
+                </div>
+              </section>
+              </div>
+        </aside>
               </div>
 
               <div className="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:flex-row sm:items-center sm:justify-between">
