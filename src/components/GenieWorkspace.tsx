@@ -264,7 +264,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
       });
       const payload = await response.json().catch(() => ({}));
       if (!response.ok || payload.success !== true || typeof payload.reply !== 'string') {
-        throw new Error(payload.error || 'The advisory assistant is temporarily unavailable. Please use a service card or request a scoped proposal.');
+        throw new Error(payload.error || 'Financial Genie could not respond just now. Please retry or describe your business problem.');
       }
       const match = matchServiceFromMessage(text);
       const prompts = match?.id === 'financial-clarity'
