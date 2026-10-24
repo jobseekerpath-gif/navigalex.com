@@ -261,21 +261,63 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
 
   const handleServiceChoice = (title: string) => {
     const normalized = title.toLowerCase();
+    if (normalized.includes('contract risk scanner')) {
+      onNavigateTab('live-tools');
+      return;
+    }
+    if (normalized.includes('bank dscr scanner') || normalized.includes('dscr scanner')) {
+      onNavigateTab('live-tools');
+      return;
+    }
     const serviceId =
       normalized.includes('financial clarity') ? 'financial-clarity' :
       normalized.includes('contract') || normalized.includes('collections') ? 'contract-collections' :
-      normalized.includes('risk management') ? 'risk-assurance' :
+      normalized.includes('risk management') || normalized.includes('risk & risk') ? 'risk-assurance' :
       normalized.includes('controls') || normalized.includes('compliance') ? 'controls-fraud' :
       normalized.includes('funding') || normalized.includes('finance & funding') ? 'funding-readiness' :
-      normalized.includes('strategy') || normalized.includes('market growth') ? 'strategy-sprint' :
+      normalized.includes('strategy') || normalized === 'strategy & growth' ? 'strategy-sprint' :
       normalized.includes('project') || normalized.includes('recovery') ? 'project-delivery' :
       normalized.includes('digital') || normalized.includes('systems') || normalized.includes('it &') ? 'digital-workflow-review' :
       normalized.includes('growth') || normalized.includes('governance') ? 'growth-governance' : null;
-    if (serviceId) {
-      chooseService(serviceId);
+    const service = SERVICES.find((item) => item.id === serviceId);
+    if (!service) {
+      setChatError('I could not match that selection to an advisory service. Please choose again.');
       return;
     }
-    setChatError('Choose one of the advisory services or open a live assessment below.');
+    setChatError('');
+    setSelectedServiceId(service.id);
+    setRoute(null);
+    setScreen('start');
+    const userMessage: ChatMessage = {
+      id: 'user-service-' + Date.now(),
+      role: 'user',
+      text: 'I want help with: ' + title
+    };
+    const assistantMessage: ChatMessage = {
+      id: 'assistant-service-' + Date.now(),
+      role: 'assistant',
+      text: 'For ' + service.title + ', I recommend starting here: ' + service.description + '\\n\\nBest fit: ' + service.bestFor + '\\n\\nWhat you can receive:\\n• ' + service.deliverables.join('\\n• ') + '\\n\\nI can help you define the scope and next steps. Choose “Show recommended service” to see the solution details and proposal options.',
+      suggestedServiceId: service.id,
+      suggestedPrompts: service.id === 'financial-clarity'
+        ? ['Build a 13-week cash-flow view', 'Identify cash and cost pressure points', 'Create a 30-day action plan']
+        : service.id === 'contract-collections'
+          ? ['Prioritise overdue invoices', 'Review customer payment terms', 'Create a collections tracker']
+          : service.id === 'risk-assurance'
+            ? ['Create a risk register', 'Prioritise business risks', 'Assign mitigation owners']
+            : service.id === 'controls-fraud'
+              ? ['Review payment approvals', 'Find control gaps', 'Create corrective actions']
+              : service.id === 'funding-readiness'
+                ? ['Prepare a lender checklist', 'Review debt-service readiness', 'List funding document gaps']
+                : service.id === 'strategy-sprint'
+                  ? ['Compare growth options', 'Choose a target market', 'Build a 90-day roadmap']
+                  : service.id === 'project-delivery'
+                    ? ['Review milestones and budget', 'Create a RAID log', 'Build a recovery plan']
+                    : service.id === 'digital-workflow-review'
+                      ? ['Map a business workflow', 'Find handoff problems', 'Prioritise system improvements']
+                      : ['Clarify decision ownership', 'Set 90-day priorities', 'Build a leadership review cadence']
+    };
+    setChatMessages((messages) => [...messages, userMessage, assistantMessage]);
+    window.setTimeout(() => document.getElementById('financial-genie-chat')?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 50);
   };
 
   const sendChatMessage = async (rawMessage: string) => {
@@ -433,7 +475,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
               <section aria-label="Navigalex Services and Live Assessments" className="order-1 min-w-0 space-y-4 lg:order-2">
                 <section aria-label="Navigalex Services">
                   <h3 className="mb-2 text-base font-bold">Navigalex Services</h3>
-                  <div className="grid gap-3 sm:grid-cols-2">
+                  <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-2">
                     {[
                       ['Financial Clarity Check','Cash flow, costs and credit readiness'],
                       ['Contract & Collections Review','Payment delays and key contract risks'],
@@ -444,8 +486,8 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                       ['Project Management & Recovery','Delivery, PMO, budgets, dependencies and turnaround'],
                       ['IT & Digital Operations','Systems workflows, IT controls, cybersecurity and vendor risks']
                     ].map(([title, detail]) => (
-                      <button key={title} type="button" disabled={chatBusy} onClick={() => handleServiceChoice(title)} className="flex min-h-24 items-center justify-between gap-2 rounded-xl border border-blue-100 bg-white p-3 text-left text-slate-950 shadow-sm transition hover:bg-blue-50 disabled:opacity-60">
-                        <span><span className="block text-sm font-extrabold">{title}</span><span className="mt-1 block text-xs leading-relaxed text-slate-600">{detail}</span></span>
+                      <button key={title} type="button" disabled={chatBusy} onClick={() => handleServiceChoice(title)} className="flex min-h-12 items-center justify-between gap-1.5 rounded-lg border border-blue-100 bg-white p-1.5 text-left text-slate-950 shadow-sm transition hover:bg-blue-50 disabled:opacity-60">
+                        <span><span className="block text-xs font-extrabold leading-tight">{title}</span><span className="mt-0.5 block text-[10px] leading-snug text-slate-600">{detail}</span></span>
                         <ChevronRight className="h-4 w-4 shrink-0 text-blue-700" />
                       </button>
                     ))}
@@ -455,8 +497,8 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                   <h3 className="mb-2 text-base font-bold">Live Assessments &amp; Guides</h3>
                   <div className="grid gap-2">
                     {['Contract Risk Scanner','Bank DSCR Scanner'].map((title) => (
-                      <button key={title} type="button" disabled={chatBusy} onClick={() => { onNavigateTab('live-tools'); }} className="flex items-center justify-between rounded-xl bg-cyan-50 p-4 text-left text-slate-950 hover:bg-cyan-100 disabled:opacity-60">
-                        <span className="text-sm font-bold">{title} <span className="ml-2 rounded-full bg-emerald-200 px-2 py-1 text-xs text-emerald-900">Live</span></span>
+                      <button key={title} type="button" disabled={chatBusy} onClick={() => { onNavigateTab('live-tools'); }} className="flex min-h-10 items-center justify-between rounded-lg bg-cyan-50 px-2.5 py-2 text-left text-slate-950 hover:bg-cyan-100 disabled:opacity-60">
+                        <span className="text-xs font-bold">{title} <span className="ml-1 rounded-full bg-emerald-200 px-1.5 py-0.5 text-[10px] text-emerald-900">Live</span></span>
                         <ChevronRight className="h-4 w-4 text-teal-700" />
                       </button>
                     ))}
