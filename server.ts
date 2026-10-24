@@ -850,10 +850,13 @@ Respond with ONLY a JSON object (no markdown fences, no extra commentary) in exa
         failures.push(provider.name + ': ' + (err?.message || String(err)));
       }
     }
-    return res.status(503).json({
-      success: false,
-      error: 'The advisory assistant is unavailable because no configured AI provider returned a response.',
-      providers: failures.map((item) => item.split(':')[0])
+    console.warn('[bot/chat] Dynamic AI unavailable; returning the published service catalogue fallback. Providers attempted:', failures.map((item) => item.split(':')[0]).join(', ') || 'none');
+    return res.json({
+      success: true,
+      modelUsed: 'navigalex-service-catalogue',
+      provider: 'catalogue-fallback',
+      dynamicAiAvailable: false,
+      reply: 'I can still help you choose a defined starting service, although the open-ended AI response is temporarily unavailable.\\n\\n• Cash flow, costs or working capital — Financial Clarity Check.\\n• Late customer payments or contract terms — Contract & Collections Review.\\n• Business, vendor or third-party risks — Risk Management & Assurance Review.\\n• A process, approvals or compliance gaps — Controls & Fraud-Prevention Snapshot.\\n• Loan preparation or lender questions — Lender & Funding Readiness Check.\\n• Decision ownership and accountability — Growth & Governance Sprint.\\n• Market, product or growth choices — Strategy & Market Growth Sprint.\\n• Delayed or over-budget delivery — Project Delivery & Recovery Review.\\n• Disconnected software or workflows — Digital Workflow & Systems Review.\\n\\nChoose the closest issue above or select a service card. Please do not paste confidential financial, contract, identity or banking records into this chat.'
     });
   });
 
