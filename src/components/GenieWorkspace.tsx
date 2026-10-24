@@ -207,7 +207,7 @@ const CHAT_PROMPTS = [
 function matchServiceFromMessage(message: string): Service | null {
   const value = message.toLowerCase();
 
-  if (/(invoice|overdue|late payment|customer payment|contract|collections?)/.test(value)) {
+  if (/(invoice|overdue|late payment|customer payment|customers? (?:are )?paying late|paying late|contract|collections?)/.test(value)) {
     return SERVICES.find((service) => service.id === 'contract-collections') ?? null;
   }
   if (/(fraud|approval|procurement|inventory|process|control|unsafe)/.test(value)) {
@@ -357,7 +357,8 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
       if (!response.ok || payload.success !== true || typeof payload.reply !== 'string') {
         throw new Error(payload.error || 'Financial Genie could not respond just now. Please retry or describe your business problem.');
       }
-      const match = matchServiceFromMessage(text);
+      // Keep follow-up questions scoped to the selected service until the user resets the problem.
+      const match = selectedService ?? matchServiceFromMessage(text);
       const prompts = match?.id === 'financial-clarity'
         ? ['Build a 13-week cash-flow forecast', 'Find the biggest cash leak', 'Make a 30-day action plan']
         : match?.id === 'contract-collections'
