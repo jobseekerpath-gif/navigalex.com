@@ -321,16 +321,16 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
   return (
     <section className="relative mx-auto w-full max-w-5xl px-2 pb-6 pt-3 sm:px-4 sm:pt-4">
       <div className="overflow-hidden rounded-2xl border border-[#244bd7]/25 bg-white shadow-[0_12px_36px_rgba(30,64,175,0.12)]">
-        <header className="relative overflow-hidden bg-gradient-to-br from-[#0d1c48] via-[#1f4fff] to-[#27419d] px-4 py-4 text-white sm:px-6 sm:py-5">
+        <header className="relative overflow-hidden bg-gradient-to-br from-[#0d1c48] via-[#1f4fff] to-[#27419d] px-3 py-2 text-white sm:px-4 sm:py-2.5">
           <div className="absolute -right-16 -top-20 h-60 w-60 rounded-full bg-white/10 blur-2xl" aria-hidden="true" />
           <div className="absolute -bottom-24 left-1/3 h-48 w-48 rounded-full bg-cyan-200/15 blur-3xl" aria-hidden="true" />
-          <div className="relative flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
-            <div className="flex max-w-3xl items-start gap-3.5">
-              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white text-xl font-black tracking-tight text-[#1f4fff] shadow-lg shadow-slate-950/15" aria-hidden="true">N</span>
+          <div className="relative flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+            <div className="flex max-w-3xl items-start gap-2">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-white text-base font-black tracking-tight text-[#1f4fff] shadow-lg shadow-slate-950/15" aria-hidden="true">N</span>
               <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-blue-100">Navigalex Advisory</p>
-                <h1 className="mt-1 text-2xl font-extrabold tracking-tight sm:text-3xl">Financial Genie</h1>
-                <p className="mt-2 max-w-2xl text-sm leading-relaxed text-blue-50 sm:text-base">
+                <p className="text-[8px] font-bold uppercase tracking-[0.18em] text-blue-100">Navigalex Advisory</p>
+                <h1 className="mt-0.5 text-lg font-extrabold tracking-tight sm:text-xl">Financial Genie</h1>
+                <p className="mt-1 max-w-2xl text-xs leading-snug text-blue-50 sm:text-sm">
                   Choose the business problem first. Financial Genie will show the right starting service, what you receive and the next step.
                 </p>
               </div>
@@ -347,13 +347,13 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
             )}
           </div>
 
-          <div className="relative mt-4 grid grid-cols-3 gap-1.5 text-center text-[10px] sm:max-w-xl sm:text-xs">
+          <div className="relative mt-2 grid grid-cols-3 gap-1 text-center text-[9px] sm:max-w-xl sm:text-[10px]">
             {[
               ['1', 'Choose your need'],
               ['2', 'Set your goal'],
               ['3', 'See your next step']
             ].map(([number, label], index) => (
-              <div key={number} className={index + 1 <= step ? 'rounded-xl bg-white/20 px-2 py-2.5 font-bold text-white' : 'rounded-xl border border-white/15 bg-slate-950/10 px-2 py-2.5 text-blue-100'}>
+              <div key={number} className={index + 1 <= step ? 'rounded-lg bg-white/20 px-2 py-1 font-bold text-white' : 'rounded-lg border border-white/15 bg-slate-950/10 px-2 py-1 text-blue-100'}>
                 <span className="mr-1.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-white/20 text-[10px]">{number}</span>
                 {label}
               </div>
@@ -382,7 +382,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                   </div>
                 </div>
 
-                <div className="max-h-64 space-y-3 overflow-y-auto bg-white p-3 sm:p-4" aria-live="polite">
+                <div className="max-h-[32rem] min-h-[24rem] space-y-3 overflow-y-auto bg-white p-4 sm:p-6" aria-live="polite">
                   {chatMessages.map((message) => (
                     <div key={message.id} className={message.role === 'user' ? 'ml-auto max-w-[88%] rounded-2xl rounded-br-md bg-[#1f4fff] px-4 py-3 text-sm leading-relaxed text-white sm:max-w-[75%]' : 'max-w-[88%] rounded-2xl rounded-bl-md bg-slate-100 px-4 py-3 text-sm leading-relaxed text-slate-800 sm:max-w-[75%]'}>
                       {message.text}
