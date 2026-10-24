@@ -399,6 +399,24 @@ export default function App() {
       </header>
       {/* Main Content */}
       <main className="flex-1">
+        {activeTab !== 'home' && (
+          <div className="mx-auto flex w-full max-w-7xl justify-start px-4 pt-4 sm:px-6 lg:px-8">
+            <button
+              type="button"
+              onClick={() => {
+                window.history.pushState(null, '', '/');
+                setActiveTab('home');
+                window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+              }}
+              className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-blue-200 bg-white px-4 py-2 text-sm font-bold text-blue-800 shadow-sm transition hover:border-blue-400 hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
+              aria-label="Return to Financial Genie"
+            >
+              <MessageCircle className="h-4 w-4" />
+              Back to Financial Genie
+            </button>
+          </div>
+        )}
+
         {activeTab === 'home' && (
           <Suspense fallback={<div className="min-h-[70vh] flex items-center justify-center text-sm text-slate-500">Opening your advisory workspace…</div>}>
             <GenieWorkspace
