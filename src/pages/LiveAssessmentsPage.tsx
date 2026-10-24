@@ -339,7 +339,7 @@ export default function LiveAssessmentsPage({ visitorId, onOpenAssessment }: Liv
           <div className="py-16 px-6 max-w-7xl mx-auto space-y-20">
             <div className="text-center max-w-3xl mx-auto space-y-3">
               <span className="text-xs font-bold text-blue-600 uppercase tracking-widest">COMMERCIAL-GRADE WORKING ENGINES</span>
-              <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900">Live AI Financial & Legal Assessments</h2>
+              <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900">Live AI Financial & Commercial Assessments</h2>
               <p className="text-slate-600">Assess real contracts, check loan readiness, and generate an instant business diagnostic report.</p>
             </div>
 
