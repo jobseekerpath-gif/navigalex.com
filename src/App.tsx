@@ -9,7 +9,7 @@ import {
   Sparkles, Activity, Lock, Users, Building2, ChevronRight, Menu, X, 
   AlertTriangle, FileCheck, DollarSign, Briefcase, Clock, Check, 
   HelpCircle, Send, Download, Phone, Mail, Award, Eye, Database,
-  Upload, File, RefreshCw, AlertCircle, TrendingUp, Landmark, MapPin
+  Upload, File, RefreshCw, AlertCircle, TrendingUp, Landmark, MapPin, MessageCircle
 } from 'lucide-react';
 
 export default function App() {
