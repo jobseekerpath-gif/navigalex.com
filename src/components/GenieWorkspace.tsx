@@ -232,7 +232,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
     {
       id: 'welcome',
       role: 'assistant',
-      text: 'Hi, I am Financial Genie. Tell me what is happening in your business, or choose a quick option below. I will suggest the clearest starting service.'
+      text: 'I will suggest the clearest starting service.'
     }
   ]);
 
@@ -406,36 +406,6 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                     </div>
                   ))}
                 </div>
-
-                <div className="border-t border-blue-100 bg-slate-50 p-3 sm:p-4">
-                  <div className="mb-3">
-                    <h3 className="text-sm font-extrabold text-slate-900">Choose a business need</h3>
-                    <p className="mt-1 text-xs text-slate-600">Select any option to see the recommended starting service.</p>
-                  </div>
-              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                {SERVICES.map((service) => {
-                  const Icon = service.Icon;
-                  return (
-                    <button
-                      key={service.id}
-                      type="button"
-                      onClick={() => chooseService(service.id)}
-                      className="group min-h-0 rounded-xl border border-slate-200 bg-white p-3.5 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-[#1f4fff] hover:shadow-lg hover:shadow-blue-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1f4fff]"
-                    >
-                      <span className="flex items-start justify-between gap-3">
-                        <span className="rounded-xl bg-blue-50 p-2.5 text-[#1f4fff]"><Icon className="h-5 w-5" /></span>
-                        <ChevronRight className="h-5 w-5 text-slate-300 transition group-hover:translate-x-0.5 group-hover:text-[#1f4fff]" />
-                      </span>
-                      <span className="mt-2 block text-[11px] font-bold uppercase tracking-wide text-[#1f4fff]">{service.pillar}</span>
-                      <span className="mt-1 block text-base font-extrabold leading-snug text-slate-950">{service.shortLabel}</span>
-                      <span className="mt-2 block text-sm leading-relaxed text-slate-600">{service.description}</span>
-                      <span className="mt-2 inline-flex items-center gap-1 text-xs font-bold text-[#1f4fff]">Choose this path <ArrowRight className="h-3.5 w-3.5" /></span>
-                    </button>
-                  );
-                })}
-              </div>
-
-      
 
                 {chatBusy && <p className="px-4 py-2 text-xs font-semibold text-slate-600" role="status">Financial Genie is preparing a response…</p>}
                 {chatError && <div className="mx-3 my-2 rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900" role="alert">{chatError} <button type="button" className="ml-2 font-bold underline" onClick={() => sendChatMessage(chatMessages.filter((m) => m.role === "user").slice(-1)[0]?.text || chatInput)}>Retry</button></div>}
