@@ -193,7 +193,7 @@ export const ADVISORY_DESKS: Service[] = [
     price: 'Fixed quote after a short scoping call',
     exclusions: 'Not legal advice, company-secretarial work, a formal board evaluation or a regulatory certification.',
     Icon: Users
-  }
+  },
   {
     id: 'strategy-sprint',
     pillar: 'governance',
