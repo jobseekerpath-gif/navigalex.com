@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   ArrowUpRight, CheckCircle2, ChevronRight, ClipboardCheck,
   ChartNoAxesCombined, Clock3, FileText, Landmark, Search, ShieldCheck, Users, Wallet, Workflow
@@ -234,44 +234,6 @@ export const ADVISORY_DESKS: Service[] = [
   },
 
   {
-    id: 'strategy-growth-sprint',
-    pillar: 'strategy',
-    pillarLabel: 'Strategy & Business Growth',
-    title: 'Strategy & Market Growth Sprint',
-    badge: 'Growth decisions',
-    shortLabel: 'Choose a growth direction',
-    tagline: 'Compare realistic growth options and decide what to test first.',
-    summary: 'A bounded strategy engagement for one decision about a market, product, channel or growth priority, using evidence and assumptions supplied or agreed with the client.',
-    idealFor: 'Owner-led businesses deciding where to focus limited time and investment.',
-    outcomes: ['A clearly framed decision and success measures', 'A comparison of up to three strategic options and their key assumptions', 'A prioritised 90-day roadmap with decision gates'],
-    deliverables: ['Decision brief and assumptions register', 'Options comparison with opportunities, risks and information gaps', '90-day action roadmap and one findings session'],
-    clientInputs: 'Business goals, current performance information where available, customer/market evidence already held, and access to the decision maker.',
-    timeframe: 'Typically 7–10 working days after complete inputs',
-    engagement: 'One defined strategic question, up to three options, one review round and a practical roadmap.',
-    price: 'Fixed quote after a short scoping call',
-    exclusions: 'Does not include independently commissioned market research, legal or tax advice, M&A due diligence, investment advice or guaranteed commercial outcomes.',
-    Icon: ChartNoAxesCombined
-  },
-  {
-    id: 'project-delivery-review',
-    pillar: 'project',
-    pillarLabel: 'Project Management & Delivery',
-    title: 'Project Delivery & Recovery Review',
-    badge: 'Delivery health',
-    shortLabel: 'Project is delayed or over budget',
-    tagline: 'Make project status, blockers and recovery decisions visible.',
-    summary: 'A focused review of one project’s plan, milestones, scope, budget assumptions, risks and dependencies, followed by a prioritised next-step plan.',
-    idealFor: 'Small teams or project sponsors facing missed milestones, unclear ownership or scope changes.',
-    outcomes: ['A concise view of schedule, scope, cost and delivery risks', 'A RAID log with owners and next actions', 'A practical recovery or next-phase plan'],
-    deliverables: ['Review of supplied project plan, status reports and budget assumptions', 'Milestone/dependency map and RAID register', 'Recovery actions, owners, dates and decision points', 'One review meeting'],
-    clientInputs: 'Current project plan, latest status report, milestone dates, budget assumptions, issue list and key stakeholder contacts.',
-    timeframe: 'Typically 5–10 working days after complete inputs',
-    engagement: 'One project with agreed evidence limits; this is a diagnostic review, not day-to-day project staffing.',
-    price: 'Fixed quote based on project size and complexity',
-    exclusions: 'Does not include project execution, engineering sign-off, independent statutory assurance or a guarantee that a project can be recovered.',
-    Icon: Workflow
-  },
-  {
     id: 'digital-workflow-review',
     pillar: 'technology',
     pillarLabel: 'IT & Digital Operations',
@@ -314,7 +276,10 @@ const SERVICE_HANDOFFS: Record<string, string> = {
   'internal-audit': 'controls-fraud',
   'growth-governance': 'growth-governance',
   'strategy-sprint': 'strategy-sprint',
-  'project-delivery': 'project-delivery'
+  'project-delivery': 'project-delivery',
+  'strategy-growth-sprint': 'strategy-sprint',
+  'project-delivery-review': 'project-delivery',
+  'digital-workflow-review': 'digital-workflow-review'
 };
 
 const PROBLEM_SHORTCUTS = ADVISORY_DESKS.map(({ id, shortLabel, summary, Icon }) => ({
@@ -467,7 +432,7 @@ export default function ServicesPage({ onInquiry }: ServicesPageProps) {
       </div>
 
       <p className="text-sm text-slate-600" aria-live="polite">
-        {recommendedId ? 'Showing the starting service closest to the selected business problem.' : 'Showing all eleven starting services.'}
+        {recommendedId ? 'Showing the starting service closest to the selected business problem.' : 'Showing all nine distinct starting services.'}
       </p>
 
       <div id="service-results" className="grid grid-cols-1 gap-6 lg:grid-cols-2">
