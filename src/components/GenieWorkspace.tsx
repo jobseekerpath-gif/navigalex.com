@@ -184,15 +184,17 @@ const ROUTE_COPY: Record<RouteChoice, string> = {
 };
 
 const CHAT_PROMPTS = [
-  'Cash flow is tight',
-  'Customers are paying late',
-  'I am worried about business risks',
-  'I need funding or a loan',
-  'A process feels unsafe',
-  'Growth decisions are unclear',
-  'I need a growth strategy',
-  'My project is delayed or over budget'
-];
+  'Financial Clarity Check',
+  'Contract & Collections Review',
+  'Risk Management & Risk Assurance',
+  'Controls & Compliance Snapshot',
+  'Finance & Funding Readiness',
+  'Strategy & Growth',
+  'Project Management & Recovery',
+  'IT & Digital Operations',
+  'Contract Risk Scanner (Live)',
+  'Bank DSCR Scanner (Live)'
+]
 
 function matchServiceFromMessage(message: string): Service | null {
   const value = message.toLowerCase();
