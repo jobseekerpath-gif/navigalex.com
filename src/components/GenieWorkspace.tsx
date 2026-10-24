@@ -373,6 +373,8 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                 <p className="text-sm leading-relaxed text-slate-600 sm:text-base">Pick the statement closest to your situation. You can change it at any time.</p>
               </div>
 
+              <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.95fr)] lg:gap-5">
+                <div className="min-w-0">
               <section aria-label="Financial Genie chat" className="overflow-hidden rounded-2xl border border-blue-200 bg-slate-50 shadow-sm">
                 <div className="flex items-center gap-3 bg-[#0d1c48] px-4 py-3 text-white">
                   <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/15"><MessageCircle className="h-5 w-5" /></span>
@@ -431,8 +433,11 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                   </form>
                 </div>
               </section>
-
-              <div className="grid gap-2 sm:grid-cols-2">
+                </div>
+                <aside aria-label="Choose an advisory service" className="min-w-0">
+                  <h3 className="mb-2 text-sm font-extrabold text-slate-900">Choose a service</h3>
+                  <div className="max-h-[42rem] space-y-2 overflow-y-auto pr-1">
+              <div className="grid grid-cols-1 gap-2">
                 {SERVICES.map((service) => {
                   const Icon = service.Icon;
                   return (
@@ -440,19 +445,22 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                       key={service.id}
                       type="button"
                       onClick={() => chooseService(service.id)}
-                      className="group min-h-36 rounded-xl border border-slate-200 bg-white p-3.5 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-[#1f4fff] hover:shadow-lg hover:shadow-blue-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1f4fff]"
+                      className="group min-h-0 rounded-xl border border-slate-200 bg-white p-3.5 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-[#1f4fff] hover:shadow-lg hover:shadow-blue-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1f4fff]"
                     >
                       <span className="flex items-start justify-between gap-3">
                         <span className="rounded-xl bg-blue-50 p-2.5 text-[#1f4fff]"><Icon className="h-5 w-5" /></span>
                         <ChevronRight className="h-5 w-5 text-slate-300 transition group-hover:translate-x-0.5 group-hover:text-[#1f4fff]" />
                       </span>
-                      <span className="mt-5 block text-[11px] font-bold uppercase tracking-wide text-[#1f4fff]">{service.pillar}</span>
+                      <span className="mt-3 block text-[11px] font-bold uppercase tracking-wide text-[#1f4fff]">{service.pillar}</span>
                       <span className="mt-1 block text-base font-extrabold leading-snug text-slate-950">{service.shortLabel}</span>
                       <span className="mt-2 block text-sm leading-relaxed text-slate-600">{service.description}</span>
-                      <span className="mt-4 inline-flex items-center gap-1 text-xs font-bold text-[#1f4fff]">Choose this path <ArrowRight className="h-3.5 w-3.5" /></span>
+                      <span className="mt-3 inline-flex items-center gap-1 text-xs font-bold text-[#1f4fff]">Choose this path <ArrowRight className="h-3.5 w-3.5" /></span>
                     </button>
                   );
                 })}
+              </div>
+                  </div>
+                </aside>
               </div>
 
               <div className="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:flex-row sm:items-center sm:justify-between">
