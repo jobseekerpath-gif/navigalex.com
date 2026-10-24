@@ -421,7 +421,7 @@ export default function App() {
           <Suspense fallback={<div className="min-h-[70vh] flex items-center justify-center text-sm text-slate-500">Opening your advisory workspace…</div>}>
             <GenieWorkspace
               onOpenAssessment={openAssessmentForm}
-              onNavigateTab={(tab) => { setActiveTab(tab); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+              onNavigateTab={(tab) => { setActiveTab(tab); window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior }); window.setTimeout(() => window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior }), 80); }}
             />
           </Suspense>
         )}
@@ -881,6 +881,23 @@ export default function App() {
           </p>
         </div>
       </section>
+
+      {activeTab !== 'home' && (
+        <div className="mx-auto flex w-full max-w-7xl justify-start px-4 py-6 sm:px-6 lg:px-8">
+          <button
+            type="button"
+            onClick={() => {
+              window.history.pushState(null, '', '/');
+              setActiveTab('home');
+              window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+            }}
+            className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-blue-200 bg-white px-4 py-2 text-sm font-bold text-blue-800 shadow-sm transition hover:border-blue-400 hover:bg-blue-50"
+          >
+            <MessageCircle className="h-4 w-4" />
+            Back to Financial Genie
+          </button>
+        </div>
+      )}
 
       {/* Footer with Working Commercial Grade Links */}
       <footer className="bg-[#0b1329] text-slate-300 py-16 px-6 border-t border-slate-800 text-xs">
