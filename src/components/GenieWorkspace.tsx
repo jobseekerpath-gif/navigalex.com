@@ -575,7 +575,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
 
           {screen === 'context' && selectedService && (
             <div className="mx-auto max-w-3xl space-y-6">
-              <button type="button" onClick={() => setScreen('start')} className="inline-flex min-h-11 items-center gap-1 text-sm font-bold text-[#1f4fff] hover:text-[#183bc4]">
+              <button type="button" onClick={reset} className="inline-flex min-h-11 items-center gap-1 text-sm font-bold text-[#1f4fff] hover:text-[#183bc4]">
                 <ChevronLeft className="h-4 w-4" /> Change the business problem
               </button>
               <div className="rounded-2xl border border-blue-200 bg-blue-50/70 p-5 sm:p-6">
