@@ -454,7 +454,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
               <section id="financial-genie-chat" aria-label="Financial Genie chat" className="order-2 min-w-0 rounded-xl bg-white p-3 text-slate-900 lg:order-1">
                 <div className="max-h-72 min-h-20 space-y-3 overflow-y-auto p-2" aria-live="polite">
                   {chatMessages.map((message) => (
-                    <div key={message.id} className={message.role === 'user' ? 'ml-auto max-w-[85%] rounded-xl bg-blue-700 p-3 text-sm text-white' : 'max-w-[85%] rounded-xl bg-slate-100 p-3 text-sm text-slate-800'}>
+                    <div key={message.id} className={message.role === 'user' ? 'ml-auto max-w-[85%] whitespace-pre-line rounded-xl bg-blue-700 p-3 text-sm text-white' : 'max-w-[95%] whitespace-pre-line rounded-xl bg-slate-100 p-3 text-sm leading-relaxed text-slate-800'}>
                       {message.text}
                       {message.suggestedPrompts && <div className="mt-2 flex flex-wrap gap-2">{message.suggestedPrompts.map(prompt => <button key={prompt} type="button" disabled={chatBusy} onClick={() => sendChatMessage(prompt)} className="rounded-lg border bg-white px-2 py-1 text-xs text-blue-800">{prompt}</button>)}</div>}
                       {message.suggestedServiceId && <button type="button" onClick={() => chooseService(message.suggestedServiceId!)} className="mt-2 block rounded-lg bg-blue-700 px-3 py-2 text-xs font-bold text-white">Show recommended service</button>}
@@ -473,6 +473,27 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                 </form>
               </section>
               <section aria-label="Navigalex Services and Live Assessments" className="order-1 min-w-0 space-y-4 lg:order-2">
+                {selectedService && (
+                  <section aria-label="Selected service recommendation" className="overflow-hidden rounded-xl border border-blue-200 bg-white text-slate-900 shadow-sm">
+                    <div className="flex items-start gap-2.5 bg-gradient-to-r from-blue-50 to-indigo-50 p-3">
+                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-700 text-white"><selectedService.Icon className="h-4 w-4" /></span>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-[9px] font-bold uppercase tracking-wider text-blue-700">Selected service</p>
+                        <h3 className="mt-0.5 text-sm font-extrabold leading-snug">{selectedService.title}</h3>
+                        <p className="mt-1 text-xs leading-relaxed text-slate-600">{selectedService.description}</p>
+                      </div>
+                    </div>
+                    <div className="space-y-2 p-3">
+                      <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500">Your likely deliverables</p>
+                      <ul className="space-y-1.5">
+                        {selectedService.deliverables.slice(0, 3).map(item => (
+                          <li key={item} className="flex gap-1.5 text-[11px] leading-snug text-slate-700"><CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-600" /><span>{item}</span></li>
+                        ))}
+                      </ul>
+                      <button type="button" onClick={() => chooseService(selectedService.id)} className="mt-1 inline-flex min-h-9 w-full items-center justify-center gap-2 rounded-lg bg-blue-700 px-3 py-2 text-xs font-bold text-white hover:bg-blue-800">View solution and next steps <ArrowRight className="h-3.5 w-3.5" /></button>
+                    </div>
+                  </section>
+                )}
                 <section aria-label="Navigalex Services">
                   <h3 className="mb-2 text-base font-bold">Navigalex Services</h3>
                   <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-2">
