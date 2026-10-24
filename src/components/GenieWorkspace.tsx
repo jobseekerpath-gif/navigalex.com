@@ -434,19 +434,6 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
               </section>
               </div>
 
-              <div className="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:flex-row sm:items-center sm:justify-between">
-                <div className="flex items-start gap-3">
-                  <MessageCircle className="mt-0.5 h-5 w-5 shrink-0 text-[#1f4fff]" />
-                  <div>
-                    <p className="font-bold text-slate-900">Not sure what matters most?</p>
-                    <p className="mt-1 text-sm text-slate-600">Choose one of the six fixed-scope advisory reviews below, or ask Financial Genie to guide you.</p>
-                  </div>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  <button type="button" onClick={openAllServices} className="min-h-11 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-bold text-slate-800 hover:bg-slate-100">Browse all services in Genie</button>
-                  <button type="button" onClick={() => onOpenAssessment('Help me choose the right Navigalex service')} className="min-h-11 rounded-xl bg-[#1f4fff] px-4 py-2.5 text-sm font-bold text-white hover:bg-[#183bc4]">Help me choose</button>
-                </div>
-              </div>
             </div>
           )}
 
