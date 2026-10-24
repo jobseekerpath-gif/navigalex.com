@@ -304,6 +304,11 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
     }
   };
 
+  const chooseChatOption = (prompt: string) => {
+    document.getElementById('financial-genie-chat')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    void sendChatMessage(prompt);
+  };
+
   const reset = () => {
     setSelectedServiceId(null);
     setRoute(null);
@@ -396,7 +401,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                     ['Project Management & Recovery','Delivery, PMO, budgets, dependencies and turnaround'],
                     ['IT & Digital Operations','Systems workflows, IT controls, cybersecurity and vendor risks']
                   ].map(([title, detail]) => (
-                    <button key={title} type="button" disabled={chatBusy} onClick={() => sendChatMessage(title + ': ' + detail)} className="flex min-h-28 items-center justify-between gap-2 rounded-xl border border-blue-100 bg-white p-3 text-left text-slate-950 shadow-sm transition hover:bg-blue-50 disabled:opacity-60">
+                    <button key={title} type="button" disabled={chatBusy} onClick={() => chooseChatOption(title + ': ' + detail)} className="flex min-h-28 items-center justify-between gap-2 rounded-xl border border-blue-100 bg-white p-3 text-left text-slate-950 shadow-sm transition hover:bg-blue-50 disabled:opacity-60">
                       <span><span className="block text-sm font-extrabold">{title}</span><span className="mt-1 block text-xs leading-relaxed text-slate-600">{detail}</span></span>
                       <ChevronRight className="h-4 w-4 shrink-0 text-blue-700" />
                     </button>
@@ -407,14 +412,14 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                 <h3 className="mb-2 text-base font-bold">Live Assessments &amp; Guides</h3>
                 <div className="grid gap-2 sm:grid-cols-2">
                   {['Contract Risk Scanner','Bank DSCR Scanner'].map((title) => (
-                    <button key={title} type="button" disabled={chatBusy} onClick={() => sendChatMessage('Help me use the ' + title)} className="flex items-center justify-between rounded-xl bg-cyan-50 p-4 text-left text-slate-950 hover:bg-cyan-100 disabled:opacity-60">
+                    <button key={title} type="button" disabled={chatBusy} onClick={() => chooseChatOption('Help me use the ' + title)} className="flex items-center justify-between rounded-xl bg-cyan-50 p-4 text-left text-slate-950 hover:bg-cyan-100 disabled:opacity-60">
                       <span className="text-sm font-bold">{title} <span className="ml-2 rounded-full bg-emerald-200 px-2 py-1 text-xs text-emerald-900">Live</span></span>
                       <ChevronRight className="h-4 w-4 text-teal-700" />
                     </button>
                   ))}
                 </div>
               </section>
-              <section aria-label="Financial Genie chat" className="rounded-xl bg-white p-3 text-slate-900">
+              <section id="financial-genie-chat" aria-label="Financial Genie chat" className="rounded-xl bg-white p-3 text-slate-900">
                 <div className="max-h-72 min-h-20 space-y-3 overflow-y-auto p-2" aria-live="polite">
                   {chatMessages.map((message) => (
                     <div key={message.id} className={message.role === 'user' ? 'ml-auto max-w-[85%] rounded-xl bg-blue-700 p-3 text-sm text-white' : 'max-w-[85%] rounded-xl bg-slate-100 p-3 text-sm text-slate-800'}>
