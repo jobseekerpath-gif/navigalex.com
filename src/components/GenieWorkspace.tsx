@@ -463,8 +463,6 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                 </div>
               </section>
               </div>
-        </aside>
-              </div>
 
               <div className="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex items-start gap-3">
