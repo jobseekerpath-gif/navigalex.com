@@ -41,6 +41,8 @@ assert(genie.includes("fetch('/api/bot/chat'") && genie.includes('chatBusy'), 'F
 assert(genie.includes('Navigalex Services and Live Assessments') && genie.includes('lg:grid-cols-[minmax(0,3fr)_minmax(280px,1.35fr)]'), 'Financial Genie gives the chat roughly three-quarters of desktop width and keeps services in a right panel');
 assert(genie.includes('onClick={() => handleServiceChoice(title)}') && genie.includes('Your likely deliverables') && genie.includes('View solution and next steps'), 'Selecting a service starts a tailored recommendation with deliverables and a solution action');
 assert(genie.includes('Change the business problem') && genie.includes("setChatMessages([{") && genie.includes("setChatInput('')"), 'Changing the business problem clears the previous conversation and selected service');
+assert(genie.includes('chatRequestVersion.current += 1') && genie.includes('requestVersion !== chatRequestVersion.current'), 'reset ignores late chat replies from an old conversation');
+assert(app.includes("if (tab === 'home') window.history.pushState(null, '', '/')"), 'home navigation clears stale service URL state');
 assert(!app.includes('Navigalex Services</h4>') && !app.includes('Live Assessments & Guides</h4>'), 'service and assessment directories are removed from the footer');
 assert(genie.includes('View full scope') && genie.includes('Request a scoped proposal'), 'Financial Genie has clear clickable next steps');
 assert(services.includes('Risk Management & Assurance Review') && services.includes('Controls & Fraud-Prevention Snapshot'), 'risk product deliverables are published');
