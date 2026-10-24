@@ -22,6 +22,9 @@ const pkg = JSON.parse(read('package.json'));
 
 assert(server.includes("app.post('/api/inquiries/submit', inquiryRateLimit"), 'inquiry endpoint is rate limited');
 assert(server.includes("app.post('/api/admin/login', loginRateLimit"), 'admin login endpoint is rate limited');
+assert(server.includes("const adminAccessRateLimit = rateLimit('admin-access', 120, 60 * 1000)") && server.includes("app.get('/api/admin/visitors', adminAccessRateLimit, authenticateAdmin"), 'protected admin endpoints have a dedicated rate limit');
+assert(server.includes('const suppliedVisitorId = typeof visitorId === \'string\' ? visitorId.trim().slice(0, 120) : \'\'') && server.includes('const safeDetails = typeof details === \'string\' ? details.slice(0, 500) : \'\''), 'telemetry input sizes are bounded before storage');
+assert(server.includes('if (visitorSessions.size > 5000)') && server.includes('if (adminTokens.size >= 1000)'), 'long-running in-memory telemetry and admin sessions are capped');
 assert(server.includes("app.post('/api/bot/chat', botRateLimit"), 'bot endpoint is rate limited in server source');
 assert(server.includes("app.post('/api/documents/analyze', documentRateLimit"), 'contract analysis endpoint is rate limited');
 assert(server.includes("app.post('/api/assessments/run', assessmentRateLimit"), 'business assessment endpoint is rate limited');
