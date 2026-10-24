@@ -32,6 +32,7 @@ assert(server.includes('RESEND_API_KEY') && server.includes('INQUIRY_TO_EMAIL'),
 assert(server.includes('persistState'), 'file persistence adapter exists');
 assert(server.includes('calculationDisclaimer'), 'financial output labels DSCR as indicative');
 assert(page.includes('calculationDisclaimer'), 'financial disclaimer is shown in the UI');
+assert(page.includes('Live AI Financial & Commercial Assessments') && !page.includes('Live AI Financial & Legal Assessments'), 'assessment page heading does not imply a legal-services offer');
 assert(page.includes('/api/documents/analyze'), 'contract scanner is wired to analysis API');
 assert(page.includes('/api/assessments/run'), 'business assessment is wired to API');
 assert(page.includes('/api/cibil-scan'), 'financial scanner is wired to API');
