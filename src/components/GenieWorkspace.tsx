@@ -491,7 +491,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
               <section id="financial-genie-chat" aria-label="Financial Genie chat" className="order-2 min-w-0 rounded-xl bg-white p-3 text-slate-900 lg:order-1">
                 <div className="mb-2 flex items-center justify-between gap-2 border-b border-slate-100 pb-2">
                   <span className="text-xs font-bold text-slate-700">Your business conversation</span>
-                  <button type="button" onClick={reset} className="inline-flex min-h-8 items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-2.5 py-1.5 text-xs font-bold text-blue-800 hover:bg-blue-100"><RotateCcw className="h-3.5 w-3.5" /> Change the business problem</button>
+                  <button type="button" onClick={reset} className="inline-flex min-h-7 items-center gap-1 rounded-md border border-blue-200 bg-blue-50 px-2 py-1 text-[10px] font-extrabold leading-tight text-blue-800 hover:bg-blue-100"><RotateCcw className="h-3 w-3" /> Change problem</button>
                 </div>
                 <div className="max-h-72 min-h-20 space-y-3 overflow-y-auto p-2" aria-live="polite">
                   {chatMessages.map((message) => (
@@ -504,10 +504,10 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                 </div>
                 {chatBusy && <p role="status" className="p-2 text-xs">Financial Genie is preparing a response…</p>}
                 {chatError && <p role="alert" className="p-2 text-xs text-red-700">{chatError}</p>}
-                <div className="my-3 flex flex-wrap gap-2">
-                  {CHAT_PROMPTS.slice(0, 8).map(prompt => <button key={prompt} type="button" disabled={chatBusy} onClick={() => chooseChatOption(prompt)} className="rounded-full border border-blue-200 bg-blue-50 px-3 py-2 text-xs font-semibold text-blue-900 hover:bg-blue-100">{prompt}</button>)}
+                <div className="my-2 flex flex-wrap gap-1.5">
+                  {CHAT_PROMPTS.slice(0, 8).map(prompt => <button key={prompt} type="button" disabled={chatBusy} onClick={() => chooseChatOption(prompt)} className="rounded-full border border-blue-200 bg-blue-50 px-2 py-1 text-[11px] font-extrabold leading-tight text-blue-900 hover:bg-blue-100">{prompt}</button>)}
                 </div>
-                <div className="mb-2 flex justify-start">
+                <div className="mb-1 flex justify-start">
                   <button type="button" onClick={reset} className="inline-flex min-h-8 items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-2.5 py-1.5 text-xs font-bold text-blue-800 hover:bg-blue-100"><RotateCcw className="h-3.5 w-3.5" /> Change the business problem</button>
                 </div>
                 <form onSubmit={e => {e.preventDefault(); sendChatMessage(chatInput);}} className="space-y-2">
@@ -576,8 +576,8 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
 
           {screen === 'context' && selectedService && (
             <div className="mx-auto max-w-3xl space-y-6">
-              <button type="button" onClick={reset} className="inline-flex min-h-11 items-center gap-1 text-sm font-bold text-[#1f4fff] hover:text-[#183bc4]">
-                <ChevronLeft className="h-4 w-4" /> Change the business problem
+              <button type="button" onClick={reset} className="inline-flex min-h-8 items-center gap-1 text-xs font-extrabold text-[#1f4fff] hover:text-[#183bc4]">
+                <ChevronLeft className="h-3.5 w-3.5" /> Change problem
               </button>
               <div className="rounded-2xl border border-blue-200 bg-blue-50/70 p-5 sm:p-6">
                 <span className="text-xs font-bold uppercase tracking-wide text-[#1f4fff]">You selected</span>
