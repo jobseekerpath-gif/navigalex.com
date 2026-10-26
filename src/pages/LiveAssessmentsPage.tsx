@@ -540,7 +540,7 @@ export default function LiveAssessmentsPage({ visitorId, onOpenAssessment }: Liv
                   <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Annual Business Turnover (₹ in Crores)</label>
                   <input 
                     type="number" 
-                    step="0.5"
+                    step="any"
                     value={cibilForm.turnover}
                     onChange={e => setCibilForm({...cibilForm, turnover: e.target.value})}
                     className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 font-bold focus:outline-none focus:border-emerald-600"
@@ -552,7 +552,7 @@ export default function LiveAssessmentsPage({ visitorId, onOpenAssessment }: Liv
                   <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Total Monthly Loan EMIs (₹ in Lakhs)</label>
                   <input 
                     type="number" 
-                    step="0.5"
+                    step="any"
                     value={cibilForm.monthlyEmi}
                     onChange={e => setCibilForm({...cibilForm, monthlyEmi: e.target.value})}
                     className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 font-bold focus:outline-none focus:border-emerald-600"
@@ -564,7 +564,7 @@ export default function LiveAssessmentsPage({ visitorId, onOpenAssessment }: Liv
                   <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Existing Bank Cash Credit / OD Limit (₹ in Crores)</label>
                   <input 
                     type="number" 
-                    step="0.1"
+                    step="any"
                     value={cibilForm.ccLimit}
                     onChange={e => setCibilForm({...cibilForm, ccLimit: e.target.value})}
                     className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 font-bold focus:outline-none focus:border-emerald-600"
@@ -576,7 +576,7 @@ export default function LiveAssessmentsPage({ visitorId, onOpenAssessment }: Liv
                   <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Overdue Receivables Stuck &gt; 90 Days (₹ in Lakhs)</label>
                   <input 
                     type="number" 
-                    step="5"
+                    step="any"
                     value={cibilForm.overdueDebtors}
                     onChange={e => setCibilForm({...cibilForm, overdueDebtors: e.target.value})}
                     className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 font-bold focus:outline-none focus:border-emerald-600"
@@ -588,7 +588,7 @@ export default function LiveAssessmentsPage({ visitorId, onOpenAssessment }: Liv
                   <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Annual Operating Profit (INR in Crores)</label>
                   <input
                     type="number"
-                    step="0.1"
+                    step="any"
                     min="0"
                     value={cibilForm.annualOperatingProfit}
                     onChange={e => setCibilForm({...cibilForm, annualOperatingProfit: e.target.value})}

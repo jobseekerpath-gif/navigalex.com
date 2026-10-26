@@ -140,6 +140,7 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
   useEffect(() => {
     if (!token || !autoRefresh) return;
     const interval = setInterval(() => {
+      if (typeof document !== 'undefined' && document.hidden) return;
       fetchDashboardData(token, false);
     }, 4000);
     return () => clearInterval(interval);
@@ -150,6 +151,11 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
       const res = await fetch('/api/admin/verify', {
         headers: { Authorization: `Bearer ${authToken}` }
       });
+      if (res.status === 401) {
+        handleLogout();
+        return;
+      }
+      if (!res.ok) return; // temporary problem such as rate limiting: keep the session
       const data = await res.json();
       if (data.authenticated) {
         setAdminUser(data.admin);
@@ -158,7 +164,7 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
         handleLogout();
       }
     } catch {
-      handleLogout();
+      // Network or parse error: keep the session; the next refresh retries.
     }
   };
 
@@ -172,6 +178,11 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
         fetch('/api/admin/visitors', { headers: { Authorization: `Bearer ${authToken}` } }),
         fetch('/api/admin/visitor-activities', { headers: { Authorization: `Bearer ${authToken}` } })
       ]);
+
+      if ([resInq, resCs, resLogs, resVisitors, resActs].some((r) => r.status === 401)) {
+        handleLogout();
+        return;
+      }
 
       const [dataInq, dataCs, dataLogs, dataVisitors, dataActs] = await Promise.all([
         resInq.json(),
@@ -323,6 +334,11 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
           body: JSON.stringify(caseStudyForm)
         });
         const data = await res.json();
+        if (res.status === 401) { handleLogout(); return; }
+        if (!data.success) {
+          window.alert(data.error || 'The case study could not be saved.');
+          return;
+        }
         if (data.success) {
           setCaseStudies(prev => prev.map(cs => cs.id === editingCaseStudy.id ? data.caseStudy : cs));
         }
@@ -336,6 +352,11 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
           body: JSON.stringify(caseStudyForm)
         });
         const data = await res.json();
+        if (res.status === 401) { handleLogout(); return; }
+        if (!data.success) {
+          window.alert(data.error || 'The case study could not be saved.');
+          return;
+        }
         if (data.success) {
           setCaseStudies(prev => [data.caseStudy, ...prev]);
         }
@@ -345,8 +366,8 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
       setCaseStudyForm({
         title: '',
         clientSector: 'Manufacturing & Engineering',
-        region: 'Noida Sector 63, ',
-        dealSize: '₹25 Cr Annual Turnover',
+        region: '',
+        dealSize: '',
         riskIdentified: '',
         advisoryProvided: '',
         concreteRoi: '',
@@ -968,12 +989,12 @@ export default function AdminPanel({ onBackToSite }: AdminPanelProps) {
                   setCaseStudyForm({
                     title: '',
                     clientSector: 'Manufacturing & Engineering',
-                    region: 'Noida Sector 63, ',
-                    dealSize: '₹25 Cr Annual Turnover',
+                    region: '',
+                    dealSize: '',
                     riskIdentified: '',
                     advisoryProvided: '',
                     concreteRoi: '',
-                    status: 'Published'
+                    status: 'Draft'
                   });
                   setShowCaseStudyModal(true);
                 }}

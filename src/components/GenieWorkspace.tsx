@@ -313,7 +313,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
     const assistantMessage: ChatMessage = {
       id: 'assistant-service-' + Date.now(),
       role: 'assistant',
-      text: 'For ' + service.title + ', I recommend starting here: ' + service.description + '\\n\\nBest fit: ' + service.bestFor + '\\n\\nWhat you can receive:\\n• ' + service.deliverables.join('\\n• ') + '\\n\\nI can help you define the scope and next steps. Choose “Show recommended service” to see the solution details and proposal options.',
+      text: 'For ' + service.title + ', I recommend starting here: ' + service.description + '\n\nBest fit: ' + service.bestFor + '\n\nWhat you can receive:\n• ' + service.deliverables.join('\n• ') + '\n\nI can help you define the scope and next steps. Choose “Show recommended service” to see the solution details and proposal options.',
       suggestedServiceId: service.id,
       suggestedPrompts: service.id === 'financial-clarity'
         ? ['Build a 13-week cash-flow view', 'Identify cash and cost pressure points', 'Create a 30-day action plan']

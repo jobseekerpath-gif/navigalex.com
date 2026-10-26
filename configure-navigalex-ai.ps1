@@ -1,5 +1,5 @@
 $ErrorActionPreference = "Stop"
-cd "C:\Users\DELL\Downloads\navigalex"
+Set-Location $PSScriptRoot
 
 # Read the credentials JSON you downloaded and set Railway variables.
 $config = Get-Content ".\navigalex-ai-credentials.json" -Raw | ConvertFrom-Json

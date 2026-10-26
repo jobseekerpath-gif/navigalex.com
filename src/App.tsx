@@ -17,9 +17,9 @@ function resolveActiveTabFromLocation() {
   const pathname = window.location.pathname.toLowerCase();
   const search = new URLSearchParams(window.location.search);
   if (pathname === '/admin' || pathname.startsWith('/admin') || search.has('admin') || window.location.hash.includes('admin')) return 'admin';
-  if (pathname === '/services' || pathname.startsWith('/services') || search.has('persona')) return 'services';
   if (pathname === '/family-office' || pathname.startsWith('/family-office')) return 'family-office';
   if (pathname === '/43b-h-check' || pathname.startsWith('/43b-h-check')) return '43b-h-check';
+  if (pathname === '/services' || pathname.startsWith('/services') || search.has('persona')) return 'services';
   if (pathname === '/live-tools' || pathname.startsWith('/live-tools')) return 'live-tools';
   if (pathname === '/about' || pathname.startsWith('/about')) return 'about';
   if (pathname === '/contact' || pathname.startsWith('/contact')) return 'contact';
