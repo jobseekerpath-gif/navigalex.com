@@ -409,6 +409,12 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
   ]);
 
   const chatRequestVersion = useRef(0);
+  const chatScrollRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const panel = chatScrollRef.current;
+    if (panel) panel.scrollTo({ top: panel.scrollHeight, behavior: 'smooth' });
+  }, [chatMessages, chatBusy]);
 
   const selectedService = useMemo(
     () => SERVICES.find((service) => service.id === selectedServiceId) ?? null,
@@ -483,53 +489,71 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
       role: 'user',
       text: 'I want help with: ' + title
     };
+    const solution = QUICK_SOLUTIONS[service.id];
     const assistantMessage: ChatMessage = {
       id: 'assistant-service-' + Date.now(),
       role: 'assistant',
-      text: 'For ' + service.title + ', I recommend starting here: ' + service.description + '\n\nBest fit: ' + service.bestFor + '\n\nWhat you can receive:\n• ' + service.deliverables.join('\n• ') + '\n\nI can help you define the scope and next steps. Choose “Show recommended service” to see the solution details and proposal options.',
-      suggestedServiceId: service.id,
-      suggestedPrompts: service.id === 'financial-clarity'
-        ? ['Build a 13-week cash-flow view', 'Identify cash and cost pressure points', 'Create a 30-day action plan']
-        : service.id === 'contract-collections'
-          ? ['Prioritise overdue invoices', 'Review customer payment terms', 'Create a collections tracker']
-          : service.id === 'risk-assurance'
-            ? ['Create a risk register', 'Prioritise business risks', 'Assign mitigation owners']
-            : service.id === 'controls-fraud'
-              ? ['Review payment approvals', 'Find control gaps', 'Create corrective actions']
-              : service.id === 'funding-readiness'
-                ? ['Prepare a lender checklist', 'Review debt-service readiness', 'List funding document gaps']
-                : service.id === 'strategy-sprint'
-                  ? ['Compare growth options', 'Choose a target market', 'Build a 90-day roadmap']
-                  : service.id === 'project-delivery'
-                    ? ['Review milestones and budget', 'Create a RAID log', 'Build a recovery plan']
-                    : service.id === 'digital-workflow-review'
-                      ? ['Map a business workflow', 'Find handoff problems', 'Prioritise system improvements']
-                      : ['Clarify decision ownership', 'Set 90-day priorities', 'Build a leadership review cadence']
+      text: 'Here is a practical first step you can start in about 30 seconds. Choose a focused action below for a usable checklist or working template.',
+      quickSolution: solution,
+      quickActions: solution.actions
     };
     setChatMessages((messages) => [...messages, userMessage, assistantMessage]);
+  };
+
+  const runQuickAction = (action: QuickAction) => {
+    if (chatBusy) return;
+    const userMessage: ChatMessage = { id: 'user-action-' + Date.now(), role: 'user', text: action.label };
+    const assistantMessage: ChatMessage = {
+      id: 'assistant-action-' + Date.now(),
+      role: 'assistant',
+      text: 'Here is a practical first pass you can use right now:',
+      quickActionResult: action
+    };
+    setChatMessages((messages) => [
+      ...messages.map((message) => message.quickActions?.length ? { ...message, quickActions: undefined } : message),
+      userMessage,
+      assistantMessage
+    ]);
+    setChatError('');
   };
 
   const sendChatMessage = async (rawMessage: string) => {
     const text = rawMessage.trim();
     if (!text || chatBusy) return;
+
+    // Recognised issue descriptions get a useful starter action without waiting for an AI call.
+    const inferredService = selectedService ?? matchServiceFromMessage(text);
+    if (!selectedService && inferredService) {
+      const solution = QUICK_SOLUTIONS[inferredService.id];
+      setSelectedServiceId(inferredService.id);
+      setChatInput('');
+      setChatError('');
+      setChatMessages((messages) => [
+        ...messages,
+        { id: 'user-' + Date.now(), role: 'user', text },
+        {
+          id: 'assistant-' + Date.now(),
+          role: 'assistant',
+          text: 'I matched your issue to ' + inferredService.title + '. Here is a practical first step you can start in about 30 seconds.',
+          quickSolution: solution,
+          quickActions: solution.actions
+        }
+      ]);
+      return;
+    }
+
     const requestVersion = ++chatRequestVersion.current;
-    // Offer service actions once. Continuing the conversation consumes old buttons so
-    // they cannot remain under earlier messages and appear to repeat with every reply.
-    const hasPriorServiceActions = chatMessages.some((message) =>
-      message.role === 'assistant' && Boolean(message.suggestedPrompts?.length || message.suggestedServiceId)
-    );
     setChatInput('');
     setChatError('');
     setChatBusy(true);
     const userMessage: ChatMessage = { id: 'user-' + Date.now(), role: 'user', text };
     setChatMessages((messages) => [
-      ...messages.map((message) =>
-        message.suggestedPrompts?.length || message.suggestedServiceId
-          ? { ...message, suggestedPrompts: undefined, suggestedServiceId: undefined }
-          : message
-      ),
+      ...messages.map((message) => message.quickActions?.length
+        ? { ...message, quickActions: undefined }
+        : message),
       userMessage
     ]);
+
     try {
       const response = await fetch('/api/bot/chat', {
         method: 'POST',
@@ -541,28 +565,10 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
       if (!response.ok || payload.success !== true || typeof payload.reply !== 'string') {
         throw new Error(payload.error || 'Financial Genie could not respond just now. Please retry or describe your business problem.');
       }
-      // Keep follow-up questions scoped to the selected service until the user resets the problem.
-      const match = selectedService ?? matchServiceFromMessage(text);
-      const prompts = match?.id === 'financial-clarity'
-        ? ['Build a 13-week cash-flow forecast', 'Find the biggest cash leak', 'Make a 30-day action plan']
-        : match?.id === 'contract-collections'
-          ? ['Prioritise overdue invoices', 'Review customer payment terms', 'Create a collections tracker']
-          : match?.id === 'risk-assurance'
-            ? ['Create a business risk register', 'Prioritise compliance gaps', 'Review vendor and cyber risks']
-            : match?.id === 'controls-fraud'
-              ? ['Review payment approvals', 'Find process control gaps', 'Build a fraud-prevention checklist']
-              : match?.id === 'funding-readiness'
-                ? ['Check lender readiness', 'Estimate debt-service coverage', 'Prepare a lender document list']
-                : match?.id === 'growth-governance'
-                  ? ['Set 90-day priorities', 'Clarify team responsibilities', 'Build a simple performance dashboard']
-                  : match?.id === 'strategy-sprint' ? ['Compare three growth options', 'Build a 90-day strategy roadmap', 'List assumptions to validate'] : match?.id === 'project-delivery' ? ['Review project milestones', 'Create a RAID log', 'Build a recovery plan'] : ['What information do you need from me?', 'Explain costs and deliverables', 'Help me choose a solution'];
       setChatMessages((messages) => [...messages, {
         id: 'assistant-' + Date.now(),
         role: 'assistant',
-        text: payload.reply,
-        ...(match && !hasPriorServiceActions
-          ? { suggestedServiceId: match.id, suggestedPrompts: prompts }
-          : {})
+        text: payload.reply
       }]);
     } catch (error) {
       if (requestVersion !== chatRequestVersion.current) return;
@@ -570,11 +576,6 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
     } finally {
       if (requestVersion === chatRequestVersion.current) setChatBusy(false);
     }
-  };
-
-  const chooseChatOption = (prompt: string) => {
-    document.getElementById('financial-genie-chat')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    void sendChatMessage(prompt);
   };
 
   const reset = () => {
@@ -691,32 +692,78 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                     </button>
                   </div>
 
-                  <div className="min-h-[70px] max-h-[480px] space-y-3 overflow-y-auto rounded-xl bg-slate-50/80 p-3 sm:min-h-[90px] sm:p-4" aria-live="polite">
+                  <div ref={chatScrollRef} className="min-h-[70px] max-h-[min(55vh,480px)] space-y-3 overflow-y-auto rounded-xl bg-slate-50/80 p-2.5 sm:min-h-[90px] sm:p-4" aria-live="polite">
                     {chatMessages.map((message) => (
                       <div key={message.id} className={message.role === 'user' ? 'ml-auto max-w-[88%] whitespace-pre-line rounded-2xl rounded-br-md bg-blue-700 p-3.5 text-sm leading-relaxed text-white shadow-sm' : 'max-w-[96%] whitespace-pre-line rounded-2xl rounded-bl-md border border-slate-200 bg-white p-3.5 text-sm leading-relaxed text-slate-800 shadow-sm'}>
                         {message.text}
-                        {message.suggestedPrompts && (
-                          <section aria-label="Suggested next steps" className="mt-4 rounded-xl border border-blue-100 bg-blue-50/60 p-3">
-                            <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-slate-600">Suggested next steps · choose one</p>
-                            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                              {message.suggestedPrompts.map((prompt, index) => (
-                                <button key={prompt} type="button" disabled={chatBusy} onClick={() => sendChatMessage(prompt)} className="group flex min-h-10 w-full items-center justify-between gap-3 rounded-lg border border-blue-200 bg-white px-3 py-2.5 text-left text-xs font-medium leading-relaxed text-blue-950 transition hover:border-blue-400 hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 disabled:cursor-not-allowed disabled:opacity-50">
-                                  <span className="flex min-w-0 items-start gap-2"><span className="mt-0.5 text-[10px] font-bold text-blue-600">{String(index + 1).padStart(2, '0')}</span><span>{prompt}</span></span>
+                        {message.quickSolution && (
+                          <section className="mt-3 rounded-xl border border-blue-200 bg-blue-50/70 p-3 sm:p-4">
+                            <div className="flex flex-wrap items-center justify-between gap-2">
+                              <p className="text-[10px] font-extrabold uppercase tracking-wider text-blue-800">First useful step</p>
+                              <span className="inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-1 text-[10px] font-semibold text-blue-800"><Sparkles className="h-3 w-3" /> About 30 seconds</span>
+                            </div>
+                            <h4 className="mt-2 text-base font-bold leading-snug text-slate-950 sm:text-lg">{message.quickSolution.heading}</h4>
+                            <p className="mt-1.5 text-sm leading-relaxed text-slate-700">{message.quickSolution.intro}</p>
+                            <ol className="mt-3 space-y-2">
+                              {message.quickSolution.steps.map((item, index) => (
+                                <li key={item} className="flex min-w-0 gap-2.5 text-sm leading-relaxed text-slate-800">
+                                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-white text-[10px] font-bold text-blue-800">{index + 1}</span>
+                                  <span className="min-w-0">{item}</span>
+                                </li>
+                              ))}
+                            </ol>
+                            <p className="mt-3 rounded-lg bg-white p-3 text-xs font-medium leading-relaxed text-slate-800"><span className="font-bold text-blue-800">First result: </span>{message.quickSolution.takeaway}</p>
+                            {message.quickSolution.caution && <p className="mt-2 text-[11px] leading-relaxed text-slate-600">{message.quickSolution.caution}</p>}
+                          </section>
+                        )}
+                        {message.quickActions && (
+                          <section aria-label="Choose one practical next action" className="mt-3 rounded-xl border border-slate-200 bg-white p-3">
+                            <p className="mb-1 text-[10px] font-extrabold uppercase tracking-wider text-slate-600">Choose one practical next action</p>
+                            <p className="mb-2 text-xs leading-relaxed text-slate-500">Each option gives you a usable checklist or working template—not another service summary.</p>
+                            <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
+                              {message.quickActions.map((action, index) => (
+                                <button key={action.label} type="button" disabled={chatBusy} onClick={() => runQuickAction(action)} className="group flex min-h-11 min-w-0 items-center justify-between gap-3 rounded-lg border border-blue-200 bg-blue-50/70 px-3 py-2.5 text-left text-xs font-semibold leading-relaxed text-blue-950 transition hover:border-blue-400 hover:bg-blue-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 disabled:cursor-not-allowed disabled:opacity-50">
+                                  <span className="flex min-w-0 items-start gap-2"><span className="mt-0.5 shrink-0 text-[10px] font-bold text-blue-600">{String(index + 1).padStart(2, '0')}</span><span className="min-w-0">{action.label}</span></span>
                                   <ChevronRight className="h-3.5 w-3.5 shrink-0 text-blue-700 transition group-hover:translate-x-0.5" />
                                 </button>
                               ))}
                             </div>
                           </section>
                         )}
-                        {message.suggestedServiceId && (
-                          <button type="button" onClick={() => chooseService(message.suggestedServiceId!)} className="mt-3 inline-flex min-h-9 items-center gap-2 rounded-lg bg-blue-700 px-3 py-2 text-xs font-semibold text-white transition hover:bg-blue-800">
-                            Show recommended service <ArrowRight className="h-3.5 w-3.5" />
-                          </button>
+                        {message.quickActionResult && (
+                          <section className="mt-3 rounded-xl border border-emerald-200 bg-emerald-50/70 p-3 sm:p-4">
+                            <p className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-800">Your first solution step</p>
+                            <h4 className="mt-1.5 text-base font-bold leading-snug text-slate-950 sm:text-lg">{message.quickActionResult.heading}</h4>
+                            <p className="mt-1.5 text-sm leading-relaxed text-slate-700">{message.quickActionResult.intro}</p>
+                            <ol className="mt-3 space-y-2">
+                              {message.quickActionResult.steps.map((item, index) => (
+                                <li key={item} className="flex min-w-0 gap-2.5 text-sm leading-relaxed text-slate-800">
+                                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-white text-[10px] font-bold text-emerald-800">{index + 1}</span>
+                                  <span className="min-w-0">{item}</span>
+                                </li>
+                              ))}
+                            </ol>
+                            <p className="mt-3 rounded-lg bg-white p-3 text-xs font-medium leading-relaxed text-slate-800"><span className="font-bold text-emerald-800">Practical result: </span>{message.quickActionResult.takeaway}</p>
+                            {message.quickActionResult.caution && <p className="mt-2 text-[11px] leading-relaxed text-slate-600">{message.quickActionResult.caution}</p>}
+                          </section>
                         )}
                       </div>
                     ))}
                     {chatBusy && <p role="status" className="rounded-lg border border-blue-100 bg-blue-50 p-3 text-xs text-blue-900">Financial Genie is preparing a response…</p>}
                   </div>
+
+                  {selectedService && (
+                    <div className="mt-3 flex flex-col gap-3 rounded-xl border border-blue-200 bg-white p-3 sm:flex-row sm:items-center sm:justify-between sm:p-4">
+                      <div className="min-w-0">
+                        <p className="text-[10px] font-extrabold uppercase tracking-wider text-blue-800">Continue when ready</p>
+                        <p className="mt-1 text-sm font-semibold leading-snug text-slate-900">{selectedService.title}</p>
+                        <p className="mt-1 text-xs leading-relaxed text-slate-600">View full scope, deliverables, timing and proposal options. This does not commit you to an engagement.</p>
+                      </div>
+                      <button type="button" onClick={openScope} className="inline-flex min-h-11 w-full shrink-0 items-center justify-center gap-2 rounded-lg bg-blue-700 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-blue-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 sm:w-auto">
+                        View service scope &amp; proposal <ArrowRight className="h-4 w-4" />
+                      </button>
+                    </div>
+                  )}
 
                   {chatError && <p role="alert" className="mt-3 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">{chatError}</p>}
 
