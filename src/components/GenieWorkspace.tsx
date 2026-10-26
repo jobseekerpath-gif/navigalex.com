@@ -524,7 +524,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
 
         <div className="p-3 sm:p-5">
           {screen === 'start' && (
-            <div className="space-y-4">
+            <div className="space-y-1">
               <div className="rounded-2xl bg-gradient-to-r from-[#07115f] via-[#101e9c] to-[#203ee5] px-4 py-4 text-white shadow-sm sm:px-5">
                 <div className="flex items-center gap-3">
                   <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/15 ring-1 ring-white/20">
@@ -538,12 +538,12 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                     <Sparkles className="h-3.5 w-3.5" /> Guided business support
                   </span>
                 </div>
-                <p className="mt-3 max-w-3xl text-sm leading-relaxed text-blue-50">
+                <p className="mt-1 max-w-3xl text-sm leading-relaxed text-blue-50">
                   Start with the business issue you need to solve. I’ll guide you to a relevant service and practical next steps—without showing every service at once.
                 </p>
               </div>
 
-              <div className="grid items-start gap-4 xl:grid-cols-[minmax(0,2fr)_minmax(250px,0.78fr)]">
+              <div className="grid items-start gap-1 xl:grid-cols-[minmax(0,2fr)_minmax(250px,0.78fr)]">
                 <section id="financial-genie-chat" aria-label="Financial Genie chat" className="min-w-0 rounded-2xl border border-slate-200 bg-white p-3.5 text-slate-900 shadow-sm sm:p-5">
                   <div className="mb-3 flex items-center justify-between gap-2 border-b border-slate-100 pb-3">
                     <div>
