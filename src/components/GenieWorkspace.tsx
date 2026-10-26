@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   ArrowRight, CheckCircle2, ChartNoAxesCombined, ChevronLeft, ChevronRight,
   FileSearch, Landmark, MessageCircle, RotateCcw, ShieldCheck, Sparkles,
@@ -24,12 +24,23 @@ type Service = {
   Icon: typeof ShieldCheck;
 };
 
+type SolutionGuide = {
+  heading: string;
+  intro: string;
+  steps: string[];
+  takeaway: string;
+  caution?: string;
+};
+
+type QuickAction = SolutionGuide & { label: string };
+
 type ChatMessage = {
   id: string;
   role: 'assistant' | 'user';
   text: string;
-  suggestedServiceId?: string;
-  suggestedPrompts?: string[];
+  quickSolution?: SolutionGuide;
+  quickActions?: QuickAction[];
+  quickActionResult?: QuickAction;
 };
 
 const SERVICES: Service[] = [
@@ -158,6 +169,112 @@ const SERVICES: Service[] = [
     Icon: Workflow
   },
 ];
+
+const QUICK_SOLUTIONS: Record<string, SolutionGuide & { actions: QuickAction[] }> = {
+  'financial-clarity': {
+    heading: 'Find your next cash pressure point',
+    intro: 'Take a 30-second snapshot of the coming week before building a longer forecast.',
+    steps: ['Cash available today', 'Receipts reasonably expected in the next 7 days', 'Payments that cannot be delayed in the next 7 days'],
+    takeaway: 'If unavoidable payments exceed available cash plus likely receipts, flag that week first and identify the earliest action to close the gap.',
+    caution: 'Use approximate figures only. Do not enter account numbers or bank credentials.',
+    actions: [
+      { label: 'Build a 13-week cash-flow view', heading: 'Start a 13-week cash-flow sheet', intro: 'Create one row per week and repeat the same four totals.', steps: ['Opening cash balance', 'Expected receipts by week', 'Expected payments by week', 'Closing cash = opening cash + receipts − payments; carry closing cash into the next week'], takeaway: 'Flag the first week with a negative or uncomfortably low closing balance.' },
+      { label: 'Identify cash and cost pressure points', heading: 'Separate the biggest cash pressures', intro: 'Use your latest figures to identify what is moving cash out or delaying cash in.', steps: ['List the five largest upcoming payments', 'Mark each as fixed, variable or potentially deferrable', 'List overdue receipts separately and assign a follow-up owner'], takeaway: 'Start with the item that has the largest near-term cash impact.' },
+      { label: 'Create a 30-day action plan', heading: 'Turn the cash review into three actions', intro: 'Keep the plan focused enough to begin today.', steps: ['One action to accelerate a likely receipt', 'One action to control or reschedule a non-essential cost', 'One action to update the forecast, with an owner and date'], takeaway: 'Review progress weekly and separate assumptions from confirmed cash.' }
+    ]
+  },
+  'contract-collections': {
+    heading: 'Build a 3-invoice priority list',
+    intro: 'Start with the three overdue invoices with the largest balances or longest delays. Approximate figures are enough for this first pass.',
+    steps: ['Use an anonymised invoice reference', 'Record amount unpaid and due date', 'Mark days overdue and whether payment is disputed or unanswered'],
+    takeaway: 'Start with the oldest material invoice that has no known dispute; assign the next contact and a date.',
+    caution: 'Do not paste customer names, full contracts, bank details or other confidential records into chat.',
+    actions: [
+      { label: 'Prioritise overdue invoices', heading: 'Choose which invoice to follow up first', intro: 'Use a consistent rule so the team is not chasing invoices at random.', steps: ['Separate disputed invoices from invoices with no known blocker', 'Within each group, sort by days overdue and amount outstanding', 'Choose one invoice and record the next owner and follow-up date'], takeaway: 'Record any payment promise and the date it must be checked again.' },
+      { label: 'Review customer payment terms', heading: 'Check five payment-term basics', intro: 'Compare the agreed terms with what actually happened for one invoice.', steps: ['When payment becomes due and what starts the clock', 'Whether delivery, acceptance or supporting evidence is required', 'How disputes and invoice corrections should be raised', 'The agreed escalation contact and route', 'Any late-payment wording that needs qualified professional review'], takeaway: 'Mark each item confirmed, missing or disputed. This is a commercial checklist, not legal advice.' },
+      { label: 'Create a collections tracker', heading: 'Create a simple collections tracker', intro: 'Use one row for each unpaid invoice, without entering customer identities into chat.', steps: ['Columns: reference, amount, due date and days overdue', 'Add blocker/status, last contact and any promised payment date', 'Set the next action, owner and follow-up date'], takeaway: 'Review the tracker on a fixed weekly cadence and update promises as confirmed.' }
+    ]
+  },
+  'risk-assurance': {
+    heading: 'Capture the top three business risks',
+    intro: 'A useful risk review can begin with three specific things that could prevent a business goal.',
+    steps: ['Write the risk as cause → event → consequence', 'Rate likelihood from 1 (rare) to 5 (very likely)', 'Rate impact from 1 (low) to 5 (severe)'],
+    takeaway: 'Multiply likelihood by impact to sort the initial list, then verify ratings with people closest to the risk.',
+    actions: [
+      { label: 'Create a risk register', heading: 'Set up a practical risk register', intro: 'Use these columns for each agreed business risk.', steps: ['Risk statement and affected objective', 'Likelihood, impact and current controls', 'Risk owner, next mitigation action and review date'], takeaway: 'Keep the register focused on risks with clear owners and decisions.' },
+      { label: 'Prioritise business risks', heading: 'Prioritise the risk list', intro: 'Separate severity from how easy a risk is to notice.', steps: ['Score likelihood and impact consistently from 1 to 5', 'Identify high-impact risks even if they are less likely', 'Record the evidence or assumption behind each rating'], takeaway: 'Discuss the top three priorities with the accountable decision-maker.' },
+      { label: 'Assign mitigation owners', heading: 'Turn risks into owned actions', intro: 'A risk without an owner usually remains an observation.', steps: ['Name one role accountable for each priority risk', 'Define one observable mitigation action', 'Set a due date and a review measure'], takeaway: 'Use review dates to confirm whether exposure actually changed.' }
+    ]
+  },
+  'controls-fraud': {
+    heading: 'Trace one process from start to finish',
+    intro: 'Choose one process such as supplier payment, purchase approval or customer refunds.',
+    steps: ['Who requests the transaction?', 'Who approves it and what evidence is checked?', 'Who executes it and who reconciles it afterwards?'],
+    takeaway: 'Flag missing approval, missing evidence or one person controlling every step for review.',
+    actions: [
+      { label: 'Review payment approvals', heading: 'Check a payment approval sample', intro: 'Follow a small sample of recent transactions end to end.', steps: ['Match the request to supporting evidence', 'Confirm authorised approval happened before payment', 'Check payment amount and beneficiary against the approval'], takeaway: 'Record exceptions and evidence; an exception alone does not prove fraud.' },
+      { label: 'Find control gaps', heading: 'Find where the process can fail', intro: 'Test the process design before proposing more controls.', steps: ['Mark steps with no owner or unclear approval authority', 'Look for incompatible duties concentrated with one person', 'Check whether exceptions are logged and reviewed'], takeaway: 'Prioritise gaps by potential impact and likelihood.' },
+      { label: 'Create corrective actions', heading: 'Create a corrective-action tracker', intro: 'Translate each confirmed gap into one checkable action.', steps: ['State the gap and evidence supporting it', 'Assign one accountable owner', 'Set a due date and proof needed to close the action'], takeaway: 'Close an action only after the new control has been tested.' }
+    ]
+  },
+  'funding-readiness': {
+    heading: 'Prepare a lender-readiness snapshot',
+    intro: 'Before discussing a loan, be clear about the purpose, amount and repayment capacity.',
+    steps: ['Purpose of funds and amount required', 'Recent sales, operating profit and cash position', 'Existing loan balances and monthly repayments'],
+    takeaway: 'Identify missing or inconsistent figures before presenting a funding request. This does not predict or guarantee approval.',
+    caution: 'Keep account numbers, identity documents and full bank statements out of chat.',
+    actions: [
+      { label: 'Prepare a lender checklist', heading: 'Assemble a lender information checklist', intro: 'Start a list of documents that may be requested, depending on the lender and facility.', steps: ['Recent financial statements and management figures', 'Current facility summaries and repayment schedules', 'Purpose, amount, timing and expected benefit of the funds', 'Receivables/payables ageing and cash-flow assumptions, if available'], takeaway: 'Confirm the exact list with the lender; requirements vary.' },
+      { label: 'Review debt-service readiness', heading: 'Check repayment coverage inputs', intro: 'A first pass compares cash available for debt service with scheduled debt repayments.', steps: ['Estimate cash available for debt service for one consistent period', 'Total principal and interest due over the same period', 'Calculate indicative coverage and label every assumption'], takeaway: 'Have a finance professional verify the calculation and lender-specific definitions before relying on it.' },
+      { label: 'List funding document gaps', heading: 'Create a funding-gap list', intro: 'Compare what you have with what the next lender conversation will need.', steps: ['List each required document or number', 'Mark it available, missing or needing reconciliation', 'Assign an owner and target date for each gap'], takeaway: 'Resolve material inconsistencies before submitting the funding pack.' }
+    ]
+  },
+  'growth-governance': {
+    heading: 'Clarify one delayed business decision',
+    intro: 'Choose a decision that keeps coming back or is waiting for approval.',
+    steps: ['Write the decision in one sentence', 'Name the recommender and authorised decision-maker', 'Set the decision deadline and evidence needed'],
+    takeaway: 'A decision log makes ownership and unresolved blockers visible without adding another meeting.',
+    actions: [
+      { label: 'Clarify decision ownership', heading: 'Build a decision-ownership entry', intro: 'Use a lightweight register for recurring decisions.', steps: ['Decision and deadline', 'Recommender, decision owner and people to consult', 'Required evidence and escalation path'], takeaway: 'Avoid shared accountability without one final decision owner.' },
+      { label: 'Set 90-day priorities', heading: 'Limit the next quarter to clear priorities', intro: 'Turn broad goals into a short execution list.', steps: ['Choose up to three outcomes for the next 90 days', 'Give each outcome one owner and one measurable indicator', 'Identify the next milestone and decision needed to unblock it'], takeaway: 'Review exceptions and decisions needed, not activity alone.' },
+      { label: 'Build a leadership review cadence', heading: 'Set a practical management-review rhythm', intro: 'Use a repeatable meeting structure with clear actions.', steps: ['Choose a weekly or fortnightly review slot', 'Review the same small set of financial, delivery and risk indicators', 'Record decisions, owners and due dates'], takeaway: 'Keep one action log and close the loop at the next review.' }
+    ]
+  },
+  'strategy-sprint': {
+    heading: 'Frame one growth decision',
+    intro: 'Make the decision precise before gathering more information.',
+    steps: ['State the choice to be made and by when', 'List no more than three realistic options', 'Name the one or two measures that matter most'],
+    takeaway: 'Separate verified facts from assumptions before comparing options.',
+    actions: [
+      { label: 'Compare growth options', heading: 'Compare up to three growth options', intro: 'Use the same criteria for every option.', steps: ['Define success measures such as margin, time, investment and execution capacity', 'Score evidence consistently', 'List the most important assumption and downside for each option'], takeaway: 'Record what needs validation instead of treating unsupported estimates as facts.' },
+      { label: 'Choose a target market', heading: 'Qualify a target market', intro: 'Test a market before committing significant spending.', steps: ['Define the target customer and problem', 'List evidence of demand, competition and willingness to pay', 'Identify the smallest low-cost test that could disprove the assumption'], takeaway: 'Run a time-bound validation test before scaling investment.' },
+      { label: 'Build a 90-day roadmap', heading: 'Turn strategy into a 90-day roadmap', intro: 'Focus the roadmap on learning and execution.', steps: ['Days 1–30: validate key assumptions', 'Days 31–60: run a limited pilot or operational test', 'Days 61–90: decide whether to scale, change or stop'], takeaway: 'Assign owners, measurable gates and a decision date to each phase.' }
+    ]
+  },
+  'project-delivery': {
+    heading: 'Spot the next project blocker',
+    intro: 'Use one real milestone to compare planned delivery with the latest forecast.',
+    steps: ['Milestone and baseline date', 'Latest forecast date and current status', 'Main blocker, decision needed and accountable owner'],
+    takeaway: 'Escalate the decision that protects the next critical milestone—not just the task that looks busiest.',
+    actions: [
+      { label: 'Review milestones and budget', heading: 'Run a quick milestone and budget check', intro: 'Compare the baseline with the current forecast.', steps: ['List the next three milestones and baseline dates', 'Record forecast dates and reasons for movement', 'Compare budget baseline, actual spend and forecast cost where available'], takeaway: 'Separate confirmed variance from estimates and assign an owner.' },
+      { label: 'Create a RAID log', heading: 'Create a RAID log', intro: 'Use one line for each risk, assumption, issue or dependency.', steps: ['Record the item and delivery impact', 'Assign an owner and next action', 'Set a review date and escalation trigger'], takeaway: 'Review the log at checkpoints and close items only with evidence.' },
+      { label: 'Build a recovery plan', heading: 'Create the first recovery actions', intro: 'Make recovery a set of explicit decisions, not a promise to work harder.', steps: ['Identify the critical-path milestone at risk', 'List the scope, resource or dependency decision needed', 'Set a reforecast date and owner for each recovery action'], takeaway: 'Agree any baseline reset with the sponsor; do not quietly change the original target.' }
+    ]
+  },
+  'digital-workflow-review': {
+    heading: 'Map one workflow in five steps',
+    intro: 'Choose a recurring task that moves across people, spreadsheets or applications.',
+    steps: ['What starts the workflow?', 'What are the next steps, tools and owners?', 'Where does work wait or get re-entered?'],
+    takeaway: 'Start with the largest repeated delay or duplicate entry before buying another tool.',
+    actions: [
+      { label: 'Map a business workflow', heading: 'Create a current-state workflow map', intro: 'Capture how work happens today, not just how the policy says it should happen.', steps: ['Trigger/input and final output', 'Each step, system used and role responsible', 'Handoffs, wait time and duplicate data entry'], takeaway: 'Validate the map with the people doing the work.' },
+      { label: 'Find handoff problems', heading: 'Locate the most expensive handoff', intro: 'A handoff is likely to be a bottleneck when ownership or information is incomplete.', steps: ['Record where work waits for the next person', 'Identify missing fields, approvals or duplicate entry', 'Estimate frequency and impact per occurrence'], takeaway: 'Fix the highest-frequency, highest-impact bottleneck first.' },
+      { label: 'Prioritise system improvements', heading: 'Prioritise low-risk improvements', intro: 'Start with changes that reduce effort without disrupting critical systems.', steps: ['Separate process-rule changes from software changes', 'Estimate impact, effort, dependency and risk', 'Pilot the smallest reversible improvement and measure results'], takeaway: 'Implementation needs a separately agreed scope; do not share passwords or production credentials.' }
+    ]
+  }
+};
+
 
 const ROUTE_CHOICES: Array<{ id: RouteChoice; title: string; detail: string }> = [
   {
