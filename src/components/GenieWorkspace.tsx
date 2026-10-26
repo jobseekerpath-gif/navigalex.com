@@ -386,11 +386,23 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
     const text = rawMessage.trim();
     if (!text || chatBusy) return;
     const requestVersion = ++chatRequestVersion.current;
+    // Offer service actions once. Continuing the conversation consumes old buttons so
+    // they cannot remain under earlier messages and appear to repeat with every reply.
+    const hasPriorServiceActions = chatMessages.some((message) =>
+      message.role === 'assistant' && Boolean(message.suggestedPrompts?.length || message.suggestedServiceId)
+    );
     setChatInput('');
     setChatError('');
     setChatBusy(true);
     const userMessage: ChatMessage = { id: 'user-' + Date.now(), role: 'user', text };
-    setChatMessages((messages) => [...messages, userMessage]);
+    setChatMessages((messages) => [
+      ...messages.map((message) =>
+        message.suggestedPrompts?.length || message.suggestedServiceId
+          ? { ...message, suggestedPrompts: undefined, suggestedServiceId: undefined }
+          : message
+      ),
+      userMessage
+    ]);
     try {
       const response = await fetch('/api/bot/chat', {
         method: 'POST',
@@ -421,8 +433,9 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
         id: 'assistant-' + Date.now(),
         role: 'assistant',
         text: payload.reply,
-        suggestedServiceId: match?.id,
-        suggestedPrompts: prompts
+        ...(match && !hasPriorServiceActions
+          ? { suggestedServiceId: match.id, suggestedPrompts: prompts }
+          : {})
       }]);
     } catch (error) {
       if (requestVersion !== chatRequestVersion.current) return;

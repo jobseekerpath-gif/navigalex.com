@@ -58,6 +58,7 @@ assert(server.includes('Risk Management & Assurance Review') && server.includes(
 assert(server.includes('customers? (?:are )?paying late') && server.includes('Digital Workflow & Systems Review'), 'common collections and digital-services prompts have deterministic replies without an AI provider');
 assert(server.includes("dynamicAiAvailable: false") && server.includes("provider: 'catalogue-fallback'"), 'chat returns a helpful catalogue fallback instead of failing when AI providers are unavailable');
 assert(genie.includes('const match = selectedService ?? matchServiceFromMessage(text)'), 'chat follow-ups remain aligned with the selected service');
+assert(genie.includes('hasPriorServiceActions') && genie.includes('message.suggestedPrompts?.length || message.suggestedServiceId') && genie.includes('suggestedServiceId: undefined'), 'service next-step actions appear once and are consumed when the user continues');
 assert(server.includes('((debtors / 100) / t) * 100'), 'overdue receivables share is calculated as a percentage, with units converted');
 assert(services.includes("'digital-workflow-review': 'digital-workflow-review'") && services.includes("'strategy-growth-sprint': 'strategy-sprint'") && services.includes("'project-delivery-review': 'project-delivery'"), 'service aliases and deep links resolve to canonical cards');
 assert(!services.includes('scrollIntoView'), 'selected service page no longer overrides scroll-to-top navigation');
