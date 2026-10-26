@@ -409,9 +409,9 @@ export default function App() {
                 ['contact', 'Contact']
               ].map(([tab, label]) => (
                 <button
-                  key={tab}
+                  key={tab + '-' + label}
                   type="button"
-                  onClick={() => navigateToTab(tab)}
+                  onClick={() => { navigateToTab(tab); setMobileMenuOpen(false); }}
                   className={`min-h-11 text-left px-3 py-2.5 rounded-xl text-[14px] font-semibold text-black transition-colors ${activeTab === tab ? 'text-black bg-slate-100' : 'text-black hover:bg-slate-100'}`}
                 >
                   {label}

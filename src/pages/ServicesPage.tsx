@@ -375,7 +375,7 @@ export default function ServicesPage({ onInquiry }: ServicesPageProps) {
                 <p className="mt-3 max-w-4xl text-sm leading-relaxed text-white/90">{recommendedService.summary}</p>
               </div>
             </div>
-            <div className="mt-6 grid gap-3 sm:grid-cols-3">
+            <div className="mt-4 grid gap-2.5 md:mt-6 md:grid-cols-3 md:gap-3">
               <div className="rounded-xl border border-white/15 bg-white/10 p-3.5">
                 <p className="text-[10px] font-bold uppercase tracking-wider text-blue-100">Typical timeframe</p>
                 <p className="mt-1.5 text-sm font-semibold leading-relaxed">{recommendedService.timeframe}</p>
@@ -433,7 +433,7 @@ export default function ServicesPage({ onInquiry }: ServicesPageProps) {
           )}
         </div>
 
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
           {PROBLEM_SHORTCUTS.map(({ id, title, detail, Icon }) => (
             <button
               key={id}
@@ -465,7 +465,7 @@ export default function ServicesPage({ onInquiry }: ServicesPageProps) {
           <h3 className="text-xl font-bold sm:text-2xl">Discover → Scope → Deliver → Review</h3>
           <p className="text-sm leading-relaxed text-slate-300">We confirm the business problem, required inputs, deliverables, timeline, fees and responsibilities before work starts. You receive a practical findings discussion and clear next actions.</p>
         </div>
-        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-4">
+        <div className="mt-4 grid grid-cols-1 gap-3 md:mt-6 md:grid-cols-2 xl:grid-cols-4">
           {[
             { n: '01', t: 'Discover', d: 'Understand the business issue and constraints.' },
             { n: '02', t: 'Scope', d: 'Agree the evidence, deliverables and success criteria.' },
@@ -485,7 +485,7 @@ export default function ServicesPage({ onInquiry }: ServicesPageProps) {
 
       {!recommendedId && (
       <>
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+      <div className="flex flex-col gap-3 md:flex-row md:items-center">
         <label className="flex min-h-11 flex-1 items-center gap-2 rounded-xl border border-slate-300 bg-white px-3">
           <Search className="h-4 w-4 text-slate-400" />
           <input
@@ -508,7 +508,7 @@ export default function ServicesPage({ onInquiry }: ServicesPageProps) {
       )}
 
       {recommendedService && (
-        <div className="mx-auto flex w-full max-w-5xl flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+        <div className="mx-auto flex w-full max-w-5xl min-w-0 flex-col gap-2 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="text-xs font-bold uppercase tracking-widest text-[#1f4fff]">Step 2 of 3 · Review the recommendation</p>
             <h3 className="mt-1 text-xl font-extrabold text-slate-950">What is included in this service?</h3>
@@ -522,7 +522,7 @@ export default function ServicesPage({ onInquiry }: ServicesPageProps) {
         {visible.map((service) => {
           const Icon = service.Icon;
           return (
-            <article id={'service-' + service.id} key={service.id} className="navigalex-card flex flex-col gap-6 rounded-2xl border border-slate-200 border-t-4 border-t-[#1f4fff] bg-white p-6 shadow-sm transition-shadow hover:shadow-md sm:p-7">
+            <article id={'service-' + service.id} key={service.id} className="navigalex-card flex min-w-0 flex-col gap-4 rounded-2xl border border-slate-200 border-t-4 border-t-[#1f4fff] bg-white p-4 shadow-sm transition-shadow hover:shadow-md sm:gap-6 sm:p-6 lg:p-7">
               <div className="space-y-4">
                 <div className="flex items-center justify-between gap-3">
                   <span className="rounded-md border border-blue-200 bg-blue-50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-blue-800">{service.badge}</span>

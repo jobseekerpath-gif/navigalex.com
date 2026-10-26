@@ -420,7 +420,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
     () => SERVICES.find((service) => service.id === selectedServiceId) ?? null,
     [selectedServiceId]
   );
-  const step = screen === 'start' ? 1 : screen === 'context' ? 2 : 3;
+  const step = screen === 'result' ? 3 : selectedService ? 2 : 1;
 
   const navigateToScreen = (nextScreen: 'start' | 'context' | 'result') => {
     setScreen(nextScreen);
@@ -617,7 +617,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
   };
 
   return (
-    <section id="financial-genie-workspace" className="relative mx-auto w-full max-w-[1360px] scroll-mt-28 px-2 pb-8 pt-3 sm:scroll-mt-32 sm:px-4 sm:pt-4">
+    <section id="financial-genie-workspace" className="relative mx-auto w-full max-w-[1360px] scroll-mt-20 px-2 pb-6 pt-3 sm:scroll-mt-24 sm:px-3 sm:pt-3 lg:scroll-mt-28 lg:px-4">
       <div className="overflow-hidden rounded-2xl border border-[#244bd7]/25 bg-white shadow-[0_12px_36px_rgba(30,64,175,0.12)]">
         <header className="relative overflow-hidden border-b border-slate-200 bg-white px-3 py-1 text-slate-900 sm:px-4 sm:py-1.5">
           
@@ -645,15 +645,15 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
             )}
           </div>
 
-          <div className="relative mt-1 grid grid-cols-3 gap-1 text-center text-[8px] sm:max-w-md sm:text-[9px]">
+          <div className="relative mt-2 grid grid-cols-3 gap-1.5 text-center text-[10px] leading-tight sm:max-w-lg sm:text-xs">
             {[
-              ['1', 'Choose your need'],
-              ['2', 'Set your goal'],
-              ['3', 'See your next step']
+              ['1', 'Choose issue'],
+              ['2', 'First solution'],
+              ['3', 'Service plan']
             ].map(([number, label], index) => (
-              <div key={number} className={index + 1 <= step ? 'rounded-md border border-blue-200 bg-blue-50 px-1.5 py-0.5 font-bold text-blue-800' : 'rounded-md border border-slate-200 bg-slate-50 px-1.5 py-0.5 text-slate-600'}>
-                <span className="mr-1 inline-flex h-4 w-4 items-center justify-center rounded-full bg-blue-100 text-[8px] text-blue-800">{number}</span>
-                {label}
+              <div key={number} className={index + 1 <= step ? 'flex min-w-0 items-center justify-center gap-1 rounded-lg border border-blue-200 bg-blue-50 px-1.5 py-1 font-semibold text-blue-800 sm:px-2' : 'flex min-w-0 items-center justify-center gap-1 rounded-lg border border-slate-200 bg-slate-50 px-1.5 py-1 text-slate-600 sm:px-2'}>
+                <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-blue-100 text-[10px] text-blue-800">{number}</span>
+                <span className="min-w-0">{label}</span>
               </div>
             ))}
           </div>
@@ -680,7 +680,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                 </p>
               </div>
 
-              <div className="grid items-start gap-1 xl:grid-cols-[minmax(0,2fr)_minmax(250px,0.78fr)]">
+              <div className="grid min-w-0 items-start gap-3 lg:grid-cols-[minmax(0,2fr)_minmax(240px,0.78fr)] lg:gap-4">
                 <section id="financial-genie-chat" aria-label="Financial Genie chat" className="min-w-0 rounded-2xl border border-slate-200 bg-white p-3.5 text-slate-900 shadow-sm sm:p-5">
                   <div className="mb-3 flex items-center justify-between gap-2 border-b border-slate-100 pb-3">
                     <div>
@@ -776,7 +776,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                         </div>
                         <span className="text-[11px] text-slate-500">Step 1 of 3</span>
                       </div>
-                      <div className="grid gap-2 sm:grid-cols-2">
+                      <div className="grid gap-2 md:grid-cols-2">
                         {BUSINESS_AREAS.slice(0, showMoreAreas ? BUSINESS_AREAS.length : 2).map((area, index) => (
                           <button
                             key={area.title}
@@ -858,18 +858,18 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
             </div>
           )}
           {screen === 'context' && selectedService && (
-            <div className="mx-auto max-w-3xl space-y-6">
+            <div className="mx-auto max-w-3xl min-w-0 space-y-4 sm:space-y-6">
               <button type="button" onClick={reset} className="inline-flex min-h-8 items-center gap-1 text-xs font-normal text-[#1f4fff] hover:text-[#183bc4]">
                 <ChevronLeft className="h-3.5 w-3.5" /> Change problem
               </button>
-              <div className="rounded-2xl border border-blue-200 bg-blue-50/70 p-5 sm:p-6">
+              <div className="rounded-2xl border border-blue-200 bg-blue-50/70 p-4 sm:p-5 lg:p-6">
                 <span className="text-xs font-bold uppercase tracking-wide text-[#1f4fff]">You selected</span>
                 <h2 className="mt-1 text-2xl font-extrabold tracking-tight text-slate-950">{selectedService.title}</h2>
                 <p className="mt-2 text-sm leading-relaxed text-slate-700">{selectedService.bestFor}</p>
               </div>
 
               <div className="space-y-2">
-                <h2 className="text-2xl font-extrabold tracking-tight text-slate-950">What do you need from this first step?</h2>
+                <h2 className="text-xl font-extrabold leading-tight tracking-tight text-slate-950 sm:text-2xl">What do you need from this first step?</h2>
                 <p className="text-sm leading-relaxed text-slate-600">One choice helps Financial Genie show the most useful next action. This does not lock you into a service.</p>
               </div>
 
@@ -879,10 +879,10 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                     key={choice.id}
                     type="button"
                     onClick={() => { setRoute(choice.id); navigateToScreen('result'); }}
-                    className="group flex min-h-20 items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-4 text-left transition hover:border-[#1f4fff] hover:bg-blue-50/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1f4fff]"
+                    className="group flex min-h-20 min-w-0 items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-3.5 text-left transition hover:border-[#1f4fff] hover:bg-blue-50/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1f4fff] sm:gap-4 sm:p-4"
                   >
-                    <span>
-                      <span className="block font-extrabold text-slate-950">{choice.title}</span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block font-extrabold leading-snug text-slate-950">{choice.title}</span>
                       <span className="mt-1 block text-sm leading-relaxed text-slate-600">{choice.detail}</span>
                     </span>
                     <ChevronRight className="h-5 w-5 shrink-0 text-slate-400 transition group-hover:translate-x-0.5 group-hover:text-[#1f4fff]" />
@@ -899,7 +899,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
               </button>
 
               <div className="overflow-hidden rounded-3xl border border-[#1f4fff]/20">
-                <div className="bg-gradient-to-r from-[#eff4ff] to-white p-5 sm:p-7">
+                <div className="bg-gradient-to-r from-[#eff4ff] to-white p-4 sm:p-5 lg:p-7">
                   <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                     <div>
                       <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-xs font-bold text-[#1f4fff] shadow-sm">
@@ -912,7 +912,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                   </div>
                 </div>
 
-                <div className="grid gap-6 bg-white p-5 sm:grid-cols-[1.1fr_.9fr] sm:p-7">
+                <div className="grid min-w-0 gap-4 bg-white p-4 md:grid-cols-[minmax(0,1.1fr)_minmax(0,.9fr)] md:gap-6 md:p-6 lg:p-7">
                   <div>
                     <h3 className="text-sm font-extrabold uppercase tracking-wide text-slate-900">What you receive</h3>
                     <ul className="mt-3 space-y-3">
@@ -934,7 +934,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                   </aside>
                 </div>
 
-                <div className="flex flex-col gap-3 border-t border-slate-200 bg-slate-50 p-5 sm:flex-row sm:flex-wrap sm:items-center sm:p-6">
+                <div className="flex flex-col gap-2.5 border-t border-slate-200 bg-slate-50 p-4 sm:gap-3 sm:p-5 lg:flex-row lg:flex-wrap lg:items-center lg:p-6">
                   <button type="button" onClick={openScope} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[#1f4fff] bg-white px-4 py-3 text-sm font-bold text-[#1f4fff] hover:bg-blue-50">
                     View full scope <ArrowRight className="h-4 w-4" />
                   </button>
