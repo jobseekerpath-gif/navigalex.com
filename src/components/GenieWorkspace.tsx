@@ -555,7 +555,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                     </button>
                   </div>
 
-                  <div className="min-h-[280px] max-h-[480px] space-y-3 overflow-y-auto rounded-xl bg-slate-50/80 p-3 sm:min-h-[360px] sm:p-4" aria-live="polite">
+                  <div className="min-h-[70px] max-h-[480px] space-y-3 overflow-y-auto rounded-xl bg-slate-50/80 p-3 sm:min-h-[90px] sm:p-4" aria-live="polite">
                     {chatMessages.map((message) => (
                       <div key={message.id} className={message.role === 'user' ? 'ml-auto max-w-[88%] whitespace-pre-line rounded-2xl rounded-br-md bg-blue-700 p-3.5 text-sm leading-relaxed text-white shadow-sm' : 'max-w-[96%] whitespace-pre-line rounded-2xl rounded-bl-md border border-slate-200 bg-white p-3.5 text-sm leading-relaxed text-slate-800 shadow-sm'}>
                         {message.text}
