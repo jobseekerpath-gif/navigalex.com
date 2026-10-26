@@ -419,6 +419,7 @@ export default function ServicesPage({ onInquiry }: ServicesPageProps) {
       )}
 
       {!recommendedId && (
+      <>
       <section aria-labelledby="problem-shortcuts-heading" className="space-y-4">
         <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
           <div>
@@ -479,10 +480,11 @@ export default function ServicesPage({ onInquiry }: ServicesPageProps) {
           ))}
         </div>
       </section>
-
+      </>
       )}
 
       {!recommendedId && (
+      <>
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
         <label className="flex min-h-11 flex-1 items-center gap-2 rounded-xl border border-slate-300 bg-white px-3">
           <Search className="h-4 w-4 text-slate-400" />
@@ -502,6 +504,7 @@ export default function ServicesPage({ onInquiry }: ServicesPageProps) {
       </div>
 
       <p className="text-sm text-slate-600" aria-live="polite">Showing all nine distinct starting services.</p>
+      </>
       )}
 
       {recommendedService && (
