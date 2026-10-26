@@ -303,6 +303,12 @@ export default function ServicesPage({ onInquiry }: ServicesPageProps) {
   const [query, setQuery] = useState('');
   const [recommendedId, setRecommendedId] = useState<string | null>(readRecommendedService);
 
+  const recommendedService = useMemo(
+    () => ADVISORY_DESKS.find((service) => service.id === recommendedId) ?? null,
+    [recommendedId]
+  );
+  const RecommendedIcon = recommendedService?.Icon;
+
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase();
     return ADVISORY_DESKS.filter((service) =>
@@ -343,8 +349,8 @@ export default function ServicesPage({ onInquiry }: ServicesPageProps) {
     <section className="mx-auto max-w-7xl space-y-10 px-4 py-14 sm:px-6 sm:py-20">
       <header className="mx-auto max-w-4xl space-y-4 text-center">
         <span className="text-xs font-bold uppercase tracking-widest text-[#1f4fff]">Navigalex Business Advisory</span>
-        <h2 className="text-3xl font-extrabold tracking-tight text-slate-950 sm:text-5xl">Start with the business problem.</h2>
-        <p className="text-base leading-relaxed text-slate-600 sm:text-lg">Choose the issue closest to yours. Each service shows the practical deliverables, client inputs, timing and boundaries before you request a proposal.</p>
+        <h2 className="text-3xl font-extrabold tracking-tight text-slate-950 sm:text-5xl">{recommendedService ? "Your recommended starting service" : "Start with the business problem."}</h2>
+        <p className="text-base leading-relaxed text-slate-600 sm:text-lg">{recommendedService ? "Based on the business issue you selected, review the recommendation, what is included, expected timing and scope limits before requesting a proposal." : "Choose the issue closest to yours. Each service shows the practical deliverables, client inputs, timing and boundaries before you request a proposal."}</p>
         <div className="flex flex-wrap justify-center gap-3 pt-2 text-xs font-semibold text-slate-600">
           <span className="inline-flex items-center gap-1.5"><ClipboardCheck className="h-4 w-4" />Defined deliverables</span>
           <span className="inline-flex items-center gap-1.5"><Clock3 className="h-4 w-4" />Agreed timelines</span>
@@ -352,6 +358,67 @@ export default function ServicesPage({ onInquiry }: ServicesPageProps) {
         </div>
       </header>
 
+
+      {recommendedService && (
+        <section aria-labelledby="recommended-service-heading" className="overflow-hidden rounded-3xl border border-blue-200 bg-white shadow-[0_10px_30px_rgba(31,79,255,0.10)]">
+          <div className="bg-gradient-to-br from-[#07115f] via-[#1429b8] to-[#2852f0] p-5 text-white sm:p-8">
+            <div className="flex items-start gap-4">
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-white/20 bg-white/10">
+                {RecommendedIcon && <RecommendedIcon className="h-6 w-6" />}
+              </span>
+              <div className="min-w-0 flex-1">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-blue-50">
+                  <CheckCircle2 className="h-3.5 w-3.5" /> Recommended for your selected issue
+                </span>
+                <h3 id="recommended-service-heading" className="mt-3 text-2xl font-extrabold tracking-tight sm:text-3xl">{recommendedService.title}</h3>
+                <p className="mt-2 text-sm font-semibold leading-relaxed text-blue-100 sm:text-base">{recommendedService.tagline}</p>
+                <p className="mt-3 max-w-4xl text-sm leading-relaxed text-white/90">{recommendedService.summary}</p>
+              </div>
+            </div>
+            <div className="mt-6 grid gap-3 sm:grid-cols-3">
+              <div className="rounded-xl border border-white/15 bg-white/10 p-3.5">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-blue-100">Typical timeframe</p>
+                <p className="mt-1.5 text-sm font-semibold leading-relaxed">{recommendedService.timeframe}</p>
+              </div>
+              <div className="rounded-xl border border-white/15 bg-white/10 p-3.5">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-blue-100">Commercials</p>
+                <p className="mt-1.5 text-sm font-semibold leading-relaxed">{recommendedService.price}</p>
+              </div>
+              <div className="rounded-xl border border-white/15 bg-white/10 p-3.5">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-blue-100">Next step</p>
+                <p className="mt-1.5 text-sm font-semibold leading-relaxed">Confirm the scope and client inputs before work starts.</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid gap-3 border-t border-slate-200 bg-slate-50 p-4 sm:grid-cols-3 sm:p-5">
+            {[
+              { number: "01", title: "Review the fit", detail: "Confirm this service matches your business issue." },
+              { number: "02", title: "Agree the scope", detail: "We confirm information, deliverables, timing and fee." },
+              { number: "03", title: "Request a proposal", detail: "Send an inquiry to discuss the agreed starting scope." }
+            ].map((step) => (
+              <div key={step.number} className="flex gap-3 rounded-xl bg-white p-3">
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-[10px] font-extrabold text-blue-800">{step.number}</span>
+                <div>
+                  <p className="text-sm font-bold text-slate-900">{step.title}</p>
+                  <p className="mt-1 text-xs leading-relaxed text-slate-600">{step.detail}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="flex flex-col gap-3 border-t border-slate-200 bg-white p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
+            <p className="max-w-2xl text-xs leading-relaxed text-slate-500">This is a suggested starting service, not a commitment. Final scope, fees and delivery dates are confirmed in writing.</p>
+            <div className="flex flex-col gap-2 sm:flex-row">
+              <button type="button" onClick={showAllServices} className="inline-flex min-h-11 items-center justify-center rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">Compare services</button>
+              <button type="button" onClick={() => onInquiry(recommendedService.title)} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#1f4fff] px-5 py-2.5 text-sm font-bold text-white transition hover:bg-[#183bc4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
+                Request this service <ArrowUpRight className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {!recommendedId && (
       <section aria-labelledby="problem-shortcuts-heading" className="space-y-4">
         <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
           <div>
@@ -413,6 +480,9 @@ export default function ServicesPage({ onInquiry }: ServicesPageProps) {
         </div>
       </section>
 
+      )}
+
+      {!recommendedId && (
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
         <label className="flex min-h-11 flex-1 items-center gap-2 rounded-xl border border-slate-300 bg-white px-3">
           <Search className="h-4 w-4 text-slate-400" />
@@ -431,11 +501,21 @@ export default function ServicesPage({ onInquiry }: ServicesPageProps) {
         )}
       </div>
 
-      <p className="text-sm text-slate-600" aria-live="polite">
-        {recommendedId ? 'Showing the starting service closest to the selected business problem.' : 'Showing all nine distinct starting services.'}
-      </p>
+      <p className="text-sm text-slate-600" aria-live="polite">Showing all nine distinct starting services.</p>
+      )}
 
-      <div id="service-results" className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+      {recommendedService && (
+        <div className="mx-auto flex w-full max-w-5xl flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-widest text-[#1f4fff]">Step 2 of 3 · Review the recommendation</p>
+            <h3 className="mt-1 text-xl font-extrabold text-slate-950">What is included in this service?</h3>
+            <p className="mt-1 text-sm leading-relaxed text-slate-600">Review the outcomes, deliverables, client inputs and scope boundaries before you send an inquiry.</p>
+          </div>
+          <button type="button" onClick={() => onInquiry(recommendedService.title)} className="mt-2 inline-flex min-h-10 shrink-0 items-center justify-center gap-2 rounded-lg bg-[#1f4fff] px-4 py-2 text-sm font-bold text-white transition hover:bg-[#183bc4] sm:mt-0">Request this service <ArrowUpRight className="h-4 w-4" /></button>
+        </div>
+      )}
+
+      <div id="service-results" className={recommendedService ? "mx-auto grid w-full max-w-5xl grid-cols-1 gap-6" : "grid grid-cols-1 gap-6 lg:grid-cols-2"}>
         {visible.map((service) => {
           const Icon = service.Icon;
           return (
