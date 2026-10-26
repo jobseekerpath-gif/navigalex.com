@@ -299,10 +299,21 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
   );
   const step = screen === 'start' ? 1 : screen === 'context' ? 2 : 3;
 
+  const navigateToScreen = (nextScreen: 'start' | 'context' | 'result') => {
+    setScreen(nextScreen);
+    // Every new step starts at the top of the Genie workflow, below the sticky site navigation.
+    window.setTimeout(() => {
+      document.getElementById('financial-genie-workspace')?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }, 50);
+  };
+
   const chooseService = (serviceId: string) => {
     setSelectedServiceId(serviceId);
     setRoute(null);
-    setScreen('context');
+    navigateToScreen('context');
   };
 
   const openAssessmentTool = (targetId: string) => {
@@ -349,7 +360,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
     setShowMoreAreas(false);
     setSelectedServiceId(service.id);
     setRoute(null);
-    setScreen('start');
+    navigateToScreen('start');
     const userMessage: ChatMessage = {
       id: 'user-service-' + Date.now(),
       role: 'user',
@@ -379,7 +390,6 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                       : ['Clarify decision ownership', 'Set 90-day priorities', 'Build a leadership review cadence']
     };
     setChatMessages((messages) => [...messages, userMessage, assistantMessage]);
-    window.setTimeout(() => document.getElementById('financial-genie-chat')?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 50);
   };
 
   const sendChatMessage = async (rawMessage: string) => {
@@ -464,11 +474,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
       role: 'assistant',
       text: 'I’ll help you find the right starting point. Choose a business area below or describe the issue in your own words.'
     }]);
-    setScreen('start');
-    window.setTimeout(() => {
-      const chat = document.getElementById('financial-genie-chat');
-      if (chat) chat.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }, 0);
+    navigateToScreen('start');
   };
 
   const openAllServices = () => {
@@ -493,7 +499,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
   };
 
   return (
-    <section className="relative mx-auto w-full max-w-[1360px] px-2 pb-8 pt-3 sm:px-4 sm:pt-4">
+    <section id="financial-genie-workspace" className="relative mx-auto w-full max-w-[1360px] scroll-mt-28 px-2 pb-8 pt-3 sm:scroll-mt-32 sm:px-4 sm:pt-4">
       <div className="overflow-hidden rounded-2xl border border-[#244bd7]/25 bg-white shadow-[0_12px_36px_rgba(30,64,175,0.12)]">
         <header className="relative overflow-hidden border-b border-slate-200 bg-white px-3 py-1 text-slate-900 sm:px-4 sm:py-1.5">
           
@@ -708,7 +714,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
                   <button
                     key={choice.id}
                     type="button"
-                    onClick={() => { setRoute(choice.id); setScreen('result'); }}
+                    onClick={() => { setRoute(choice.id); navigateToScreen('result'); }}
                     className="group flex min-h-20 items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-4 text-left transition hover:border-[#1f4fff] hover:bg-blue-50/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1f4fff]"
                   >
                     <span>
@@ -724,7 +730,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
 
           {screen === 'result' && selectedService && route && (
             <div className="mx-auto max-w-4xl space-y-6">
-              <button type="button" onClick={() => setScreen('context')} className="inline-flex min-h-11 items-center gap-1 text-sm font-bold text-[#1f4fff] hover:text-[#183bc4]">
+              <button type="button" onClick={() => navigateToScreen('context')} className="inline-flex min-h-11 items-center gap-1 text-sm font-bold text-[#1f4fff] hover:text-[#183bc4]">
                 <ChevronLeft className="h-4 w-4" /> Change what I need
               </button>
 
