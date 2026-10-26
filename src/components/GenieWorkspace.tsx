@@ -204,6 +204,49 @@ const CHAT_PROMPTS = [
   'Bank DSCR Scanner (Live)'
 ]
 
+const BUSINESS_AREAS = [
+  {
+    title: 'Finance & cash flow',
+    detail: 'Cash pressure, costs, margins and working capital',
+    serviceTitle: 'Financial Clarity Check'
+  },
+  {
+    title: 'Contracts & collections',
+    detail: 'Late payments, overdue invoices and contract exposure',
+    serviceTitle: 'Contract & Collections Review'
+  },
+  {
+    title: 'Risk management',
+    detail: 'Operational, regulatory, vendor and business risks',
+    serviceTitle: 'Risk Management & Risk Assurance'
+  },
+  {
+    title: 'Controls & assurance',
+    detail: 'Approvals, process gaps and fraud prevention',
+    serviceTitle: 'Controls & Compliance Snapshot'
+  },
+  {
+    title: 'Finance & funding',
+    detail: 'Lender readiness, borrowing and financial modelling',
+    serviceTitle: 'Finance & Funding Readiness'
+  },
+  {
+    title: 'Owner decisions & governance',
+    detail: 'Decision ownership, accountability and oversight',
+    serviceTitle: 'Growth & Governance Sprint'
+  },
+  {
+    title: 'Strategy & growth',
+    detail: 'Market choices, expansion and performance improvement',
+    serviceTitle: 'Strategy & Growth'
+  },
+  {
+    title: 'Project management',
+    detail: 'Delayed delivery, budgets and project recovery',
+    serviceTitle: 'Project Management & Recovery'
+  }
+];
+
 function matchServiceFromMessage(message: string): Service | null {
   const value = message.toLowerCase();
 
@@ -239,11 +282,12 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
   const [chatInput, setChatInput] = useState('');
   const [chatBusy, setChatBusy] = useState(false);
   const [chatError, setChatError] = useState('');
+  const [showMoreAreas, setShowMoreAreas] = useState(false);
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
     {
       id: 'welcome',
       role: 'assistant',
-      text: 'I will suggest the clearest starting service.'
+      text: 'I’ll help you find the right starting point. Choose a business area below or describe the issue in your own words.'
     }
   ]);
 
@@ -302,6 +346,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
       return;
     }
     setChatError('');
+    setShowMoreAreas(false);
     setSelectedServiceId(service.id);
     setRoute(null);
     setScreen('start');
@@ -400,10 +445,11 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
     setChatInput('');
     setChatError('');
     setChatBusy(false);
+    setShowMoreAreas(false);
     setChatMessages([{
       id: 'welcome-' + Date.now(),
       role: 'assistant',
-      text: 'Choose a business problem. Financial Genie will recommend the right service, deliverables and next steps.'
+      text: 'I’ll help you find the right starting point. Choose a business area below or describe the issue in your own words.'
     }]);
     setScreen('start');
     window.setTimeout(() => {
@@ -434,7 +480,7 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
   };
 
   return (
-    <section className="relative mx-auto w-full max-w-7xl px-2 pb-6 pt-3 sm:px-4 sm:pt-4">
+    <section className="relative mx-auto w-full max-w-[1360px] px-2 pb-8 pt-3 sm:px-4 sm:pt-4">
       <div className="overflow-hidden rounded-2xl border border-[#244bd7]/25 bg-white shadow-[0_12px_36px_rgba(30,64,175,0.12)]">
         <header className="relative overflow-hidden border-b border-slate-200 bg-white px-3 py-1 text-slate-900 sm:px-4 sm:py-1.5">
           
@@ -478,102 +524,150 @@ export default function GenieWorkspace({ onOpenAssessment, onNavigateTab }: Prop
 
         <div className="p-3 sm:p-5">
           {screen === 'start' && (
-            <div className="space-y-5 rounded-2xl bg-gradient-to-br from-[#02044b] via-[#0715a5] to-[#000d63] p-4 text-white shadow-[0_16px_44px_rgba(2,6,80,0.28)] sm:p-6">
-              <div className="flex items-center gap-3">
-                <span className="rounded-xl bg-blue-600 p-3"><MessageCircle className="h-6 w-6" /></span>
-                <div>
-                  <p className="text-sm font-semibold">Chat with</p>
-                  <h2 className="text-2xl font-extrabold">Financial Genie</h2>
+            <div className="space-y-4">
+              <div className="rounded-2xl bg-gradient-to-r from-[#07115f] via-[#101e9c] to-[#203ee5] px-4 py-4 text-white shadow-sm sm:px-5">
+                <div className="flex items-center gap-3">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/15 ring-1 ring-white/20">
+                    <MessageCircle className="h-5 w-5" />
+                  </span>
+                  <div className="min-w-0">
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-blue-100">Navigalex · Executive Advisory</p>
+                    <h2 className="mt-0.5 text-lg font-bold leading-tight sm:text-xl">Financial Genie</h2>
+                  </div>
+                  <span className="ml-auto hidden items-center gap-1.5 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-xs text-blue-50 sm:inline-flex">
+                    <Sparkles className="h-3.5 w-3.5" /> Guided business support
+                  </span>
                 </div>
+                <p className="mt-3 max-w-3xl text-sm leading-relaxed text-blue-50">
+                  Start with the business issue you need to solve. I’ll guide you to a relevant service and practical next steps—without showing every service at once.
+                </p>
               </div>
-              <p className="text-lg font-bold lg:col-span-2">I will suggest the clearest starting service.</p>
-              <div className="grid items-start gap-5 lg:col-span-2 lg:grid-cols-[minmax(0,3fr)_minmax(280px,1.35fr)]">
-              <section id="financial-genie-chat" aria-label="Financial Genie chat" className="order-2 min-w-0 rounded-xl bg-white p-3 text-slate-900 lg:order-1">
-                <div className="mb-2 flex items-center justify-between gap-2 border-b border-slate-100 pb-2">
-                  <span className="text-xs font-bold text-slate-700">Your business conversation</span>
-                  <button type="button" onClick={reset} className="inline-flex min-h-7 items-center gap-1 rounded-md border border-blue-200 bg-blue-50 px-2 py-1 text-[10px] font-normal leading-tight text-blue-800 hover:bg-blue-100"><RotateCcw className="h-3 w-3" /> Change problem</button>
-                </div>
-                <div className="max-h-72 min-h-20 space-y-3 overflow-y-auto p-2" aria-live="polite">
-                  {chatMessages.map((message) => (
-                    <div key={message.id} className={message.role === 'user' ? 'ml-auto max-w-[85%] whitespace-pre-line rounded-xl bg-blue-700 p-3 text-sm text-white' : 'max-w-[95%] whitespace-pre-line rounded-xl bg-slate-100 p-3 text-sm leading-relaxed text-slate-800'}>
-                      {message.text}
-                      {message.suggestedPrompts && <div className="mt-2 flex flex-wrap gap-2">{message.suggestedPrompts.map(prompt => <button key={prompt} type="button" disabled={chatBusy} onClick={() => sendChatMessage(prompt)} className="rounded-lg border bg-white px-2 py-1 text-xs text-blue-800">{prompt}</button>)}</div>}
-                      {message.suggestedServiceId && <button type="button" onClick={() => chooseService(message.suggestedServiceId!)} className="mt-2 block rounded-lg bg-blue-700 px-3 py-2 text-xs font-bold text-white">Show recommended service</button>}
+
+              <div className="grid items-start gap-4 xl:grid-cols-[minmax(0,2fr)_minmax(250px,0.78fr)]">
+                <section id="financial-genie-chat" aria-label="Financial Genie chat" className="min-w-0 rounded-2xl border border-slate-200 bg-white p-3.5 text-slate-900 shadow-sm sm:p-5">
+                  <div className="mb-3 flex items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                    <div>
+                      <h3 className="text-sm font-semibold text-slate-900 sm:text-base">Your business conversation</h3>
+                      <p className="mt-0.5 text-xs text-slate-500">A focused starting point, then tailored guidance</p>
                     </div>
-                  ))}
-                </div>
-                {chatBusy && <p role="status" className="p-2 text-xs">Financial Genie is preparing a response…</p>}
-                {chatError && <p role="alert" className="p-2 text-xs text-red-700">{chatError}</p>}
-                <div className="my-2 flex flex-wrap gap-1.5">
-                  {CHAT_PROMPTS.slice(0, 8).map(prompt => <button key={prompt} type="button" disabled={chatBusy} onClick={() => chooseChatOption(prompt)} className="rounded-full border border-blue-200 bg-blue-50 px-2 py-1 text-[11px] font-normal leading-tight text-blue-900 hover:bg-blue-100">{prompt}</button>)}
-                </div>
-                <div className="mb-1 flex justify-start">
-                  <button type="button" onClick={reset} className="inline-flex min-h-8 items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-2.5 py-1.5 text-xs font-normal text-blue-800 hover:bg-blue-100"><RotateCcw className="h-3.5 w-3.5" /> Change the business problem</button>
-                </div>
-                <form onSubmit={e => {e.preventDefault(); sendChatMessage(chatInput);}} className="space-y-2">
-                  <label htmlFor="financial-genie-message" className="sr-only">Describe your business problem</label>
-                  <textarea id="financial-genie-message" value={chatInput} onChange={e => setChatInput(e.target.value)} rows={4} placeholder="Describe your business problem..." className="w-full resize-y rounded-xl border border-slate-200 p-3 text-sm text-slate-950 outline-none focus:border-blue-500" />
-                  <div className="flex justify-end"><button type="submit" disabled={chatBusy || !chatInput.trim()} className="inline-flex items-center gap-2 rounded-full bg-blue-700 px-5 py-2 text-sm font-bold text-white disabled:opacity-50"><Send className="h-4 w-4" /> Send</button></div>
-                </form>
-              </section>
-              <section aria-label="Navigalex Services and Live Assessments" className="order-1 min-w-0 space-y-4 lg:order-2">
-                {selectedService && (
-                  <section aria-label="Selected service recommendation" className="overflow-hidden rounded-xl border border-blue-200 bg-white text-slate-900 shadow-sm">
-                    <div className="flex items-start gap-2.5 bg-gradient-to-r from-blue-50 to-indigo-50 p-3">
-                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-700 text-white"><selectedService.Icon className="h-4 w-4" /></span>
-                      <div className="min-w-0 flex-1">
-                        <p className="text-[9px] font-bold uppercase tracking-wider text-blue-700">Selected service</p>
-                        <h3 className="mt-0.5 text-sm font-extrabold leading-snug">{selectedService.title}</h3>
-                        <p className="mt-1 text-xs leading-relaxed text-slate-600">{selectedService.description}</p>
+                    <button type="button" onClick={reset} className="inline-flex min-h-8 shrink-0 items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-2.5 py-1.5 text-xs font-normal text-blue-800 transition hover:bg-blue-100">
+                      <RotateCcw className="h-3.5 w-3.5" /> Change problem
+                    </button>
+                  </div>
+
+                  <div className="min-h-[280px] max-h-[480px] space-y-3 overflow-y-auto rounded-xl bg-slate-50/80 p-3 sm:min-h-[360px] sm:p-4" aria-live="polite">
+                    {chatMessages.map((message) => (
+                      <div key={message.id} className={message.role === 'user' ? 'ml-auto max-w-[88%] whitespace-pre-line rounded-2xl rounded-br-md bg-blue-700 p-3.5 text-sm leading-relaxed text-white shadow-sm' : 'max-w-[96%] whitespace-pre-line rounded-2xl rounded-bl-md border border-slate-200 bg-white p-3.5 text-sm leading-relaxed text-slate-800 shadow-sm'}>
+                        {message.text}
+                        {message.suggestedPrompts && (
+                          <div className="mt-3 flex flex-wrap gap-2">
+                            {message.suggestedPrompts.map(prompt => (
+                              <button key={prompt} type="button" disabled={chatBusy} onClick={() => sendChatMessage(prompt)} className="rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 text-xs font-medium text-blue-900 transition hover:bg-blue-100 disabled:opacity-50">{prompt}</button>
+                            ))}
+                          </div>
+                        )}
+                        {message.suggestedServiceId && (
+                          <button type="button" onClick={() => chooseService(message.suggestedServiceId!)} className="mt-3 inline-flex min-h-9 items-center gap-2 rounded-lg bg-blue-700 px-3 py-2 text-xs font-semibold text-white transition hover:bg-blue-800">
+                            Show recommended service <ArrowRight className="h-3.5 w-3.5" />
+                          </button>
+                        )}
                       </div>
-                    </div>
-                    <div className="space-y-2 p-3">
-                      <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500">Your likely deliverables</p>
-                      <ul className="space-y-1.5">
-                        {selectedService.deliverables.slice(0, 3).map(item => (
-                          <li key={item} className="flex gap-1.5 text-[11px] leading-snug text-slate-700"><CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-600" /><span>{item}</span></li>
+                    ))}
+                    {chatBusy && <p role="status" className="rounded-lg border border-blue-100 bg-blue-50 p-3 text-xs text-blue-900">Financial Genie is preparing a response…</p>}
+                  </div>
+
+                  {chatError && <p role="alert" className="mt-3 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">{chatError}</p>}
+
+                  {chatMessages.length === 1 && (
+                    <div className="mt-4">
+                      <div className="mb-2 flex items-end justify-between gap-3">
+                        <div>
+                          <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-blue-700">Choose a starting point</p>
+                          <h4 className="mt-1 text-sm font-semibold text-slate-900">What do you need help with?</h4>
+                        </div>
+                        <span className="text-[11px] text-slate-500">Step 1 of 3</span>
+                      </div>
+                      <div className="grid gap-2 sm:grid-cols-2">
+                        {BUSINESS_AREAS.slice(0, showMoreAreas ? BUSINESS_AREAS.length : 2).map((area, index) => (
+                          <button
+                            key={area.title}
+                            type="button"
+                            disabled={chatBusy}
+                            onClick={() => handleServiceChoice(area.serviceTitle)}
+                            className="group flex min-h-[78px] items-center gap-3 rounded-xl border border-slate-200 bg-white p-3 text-left transition hover:border-blue-400 hover:bg-blue-50/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 disabled:opacity-60"
+                          >
+                            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-xs font-bold text-blue-800 transition group-hover:bg-blue-100">{String(index + 1).padStart(2, '0')}</span>
+                            <span className="min-w-0 flex-1">
+                              <span className="block text-sm font-semibold leading-snug text-slate-900">{area.title}</span>
+                              <span className="mt-1 block text-xs leading-relaxed text-slate-600">{area.detail}</span>
+                            </span>
+                            <ChevronRight className="h-4 w-4 shrink-0 text-blue-700 transition group-hover:translate-x-0.5" />
+                          </button>
                         ))}
-                      </ul>
-                      <button type="button" onClick={() => chooseService(selectedService.id)} className="mt-1 inline-flex min-h-9 w-full items-center justify-center gap-2 rounded-lg bg-blue-700 px-3 py-2 text-xs font-bold text-white hover:bg-blue-800">View solution and next steps <ArrowRight className="h-3.5 w-3.5" /></button>
+                      </div>
+                      <button type="button" onClick={() => setShowMoreAreas(value => !value)} className="mt-2 inline-flex min-h-9 items-center gap-1.5 rounded-lg px-2 text-xs font-medium text-blue-800 transition hover:bg-blue-50">
+                        {showMoreAreas ? 'Show fewer areas' : 'Explore 6 more business areas'}
+                        <ChevronRight className={showMoreAreas ? 'h-3.5 w-3.5 rotate-90' : 'h-3.5 w-3.5'} />
+                      </button>
+                    </div>
+                  )}
+
+                  <form onSubmit={e => { e.preventDefault(); sendChatMessage(chatInput); }} className="mt-4 border-t border-slate-100 pt-4">
+                    <label htmlFor="financial-genie-message" className="mb-2 block text-xs font-medium text-slate-700">Or describe the situation in your own words</label>
+                    <textarea id="financial-genie-message" value={chatInput} onChange={e => setChatInput(e.target.value)} rows={3} placeholder="For example: three major customers are paying 60 days late…" className="w-full resize-y rounded-xl border border-slate-300 bg-white p-3.5 text-sm leading-relaxed text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100" />
+                    <div className="mt-2 flex flex-wrap items-center justify-between gap-2">
+                      <p className="text-[11px] text-slate-500">Avoid entering confidential account numbers or identity documents.</p>
+                      <button type="submit" disabled={chatBusy || !chatInput.trim()} className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-blue-700 px-5 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-50">
+                        <Send className="h-4 w-4" /> Send to Genie
+                      </button>
+                    </div>
+                  </form>
+                </section>
+
+                <aside aria-label="Financial Genie next steps" className="space-y-3">
+                  <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                    <h3 className="text-sm font-semibold text-slate-900">How it works</h3>
+                    <p className="mt-1 text-xs leading-relaxed text-slate-600">You choose the issue. Genie narrows the options, explains what the service covers, then helps define a sensible next step.</p>
+                    <ol className="mt-4 space-y-3">
+                      {[
+                        ['01', 'Choose your issue', 'Start with one business area.'],
+                        ['02', 'Get tailored guidance', 'See relevant deliverables and follow-up actions.'],
+                        ['03', 'Decide what to do next', 'Explore the service scope or a live assessment.']
+                      ].map(([number, title, detail]) => (
+                        <li key={number} className="flex gap-3">
+                          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-[10px] font-bold text-blue-800">{number}</span>
+                          <span>
+                            <span className="block text-xs font-semibold text-slate-900">{title}</span>
+                            <span className="mt-0.5 block text-[11px] leading-relaxed text-slate-600">{detail}</span>
+                          </span>
+                        </li>
+                      ))}
+                    </ol>
+                    <button type="button" onClick={openAllServices} className="mt-4 inline-flex min-h-9 w-full items-center justify-center gap-2 rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 text-xs font-medium text-blue-800 transition hover:bg-blue-100">
+                      Browse all advisory services <ArrowRight className="h-3.5 w-3.5" />
+                    </button>
+                  </section>
+
+                  <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                    <h3 className="text-sm font-semibold text-slate-900">Need a quick diagnostic?</h3>
+                    <p className="mt-1 text-xs leading-relaxed text-slate-600">Open a focused scanner for contract risks or bank debt-service readiness.</p>
+                    <div className="mt-3 space-y-2">
+                      {[
+                        ['Contract Risk Scanner', 'contract-risk-scanner'],
+                        ['Bank DSCR Scanner', 'bank-dscr-scanner']
+                      ].map(([title, target]) => (
+                        <button key={title} type="button" onClick={() => openAssessmentTool(target)} className="flex min-h-10 w-full items-center justify-between gap-2 rounded-lg border border-slate-200 px-3 py-2 text-left text-xs font-medium text-slate-800 transition hover:border-blue-300 hover:bg-blue-50">
+                          {title} <ChevronRight className="h-4 w-4 text-blue-700" />
+                        </button>
+                      ))}
                     </div>
                   </section>
-                )}
-                <section aria-label="Navigalex Services">
-                  <h3 className="mb-2 text-base font-bold">Navigalex Services</h3>
-                  <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-2">
-                    {[
-                      ['Financial Clarity Check','Cash flow, costs and credit readiness'],
-                      ['Contract & Collections Review','Payment delays and key contract risks'],
-                      ['Risk Management & Risk Assurance','Enterprise, operational, regulatory and third-party risks'],
-                      ['Controls & Compliance Snapshot','Priority process gaps and next steps'],
-                      ['Finance & Funding Readiness','Forecasting, financial modelling and lender preparation'],
-                      ['Strategy & Growth','Market entry, transformation and performance improvement'],
-                      ['Project Management & Recovery','Delivery, PMO, budgets, dependencies and turnaround'],
-                      ['IT & Digital Operations','Systems workflows, IT controls, cybersecurity and vendor risks']
-                    ].map(([title, detail]) => (
-                      <button key={title} type="button" disabled={chatBusy} onClick={() => handleServiceChoice(title)} className="flex min-h-12 items-center justify-between gap-1.5 rounded-lg border border-blue-100 bg-white p-1.5 text-left text-slate-950 shadow-sm transition hover:bg-blue-50 disabled:opacity-60">
-                        <span><span className="block text-xs font-extrabold leading-tight">{title}</span><span className="mt-0.5 block text-[10px] leading-snug text-slate-600">{detail}</span></span>
-                        <ChevronRight className="h-4 w-4 shrink-0 text-blue-700" />
-                      </button>
-                    ))}
-                  </div>
-                </section>
-                <section aria-label="Live Assessments and Guides">
-                  <h3 className="mb-2 text-base font-bold">Live Assessments &amp; Guides</h3>
-                  <div className="grid gap-2">
-                    {['Contract Risk Scanner','Bank DSCR Scanner'].map((title) => (
-                      <button key={title} type="button" disabled={chatBusy} onClick={() => openAssessmentTool(title === 'Contract Risk Scanner' ? 'contract-risk-scanner' : 'bank-dscr-scanner')} className="flex min-h-10 items-center justify-between rounded-lg bg-cyan-50 px-2.5 py-2 text-left text-slate-950 hover:bg-cyan-100 disabled:opacity-60">
-                        <span className="text-xs font-bold">{title} <span className="ml-1 rounded-full bg-emerald-200 px-1.5 py-0.5 text-[10px] text-emerald-900">Live</span></span>
-                        <ChevronRight className="h-4 w-4 text-teal-700" />
-                      </button>
-                    ))}
-                  </div>
-                </section>
-              </section>
+
+                  <p className="px-1 text-[11px] leading-relaxed text-slate-500">Financial Genie helps identify a starting point. Any advisory engagement is subject to an agreed written scope.</p>
+                </aside>
               </div>
             </div>
           )}
-
           {screen === 'context' && selectedService && (
             <div className="mx-auto max-w-3xl space-y-6">
               <button type="button" onClick={reset} className="inline-flex min-h-8 items-center gap-1 text-xs font-normal text-[#1f4fff] hover:text-[#183bc4]">
