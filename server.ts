@@ -545,7 +545,8 @@ async function startServer() {
       });
     }
 
-    recordAuditLog(identifier || 'Anonymous', 'AUTH_FAILED', `Failed admin login attempt using identifier: ${identifier}`, clientIp, 'WARNING');
+    const failedIdentifier = (identifier || 'Anonymous').slice(0, 120);
+    recordAuditLog(failedIdentifier, 'AUTH_FAILED', `Failed admin login attempt using identifier: ${failedIdentifier}`, clientIp, 'WARNING');
     return res.status(401).json({ error: 'Invalid admin username or password.' });
   });
 
@@ -668,10 +669,27 @@ async function startServer() {
     const cs = caseStudies.find(c => c.id === id);
     if (!cs) return res.status(404).json({ error: 'Case study not found.' });
 
-    const updates = req.body && typeof req.body === 'object' ? req.body : {};
-    const allowedFields = ['title', 'clientSector', 'region', 'dealSize', 'riskIdentified', 'advisoryProvided', 'concreteRoi', 'status'];
-    for (const field of allowedFields) if (Object.prototype.hasOwnProperty.call(updates, field)) (cs as any)[field] = String(updates[field]).slice(0, 4000);
-    if (!['Published', 'Under Review', 'Draft'].includes(cs.status)) return res.status(400).json({ error: 'Invalid case study status.' });
+    const updates = req.body && typeof req.body === 'object' && !Array.isArray(req.body) ? req.body : {};
+    const allowedFields = ['title', 'clientSector', 'region', 'dealSize', 'riskIdentified', 'advisoryProvided', 'concreteRoi', 'status'] as const;
+    const updateKeys = Object.keys(updates);
+    const unsupportedField = updateKeys.find((field) => !allowedFields.includes(field as typeof allowedFields[number]));
+    if (unsupportedField) return res.status(400).json({ error: 'Unsupported case study field: ' + unsupportedField });
+    for (const field of allowedFields) {
+      if (!Object.prototype.hasOwnProperty.call(updates, field)) continue;
+      if (typeof updates[field] !== 'string') {
+        return res.status(400).json({ error: 'Case study fields must be text values.' });
+      }
+      if (updates[field].length > 4000) {
+        return res.status(400).json({ error: 'Case study fields must be 4,000 characters or fewer.' });
+      }
+    }
+    if (Object.prototype.hasOwnProperty.call(updates, 'status') && !['Published', 'Under Review', 'Draft'].includes(updates.status)) {
+      return res.status(400).json({ error: 'Invalid case study status.' });
+    }
+    // Validate every field before mutating the stored record.
+    for (const field of allowedFields) {
+      if (Object.prototype.hasOwnProperty.call(updates, field)) (cs as any)[field] = updates[field].trim();
+    }
     persistState();
     recordAuditLog(ADMIN_CREDENTIALS.email, 'CASE_STUDY_UPDATED', `Updated case study: ${cs.title} (ID: ${id})`, clientIp);
 
