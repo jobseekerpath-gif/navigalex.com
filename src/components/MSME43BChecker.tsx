@@ -24,7 +24,7 @@ type Result = Invoice & {
 const aliases: Record<string, string[]> = {
   supplier: ['supplier', 'vendor', 'vendor name', 'supplier name', 'party', 'party name'],
   invoice: ['invoice', 'invoice no', 'invoice number', 'bill no', 'bill number', 'document number'],
-  acceptanceDate: ['acceptance date', 'accepted date', 'deemed acceptance date', 'delivery date', 'invoice date'],
+  acceptanceDate: ['acceptance date', 'accepted date', 'deemed acceptance date', 'delivery date'],
   amount: ['amount', 'invoice amount', 'invoice value', 'bill amount', 'total amount'],
   paymentDate: ['payment date', 'paid date', 'date paid', 'settlement date'],
   writtenAgreement: ['written agreement', 'agreement', 'written terms'],
@@ -139,7 +139,7 @@ export default function MSME43BChecker() {
     }
     const required = ['acceptanceDate', 'amount'];
     const missing = required.filter(k => map[k] === undefined);
-    if (missing.length) { setFileError('Missing required columns: ' + missing.map(k => k === 'acceptanceDate' ? 'acceptance date (or invoice date)' : k).join(', ') + '.'); return; }
+    if (missing.length) { setFileError('Missing required columns: ' + missing.map(k => k === 'acceptanceDate' ? 'acceptance or deemed-acceptance date (invoice date alone is not sufficient)' : k).join(', ') + '.'); return; }
     const parsed: Invoice[] = [];
     const rowErrors: string[] = [];
     table.slice(1).forEach((cells, idx) => {
@@ -204,7 +204,7 @@ export default function MSME43BChecker() {
         <label className="block text-sm font-semibold text-slate-700">Tax year / rule reference
           <select value={taxYear} onChange={e => setTaxYear(e.target.value)} className="mt-2 w-full rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm">
             <option value="2025-26">Tax year 2025–26 · Income-tax Act 1961, section 43B(h)</option>
-            <option value="2026-27">Tax year 2026–27 · Income-tax Act 2025, section 37(2)(g)</option>
+            
           </select>
         </label>
         <label className="block text-sm font-semibold text-slate-700">RBI bank rate used for estimate (% p.a.)
