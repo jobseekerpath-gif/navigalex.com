@@ -3,6 +3,7 @@ const GenieWorkspace = lazy(() => import('./components/GenieWorkspace'));
 const AdminPanel = lazy(() => import('./components/AdminPanel'));
 const LiveAssessmentsPage = lazy(() => import('./pages/LiveAssessmentsPage'));
 const ServicesPage = lazy(() => import('./pages/ServicesPage'));
+const MSME43BChecker = lazy(() => import('./components/MSME43BChecker'));
 import ModalCloseButton from './components/ModalCloseButton';
 import { 
   Shield, Scale, FileText, BarChart3, ArrowRight, CheckCircle2, 
@@ -490,7 +491,7 @@ export default function App() {
         )}
 
         {activeTab === '43b-h-check' && (
-          <div className="py-16 px-6 max-w-4xl mx-auto space-y-8">
+          <section className="py-12 px-4 sm:px-6 max-w-6xl mx-auto space-y-6">
             <button
               type="button"
               onClick={() => {
@@ -501,132 +502,15 @@ export default function App() {
             >
               ← Back to Contract-to-Cash
             </button>
-
             <div className="space-y-3">
-              <span className="text-xs font-bold text-blue-600 uppercase tracking-widest">MSME PAYMENT TIMING SCREEN</span>
-              <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900">Check a supplier payment timeline</h2>
-              <p className="text-slate-600 max-w-3xl">
-                Enter the acceptance date, supplier eligibility and whether payment terms were agreed in writing. This is an informational screen, not a legal or tax conclusion.
-              </p>
+              <span className="text-xs font-bold text-blue-600 uppercase tracking-widest">FREE MSME PAYMENT SCREENING BETA</span>
+              <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900">Find delayed-payment records that need review</h2>
+              <p className="text-slate-600 max-w-3xl">Start with a CSV exported from Excel or Tally. This browser-based checker screens invoice timing and creates a downloadable review list. It does not certify tax treatment, verify Udyam registration or replace a CA's review.</p>
             </div>
-
-            <form onSubmit={runPaymentTimingCheck} className="navigalex-card rounded-2xl p-6 sm:p-8 shadow-xl border-t-4 border-blue-600 space-y-6">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Supplier status</label>
-                  <select
-                    value={paymentCheck.msmeStatus}
-                    onChange={(e) => setPaymentCheck({ ...paymentCheck, msmeStatus: e.target.value })}
-                    className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900"
-                  >
-                    <option value="unknown">Not sure</option>
-                    <option value="yes">Micro/small supplier status confirmed</option>
-                    <option value="no">Not confirmed / may not qualify</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Written payment agreement?</label>
-                  <select
-                    value={paymentCheck.writtenAgreement}
-                    onChange={(e) => setPaymentCheck({ ...paymentCheck, writtenAgreement: e.target.value })}
-                    className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900"
-                  >
-                    <option value="unknown">Not sure</option>
-                    <option value="yes">Yes, there is a written term</option>
-                    <option value="no">No written agreement</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Acceptance / deemed acceptance date</label>
-                  <input
-                    required
-                    type="date"
-                    value={paymentCheck.acceptanceDate}
-                    onChange={(e) => setPaymentCheck({ ...paymentCheck, acceptanceDate: e.target.value })}
-                    className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900"
-                  />
-                </div>
-
-                {paymentCheck.writtenAgreement === 'yes' && (
-                  <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Written payment term (days)</label>
-                    <input
-                      type="number"
-                      min="0"
-                      max="3650"
-                      required
-                      value={paymentCheck.agreedDays}
-                      onChange={(e) => setPaymentCheck({ ...paymentCheck, agreedDays: e.target.value })}
-                      className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900"
-                    />
-                    <span className="text-[11px] text-slate-500 mt-1 block">Enter the term shown in the agreement. If it is longer, the screen applies a 45-day maximum.</span>
-                  </div>
-                )}
-
-                <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Actual or expected payment date</label>
-                  <input
-                    type="date"
-                    value={paymentCheck.paidDate}
-                    onChange={(e) => setPaymentCheck({ ...paymentCheck, paidDate: e.target.value })}
-                    className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900"
-                  />
-                  <span className="text-[11px] text-slate-500 mt-1 block">Leave blank if still unpaid; the screen uses today's date.</span>
-                </div>
-
-                <div className="sm:col-span-2">
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">Outstanding amount (optional)</label>
-                  <input
-                    type="text"
-                    inputMode="decimal"
-                    value={paymentCheck.amount}
-                    onChange={(e) => setPaymentCheck({ ...paymentCheck, amount: e.target.value })}
-                    placeholder="e.g. 250000"
-                    className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900"
-                  />
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                className="w-full py-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-bold shadow-lg"
-              >
-                Check Payment Timing
-              </button>
-            </form>
-
-            {paymentCheckResult && (
-              <div className={`rounded-2xl border p-6 ${paymentCheckResult.type === 'flag' ? 'bg-amber-50 border-amber-200' : paymentCheckResult.type === 'clear' ? 'bg-emerald-50 border-emerald-200' : 'bg-slate-50 border-slate-200'}`}>
-                {paymentCheckResult.type === 'input' ? (
-                  <p className="text-sm font-semibold text-slate-800">{paymentCheckResult.message}</p>
-                ) : (
-                  <div className="space-y-3">
-                    <h3 className="text-lg font-bold text-slate-900">
-                      {paymentCheckResult.type === 'flag' ? 'Potential payment-timing issue' : paymentCheckResult.type === 'uncertain' ? 'Confirm eligibility before relying on this result' : 'No timing issue indicated by these entries'}
-                    </h3>
-                    <ul className="space-y-2 text-sm text-slate-700">
-                      <li>• Days from acceptance to payment check: {paymentCheckResult.daysToPayment}</li>
-                      <li>• {paymentCheckResult.timingRuleLabel}: {paymentCheckResult.timingThreshold}</li>
-                      {paymentCheckResult.show45DayOuterLimit && <li>• 45-day outer limit for written terms: {paymentCheckResult.statutoryMax}</li>}
-                      {paymentCheckResult.amount && <li>• Amount entered: ₹{paymentCheckResult.amount}</li>}
-                    </ul>
-                    <p className="text-xs text-slate-600">{paymentCheckResult.note}</p>
-                    {paymentCheckResult.type === 'flag' && (
-                      <button
-                        type="button"
-                        onClick={() => openAssessmentForm('Contract & Collections Review — MSME payment timing question')}
-                        className="inline-flex px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold"
-                      >
-                        Request a contract and collections review
-                      </button>
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
+            <Suspense fallback={<div className="rounded-2xl border border-slate-200 p-6 text-sm text-slate-500">Loading payment checker…</div>}>
+              <MSME43BChecker />
+            </Suspense>
+          </section>
         )}
 
         {activeTab === 'family-office' && (
