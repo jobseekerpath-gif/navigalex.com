@@ -100,7 +100,7 @@ export default function MSME43BChecker() {
       const dueDate = plusDays(inv.acceptanceDate, days);
       const effectiveDate = inv.paymentDate || new Date().toISOString().slice(0, 10);
       const daysLate = Math.max(0, dayDiff(dueDate, effectiveDate));
-      const interestApplicable = inv.udyamStatus === 'yes' && Number.isFinite(bankRate) && bankRate >= 0 && bankRate <= 30;
+      const interestApplicable = inv.udyamStatus === 'yes' && Number.isFinite(bankRate) && bankRate > 0 && bankRate <= 30;
       const estimatedInterest = interestApplicable
         ? inv.amount * (Math.pow(1 + ((bankRate * 3) / 100) / 12, daysLate / 30.4375) - 1)
         : null;
@@ -112,7 +112,8 @@ export default function MSME43BChecker() {
       if (inv.writtenAgreement === 'unknown') notes.push('Written payment terms not confirmed; 45 days used only as a screening assumption.');
       if (inv.writtenAgreement === 'yes' && inv.agreedDays === null) notes.push('Written term missing; 45-day outer limit used as a screening assumption.');
       if (inv.writtenAgreement === 'yes' && (inv.agreedDays ?? 0) > 45) notes.push('Entered term exceeds 45 days; capped at 45 days for screening.');
-      if (inv.udyamStatus !== 'yes') notes.push('Supplier micro/small status not confirmed; statutory flags and interest are not determined.');
+      if (inv.udyamStatus !== 'yes') notes.push('Supplier micro/small status and activity eligibility are not confirmed; statutory flags and interest are not determined.');
+      else notes.push('Eligibility is user-entered and not independently verified. Confirm Udyam status and eligible activity before relying on this result.');
       if (inv.paymentDate && inv.paymentDate < inv.acceptanceDate) notes.push('Payment date precedes acceptance date; verify the source data.');
       if (inv.paymentDate && daysLate > 0) notes.push('Interest estimate uses one full payment date. Partial payments and multiple payments are not modelled.');
       if (!inv.paymentDate && daysLate > 0) notes.push('Invoice is treated as unpaid through today for this estimate.');
@@ -192,7 +193,7 @@ export default function MSME43BChecker() {
         <div>
           <p className="text-xs font-bold uppercase tracking-widest text-blue-700">Free beta · runs in your browser</p>
           <h3 className="mt-1 text-xl font-extrabold text-slate-950">MSME payment ledger checker</h3>
-          <p className="mt-2 max-w-3xl text-sm leading-relaxed text-slate-600">Screen invoice-level payment timing, possible year-end tax flags and an indicative interest estimate from a CSV exported by Excel or Tally. Your ledger file is processed in this browser and is not sent to Navigalex's server by this tool.</p>
+          <p className="mt-2 max-w-3xl text-sm leading-relaxed text-slate-600">Screen invoice-level payment timing, possible year-end tax flags and an indicative interest estimate from a CSV exported by Excel or Tally. Mark supplier eligibility only after checking the supplier's Udyam certificate and activity type; trading registrations may not qualify for MSMED delayed-payment protections. Your ledger file is processed in this browser and is not sent to Navigalex's server by this tool.</p>
         </div>
       </div>
 
