@@ -15,6 +15,20 @@ function writeStore(value:Store){const file=filePath();fs.writeFileSync(file+'.t
 function hash(token:string){return crypto.createHash('sha256').update(token).digest('hex');}
 function findPayment(token:string){if(!/^[A-Za-z0-9_-]{32,80}$/.test(token))return undefined;const digest=hash(token);return readStore().payments.find(p=>p.tokenHash===digest);}
 function clean(value:unknown,max=200){return typeof value==='string'?value.trim().slice(0,max):'';}
+function routeLimiter(maxRequests:number,windowMs:number){
+  const buckets=new Map<string,{count:number;resetAt:number}>();
+  return (req:Request,res:Response,next:()=>void)=>{
+    const now=Date.now();const key=req.ip||req.socket.remoteAddress||'unknown';
+    let bucket=buckets.get(key);if(!bucket||bucket.resetAt<=now){bucket={count:0,resetAt:now+windowMs};buckets.set(key,bucket);}
+    bucket.count++;
+    if(bucket.count>maxRequests){res.setHeader('Retry-After',String(Math.max(1,Math.ceil((bucket.resetAt-now)/1000))));return res.status(429).json({error:'Too many MSME requests. Please try again later.'});}
+    if(buckets.size>5000){for(const [k,v] of buckets){if(v.resetAt<=now)buckets.delete(k);}while(buckets.size>5000){const first=buckets.keys().next().value;if(typeof first!=='string')break;buckets.delete(first);}}
+    next();
+  };
+}
+const paymentLinkRateLimit=routeLimiter(8,15*60*1000);
+const accessRateLimit=routeLimiter(60,15*60*1000);
+const pdfRateLimit=routeLimiter(20,15*60*1000);
 function baseUrl(){return process.env.CASHFREE_ENV==='production'?'https://api.cashfree.com/pg':'https://sandbox.cashfree.com/pg';}
 function validSignature(signature:string,timestamp:string,body:Buffer,secret:string){if(!signature||!timestamp||!secret)return false;const expected=crypto.createHmac('sha256',secret).update(timestamp,'utf8').update(body).digest();const received=Buffer.from(signature,'base64');return received.length===expected.length&&crypto.timingSafeEqual(received,expected);}
 function safePdf(value:unknown){return String(value??'').replaceAll('₹','Rs ').replaceAll('–','-').replaceAll('—','-').replace(/[^\x09\x0A\x0D\x20-\x7E]/g,' ').replace(/\s+/g,' ').trim();}
@@ -44,7 +58,7 @@ export function registerMsmeWebhook(app:Express){
 export function registerMsmeRoutes(app:Express){
   app.get('/api/msme/config',(_req,res)=>{const n=Number(process.env.MSMED_BANK_RATE??'6');const bankRate=Number.isFinite(n)&&n>0&&n<=30?n:6;res.json({success:true,bankRate,privacy:'Invoice rows are processed in the browser and are not stored by this service.'});});
 
-  app.post('/api/msme/payment-links',async(req,res)=>{
+  app.post('/api/msme/payment-links',paymentLinkRateLimit,async(req,res)=>{
     const appId=process.env.CASHFREE_APP_ID,secret=process.env.CASHFREE_SECRET_KEY;
     if(!appId||!secret)return res.status(503).json({error:'Paid reports are not configured yet. Use the free CSV export for now.'});
     const plan=req.body?.plan as Plan;if(plan!=='single'&&plan!=='annual')return res.status(400).json({error:'Choose a valid access plan.'});
@@ -61,18 +75,18 @@ export function registerMsmeRoutes(app:Express){
     }catch{const failed=readStore();const record=failed.payments.find(p=>p.linkId===linkId);if(record){record.status='FAILED';writeStore(failed);}return res.status(502).json({error:'Cashfree is unavailable. Please try again.'});}
   });
 
-  app.get('/api/msme/access/:token',(req,res)=>{
+  app.get('/api/msme/access/:token',accessRateLimit,(req,res)=>{
     const payment=findPayment(req.params.token);if(!payment)return res.status(404).json({error:'Access record not found.'});
     const annualActive=payment.plan==='annual'&&payment.status==='PAID'&&!!payment.expiresAt&&Date.parse(payment.expiresAt)>Date.now();
     return res.json({success:true,paid:payment.status==='PAID',plan:payment.plan,status:payment.status,annualActive,pdfAvailable:annualActive||(payment.plan==='single'&&payment.status==='PAID'&&!payment.reportUsed),expiresAt:payment.expiresAt||null});
   });
 
-  app.post('/api/msme/report/pdf',(req,res)=>{
+  app.post('/api/msme/report/pdf',pdfRateLimit,(req,res)=>{
     const token=clean(req.body?.accessToken,100);const payment=findPayment(token);
     if(!payment||payment.status!=='PAID')return res.status(402).json({error:'A verified successful payment is required before downloading this PDF.'});
     const annual=payment.plan==='annual'&&!!payment.expiresAt&&Date.parse(payment.expiresAt)>Date.now();const oneTime=payment.plan==='single'&&!payment.reportUsed;
     if(!annual&&!oneTime)return res.status(403).json({error:'This report access has already been used or has expired.'});
-    const rows=Array.isArray(req.body?.results)?req.body.results.slice(0,2000):[];if(!rows.length)return res.status(400).json({error:'There are no screening results to include.'});
+    const rows=Array.isArray(req.body?.results)?req.body.results:[];if(!rows.length)return res.status(400).json({error:'There are no screening results to include.'});if(rows.length>2000)return res.status(413).json({error:'A PDF report can contain at most 2,000 invoice rows. Download the free CSV for the full ledger.'});
     const rate=Number(req.body?.bankRate);if(!Number.isFinite(rate)||rate<=0||rate>30)return res.status(400).json({error:'Invalid bank rate.'});
     const lines=['NAVIGALEX - MSME PAYMENT SCREENING REPORT','Created: '+new Date().toLocaleString('en-IN'),'Tax year / reference: '+safePdf(req.body?.taxYear||'Not specified'),'Bank rate entered: '+rate+'% p.a. (confirm the applicable current RBI bank rate)','Invoice rows: '+rows.length,'','SCREENING RESULTS'];
     rows.forEach((item:any,index:number)=>{
@@ -85,7 +99,8 @@ export function registerMsmeRoutes(app:Express){
       if(Array.isArray(item?.notes))item.notes.filter((n:unknown)=>typeof n==='string').slice(0,5).forEach((n:string)=>lines.push('Note: '+safePdf(n)));
     });
     lines.push('','ASSUMPTIONS AND LIMITATIONS','This report uses only information entered by the user. Supplier status, activity eligibility, agreements, dates and payments are not independently verified.','Partial payments, disputes, credit notes, statutory exceptions and formal tax return positions may require separate review.','Screening estimate, not tax or legal advice; confirm with your CA.','Invoice data is submitted only for PDF generation and is not written to the payment store.');
+    const pdf=makePdf(lines.flatMap(line=>wrap(line)));
     if(payment.plan==='single'){const latest=readStore();const record=latest.payments.find(p=>p.tokenHash===payment.tokenHash);if(!record||record.reportUsed||record.status!=='PAID')return res.status(409).json({error:'This one-time report download has already been used.'});record.reportUsed=true;writeStore(latest);}
-    res.setHeader('Content-Type','application/pdf');res.setHeader('Content-Disposition','attachment; filename="Navigalex-MSME-Screening-Report.pdf"');res.setHeader('Cache-Control','no-store');return res.send(makePdf(lines.flatMap(line=>wrap(line))));
+    res.setHeader('Content-Type','application/pdf');res.setHeader('Content-Disposition','attachment; filename="Navigalex-MSME-Screening-Report.pdf"');res.setHeader('Cache-Control','no-store');return res.send(pdf);
   });
 }
