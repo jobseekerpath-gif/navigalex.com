@@ -24,6 +24,8 @@ jobs:
           cache: npm
       - name: Install locked dependencies
         run: npm ci
+      - name: Read patched qs release metadata
+        run: npm view qs@6.16.2 dist.integrity dist.tarball
       - name: Audit dependencies
         run: npm audit --audit-level=high
       - name: Static integration checks
