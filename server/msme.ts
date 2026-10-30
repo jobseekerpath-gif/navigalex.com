@@ -7,7 +7,7 @@ type Plan = 'single' | 'annual';
 type Payment = { tokenHash:string; linkId:string; plan:Plan; amount:number; email:string; status:'PENDING'|'PAID'|'FAILED'|'EXPIRED'; createdAt:string; paidAt?:string; expiresAt?:string; reportUsed:boolean };
 type Store = { payments:Payment[] };
 const price:Record<Plan,number>={single:499,annual:3000};
-const apiVersion='2025-01-01';
+const apiVersion='2022-09-01';
 
 function filePath(){const dir=path.resolve(process.env.NAVIGALEX_DATA_DIR||'./data');fs.mkdirSync(dir,{recursive:true,mode:0o700});return path.join(dir,'msme-payments.json');}
 function readStore():Store{try{const value=JSON.parse(fs.readFileSync(filePath(),'utf8')) as Store;if(Array.isArray(value.payments))return value;}catch(e){if((e as NodeJS.ErrnoException).code!=='ENOENT')console.error('[msme] payment store read failed');}return{payments:[]};}
