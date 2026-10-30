@@ -35,7 +35,6 @@ railway up
 if ($LASTEXITCODE -ne 0) { Stop-WithMessage "railway up failed." }
 if (-not $HealthUrl -and $values.ContainsKey("APP_URL")) { $HealthUrl = $values["APP_URL"] }
 if (-not $HealthUrl) { Write-Warning "Deployment submitted. Pass -HealthUrl https://your-domain to verify /api/health."; exit 0 }
-if (-not $HealthUrl) { Write-Warning "Deployment submitted. Supply HealthUrl to verify /api/health."; exit 0 }
 if ($HealthUrl -notmatch '^https?://') { $HealthUrl = "https://$HealthUrl" }
 $health = $HealthUrl.TrimEnd('/') + "/api/health"
 try { $response = Invoke-RestMethod -Uri $health -TimeoutSec 20; if (-not $response.success) { Stop-WithMessage "Health endpoint did not report success." }; Write-Host "Health check passed: $health" }
