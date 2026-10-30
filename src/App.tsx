@@ -503,7 +503,7 @@ export default function App() {
               ← Back to Contract-to-Cash
             </button>
             <div className="space-y-3">
-              <span className="text-xs font-bold text-blue-600 uppercase tracking-widest">FREE MSME PAYMENT SCREENING BETA</span>
+              <span className="text-xs font-bold text-blue-600 uppercase tracking-widest">MSME PAYMENT SCREENING & REPORTS</span>
               <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900">Find delayed-payment records that need review</h2>
               <p className="text-slate-600 max-w-3xl">Start with a CSV exported from Excel or Tally. This browser-based checker screens invoice timing and creates a downloadable review list. It does not certify tax treatment, verify Udyam registration or replace a CA's review.</p>
             </div>
@@ -898,11 +898,11 @@ export default function App() {
               </div>
               <div>
                 <h4 className="mb-1 font-bold uppercase tracking-wider text-slate-900">How information is processed</h4>
-                <p>Inquiry details are sent to the email address configured by the business through its email delivery provider and stored in the site's server records for follow-up. Text or documents entered into AI-assisted chat and assessment tools are sent to the AI provider configured for the site to generate a response.</p>
+                <p>Inquiry details are sent to the email address configured by the business through its email delivery provider and stored in the site's server records for follow-up. Text or documents entered into AI-assisted chat and assessment tools are sent to the AI provider configured for the site to generate a response. In the MSME checker, invoice CSV rows are parsed in your browser and are not uploaded during the free screening step. When you request a paid PDF, the calculated result rows are sent to the server for report generation and are not written to the payment store.</p>
               </div>
               <div>
                 <h4 className="mb-1 font-bold uppercase tracking-wider text-slate-900">Retention and requests</h4>
-                <p>No fixed automatic deletion period is set. An administrator can delete inquiry records; visit and security logs remain in the site's operational records until they are removed. To ask about your information, use the contact form.</p>
+                <p>The payment service retains payment-link references, a hashed access token, customer email, payment status and access dates in the server data store for paid-access support. Cashfree processes payment details under its own terms. No fixed automatic deletion period is set for inquiry, payment or operational records. An administrator can delete inquiry records; visit and security logs remain in the site's operational records until removed. To ask about your information, use the contact form.</p>
               </div>
               <p className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-amber-900">For a privacy question or request, use the contact form and include the email address connected to your inquiry.</p>
             </div>

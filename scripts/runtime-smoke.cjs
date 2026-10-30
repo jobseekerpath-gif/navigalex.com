@@ -1,4 +1,5 @@
 const { spawn } = require('node:child_process');
+const crypto = require('node:crypto');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
@@ -21,7 +22,11 @@ const child = spawn(
       ADMIN_PASSWORD: '',
       RESEND_API_KEY: '',
       RESEND_FROM_EMAIL: '',
-      INQUIRY_TO_EMAIL: ''
+      INQUIRY_TO_EMAIL: '',
+      CASHFREE_APP_ID: '',
+      CASHFREE_SECRET_KEY: 'runtime-test-cashfree-secret',
+      CASHFREE_ENV: 'sandbox',
+      MSMED_BANK_RATE: '6'
     },
     stdio: ['ignore', 'pipe', 'pipe']
   }
@@ -75,6 +80,113 @@ async function main() {
     const health = await waitForServer();
     assert(health.service === 'navigalex-api', 'runtime health endpoint responds');
     assert(health.integrations.aiProviderConfigured === false, 'runtime health reports missing AI provider in the test environment');
+
+
+    const msmeConfig = await request('/api/msme/config');
+    assert(msmeConfig.response.ok && msmeConfig.data.bankRate === 6, 'MSME checker exposes the configured bank-rate assumption');
+
+    const unavailablePaymentLink = await request('/api/msme/payment-links', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ plan: 'single', email: 'test@example.com', name: 'Runtime Test' })
+    });
+    assert(unavailablePaymentLink.response.status === 503, 'paid report checkout fails closed when Cashfree credentials are absent');
+
+    const invalidWebhook = await request('/api/msme/cashfree/webhook', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-webhook-signature': 'invalid', 'x-webhook-timestamp': 'test' },
+      body: JSON.stringify({ type: 'PAYMENT_LINK_EVENT', data: { link_id: 'unknown', link_status: 'PAID' } })
+    });
+    assert(invalidWebhook.response.status === 401, 'Cashfree webhook rejects an invalid signature');
+
+    const unpaidPdf = await request('/api/msme/report/pdf', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ accessToken: 'invalid_invalid_invalid_invalid_invalid', bankRate: 6, taxYear: '2025-26', results: [{ invoice: 'test' }] })
+    });
+
+    assert(unpaidPdf.response.status === 402, 'MSME PDF endpoint refuses to generate a report without verified payment');
+
+    const accessToken = 'runtime-msme-access-token-12345678901234567890';
+    const webhookSecret = 'runtime-test-cashfree-secret';
+    const linkId = 'runtime-smoke-msme-link';
+    fs.writeFileSync(path.join(dataDir, 'msme-payments.json'), JSON.stringify({
+      payments: [{
+        tokenHash: crypto.createHash('sha256').update(accessToken).digest('hex'),
+        linkId,
+        plan: 'single',
+        amount: 499,
+        email: 'runtime@example.com',
+        status: 'PENDING',
+        createdAt: new Date().toISOString(),
+        reportUsed: false
+      }]
+    }), 'utf8');
+
+    const eventBody = JSON.stringify({
+      type: 'PAYMENT_LINK_EVENT',
+      data: {
+        link_id: linkId,
+        link_status: 'PAID',
+        link_amount: 499,
+        link_amount_paid: 499,
+        link_currency: 'INR'
+      }
+    });
+    const eventTimestamp = String(Date.now());
+    const eventSignature = crypto.createHmac('sha256', webhookSecret)
+      .update(eventTimestamp, 'utf8')
+      .update(Buffer.from(eventBody, 'utf8'))
+      .digest('base64');
+    const signedWebhook = await request('/api/msme/cashfree/webhook', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-webhook-timestamp': eventTimestamp,
+        'x-webhook-signature': eventSignature
+      },
+      body: eventBody
+    });
+    assert(signedWebhook.response.ok, 'valid signed Cashfree webhook is accepted');
+
+    const paidAccess = await request('/api/msme/access/' + encodeURIComponent(accessToken));
+    assert(paidAccess.response.ok && paidAccess.data.paid && paidAccess.data.pdfAvailable, 'valid signed payment activates the report entitlement');
+
+    const paidPdf = await request('/api/msme/report/pdf', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        accessToken,
+        bankRate: 6,
+        taxYear: '2025-26',
+        results: [{
+          supplier: 'Test Supplier',
+          invoice: 'TEST-001',
+          amount: 499,
+          acceptanceDate: '2025-04-01',
+          dueDate: '2025-04-16',
+          paymentDate: '',
+          daysLate: 30,
+          estimatedInterest: 4.5,
+          disallowanceFlag: false,
+          notes: ['Runtime smoke test']
+        }]
+      })
+    });
+    assert(paidPdf.response.ok && paidPdf.response.headers.get('content-type') === 'application/pdf' && paidPdf.text.startsWith('%PDF-1.4'), 'verified one-time payment generates a server-side PDF report');
+
+    const repeatPdf = await request('/api/msme/report/pdf', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        accessToken,
+        bankRate: 6,
+        taxYear: '2025-26',
+        results: [{ supplier: 'Test Supplier', invoice: 'TEST-001', amount: 499 }]
+      })
+    });
+    assert(repeatPdf.response.status === 403, 'one-time PDF access cannot be reused after a successful download');
+
 
     const invalidCibil = await request('/api/cibil-scan', {
       method: 'POST',

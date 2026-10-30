@@ -73,3 +73,20 @@ assert(env.includes('NAVIGALEX_DATA_DIR') && env.includes('RESEND_API_KEY') && e
 assert(ignore.includes('data/'), 'runtime data directory is excluded from Git');
 assert(railway.includes('healthcheckPath = "/api/health"'), 'Railway checks API health');
 assert(Boolean(pkg.scripts && pkg.scripts.postbuild), 'postbuild asset processing is configured');
+
+const msme = read('server/msme.ts');
+const checker = read('src/components/MSME43BChecker.tsx');
+assert(server.indexOf("registerMsmeWebhook(app)") < server.indexOf("app.use(express.json"), 'Cashfree webhook is mounted before JSON body parsing');
+assert(server.includes("registerMsmeRoutes(app)") && msme.includes("express.raw({type:'application/json'"), 'MSME route module is mounted and webhook receives raw request bytes');
+assert(msme.includes("x-webhook-signature") && msme.includes("x-webhook-timestamp") && msme.includes("timingSafeEqual"), 'Cashfree webhook signature is checked using a constant-time comparison');
+assert(msme.includes("link_status==='PAID'") && msme.includes("link_amount_paid") && msme.includes("link_currency==='INR'"), 'paid access requires a matching successful INR payment');
+assert(msme.includes("link_amount:amount") && msme.includes("single:499,annual:3000"), 'payment amounts are fixed server-side at Rs 499 and Rs 3000');
+assert(msme.includes("Screening estimate, not tax or legal advice; confirm with your CA."), 'paid MSME PDF includes the requested professional-review disclaimer');
+assert(checker.includes('/api/msme/payment-links') && checker.includes('/api/msme/report/pdf') && checker.includes('Delayed-payment interest calculator'), 'checker UI is connected to paid PDF and supplier calculator features');
+assert(checker.includes('Copy letter') && checker.includes('Download free CSV'), 'supplier letter and free CSV export remain available');
+assert(env.includes('CASHFREE_APP_ID') && env.includes('CASHFREE_SECRET_KEY') && env.includes('CASHFREE_ENV') && env.includes('MSMED_BANK_RATE'), 'Cashfree and MSME variables are documented');
+
+assert(checker.includes('Tax-year limitation:') && checker.includes('FY 2026–27 or later'), 'MSME tax-year scope warns that the legacy section 43B(h) checker is historical only');
+
+assert(msme.includes("paymentLinkRateLimit=routeLimiter(8") && msme.includes("accessRateLimit=routeLimiter(60") && msme.includes("pdfRateLimit=routeLimiter(20"), 'MSME checkout, access and PDF endpoints have bounded request rates');
+assert(checker.includes('Please confirm that the payment has been received') && checker.includes('Please arrange payment of the outstanding amount'), 'supplier letter wording distinguishes already-paid from still-unpaid invoices');
