@@ -85,3 +85,5 @@ assert(msme.includes("Screening estimate, not tax or legal advice; confirm with 
 assert(checker.includes('/api/msme/payment-links') && checker.includes('/api/msme/report/pdf') && checker.includes('Delayed-payment interest calculator'), 'checker UI is connected to paid PDF and supplier calculator features');
 assert(checker.includes('Copy letter') && checker.includes('Download free CSV'), 'supplier letter and free CSV export remain available');
 assert(env.includes('CASHFREE_APP_ID') && env.includes('CASHFREE_SECRET_KEY') && env.includes('CASHFREE_ENV') && env.includes('MSMED_BANK_RATE'), 'Cashfree and MSME variables are documented');
+
+assert(checker.includes('Tax-year limitation:') && checker.includes('FY 2026–27 or later'), 'MSME tax-year scope warns that the legacy section 43B(h) checker is historical only');
