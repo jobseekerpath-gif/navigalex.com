@@ -14,7 +14,7 @@ railway login
 if ($LASTEXITCODE -ne 0) { Stop-WithMessage "Railway login failed." }
 railway link
 if ($LASTEXITCODE -ne 0) { Stop-WithMessage "Railway project linking failed." }
-$allowed = @("RESEND_API_KEY","RESEND_FROM_EMAIL","INQUIRY_TO_EMAIL","ADMIN_PASSWORD","CASHFREE_APP_ID","CASHFREE_SECRET_KEY","CASHFREE_ENV","NAVIGALEX_DATA_DIR","MSMED_BANK_RATE")
+$allowed = @("GEMINI_API_KEY","GEMINI_MODEL","ANTHROPIC_API_KEY","ANTHROPIC_MODEL","GOOGLE_CLOUD_PROJECT","GOOGLE_CLOUD_LOCATION","VERTEX_MODEL","APP_URL","RESEND_API_KEY","RESEND_FROM_EMAIL","INQUIRY_TO_EMAIL","ADMIN_USERNAME","ADMIN_EMAIL","ADMIN_PASSWORD","CASHFREE_APP_ID","CASHFREE_SECRET_KEY","CASHFREE_ENV","NAVIGALEX_DATA_DIR","MSMED_BANK_RATE")
 $values = @{}
 foreach ($line in Get-Content $EnvFile) {
   if ($line -match '^\s*#' -or $line -notmatch '^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)\s*$') { continue }
@@ -24,8 +24,7 @@ foreach ($line in Get-Content $EnvFile) {
 }
 foreach ($key in $allowed) {
   if (-not $values.ContainsKey($key)) { Write-Warning "Missing $key in .env; it will not be changed."; continue }
-  $assignment = "$key=$($values[$key])"
-  $assignment | railway variables set
+  $values[$key] | railway variable set $key --stdin
   if ($LASTEXITCODE -ne 0) { Stop-WithMessage "Setting Railway variable failed for $key. Value not printed." }
   Write-Host "Set Railway variable: $key"
 }
@@ -34,7 +33,8 @@ npm run ci
 if ($LASTEXITCODE -ne 0) { Stop-WithMessage "npm run ci failed; deployment stopped." }
 railway up
 if ($LASTEXITCODE -ne 0) { Stop-WithMessage "railway up failed." }
-if (-not $HealthUrl) { $HealthUrl = (railway domain 2>$null | Select-Object -Last 1).Trim() }
+if (-not $HealthUrl -and $values.ContainsKey("APP_URL")) { $HealthUrl = $values["APP_URL"] }
+if (-not $HealthUrl) { Write-Warning "Deployment submitted. Pass -HealthUrl https://your-domain to verify /api/health."; exit 0 }
 if (-not $HealthUrl) { Write-Warning "Deployment submitted. Supply HealthUrl to verify /api/health."; exit 0 }
 if ($HealthUrl -notmatch '^https?://') { $HealthUrl = "https://$HealthUrl" }
 $health = $HealthUrl.TrimEnd('/') + "/api/health"
