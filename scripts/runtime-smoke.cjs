@@ -21,7 +21,11 @@ const child = spawn(
       ADMIN_PASSWORD: '',
       RESEND_API_KEY: '',
       RESEND_FROM_EMAIL: '',
-      INQUIRY_TO_EMAIL: ''
+      INQUIRY_TO_EMAIL: '',
+      CASHFREE_APP_ID: '',
+      CASHFREE_SECRET_KEY: '',
+      CASHFREE_ENV: 'sandbox',
+      MSMED_BANK_RATE: '6'
     },
     stdio: ['ignore', 'pipe', 'pipe']
   }
@@ -75,6 +79,31 @@ async function main() {
     const health = await waitForServer();
     assert(health.service === 'navigalex-api', 'runtime health endpoint responds');
     assert(health.integrations.aiProviderConfigured === false, 'runtime health reports missing AI provider in the test environment');
+
+
+    const msmeConfig = await request('/api/msme/config');
+    assert(msmeConfig.response.ok && msmeConfig.data.bankRate === 6, 'MSME checker exposes the configured bank-rate assumption');
+
+    const unavailablePaymentLink = await request('/api/msme/payment-links', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ plan: 'single', email: 'test@example.com', name: 'Runtime Test' })
+    });
+    assert(unavailablePaymentLink.response.status === 503, 'paid report checkout fails closed when Cashfree credentials are absent');
+
+    const invalidWebhook = await request('/api/msme/cashfree/webhook', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-webhook-signature': 'invalid', 'x-webhook-timestamp': 'test' },
+      body: JSON.stringify({ type: 'PAYMENT_LINK_EVENT', data: { link_id: 'unknown', link_status: 'PAID' } })
+    });
+    assert(invalidWebhook.response.status === 401, 'Cashfree webhook rejects an invalid signature');
+
+    const unpaidPdf = await request('/api/msme/report/pdf', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ accessToken: 'invalid_invalid_invalid_invalid_invalid', bankRate: 6, taxYear: '2025-26', results: [{ invoice: 'test' }] })
+    });
+    assert(unpaidPdf.response.status === 402, 'MSME PDF endpoint refuses to generate a report without verified payment');
 
     const invalidCibil = await request('/api/cibil-scan', {
       method: 'POST',
