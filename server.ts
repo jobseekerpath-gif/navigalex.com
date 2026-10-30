@@ -4,6 +4,7 @@ import path from 'node:path';
 import fs from 'node:fs';
 import crypto from 'node:crypto';
 import { GoogleGenAI } from '@google/genai';
+import { registerMsmeRoutes, registerMsmeWebhook } from './server/msme.ts';
 
 async function startServer() {
   const app = express();
@@ -11,7 +12,10 @@ async function startServer() {
 
   // Enable trust proxy for accurate real visitor IP tracking behind Google Cloud Run / Load Balancers
   app.set('trust proxy', 1);
+  // Mount Cashfree's signed raw-body callback before JSON parsing changes the request body.
+  registerMsmeWebhook(app);
   app.use(express.json({ limit: '8mb' }));
+  registerMsmeRoutes(app);
 
   // Small in-process API rate limiter. On multi-instance deployments, move this
   // to a shared store (for example Redis) so limits apply across replicas.
