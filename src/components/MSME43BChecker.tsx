@@ -148,7 +148,7 @@ export default function MSME43BChecker() {
       const acceptanceDate = isoDate(get('acceptanceDate'));
       const amount = Number(get('amount').replace(/[₹,\s]/g, ''));
       const paymentDateRaw = get('paymentDate');
-      const paymentDate = paymentDateRaw ? isoDate(paymentDateRaw) : '';
+      const paymentDate = paymentDateRaw ? (isoDate(paymentDateRaw) ?? '') : '';
       const agreementRaw = get('writtenAgreement').toLowerCase();
       const writtenAgreement: Invoice['writtenAgreement'] = /^(yes|y|true|written)$/.test(agreementRaw) ? 'yes' : /^(no|n|false|none)$/.test(agreementRaw) ? 'no' : 'unknown';
       const daysRaw = get('agreedDays');
