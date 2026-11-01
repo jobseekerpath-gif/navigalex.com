@@ -4,6 +4,7 @@ const AdminPanel = lazy(() => import('./components/AdminPanel'));
 const LiveAssessmentsPage = lazy(() => import('./pages/LiveAssessmentsPage'));
 const ServicesPage = lazy(() => import('./pages/ServicesPage'));
 const MSME43BChecker = lazy(() => import('./components/MSME43BChecker'));
+const InstantReports = lazy(() => import('./components/InstantReports'));
 import ModalCloseButton from './components/ModalCloseButton';
 import { 
   Shield, Scale, FileText, BarChart3, ArrowRight, CheckCircle2, 
@@ -20,6 +21,7 @@ function resolveActiveTabFromLocation() {
   if (pathname === '/admin' || pathname.startsWith('/admin') || search.has('admin') || window.location.hash.includes('admin')) return 'admin';
   if (pathname === '/family-office' || pathname.startsWith('/family-office')) return 'family-office';
   if (pathname === '/43b-h-check' || pathname.startsWith('/43b-h-check')) return '43b-h-check';
+  if (pathname === '/instant-reports' || pathname.startsWith('/instant-reports')) return 'instant-reports';
   if (pathname === '/services' || pathname.startsWith('/services') || search.has('persona')) return 'services';
   if (pathname === '/live-tools' || pathname.startsWith('/live-tools')) return 'live-tools';
   if (pathname === '/about' || pathname.startsWith('/about')) return 'about';
@@ -296,6 +298,7 @@ export default function App() {
       'why-pick-us': '/why-pick-us',
       'family-office': '/family-office',
       '43b-h-check': '/43b-h-check',
+      'instant-reports': '/instant-reports',
       admin: '/admin'
     };
     const nextPath = paths[tab];
@@ -366,6 +369,7 @@ export default function App() {
             {[
               ['home', 'Home'],
               ['home', 'Financial Genie'],
+              ['instant-reports', 'Instant reports'],
                             ['about', 'About'],
               ['contact', 'Contact']
             ].map(([tab, label]) => (
@@ -406,6 +410,7 @@ export default function App() {
               {[
                 ['home', 'Home'],
                 ['home', 'Services in Financial Genie'],
+                ['instant-reports', 'Instant reports'],
                                 ['about', 'About'],
                 ['contact', 'Contact']
               ].map(([tab, label]) => (
@@ -451,6 +456,15 @@ export default function App() {
         )}
 
         {activeTab === 'home' && (
+          <div className="mx-auto max-w-6xl px-4 pt-4 sm:px-6">
+            <button type="button" onClick={() => navigateToTab('instant-reports')} className="flex w-full flex-wrap items-center justify-between gap-2 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-left text-sm font-semibold text-blue-900 hover:bg-blue-100">
+              <span>New: instant PDF reports from ₹299 — late-payment follow-up pack, loan readiness snapshot and MSME ledger check. No calls, fixed price.</span>
+              <span className="inline-flex items-center gap-1 font-bold">See instant reports <ArrowRight className="h-4 w-4" /></span>
+            </button>
+          </div>
+        )}
+
+        {activeTab === 'home' && (
           <Suspense fallback={<div className="min-h-[70vh] flex items-center justify-center text-sm text-slate-500">Opening your advisory workspace…</div>}>
             <GenieWorkspace
               onOpenAssessment={openAssessmentForm}
@@ -487,6 +501,12 @@ export default function App() {
         {activeTab === 'services' && (
           <Suspense fallback={<div className="py-20 px-6 max-w-7xl mx-auto text-center text-sm text-slate-500">Loading services…</div>}>
             <ServicesPage onInquiry={openAssessmentForm} />
+          </Suspense>
+        )}
+
+        {activeTab === 'instant-reports' && (
+          <Suspense fallback={<div className="py-20 px-6 max-w-7xl mx-auto text-center text-sm text-slate-500">Loading instant reports…</div>}>
+            <InstantReports onNavigateTab={navigateToTab} />
           </Suspense>
         )}
 

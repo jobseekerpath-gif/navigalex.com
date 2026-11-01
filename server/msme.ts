@@ -2,11 +2,18 @@ import express, { type Express, type Request, type Response } from 'express';
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
+import { checkSupplierPack, supplierPackLines, checkLoan, loanReadinessLines } from './reports.ts';
 
 type Plan = 'single' | 'annual';
-type Payment = { tokenHash:string; linkId:string; plan:Plan; amount:number; email:string; status:'PENDING'|'PAID'|'FAILED'|'EXPIRED'; createdAt:string; paidAt?:string; expiresAt?:string; reportUsed:boolean };
+type Product = 'msme' | 'supplier-pack' | 'loan-readiness';
+type Payment = { product?:Product; downloads?:number; tokenHash:string; linkId:string; plan:Plan; amount:number; email:string; status:'PENDING'|'PAID'|'FAILED'|'EXPIRED'; createdAt:string; paidAt?:string; expiresAt?:string; reportUsed:boolean };
 type Store = { payments:Payment[] };
 const price:Record<Plan,number>={single:499,annual:3000};
+const productPrice:Record<Exclude<Product,'msme'>,number>={'supplier-pack':299,'loan-readiness':499};
+const productTitle:Record<Product,string>={'msme':'Navigalex MSME screening PDF report','supplier-pack':'Navigalex delayed-payment follow-up pack','loan-readiness':'Navigalex loan readiness snapshot'};
+const productPath:Record<Product,string>={'msme':'/43b-h-check','supplier-pack':'/instant-reports','loan-readiness':'/instant-reports'};
+const MAX_DOWNLOADS=3,DOWNLOAD_WINDOW_MS=7*24*60*60*1000;
+const todayIst=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Kolkata'}).format(new Date());
 const apiVersion='2022-09-01';
 
 function filePath(){const dir=path.resolve(process.env.NAVIGALEX_DATA_DIR||'./data');fs.mkdirSync(dir,{recursive:true,mode:0o700});return path.join(dir,'msme-payments.json');}
@@ -60,30 +67,33 @@ export function registerMsmeRoutes(app:Express){
 
   app.post('/api/msme/payment-links',paymentLinkRateLimit,async(req,res)=>{
     const appId=process.env.CASHFREE_APP_ID,secret=process.env.CASHFREE_SECRET_KEY;
-    if(!appId||!secret)return res.status(503).json({error:'Paid reports are not configured yet. Use the free CSV export for now.'});
-    const plan=req.body?.plan as Plan;if(plan!=='single'&&plan!=='annual')return res.status(400).json({error:'Choose a valid access plan.'});
+    const productRaw=req.body?.product===undefined?'msme':req.body.product;if(productRaw!=='msme'&&productRaw!=='supplier-pack'&&productRaw!=='loan-readiness')return res.status(400).json({error:'Choose a valid product.'});const product:Product=productRaw;
+    const plan=(product==='msme'?req.body?.plan:'single') as Plan;if(plan!=='single'&&plan!=='annual')return res.status(400).json({error:'Choose a valid access plan.'});
     const email=clean(req.body?.email,254).toLowerCase();const name=clean(req.body?.name,80)||'Navigalex customer';
     if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))return res.status(400).json({error:'Enter a valid email address.'});
-    const token=crypto.randomBytes(32).toString('base64url');const linkId='navmsme'+crypto.randomBytes(12).toString('hex');const amount=price[plan];
-    const store=readStore();store.payments.push({tokenHash:hash(token),linkId,plan,amount,email,status:'PENDING',createdAt:new Date().toISOString(),reportUsed:false});store.payments=store.payments.slice(-5000);writeStore(store);
+    if(!appId||!secret)return res.status(503).json({error:'Paid reports are not configured yet. Use the free CSV export for now.'});
+    const token=crypto.randomBytes(32).toString('base64url');const linkId='navmsme'+crypto.randomBytes(12).toString('hex');const amount=product==='msme'?price[plan]:productPrice[product];
+    const store=readStore();store.payments.push({product,downloads:0,tokenHash:hash(token),linkId,plan,amount,email,status:'PENDING',createdAt:new Date().toISOString(),reportUsed:false});store.payments=store.payments.slice(-5000);writeStore(store);
     const site=(process.env.APP_URL||'https://navigalex.com').replace(/\/+$/,'');
-    const payload={link_id:linkId,link_amount:amount,link_currency:'INR',link_purpose:plan==='single'?'Navigalex MSME screening PDF report':'Navigalex MSME annual report access',customer_details:{customer_name:name,customer_email:email},link_meta:{return_url:site+'/43b-h-check?payment=return',notify_url:site+'/api/msme/cashfree/webhook'},link_notify:{send_email:false,send_sms:false},link_partial_payments:false,link_auto_reminders:false};
+    const payload={link_id:linkId,link_amount:amount,link_currency:'INR',link_purpose:product!=='msme'?productTitle[product]:plan==='single'?productTitle.msme:'Navigalex MSME annual report access',customer_details:{customer_name:name,customer_email:email},link_meta:{return_url:site+productPath[product]+'?payment=return&product='+product,notify_url:site+'/api/msme/cashfree/webhook'},link_notify:{send_email:false,send_sms:false},link_partial_payments:false,link_auto_reminders:false};
     try{
       const response=await fetch(baseUrl()+'/links',{method:'POST',headers:{'content-type':'application/json','x-client-id':appId,'x-client-secret':secret,'x-api-version':apiVersion,'x-request-id':crypto.randomUUID()},body:JSON.stringify(payload),signal:AbortSignal.timeout(15000)});
       const result=await response.json().catch(()=>({}));if(!response.ok||typeof result.link_url!=='string'){const failed=readStore();const record=failed.payments.find(p=>p.linkId===linkId);if(record){record.status='FAILED';writeStore(failed);}console.error('[msme] Cashfree create-link API returned HTTP '+response.status);return res.status(502).json({error:'Cashfree could not create the payment link. Check its environment and credentials.'});}
-      return res.status(201).json({success:true,paymentUrl:result.link_url,accessToken:token,amount,plan});
+      return res.status(201).json({success:true,paymentUrl:result.link_url,accessToken:token,amount,plan,product});
     }catch{const failed=readStore();const record=failed.payments.find(p=>p.linkId===linkId);if(record){record.status='FAILED';writeStore(failed);}return res.status(502).json({error:'Cashfree is unavailable. Please try again.'});}
   });
 
   app.get('/api/msme/access/:token',accessRateLimit,(req,res)=>{
     const payment=findPayment(req.params.token);if(!payment)return res.status(404).json({error:'Access record not found.'});
     const annualActive=payment.plan==='annual'&&payment.status==='PAID'&&!!payment.expiresAt&&Date.parse(payment.expiresAt)>Date.now();
-    return res.json({success:true,paid:payment.status==='PAID',plan:payment.plan,status:payment.status,annualActive,pdfAvailable:annualActive||(payment.plan==='single'&&payment.status==='PAID'&&!payment.reportUsed),expiresAt:payment.expiresAt||null});
+    const product:Product=payment.product||'msme';const instantLeft=product!=='msme'&&payment.status==='PAID'&&(payment.downloads||0)<MAX_DOWNLOADS&&!!payment.paidAt&&Date.now()-Date.parse(payment.paidAt)<=DOWNLOAD_WINDOW_MS;
+    return res.json({success:true,product,paid:payment.status==='PAID',plan:payment.plan,status:payment.status,annualActive,pdfAvailable:product==='msme'?(annualActive||(payment.plan==='single'&&payment.status==='PAID'&&!payment.reportUsed)):instantLeft,downloadsLeft:product==='msme'?null:Math.max(0,MAX_DOWNLOADS-(payment.downloads||0)),expiresAt:payment.expiresAt||null});
   });
 
   app.post('/api/msme/report/pdf',pdfRateLimit,(req,res)=>{
     const token=clean(req.body?.accessToken,100);const payment=findPayment(token);
     if(!payment||payment.status!=='PAID')return res.status(402).json({error:'A verified successful payment is required before downloading this PDF.'});
+    if((payment.product||'msme')!=='msme')return res.status(403).json({error:'This payment is for a different report.'});
     const annual=payment.plan==='annual'&&!!payment.expiresAt&&Date.parse(payment.expiresAt)>Date.now();const oneTime=payment.plan==='single'&&!payment.reportUsed;
     if(!annual&&!oneTime)return res.status(403).json({error:'This report access has already been used or has expired.'});
     const rows=Array.isArray(req.body?.results)?req.body.results:[];if(!rows.length)return res.status(400).json({error:'There are no screening results to include.'});if(rows.length>2000)return res.status(413).json({error:'A PDF report can contain at most 2,000 invoice rows. Download the free CSV for the full ledger.'});
@@ -103,4 +113,19 @@ export function registerMsmeRoutes(app:Express){
     if(payment.plan==='single'){const latest=readStore();const record=latest.payments.find(p=>p.tokenHash===payment.tokenHash);if(!record||record.reportUsed||record.status!=='PAID')return res.status(409).json({error:'This one-time report download has already been used.'});record.reportUsed=true;writeStore(latest);}
     res.setHeader('Content-Type','application/pdf');res.setHeader('Content-Disposition','attachment; filename="Navigalex-MSME-Screening-Report.pdf"');res.setHeader('Cache-Control','no-store');return res.send(pdf);
   });
+
+  // Fixed-price instant reports: payment is verified by the signed webhook; the figures are used only to build the PDF.
+  const instantPdf=(product:Exclude<Product,'msme'>,build:(body:any)=>{ok:true;lines:string[]}|{ok:false;error:string})=>(req:Request,res:Response)=>{
+    const payment=findPayment(clean(req.body?.accessToken,100));
+    if(!payment||payment.status!=='PAID')return res.status(402).json({error:'A verified successful payment is required before downloading this PDF.'});
+    if((payment.product||'msme')!==product)return res.status(403).json({error:'This payment is for a different report.'});
+    if((payment.downloads||0)>=MAX_DOWNLOADS||!payment.paidAt||Date.now()-Date.parse(payment.paidAt)>DOWNLOAD_WINDOW_MS)return res.status(403).json({error:'The download allowance for this payment (3 downloads within 7 days) has been used or has expired. Contact us if you need help.'});
+    const built=build(req.body);if(!built.ok)return res.status(400).json({error:built.error});
+    const pdf=makePdf(built.lines.flatMap(line=>wrap(line)));
+    const latest=readStore();const record=latest.payments.find(p=>p.tokenHash===payment.tokenHash);if(!record||record.status!=='PAID'||(record.downloads||0)>=MAX_DOWNLOADS)return res.status(409).json({error:'The download allowance for this payment has been used.'});
+    record.downloads=(record.downloads||0)+1;writeStore(latest);
+    res.setHeader('Content-Type','application/pdf');res.setHeader('Content-Disposition','attachment; filename="Navigalex-'+product+'.pdf"');res.setHeader('Cache-Control','no-store');return res.send(pdf);
+  };
+  app.post('/api/reports/supplier-pack/pdf',pdfRateLimit,instantPdf('supplier-pack',body=>{const c=checkSupplierPack(body);return c.ok?{ok:true,lines:supplierPackLines(c.value,todayIst())}:{ok:false,error:c.error};}));
+  app.post('/api/reports/loan-readiness/pdf',pdfRateLimit,instantPdf('loan-readiness',body=>{const c=checkLoan(body);return c.ok?{ok:true,lines:loanReadinessLines(c.value,clean(body?.business,100),todayIst())}:{ok:false,error:c.error};}));
 }

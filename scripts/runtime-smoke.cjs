@@ -188,6 +188,79 @@ async function main() {
     assert(repeatPdf.response.status === 403, 'one-time PDF access cannot be reused after a successful download');
 
 
+    // ---- Instant reports (supplier pack and loan readiness) ----
+    const badProduct = await request('/api/msme/payment-links', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ product: 'nonsense', email: 'a@b.co', plan: 'single' })
+    });
+    assert(badProduct.response.status === 400, 'checkout rejects an unknown report product');
+
+    const unpaidPack = await request('/api/reports/supplier-pack/pdf', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ accessToken: 'invalid_invalid_invalid_invalid_invalid' })
+    });
+    assert(unpaidPack.response.status === 402, 'supplier pack PDF refuses to generate without verified payment');
+
+    const packToken = 'runtime-pack-access-token-1234567890123456789012';
+    const loanToken = 'runtime-loan-access-token-1234567890123456789012';
+    const store = JSON.parse(fs.readFileSync(path.join(dataDir, 'msme-payments.json'), 'utf8'));
+    const nowIso = new Date().toISOString();
+    const mk = (token, link, product, amount) => ({
+      product, downloads: 0, tokenHash: crypto.createHash('sha256').update(token).digest('hex'), linkId: link, plan: 'single',
+      amount, email: 'runtime@example.com', status: 'PENDING', createdAt: nowIso, reportUsed: false
+    });
+    store.payments.push(mk(packToken, 'runtime-pack-link', 'supplier-pack', 299), mk(loanToken, 'runtime-loan-link', 'loan-readiness', 499));
+    fs.writeFileSync(path.join(dataDir, 'msme-payments.json'), JSON.stringify(store), 'utf8');
+
+    async function paidWebhook(link, amount, paidAmount) {
+      const body = JSON.stringify({ type: 'PAYMENT_LINK_EVENT', data: { link_id: link, link_status: 'PAID', link_amount: amount, link_amount_paid: paidAmount, link_currency: 'INR' } });
+      const ts = String(Date.now());
+      const sig = crypto.createHmac('sha256', webhookSecret).update(ts, 'utf8').update(Buffer.from(body, 'utf8')).digest('base64');
+      return request('/api/msme/cashfree/webhook', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-webhook-timestamp': ts, 'x-webhook-signature': sig }, body });
+    }
+    await paidWebhook('runtime-pack-link', 299, 100);
+    const underpaid = await request('/api/msme/access/' + encodeURIComponent(packToken));
+    assert(underpaid.data.paid === false, 'a part-payment does not unlock the supplier pack');
+    await paidWebhook('runtime-pack-link', 299, 299);
+    await paidWebhook('runtime-loan-link', 499, 499);
+    const packAccess = await request('/api/msme/access/' + encodeURIComponent(packToken));
+    assert(packAccess.data.paid && packAccess.data.product === 'supplier-pack' && packAccess.data.pdfAvailable && packAccess.data.downloadsLeft === 3, 'verified payment unlocks the supplier pack with 3 downloads');
+
+    const wrongProduct = await request('/api/reports/loan-readiness/pdf', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ accessToken: packToken, turnoverLatest: 1000000, netProfit: 100000, proposedAmount: 500000, proposedRate: 11, proposedTenureYears: 3 })
+    });
+    assert(wrongProduct.response.status === 403, 'a supplier pack payment cannot be used for the loan snapshot');
+    const msmeWithPack = await request('/api/msme/report/pdf', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ accessToken: packToken, bankRate: 6, taxYear: '2025-26', results: [{ invoice: 'x', amount: 1 }] })
+    });
+    assert(msmeWithPack.response.status === 403, 'a supplier pack payment cannot be used for the MSME ledger report');
+
+    const badPack = await request('/api/reports/supplier-pack/pdf', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ accessToken: packToken, supplier: 'S', buyer: 'B', bankRate: 6, invoices: [{ invoice: 'A', amount: -5, dueDate: '2026-01-01', paymentDate: '' }] })
+    });
+    assert(badPack.response.status === 400, 'supplier pack rejects invalid invoice data without using a download');
+
+    const packBody = JSON.stringify({ accessToken: packToken, supplier: 'Test Supplier', buyer: 'Test Buyer', bankRate: 6, invoices: [{ invoice: 'INV-1', amount: 100000, dueDate: '2026-01-01', paymentDate: '' }] });
+    const packPdf = await request('/api/reports/supplier-pack/pdf', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: packBody });
+    assert(packPdf.response.ok && packPdf.text.startsWith('%PDF-1.4') && packPdf.text.includes('FOLLOW-UP LETTER'), 'verified payment generates the supplier pack PDF');
+    const packAfter = await request('/api/msme/access/' + encodeURIComponent(packToken));
+    assert(packAfter.data.downloadsLeft === 2, 'a successful pack download uses one of three downloads');
+    await request('/api/reports/supplier-pack/pdf', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: packBody });
+    await request('/api/reports/supplier-pack/pdf', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: packBody });
+    const fourth = await request('/api/reports/supplier-pack/pdf', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: packBody });
+    assert(fourth.response.status === 403, 'the supplier pack stops after 3 downloads');
+
+    const loanBody = { accessToken: loanToken, business: 'Test Co', turnoverLatest: 5000000, turnoverPrevious: 4000000, netProfit: 400000, depreciation: 100000, interestPaid: 80000, existingPrincipalRepayment: 150000, proposedAmount: 1000000, proposedRate: 11, proposedTenureYears: 5, collateralValue: 1500000 };
+    const badLoan = await request('/api/reports/loan-readiness/pdf', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...loanBody, proposedTenureYears: 99 }) });
+    assert(badLoan.response.status === 400, 'loan snapshot rejects an impossible tenure');
+    const loanPdf = await request('/api/reports/loan-readiness/pdf', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(loanBody) });
+    assert(loanPdf.response.ok && loanPdf.text.startsWith('%PDF-1.4') && loanPdf.text.includes('LOAN READINESS SNAPSHOT') && loanPdf.text.includes('Combined DSCR'), 'verified payment generates the loan readiness PDF');
+
     const invalidCibil = await request('/api/cibil-scan', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

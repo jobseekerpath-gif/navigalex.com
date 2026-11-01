@@ -90,3 +90,12 @@ assert(checker.includes('Tax-year limitation:') && checker.includes('FY 2026–2
 
 assert(msme.includes("paymentLinkRateLimit=routeLimiter(8") && msme.includes("accessRateLimit=routeLimiter(60") && msme.includes("pdfRateLimit=routeLimiter(20"), 'MSME checkout, access and PDF endpoints have bounded request rates');
 assert(checker.includes('Please confirm that the payment has been received') && checker.includes('Please arrange payment of the outstanding amount'), 'supplier letter wording distinguishes already-paid from still-unpaid invoices');
+
+const reports = read('server/reports.ts');
+const instant = read('src/components/InstantReports.tsx');
+assert(msme.includes("'supplier-pack':299,'loan-readiness':499"), 'instant report prices are fixed server-side at Rs 299 and Rs 499');
+assert(msme.includes("/api/reports/supplier-pack/pdf") && msme.includes("/api/reports/loan-readiness/pdf") && msme.includes("different report"), 'instant report PDFs require a matching verified payment');
+assert(reports.includes('are not stored') && reports.includes('not a credit appraisal'), 'instant report PDFs carry the not-stored and not-advice disclaimers');
+assert(instant.includes('access code') && instant.includes('Restore') && instant.includes('/api/msme/payment-links'), 'instant reports page lets customers keep and restore their access code');
+assert(app.includes("'instant-reports'") && app.includes('/instant-reports'), 'instant reports page has a route and navigation entry');
+
