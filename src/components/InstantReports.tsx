@@ -150,6 +150,17 @@ function PayBox({ product, price, ready, notReadyHint, buildBody }: {
         <div className="mt-2 flex gap-2"><input className={field + ' mt-0'} value={restore} onChange={e => setRestore(e.target.value)} placeholder="Paste access code" />
           <button type="button" onClick={() => void useRestoreCode()} className="rounded-lg border border-blue-300 bg-white px-3 text-xs font-bold text-blue-900">Restore</button></div>
       </details>
+      <details className="rounded-lg border border-slate-200 bg-white p-3 text-xs text-slate-700">
+        <summary className="cursor-pointer font-bold text-slate-900">Terms, refunds and disclaimer</summary>
+        <ul className="mt-2 list-disc space-y-1 pl-4">
+          <li><strong>What you get:</strong> an automatically generated PDF based only on the figures you enter. Nothing you enter is stored.</li>
+          <li><strong>Not professional advice:</strong> reports are informational. They are not legal, tax, audit or credit advice and do not replace a Chartered Accountant, advocate or lender. Check the figures and the RBI bank rate before relying on them.</li>
+          <li><strong>Refunds:</strong> if payment succeeded but you could not download the PDF, contact us within 7 days and we will re-issue it or refund in full. Because the report is delivered instantly, we do not refund after a successful download, except for a calculation error on our side.</li>
+          <li><strong>Failed or duplicate payments:</strong> amounts debited without access are refunded to the original payment method, usually within 5-7 working days.</li>
+          <li><strong>Access:</strong> up to 3 downloads within 7 days using your access code. Keep the code safe; anyone holding it can download.</li>
+          <li><strong>Prices:</strong> in Indian rupees, as shown at checkout.</li>
+        </ul>
+      </details>
       {message && <p role="status" className="text-xs text-slate-700">{message}</p>}
       <p className="text-xs text-slate-500">Secure payment through Cashfree. The PDF is created automatically once the payment is confirmed. You can download it up to 3 times within 7 days. If payment succeeds but the PDF fails, contact us from the Contact page and we will re-issue the report or refund the payment.</p>
     </div>
@@ -157,7 +168,7 @@ function PayBox({ product, price, ready, notReadyHint, buildBody }: {
 }
 
 function SupplierPack() {
-  const [bankRate, setBankRate] = useState('6');
+  const [bankRate, setBankRate] = useState('5.75');
   const [supplier, setSupplier] = useState('');
   const [buyer, setBuyer] = useState('');
   const [rows, setRows] = useState<{ invoice: string; amount: string; dueDate: string; paymentDate: string }[]>([{ invoice: '', amount: '', dueDate: '', paymentDate: '' }]);
