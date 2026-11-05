@@ -27,7 +27,7 @@ How delivery works: the server creates a Cashfree payment link and returns a pri
 
 Prices live in `server/msme.ts` (`price`, `productPrice`). The calculations are shared between the browser preview and the PDF in `src/lib/msmeInterest.ts` and `src/lib/loanReadiness.ts`; the PDF text is built in `server/reports.ts`.
 
-Before taking real payments: activate the Cashfree account, confirm the sandbox flow end to end, add refund and cancellation terms to the site, and confirm the statement on the page that a failed PDF will be re-issued or refunded.
+Before taking real payments: activate the Cashfree account, confirm the sandbox flow end to end, confirm the RBI Bank Rate in MSMED_BANK_RATE, confirm the refund terms shown on the Instant reports page, and confirm the statement on the page that a failed PDF will be re-issued or refunded.
 
 ## MSME payment screening
 

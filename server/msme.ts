@@ -48,7 +48,7 @@ function makePdf(lines:string[]):Buffer{
 }
 
 export function registerMsmeWebhook(app:Express){
-  app.post('/api/msme/cashfree/webhook',express.raw({type:'application/json',limit:'1mb'}),(req:Request,res:Response)=>{
+  app.post('/api/msme/cashfree/webhook',express.raw({type:()=>true,limit:'1mb'}),(req:Request,res:Response)=>{
     const raw=Buffer.isBuffer(req.body)?req.body:Buffer.alloc(0);
     if(!validSignature(clean(req.headers['x-webhook-signature'],500),clean(req.headers['x-webhook-timestamp'],100),raw,process.env.CASHFREE_SECRET_KEY||''))return res.status(401).json({error:'Invalid webhook signature.'});
     let event:any;try{event=JSON.parse(raw.toString('utf8'));}catch{return res.status(400).json({error:'Invalid webhook payload.'});}
@@ -63,7 +63,7 @@ export function registerMsmeWebhook(app:Express){
 }
 
 export function registerMsmeRoutes(app:Express){
-  app.get('/api/msme/config',(_req,res)=>{const n=Number(process.env.MSMED_BANK_RATE??'6');const bankRate=Number.isFinite(n)&&n>0&&n<=30?n:6;res.json({success:true,bankRate,privacy:'Invoice rows are processed in the browser and are not stored by this service.'});});
+  app.get('/api/msme/config',(_req,res)=>{const n=Number(process.env.MSMED_BANK_RATE??'5.75');const bankRate=Number.isFinite(n)&&n>0&&n<=30?n:5.75;res.json({success:true,bankRate,privacy:'Invoice rows are processed in the browser and are not stored by this service.'});});
 
   app.post('/api/msme/payment-links',paymentLinkRateLimit,async(req,res)=>{
     const appId=process.env.CASHFREE_APP_ID,secret=process.env.CASHFREE_SECRET_KEY;
