@@ -800,7 +800,7 @@ Respond with ONLY a JSON object (no markdown fences, no extra commentary) in exa
     if (!key) return null;
     const model = process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-5-20250929';
 
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    const resp = await fetch((process.env.ANTHROPIC_BASE_URL || 'https://api.anthropic.com').replace(/\/+$/, '') + '/v1/messages', {
       method: 'POST',
       headers: {
         'x-api-key': key,
