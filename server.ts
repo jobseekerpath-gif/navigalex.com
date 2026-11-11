@@ -800,10 +800,12 @@ Respond with ONLY a JSON object (no markdown fences, no extra commentary) in exa
     if (!key) return null;
     const model = process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-5-20250929';
 
-    const resp = await fetch((process.env.ANTHROPIC_BASE_URL || 'https://api.anthropic.com').replace(/\/+$/, '') + '/v1/messages', {
+    const baseUrl = (process.env.ANTHROPIC_BASE_URL || 'https://api.anthropic.com').replace(/\/+$/, '');
+    const isScaleMax = new URL(baseUrl).hostname === 'api.scalemax.pro';
+    const resp = await fetch(baseUrl + '/v1/messages', {
       method: 'POST',
       headers: {
-        'x-api-key': key,
+        ...(isScaleMax ? { 'Authorization': `Bearer ${key}` } : { 'x-api-key': key }),
         'anthropic-version': '2023-06-01',
         'content-type': 'application/json'
       },
