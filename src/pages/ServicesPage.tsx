@@ -4,11 +4,13 @@ import {
   ChartNoAxesCombined, Clock3, FileText, Landmark, Search, ShieldCheck, Users, Wallet, Workflow
 } from 'lucide-react';
 
-type Pillar = 'finance' | 'risk' | 'governance' | 'strategy' | 'project' | 'technology';
+type Pillar = 'finance' | 'risk' | 'governance' | 'strategy' | 'project' | 'technology' | 'operations';
+type ServiceGroup = 'all' | 'advisory' | 'backoffice' | 'it';
 type Service = {
   id: string;
   pillar: Pillar;
   pillarLabel: string;
+  serviceGroup?: Exclude<ServiceGroup, 'all'>;
   title: string;
   badge: string;
   shortLabel: string;
@@ -235,6 +237,7 @@ export const ADVISORY_DESKS: Service[] = [
 
   {
     id: 'digital-workflow-review',
+    serviceGroup: 'it',
     pillar: 'technology',
     pillarLabel: 'IT & Digital Operations',
     title: 'Digital Workflow & Systems Review',
@@ -250,6 +253,167 @@ export const ADVISORY_DESKS: Service[] = [
     engagement: 'Advisory review only, limited to one workflow and the information the client chooses to share.',
     price: 'Fixed quote after a short scoping call',
     exclusions: 'Not penetration testing, cybersecurity certification, ITGC assurance, software development, managed IT support, vendor certification or a guarantee of security. Implementation is separately scoped.',
+    Icon: Workflow
+  },
+
+  {
+    id: 'bookkeeping-reconciliation',
+    serviceGroup: 'backoffice',
+    pillar: 'operations',
+    pillarLabel: 'Back-office Operations',
+    title: 'Bookkeeping & Reconciliation Support',
+    badge: 'Finance operations',
+    shortLabel: 'Books and reconciliations need regular attention',
+    tagline: 'Keep routine financial records organised and reconciled on an agreed schedule.',
+    summary: 'A practical back-office support desk for organising transaction records, preparing bookkeeping inputs and reconciling agreed bank, card or ledger accounts using client-authorised records.',
+    idealFor: 'Small businesses that need dependable monthly finance administration but are not ready to hire a full in-house accounts team.',
+    outcomes: ['More organised transaction records and supporting documents', 'A clear reconciliation status with unmatched items highlighted', 'A consistent monthly handover pack for the business owner or accountant'],
+    deliverables: ['Agreed transaction categorisation and bookkeeping input support', 'Bank, card or selected ledger reconciliations for the agreed period', 'A list of missing records, unmatched entries and follow-up questions', 'A monthly close checklist and handover summary'],
+    clientInputs: 'Authorised bank statements, invoices, receipts, prior-period records, chart of accounts and the contact details of the client’s accountant where relevant. Never share banking passwords or OTPs.',
+    timeframe: 'Weekly or monthly cadence agreed at onboarding',
+    engagement: 'Recurring remote back-office support with defined transaction volumes, account limits, review responsibilities and cut-off dates.',
+    price: 'Monthly retainer quoted after a workload assessment',
+    exclusions: 'Does not include statutory audit, tax opinions or filings, certification, independent accounting sign-off, fund handling or operation of client bank accounts.',
+    Icon: Wallet
+  },
+  {
+    id: 'payables-receivables-billing',
+    serviceGroup: 'backoffice',
+    pillar: 'operations',
+    pillarLabel: 'Back-office Operations',
+    title: 'Payables, Receivables & Billing Desk',
+    badge: 'Billing operations',
+    shortLabel: 'Invoices, follow-ups and payment trackers are scattered',
+    tagline: 'Bring invoice processing and payment follow-ups into one controlled workflow.',
+    summary: 'Routine administrative support for purchase and sales invoice registers, billing coordination, due-date tracking and courteous payment reminders based on client-approved instructions.',
+    idealFor: 'B2B service firms, distributors and growing businesses managing a recurring volume of customer and supplier invoices.',
+    outcomes: ['A current view of invoices issued, received, due and disputed', 'Fewer missed billing steps and overdue follow-ups', 'A documented handover of exceptions requiring owner approval'],
+    deliverables: ['Sales and purchase invoice register maintenance', 'Billing document preparation from approved source information', 'Receivables ageing and payment-due tracker', 'Supplier payment schedule and customer reminder queue', 'Weekly exception report for approvals and unresolved items'],
+    clientInputs: 'Approved rate cards, purchase orders, invoice formats, customer and supplier master data, payment terms and authorised reminder wording.',
+    timeframe: 'Weekly or monthly cadence agreed at onboarding',
+    engagement: 'A recurring admin desk with defined invoice volumes, approval matrix, communication channels and turnaround times.',
+    price: 'Monthly retainer quoted after a workload assessment',
+    exclusions: 'No debt recovery, legal notices, negotiation of disputed claims, payment authorisation, custody of funds or guarantee of collection.',
+    Icon: FileText
+  },
+  {
+    id: 'hr-payroll-administration',
+    serviceGroup: 'backoffice',
+    pillar: 'operations',
+    pillarLabel: 'Back-office Operations',
+    title: 'HR & Payroll Administration Support',
+    badge: 'People operations',
+    shortLabel: 'Employee records and payroll inputs take too much time',
+    tagline: 'Make routine people administration more consistent and easier to review.',
+    summary: 'Administrative support for employee records, onboarding checklists, attendance and leave inputs, payroll data collation and monthly people-operations reports.',
+    idealFor: 'Small and mid-sized teams that need structured HR administration without building a large internal HR operations function.',
+    outcomes: ['More complete and consistently maintained employee records', 'A reviewable attendance, leave and payroll-input trail', 'Clear monthly exceptions for the authorised HR or payroll approver'],
+    deliverables: ['Employee master-data and document checklist maintenance', 'Joining, exit and onboarding administration trackers', 'Attendance, leave and variable-pay input collation', 'Payroll input validation checklist and payslip distribution coordination', 'Monthly HR administration summary'],
+    clientInputs: 'Employee data supplied through an agreed secure channel, attendance and leave records, approved salary structures and the client’s payroll policies.',
+    timeframe: 'Monthly cycle aligned to the client’s payroll calendar',
+    engagement: 'Administrative processing only, with payroll calculations and final approvals assigned to the client or its authorised payroll professional.',
+    price: 'Monthly retainer quoted by employee count and process scope',
+    exclusions: 'No employment-law opinion, statutory compliance certification, independent payroll audit, hiring guarantee or release of salary payments.',
+    Icon: Users
+  },
+  {
+    id: 'data-document-admin',
+    serviceGroup: 'backoffice',
+    pillar: 'operations',
+    pillarLabel: 'Back-office Operations',
+    title: 'Data, Document & Administrative Support',
+    badge: 'Admin support',
+    shortLabel: 'Records, data entry and routine admin are slowing the team',
+    tagline: 'Move repetitive administrative work into a clear, trackable support process.',
+    summary: 'Flexible remote support for structured data entry, document indexing, CRM updates, report preparation, meeting coordination and routine business administration.',
+    idealFor: 'Owner-led businesses and lean teams with recurring administrative work that can be documented and delegated safely.',
+    outcomes: ['Cleaner and more searchable business records', 'A visible queue of completed, pending and blocked tasks', 'More owner and team time for customer-facing and decision work'],
+    deliverables: ['Data entry, spreadsheet updates and agreed data checks', 'Document naming, indexing and digital filing', 'CRM and business-system record updates', 'Meeting scheduling, action logs and routine report preparation', 'Simple task SOPs and weekly completion summary'],
+    clientInputs: 'Task instructions, approved templates, data definitions, access through named user accounts and a designated reviewer for exceptions.',
+    timeframe: 'Task batches or recurring weekly support agreed at onboarding',
+    engagement: 'A defined number of support hours or task volumes with agreed quality checks, turnaround targets and escalation rules.',
+    price: 'Monthly support plan or fixed task quote after scoping',
+    exclusions: 'No legal document drafting, regulated data processing, unapproved customer commitments, use of shared passwords or guarantee of error-free source data.',
+    Icon: ClipboardCheck
+  },
+  {
+    id: 'managed-it-helpdesk',
+    serviceGroup: 'it',
+    pillar: 'technology',
+    pillarLabel: 'IT Services',
+    title: 'Managed IT Helpdesk & Workplace Support',
+    badge: 'IT support',
+    shortLabel: 'Staff need reliable day-to-day IT help',
+    tagline: 'Give your team one structured channel for routine technology support.',
+    summary: 'Remote-first user support for common workplace technology issues, account setup coordination, device and software troubleshooting, IT asset records and vendor escalation.',
+    idealFor: 'Small businesses without a dedicated IT support desk or with recurring user issues across laptops, email and business applications.',
+    outcomes: ['A single queue for support requests and issue status', 'Better visibility of devices, software and recurring problems', 'Clear escalation for issues requiring specialist or on-site attention'],
+    deliverables: ['Helpdesk intake, prioritisation and ticket tracking', 'Remote troubleshooting for agreed operating systems and business apps', 'User onboarding and offboarding checklists', 'IT asset and licence register maintenance', 'Monthly ticket trends and recurring-issue summary'],
+    clientInputs: 'Device and software inventory, named user contacts, approved support access, escalation contacts and a list of critical business systems.',
+    timeframe: 'Support hours and response targets agreed in the service schedule',
+    engagement: 'Remote support within agreed business hours and supported systems. On-site visits, specialist repairs and out-of-hours coverage are separately scoped.',
+    price: 'Monthly support plan based on users, devices and coverage',
+    exclusions: 'No guaranteed 24/7 availability, hardware warranty, telecom service, incident-response retainer or security certification. Emergency recovery and specialist work require separate approval.',
+    Icon: ShieldCheck
+  },
+  {
+    id: 'website-business-app-development',
+    serviceGroup: 'it',
+    pillar: 'technology',
+    pillarLabel: 'IT Services',
+    title: 'Website & Business Application Development',
+    badge: 'Digital delivery',
+    shortLabel: 'You need a website, portal or business tool',
+    tagline: 'Build practical digital experiences around the way your business works.',
+    summary: 'Scoped design and development of business websites, landing pages, internal portals, workflow tools and focused application features, with testing and a structured handover.',
+    idealFor: 'Businesses that need a professional web presence or a small digital product to support customers, staff or internal operations.',
+    outcomes: ['A clear feature scope, delivery plan and acceptance criteria', 'A responsive website or application aligned to agreed requirements', 'A documented handover with ownership of access and next actions'],
+    deliverables: ['Discovery brief, sitemap or workflow outline and UI direction', 'Responsive website, portal or agreed application features', 'Integration of approved forms, analytics or business services', 'Functional checks, launch checklist and handover notes'],
+    clientInputs: 'Approved requirements, brand assets, content, domain and hosting ownership, integration credentials shared through secure methods and a decision maker for acceptance.',
+    timeframe: 'Milestones and delivery date confirmed after requirements are agreed',
+    engagement: 'Fixed-scope project with written requirements, acceptance criteria, change control and a separately agreed maintenance option.',
+    price: 'Project quote after requirements discovery',
+    exclusions: 'No guaranteed traffic, sales or search ranking; third-party licences and hosting are additional. Penetration testing, regulated software certification and ongoing maintenance require separate scopes.',
+    Icon: ChartNoAxesCombined
+  },
+  {
+    id: 'cloud-email-infrastructure',
+    serviceGroup: 'it',
+    pillar: 'technology',
+    pillarLabel: 'IT Services',
+    title: 'Cloud, Email & Infrastructure Setup',
+    badge: 'Cloud & workplace',
+    shortLabel: 'Email, hosting and cloud tools are fragmented',
+    tagline: 'Set up a more organised and supportable digital workplace.',
+    summary: 'Practical setup and administration support for business email, domains, hosting, cloud collaboration, backups and basic access-management practices.',
+    idealFor: 'Small businesses moving from informal tools to managed business email, shared cloud workspaces and dependable hosting.',
+    outcomes: ['A clearer inventory of domains, hosting, accounts and subscriptions', 'A more consistent setup for users, shared files and access', 'Documented backup and account-recovery responsibilities'],
+    deliverables: ['Domain, DNS, hosting and business-email configuration support', 'Cloud workspace and user-access setup', 'Basic backup configuration and restore-check plan', 'MFA and account-recovery setup checklist', 'Infrastructure inventory and handover documentation'],
+    clientInputs: 'Proof of domain and subscription ownership, nominated administrators, user list, current provider details and an approved change window.',
+    timeframe: 'Typically 5–10 working days after access and requirements are confirmed',
+    engagement: 'Project-based setup and handover. Ongoing administration, monitoring, migration and support are separately scoped.',
+    price: 'Project quote based on users, systems and migration complexity',
+    exclusions: 'No guarantee against outages, data loss or cyber incidents; no penetration testing, security certification, forensic response or managed security operations.',
+    Icon: Workflow
+  },
+  {
+    id: 'workflow-automation-integration',
+    serviceGroup: 'it',
+    pillar: 'technology',
+    pillarLabel: 'IT Services',
+    title: 'Workflow Automation & Systems Integration',
+    badge: 'Automation',
+    shortLabel: 'Teams repeat the same tasks across disconnected tools',
+    tagline: 'Reduce manual handoffs by connecting the systems your team already uses.',
+    summary: 'Design and implementation of agreed workflow automations, form-to-system handoffs, notifications, CRM connections and management dashboards for repeatable business processes.',
+    idealFor: 'Businesses with recurring approvals, lead handling, reporting or data-transfer work spread across spreadsheets and SaaS tools.',
+    outcomes: ['A documented current and proposed workflow', 'Fewer manual copy-and-paste steps in the agreed process', 'Clear exception handling, ownership and maintenance notes'],
+    deliverables: ['Workflow mapping and automation suitability review', 'Configuration or development of the agreed automation', 'System integration and data-mapping checks', 'User acceptance checklist and exception-handling guide', 'Handover documentation and support recommendations'],
+    clientInputs: 'Process owner, current workflow examples, approved system access, API or vendor permissions and sample data that can be safely shared.',
+    timeframe: 'Milestones agreed after a technical feasibility review',
+    engagement: 'One or more specifically scoped workflows with documented assumptions, data permissions and acceptance criteria.',
+    price: 'Project quote based on workflow and integration complexity',
+    exclusions: 'No guarantee that third-party APIs remain unchanged, no bypassing vendor security controls, and no handling of payment credentials or sensitive data without an agreed secure design.',
     Icon: Workflow
   },
 ];
@@ -279,13 +443,22 @@ const SERVICE_HANDOFFS: Record<string, string> = {
   'project-delivery': 'project-delivery',
   'strategy-growth-sprint': 'strategy-sprint',
   'project-delivery-review': 'project-delivery',
-  'digital-workflow-review': 'digital-workflow-review'
+  'digital-workflow-review': 'digital-workflow-review',
+  'bookkeeping-reconciliation': 'bookkeeping-reconciliation',
+  'payables-receivables-billing': 'payables-receivables-billing',
+  'hr-payroll-administration': 'hr-payroll-administration',
+  'data-document-admin': 'data-document-admin',
+  'managed-it-helpdesk': 'managed-it-helpdesk',
+  'website-business-app-development': 'website-business-app-development',
+  'cloud-email-infrastructure': 'cloud-email-infrastructure',
+  'workflow-automation-integration': 'workflow-automation-integration'
 };
 
-const PROBLEM_SHORTCUTS = ADVISORY_DESKS.map(({ id, shortLabel, summary, Icon }) => ({
+const PROBLEM_SHORTCUTS = ADVISORY_DESKS.map(({ id, shortLabel, summary, Icon, serviceGroup }) => ({
   id,
   title: shortLabel,
   detail: summary,
+  serviceGroup: serviceGroup ?? 'advisory',
   Icon
 }));
 
@@ -301,6 +474,7 @@ function readRecommendedService(): string | null {
 
 export default function ServicesPage({ onInquiry }: ServicesPageProps) {
   const [query, setQuery] = useState('');
+  const [serviceGroup, setServiceGroup] = useState<ServiceGroup>('all');
   const [recommendedId, setRecommendedId] = useState<string | null>(readRecommendedService);
 
   const recommendedService = useMemo(
@@ -313,6 +487,7 @@ export default function ServicesPage({ onInquiry }: ServicesPageProps) {
     const q = query.trim().toLowerCase();
     return ADVISORY_DESKS.filter((service) =>
       (!recommendedId || service.id === recommendedId) &&
+      (serviceGroup === 'all' || (service.serviceGroup ?? 'advisory') === serviceGroup) &&
       (!q || [
         service.title,
         service.pillarLabel,
@@ -323,7 +498,7 @@ export default function ServicesPage({ onInquiry }: ServicesPageProps) {
         ...service.deliverables
       ].join(' ').toLowerCase().includes(q))
     );
-  }, [recommendedId, query]);
+  }, [recommendedId, query, serviceGroup]);
 
   // Do not auto-scroll to the selected service card here.
   // App-level route navigation resets the page to the top, keeping the page header visible.
@@ -338,6 +513,7 @@ export default function ServicesPage({ onInquiry }: ServicesPageProps) {
 
   const showAllServices = () => {
     setQuery('');
+    setServiceGroup('all');
     setRecommendedId(null);
     const params = new URLSearchParams(window.location.search);
     params.delete('service');
@@ -348,9 +524,9 @@ export default function ServicesPage({ onInquiry }: ServicesPageProps) {
   return (
     <section className="mx-auto max-w-7xl space-y-10 px-4 py-14 sm:px-6 sm:py-20">
       <header className="mx-auto max-w-4xl space-y-4 text-center">
-        <span className="text-xs font-bold uppercase tracking-widest text-[#1f4fff]">Navigalex Business Advisory</span>
-        <h2 className="text-3xl font-extrabold tracking-tight text-slate-950 sm:text-5xl">{recommendedService ? "Your recommended starting service" : "Start with the business problem."}</h2>
-        <p className="text-base leading-relaxed text-slate-600 sm:text-lg">{recommendedService ? "Based on the business issue you selected, review the recommendation, what is included, expected timing and scope limits before requesting a proposal." : "Choose the issue closest to yours. Each service shows the practical deliverables, client inputs, timing and boundaries before you request a proposal."}</p>
+        <span className="text-xs font-bold uppercase tracking-widest text-[#1f4fff]">Navigalex Business Services</span>
+        <h2 className="text-3xl font-extrabold tracking-tight text-slate-950 sm:text-5xl">{recommendedService ? "Your recommended starting service" : "Business advisory, back-office and IT support."}</h2>
+        <p className="text-base leading-relaxed text-slate-600 sm:text-lg">{recommendedService ? "Review the recommended service, deliverables, timing and scope limits before requesting a proposal." : "Practical support across business decisions, everyday operations and business technology. Select a service area, compare the scope and request a proposal."}</p>
         <div className="flex flex-wrap justify-center gap-3 pt-2 text-xs font-semibold text-slate-600">
           <span className="inline-flex items-center gap-1.5"><ClipboardCheck className="h-4 w-4" />Defined deliverables</span>
           <span className="inline-flex items-center gap-1.5"><Clock3 className="h-4 w-4" />Agreed timelines</span>
@@ -358,6 +534,62 @@ export default function ServicesPage({ onInquiry }: ServicesPageProps) {
         </div>
       </header>
 
+
+      {!recommendedId && (
+        <section aria-label="Service categories" className="grid gap-4 md:grid-cols-3">
+          {[
+            {
+              id: 'advisory' as const,
+              eyebrow: 'Business advisory',
+              title: 'Make better business decisions',
+              detail: 'Finance, contracts, risk, governance, strategy and project delivery.',
+              Icon: ChartNoAxesCombined,
+              count: ADVISORY_DESKS.filter((item) => (item.serviceGroup ?? 'advisory') === 'advisory').length
+            },
+            {
+              id: 'backoffice' as const,
+              eyebrow: 'Back-office operations',
+              title: 'Keep daily work moving',
+              detail: 'Bookkeeping support, billing, reconciliations, HR administration and document operations.',
+              Icon: ClipboardCheck,
+              count: ADVISORY_DESKS.filter((item) => item.serviceGroup === 'backoffice').length
+            },
+            {
+              id: 'it' as const,
+              eyebrow: 'IT services',
+              title: 'Make technology work for you',
+              detail: 'Helpdesk support, websites, cloud setup, workflow automation and systems improvement.',
+              Icon: Workflow,
+              count: ADVISORY_DESKS.filter((item) => item.serviceGroup === 'it').length
+            }
+          ].map((group) => {
+            const selected = serviceGroup === group.id;
+            const Icon = group.Icon;
+            return (
+              <button
+                key={group.id}
+                type="button"
+                aria-pressed={selected}
+                onClick={() => { setServiceGroup(selected ? 'all' : group.id); setQuery(''); }}
+                className={'group rounded-2xl border p-5 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1f4fff] sm:p-6 ' + (
+                  selected
+                    ? 'border-[#1f4fff] bg-blue-50 shadow-[0_10px_28px_rgba(31,79,255,0.10)]'
+                    : 'border-slate-200 bg-white hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-lg'
+                )}
+              >
+                <span className="flex items-center justify-between gap-3">
+                  <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50 text-[#1f4fff]"><Icon className="h-5 w-5" /></span>
+                  <span className="rounded-full bg-slate-100 px-3 py-1 text-[11px] font-bold text-slate-600">{group.count} services</span>
+                </span>
+                <span className="mt-5 block text-[11px] font-bold uppercase tracking-widest text-[#1f4fff]">{group.eyebrow}</span>
+                <span className="mt-1 block text-lg font-extrabold tracking-tight text-slate-950">{group.title}</span>
+                <span className="mt-2 block min-h-12 text-sm leading-relaxed text-slate-600">{group.detail}</span>
+                <span className="mt-4 inline-flex items-center gap-1 text-xs font-bold text-[#1f4fff]">{selected ? 'Showing this category' : 'Explore services'} <ChevronRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" /></span>
+              </button>
+            );
+          })}
+        </section>
+      )}
 
       {recommendedService && (
         <section aria-labelledby="recommended-service-heading" className="overflow-hidden rounded-3xl border border-blue-200 bg-white shadow-[0_10px_30px_rgba(31,79,255,0.10)]">
@@ -424,17 +656,17 @@ export default function ServicesPage({ onInquiry }: ServicesPageProps) {
         <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <h3 id="problem-shortcuts-heading" className="text-lg font-bold text-slate-950">What do you need help with?</h3>
-            <p className="text-sm text-slate-600">Choose one to see the closest productised starting service. You can change it or browse all eight.</p>
+            <p className="text-sm text-slate-600">Choose one to see the closest starting service, or browse the complete service list.</p>
           </div>
           {recommendedId && (
             <button type="button" onClick={showAllServices} className="self-start text-sm font-semibold text-[#1f4fff] underline underline-offset-2">
-              Show all eleven services
+              Show all {ADVISORY_DESKS.length} services
             </button>
           )}
         </div>
 
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
-          {PROBLEM_SHORTCUTS.map(({ id, title, detail, Icon }) => (
+          {PROBLEM_SHORTCUTS.filter((item) => serviceGroup === 'all' || item.serviceGroup === serviceGroup).map(({ id, title, detail, Icon }) => (
             <button
               key={id}
               type="button"
@@ -503,7 +735,7 @@ export default function ServicesPage({ onInquiry }: ServicesPageProps) {
         )}
       </div>
 
-      <p className="text-sm text-slate-600" aria-live="polite">Showing all nine distinct starting services.</p>
+      <p className="text-sm text-slate-600" aria-live="polite">Showing {visible.length} of {ADVISORY_DESKS.length} service lines.</p>
       </>
       )}
 
@@ -607,7 +839,7 @@ export default function ServicesPage({ onInquiry }: ServicesPageProps) {
 
       <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5 sm:p-6">
         <h3 className="font-bold text-slate-900">Professional scope and independence</h3>
-        <p className="mt-2 text-sm leading-relaxed text-slate-600">Navigalex provides business advisory, operational analysis and technology enablement within the scope agreed with each client. We do not advertise or offer legal services. Legal, tax, statutory audit, certification or other regulated professional work is outside scope unless delivered separately by appropriately qualified and authorised professionals under their own engagement. Recommendations depend on the accuracy and completeness of client-supplied information; outcomes are not guaranteed.</p>
+        <p className="mt-2 text-sm leading-relaxed text-slate-600">Navigalex provides scoped business advisory, back-office administration and technology support within the scope agreed with each client. We do not advertise or offer legal services. Legal, tax, statutory audit, certification or other regulated professional work is outside scope unless delivered separately by appropriately qualified and authorised professionals under their own engagement. Recommendations depend on the accuracy and completeness of client-supplied information; outcomes are not guaranteed.</p>
       </div>
     </section>
   );
